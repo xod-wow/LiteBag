@@ -4,38 +4,38 @@
 
 <Script file="LiteBagItemButtonTemplate.lua"/>
 
-<Button name="LiteBagItemButtonTemplate" inherits="ItemButtonTemplate" hidden="true" virtual="true">
+<Button name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" hidden="true" virtual="true">
 
     <Anchors>
         <Anchor point="BOTTOMRIGHT" x="0" y="0" />
     </Anchors>
 
     <Layers>
-        <Layer level="ARTWORK" textureSubLevel="1">
-            <!-- matches ContainerFrameItemButtonTemplate -->
-            <Texture name="$parentIconQuestTexture" parentKey="questTexture">
-                <Size x="37" y="37" />
+        <Layer level="BACKGROUND">
+            <Texture name="$parentSlotTexture" file="Interface\Buttons\UI-EmptySlot">
+                <Size x="64" y="64"/>
                 <Anchors>
-                    <Anchor point="TOP" x="0" y="0" />
+                    <Anchor point="TOPLEFT" x="-13" y="13"/>
                 </Anchors>
             </Texture>
-            <Texture parentKey="qualityTexture" file="Interface\Buttons\UI-ActionButton-Border" blendMode="ADD" hidden="true">
+        </Layer>
+
+        <Layer level="ARTWORK" textureSubLevel="1">
+            <Texture name="$parentQualityTexture" parentKey="qualityTexture" file="Interface\Buttons\UI-ActionButton-Border" alphaMode="ADD" hidden="true">
                 <Size x="67" y="67" />
                 <Anchors>
                     <Anchor point="CENTER" />
                 </Anchors>
+                <Color r="1" g="1" b="1" a="0.5" />
             </Texture>
         </Layer>
     </Layers>
 
     <Frames>
-        <!-- matches ContainerFrameItemButtonTemplate -->
         <Cooldown name="$parentCooldown" inherits="CooldownFrameTemplate" />
     </Frames>
-
     <Scripts>
         <OnLoad function="LiteBagItemButton_OnLoad" />
-        <OnClick function="LiteBagItemButton_OnClick" />
         <OnEnter function="LiteBagItemButton_OnEnter" />
         <OnLeave function="LiteBagItemButton_OnLeave" />
         <OnHide function="LiteBagItemButton_OnHide" />

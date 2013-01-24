@@ -27,12 +27,12 @@ function LiteBag_OnLoad(self)
     self.dummyContainerFrames = { }
     self.itemButtons = { }
 
-    for _,bag in ipairs(self.BagIDs) do
+    for _,bag in ipairs(self.bagIDs) do
         self.dummyContainerFrames[bag] = CreateFrame("Frame", self:GetName() .. "ContainerFrame" .. bag, self)
         self.dummyContainerFrames[bag]:SetID(bag)
     end
 
-    SetBagPortraitTexture(self.portraitFrame, self.bagIDs[0])
+    SetBagPortraitTexture(self.portrait, self.bagIDs[1])
 
     self:RegisterEvent("BAG_OPEN")
     self:RegisterEvent("BAG_CLOSED")
@@ -71,7 +71,7 @@ function LiteBag_OnEvent(self, event, ...)
     elseif event == "INVENTORY_SEARCH_UPDATE" then
         LiteBag_UpdateSearchResults(self)
     elseif event == "DISPLAY_SIZE_CHANGED" then
-        LiteBag_UpdateLayout(self)
+        LiteBag_PositionItemButtons(self)
     end
 end
 
@@ -109,7 +109,7 @@ function LiteBag_OnShow(self)
     self:RegisterEvent("DISPLAY_SIZE_CHANGED")
     self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
 
-    self:Update()
+    LiteBag_Update(self)
 
     LiteBag_SetMainMenuBarButtons(self, 1)
 
@@ -125,19 +125,19 @@ end
 
 function LiteBag_UpdateCooldowns(self)
     for i = 1, self.size do
-        LiteMountItemButton_UpdateCooldown(self.itemButtons[i])
+        LiteBagItemButton_UpdateCooldown(self.itemButtons[i])
     end
 end
 
-function LiteBag_UpdateLocked()
+function LiteBag_UpdateLocked(self)
     for i = 1, self.size do
-        LiteMountItemButton_UpdateLocked(self.itemButtons[i])
+        LiteBagItemButton_UpdateLocked(self.itemButtons[i])
     end
 end
 
-function LiteBag_UpdateQuestTextures()
+function LiteBag_UpdateQuestTextures(self)
     for i = 1, self.size do
-        LiteMountItemButton_UpdateQuestTexture(self.itemButtons[i])
+        LiteBagItemButton_UpdateQuestTexture(self.itemButtons[i])
     end
 end
 
@@ -152,7 +152,7 @@ function LiteBag_CreateItemButtons(self)
     self.size = 0
 
     for _,bag in ipairs(self.bagIDs) do
-        for slot = 0, GetNumContainerSlots(bag) do
+        for slot = GetContainerNumSlots(bag), 1, -1 do
             if not self.itemButtons[n] then
                 LiteBag_CreateItemButton(self, n)
             end
@@ -169,8 +169,14 @@ function LiteBag_PositionItemButtons(self)
 
     for i = 1, self.size do
         local itemButton = self.itemButtons[i]
-        -- XXX Pack them on top of each other bottom right for now XXX
-        itemButton:SetPoint("BOTTOMRIGHT", name, "BOTTOMRIGHT", -12, 9 + self.moneyFrame:GetHeight())
+        if i == 1 then
+            self.itemButtons[i]:SetPoint("BOTTOMRIGHT", name, "BOTTOMRIGHT", -12, 9 + self.moneyFrame:GetHeight())
+        elseif i % 8 == 1 then
+            self.itemButtons[i]:SetPoint("BOTTOMRIGHT", self.itemButtons[i-8], "TOPRIGHT", 0, 2)
+        else
+            self.itemButtons[i]:SetPoint("BOTTOMRIGHT", self.itemButtons[i-1]:GetName(), "BOTTOMLEFT", -2, 0)
+        end
+            
     end
 end
 
@@ -185,7 +191,7 @@ function LiteBag_Update(self)
 
     for i,itemButton in ipairs(self.itemButtons) do
         if i <= self.size then
-            itemButton:Update()
+            LiteBagItemButton_Update(itemButton)
             itemButton:Show()
         else
             itemButton:Hide()

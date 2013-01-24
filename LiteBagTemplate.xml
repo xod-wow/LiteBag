@@ -4,23 +4,76 @@
 
 <!-- Copyright 2013 Mike Battersby -->
 
-<Frame name="LiteBagTemplate" frameStrata="MEDIUM" toplevel="true" movable="true" enableMouse="true" hidden="true" virtual="true" inherits="PortraitFrameTemplate">
+<Frame name="LiteBagTemplate" frameStrata="MEDIUM" toplevel="true" movable="true" enableMouse="true" hidden="true" virtual="true">
 
-    <Size x="256" y="512" />
+    <Size x="256" y="256" />
 
     <Layers>
         <Layer level="BACKGROUND">
-            <Texture parentKey="portraitFrame">
+            <Texture name="Portrait" parentKey="portrait">
                 <Size x="40" y="40" />
                 <Anchors>
                     <Anchor point="TOPLEFT" x="7" y="-5" />
                 </Anchors>
             </Texture>
         </Layer>
+        <Layer level="ARTWORK">
+            <Texture name="$parentBackgroundTop" file="Interface\ContainerFrame\UI-Bag-Components">
+                <Size>
+                    <AbsDimension x="256" y="512"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeTo="$parent">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </Texture>
+            <Texture name="$parentBackgroundMiddle1" file="Interface\ContainerFrame\UI-Bag-Components">
+                <Size>
+                    <AbsDimension x="256" y="512"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parentBackgroundTop" relativePoint="BOTTOM"/>
+                </Anchors>
+                <TexCoords left="0" right="1" top="0.3515625" bottom="0.8515625"/>
+            </Texture>
+            <Texture name="$parentBackgroundMiddle2" file="Interface\ContainerFrame\UI-Bag-Components" hidden="true">
+                <Size>
+                    <AbsDimension x="256" y="256"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parentBackgroundMiddle1" relativePoint="BOTTOM"/>
+                </Anchors>
+                <TexCoords left="0" right="1" top="0.353515625" bottom="0.8515625"/>
+            </Texture>
+            <Texture name="$parentBackgroundBottom" file="Interface\ContainerFrame\UI-Bag-Components">
+                <Size>
+                    <AbsDimension x="256" y="10"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parentBackgroundMiddle1" relativePoint="BOTTOM"/>
+                </Anchors>
+                <TexCoords left="0" right="1" top="0.330078125" bottom="0.349609375"/>
+            </Texture>
+            <FontString name="$parentName" inherits="GameFontHighlight">
+                <Size>
+                    <AbsDimension x="112" y="12"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="47" y="-10"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+        </Layer>
     </Layers>
 
     <Frames>
-        <Frame parentKey="moneyFrame" inherits="SmallMoneyFrameTemplate">
+        <Frame name="$parentMoneyFrame" parentKey="moneyFrame" inherits="SmallMoneyFrameTemplate">
             <Anchors>
                 <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-2" />
             </Anchors>

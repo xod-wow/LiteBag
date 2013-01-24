@@ -44,14 +44,16 @@ function LiteBagItemButton_UpdateQuestTexture(self)
 
     local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bag, slot)
 
+    local questTexture = _G[self:GetName() .. "IconQuestTexture"]
+
     if questId and not isActive then
-        self.questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG)
-        self.questTexture:Show()
+        questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG)
+        questTexture:Show()
     elseif questId or isQuestItem then
-        self.questTexture:SetTexture(TEXTURE_ITEM_QUEST_BORDER)
-        self.questTexture:Show()
+        questTexture:SetTexture(TEXTURE_ITEM_QUEST_BORDER)
+        questTexture:Show()
     else
-        self.questTexture:Hide()
+        questTexture:Hide()
     end
 end
 
@@ -77,6 +79,8 @@ function LiteBagItemButton_UpdateFiltered(self)
     else
         if GetContainerItemQuestInfo(bag, slot) then
             self.qualityTexture:Hide()
+        elseif not quality or quality < 2 then
+            self.qualityTexture:Hide()
         else
             local r, g, b = GetItemQualityColor(quality)
             self.qualityTexture:SetVertexColor(r, g, b)
@@ -100,7 +104,7 @@ function LiteBagItemButton_OnLoad(self)
     ContainerFrameItemButton_OnLoad(self)
 end
 
-function LiteBagItemButton_OnClick(self)
+function LiteBagItemButton_OnClick(self, button)
     -- ContainerFrameItemButtonTemplate:GetScript("OnClick")(self)
 
     -- This buggering around with IsModifiedClick taken from the OnClick
