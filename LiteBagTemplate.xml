@@ -1,0 +1,45 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+
+<Script file="LiteBagTemplate.lua" />
+
+<!-- Copyright 2013 Mike Battersby -->
+
+<Frame name="LiteBagTemplate" frameStrata="MEDIUM" toplevel="true" movable="true" enableMouse="true" hidden="true" virtual="true" inherits="PortraitFrameTemplate">
+
+    <Size x="256" y="512" />
+
+    <Layers>
+        <Layer level="BACKGROUND">
+            <Texture parentKey="portraitFrame">
+                <Size x="40" y="40" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="7" y="-5" />
+                </Anchors>
+            </Texture>
+        </Layer>
+    </Layers>
+
+    <Frames>
+        <Frame parentKey="moneyFrame" inherits="SmallMoneyFrameTemplate">
+            <Anchors>
+                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-2" />
+            </Anchors>
+            <Scripts>
+                <OnLoad>
+                    SmallMoneyFrame_OnLoad(self)
+                    MoneyFrame_SetType(self, "PLAYER")
+                    MoneyFrame_SetMaxDisplayWidth(self, 168)
+                </OnLoad>
+            </Scripts>
+        </Frame>
+    </Frames>
+
+    <Scripts>
+        <OnLoad function="LiteBag_OnLoad" />
+        <OnEvent function="LiteBag_OnEvent" />
+        <OnHide function="LiteBag_OnHide" />
+        <OnShow function="LiteBag_OnShow" />
+    </Scripts>
+</Frame>
+
+</Ui>

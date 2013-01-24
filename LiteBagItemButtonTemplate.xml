@@ -1,0 +1,48 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+
+<!-- Copyright 2013 Mike Battersby -->
+
+<Script file="LiteBagItemButtonTemplate.lua"/>
+
+<Button name="LiteBagItemButtonTemplate" inherits="ItemButtonTemplate" hidden="true" virtual="true">
+
+    <Anchors>
+        <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+    </Anchors>
+
+    <Layers>
+        <Layer level="ARTWORK" textureSubLevel="1">
+            <!-- matches ContainerFrameItemButtonTemplate -->
+            <Texture name="$parentIconQuestTexture" parentKey="questTexture">
+                <Size x="37" y="37" />
+                <Anchors>
+                    <Anchor point="TOP" x="0" y="0" />
+                </Anchors>
+            </Texture>
+            <Texture parentKey="qualityTexture" file="Interface\Buttons\UI-ActionButton-Border" blendMode="ADD" hidden="true">
+                <Size x="67" y="67" />
+                <Anchors>
+                    <Anchor point="CENTER" />
+                </Anchors>
+            </Texture>
+        </Layer>
+    </Layers>
+
+    <Frames>
+        <!-- matches ContainerFrameItemButtonTemplate -->
+        <Cooldown name="$parentCooldown" inherits="CooldownFrameTemplate" />
+    </Frames>
+
+    <Scripts>
+        <OnLoad function="LiteBagItemButton_OnLoad" />
+        <OnClick function="LiteBagItemButton_OnClick" />
+        <OnEnter function="LiteBagItemButton_OnEnter" />
+        <OnLeave function="LiteBagItemButton_OnLeave" />
+        <OnHide function="LiteBagItemButton_OnHide" />
+        <OnDragStart function="LiteBagItemButton_OnDrag" />
+        <OnReceiveDrag function="LiteBagItemButton_OnDrag" />
+    </Scripts>
+
+</Button>
+
+</Ui>
