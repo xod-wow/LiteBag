@@ -129,6 +129,12 @@ function LiteBag_UpdateCooldowns(self)
     end
 end
 
+function LiteBag_UpdateSearchResults(self)
+    for i = 1, self.size do
+        LiteBagItemButton_UpdateFiltered(self.itemButtons[i])
+    end
+end
+
 function LiteBag_UpdateLocked(self)
     for i = 1, self.size do
         LiteBagItemButton_UpdateLocked(self.itemButtons[i])
