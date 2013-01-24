@@ -22,10 +22,11 @@
 
         <Layer level="ARTWORK" textureSubLevel="1">
             <Texture name="$parentQualityTexture" parentKey="qualityTexture" file="Interface\Buttons\UI-ActionButton-Border" alphaMode="ADD" hidden="true">
-                <Size x="67" y="67" />
+                <Size x="37" y="37" />
                 <Anchors>
                     <Anchor point="CENTER" />
                 </Anchors>
+                <TexCoords left="0.25" right="0.75" top="0.25" bottom="0.75" />
                 <Color r="1" g="1" b="1" a="0.5" />
             </Texture>
         </Layer>

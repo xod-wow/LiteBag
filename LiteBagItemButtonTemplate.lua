@@ -43,8 +43,11 @@ function LiteBagItemButton_UpdateQuestTexture(self)
     local slot = self:GetID()
 
     local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bag, slot)
+    local quality = select(4, GetContainerItemInfo(bag, slot))
 
     local questTexture = _G[self:GetName() .. "IconQuestTexture"]
+
+    self.qualityTexture:Hide()
 
     if questId and not isActive then
         questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG)
@@ -54,6 +57,11 @@ function LiteBagItemButton_UpdateQuestTexture(self)
         questTexture:Show()
     else
         questTexture:Hide()
+        if quality and quality > 1 then
+            local r, g, b = GetItemQualityColor(quality)
+            self.qualityTexture:SetVertexColor(r, g, b)
+            self.qualityTexture:Show()
+        end
     end
 end
 
@@ -71,21 +79,11 @@ function LiteBagItemButton_UpdateFiltered(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
-    local quality, _, _, _, isFiltered = select(4, GetContainerItemInfo(bag, slot))
+    local isFiltered = select(8, GetContainerItemInfo(bag, slot))
 
     if isFiltered then
-        self.qualityTexture:Hide()
         self.searchOverlay:Show()
     else
-        if GetContainerItemQuestInfo(bag, slot) then
-            self.qualityTexture:Hide()
-        elseif not quality or quality < 2 then
-            self.qualityTexture:Hide()
-        else
-            local r, g, b = GetItemQualityColor(quality)
-            self.qualityTexture:SetVertexColor(r, g, b)
-            self.qualityTexture:Show()
-        end
         self.searchOverlay:Hide()
     end
 end

@@ -178,9 +178,9 @@ function LiteBag_PositionItemButtons(self)
         if i == 1 then
             self.itemButtons[i]:SetPoint("BOTTOMRIGHT", name, "BOTTOMRIGHT", -12, 9 + self.moneyFrame:GetHeight())
         elseif i % 8 == 1 then
-            self.itemButtons[i]:SetPoint("BOTTOMRIGHT", self.itemButtons[i-8], "TOPRIGHT", 0, 2)
+            self.itemButtons[i]:SetPoint("BOTTOMRIGHT", self.itemButtons[i-8], "TOPRIGHT", 0, 4)
         else
-            self.itemButtons[i]:SetPoint("BOTTOMRIGHT", self.itemButtons[i-1]:GetName(), "BOTTOMLEFT", -2, 0)
+            self.itemButtons[i]:SetPoint("BOTTOMRIGHT", self.itemButtons[i-1]:GetName(), "BOTTOMLEFT", -4, 0)
         end
             
     end
