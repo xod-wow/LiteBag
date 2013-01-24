@@ -26,7 +26,7 @@
                 <Anchors>
                     <Anchor point="CENTER" />
                 </Anchors>
-                <TexCoords left="0.25" right="0.75" top="0.25" bottom="0.75" />
+                <TexCoords left="0.22" right="0.78" top="0.22" bottom="0.78" />
                 <Color r="1" g="1" b="1" a="0.5" />
             </Texture>
         </Layer>
