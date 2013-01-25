@@ -43,7 +43,10 @@ function LiteBagItemButton_UpdateQuestTexture(self)
     local slot = self:GetID()
 
     local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bag, slot)
-    local quality = select(4, GetContainerItemInfo(bag, slot))
+    local quality, _, _, link = select(4, GetContainerItemInfo(bag, slot))
+    if link and quality < 0 then
+        quality = select(3, GetItemInfo(link))
+    end
 
     local questTexture = _G[self:GetName() .. "IconQuestTexture"]
 
