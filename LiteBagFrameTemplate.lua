@@ -1,10 +1,10 @@
---[[------------------------------------------------------------------------------
+--[[----------------------------------------------------------------------------
 
   LiteBag/LiteBagTemplate.lua
 
   Copyright 2013 Mike Battersby
 
-------------------------------------------------------------------------------]]--
+----------------------------------------------------------------------------]]--
 
 function LiteBagFrame_IsMyBag(self, id)
     for _,bag in ipairs(self.bagIDs) do
@@ -16,7 +16,7 @@ function LiteBagFrame_OnLoad(self)
 
     if not self.bagIDs then
         -- Error!  Needs self.bagIDs set before calling!
-        --  <Frame ... inherits="LiteBagTemplate">
+        --  <Frame ... inherits="LiteBagFrameTemplate">
         --      <Scripts>
         --          <OnLoad>
         --              self.bagIDs = { 0, 1, 2, 3 }
