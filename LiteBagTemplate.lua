@@ -35,6 +35,8 @@ function LiteBag_OnLoad(self)
     SetBagPortraitTexture(self.portrait, self.bagIDs[1])
 
     self:RegisterEvent("BAG_OPEN")
+    self:RegisterEvent("BANKFRAME_OPENED")
+    self:RegisterEvent("BANKFRAME_CLOSED")
     self:RegisterEvent("BAG_CLOSED")
     self:RegisterEvent("QUEST_ACCEPTED")
     self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
@@ -46,15 +48,25 @@ function LiteBag_OnEvent(self, event, ...)
         if LiteBag_IsMyBag(self, bag) then
             self:Show()
         end
-    elseif event == "BAG_CLOSED" then
-        local bag = ...
-        if LiteBag_IsMyBag(self, bag) then
+    elseif event == "BANKFRAME_OPENED" then
+        if LiteBag_IsMyBag(self, BANK_CONTAINER) then
+            self:Show()
+        end
+    elseif event == "BANKFRAME_CLOSED" then
+        if LiteBag_IsMyBag(self, BANK_CONTAINER) then
             self:Hide()
         end
-    elseif event == "BAG_UPDATE" then
+    elseif event == "BAG_UPDATE" or event == "BAG_CLOSED" then
         local bag = ...
         if LiteBag_IsMyBag(self, bag) then
             LiteBag_Update(self)
+        end
+    elseif event == "PLAYERBANKSLOTS_CHANGED" then
+        local slot = ...
+        if LiteBag_IsMyBag(self, BANK_CONTAINER) then
+            if slot <= NUM_BANKGENERIC_SLOTS then
+                LiteBag_Update(self)
+            end
         end
     elseif event == "ITEM_LOCK_CHANGED" then
         local bag, slot = ...
@@ -92,18 +104,23 @@ end
 
 function LiteBag_OnHide(self)
     self:UnregisterEvent("BAG_UPDATE")
+    self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:UnregisterEvent("ITEM_LOCK_CHANGED")
     self:UnregisterEvent("BAG_UPDATE_COOLDOWN")
     self:UnregisterEvent("DISPLAY_SIZE_CHANGED")
     self:UnregisterEvent("INVENTORY_SEARCH_UPDATE")
 
     LiteBag_SetMainMenuBarButtons(self, 0)
+    if LiteBag_IsMyBag(self, BANK_CONTAINER) then
+       CloseBankFrame()
+    end
 
     PlaySound("igBackPackClose")
 end
 
 function LiteBag_OnShow(self)
     self:RegisterEvent("BAG_UPDATE")
+    self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:RegisterEvent("ITEM_LOCK_CHANGED")
     self:RegisterEvent("BAG_UPDATE_COOLDOWN")
     self:RegisterEvent("DISPLAY_SIZE_CHANGED")
@@ -175,12 +192,13 @@ function LiteBag_PositionItemButtons(self)
 
     for i = 1, self.size do
         local itemButton = self.itemButtons[i]
+            itemButton:ClearAllPoints()
         if i == 1 then
-            self.itemButtons[i]:SetPoint("BOTTOMRIGHT", name, "BOTTOMRIGHT", -12, 9 + self.moneyFrame:GetHeight())
-        elseif i % 8 == 1 then
-            self.itemButtons[i]:SetPoint("BOTTOMRIGHT", self.itemButtons[i-8], "TOPRIGHT", 0, 4)
+            self.itemButtons[i]:SetPoint("TOPLEFT", name, "TOPLEFT", 18, -50)
+        elseif i % 4 == 1 then
+            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-4], "BOTTOMLEFT", 0, -4)
         else
-            self.itemButtons[i]:SetPoint("BOTTOMRIGHT", self.itemButtons[i-1]:GetName(), "BOTTOMLEFT", -4, 0)
+            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-1]:GetName(), "TOPRIGHT", 5, 0)
         end
             
     end

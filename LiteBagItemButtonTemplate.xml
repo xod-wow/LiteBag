@@ -7,18 +7,10 @@
 <Button name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" hidden="true" virtual="true">
 
     <Anchors>
-        <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+        <Anchor point="TOPLEFT" x="0" y="0" />
     </Anchors>
 
     <Layers>
-        <Layer level="BACKGROUND">
-            <Texture name="$parentSlotTexture" file="Interface\Buttons\UI-EmptySlot">
-                <Size x="64" y="64"/>
-                <Anchors>
-                    <Anchor point="TOPLEFT" x="-13" y="13"/>
-                </Anchors>
-            </Texture>
-        </Layer>
 
         <Layer level="ARTWORK" textureSubLevel="1">
             <Texture name="$parentQualityTexture" parentKey="qualityTexture" file="Interface\Buttons\UI-ActionButton-Border" alphaMode="ADD" hidden="true">
@@ -36,6 +28,7 @@
         <Cooldown name="$parentCooldown" inherits="CooldownFrameTemplate" />
     </Frames>
     <Scripts>
+        <!-- No OnClick, we have to inherit it because it's secure. -->
         <OnLoad function="LiteBagItemButton_OnLoad" />
         <OnEnter function="LiteBagItemButton_OnEnter" />
         <OnLeave function="LiteBagItemButton_OnLeave" />

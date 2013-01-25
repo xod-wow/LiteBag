@@ -100,6 +100,8 @@ end
 function LiteBagItemButton_OnLoad(self)
     -- ContainerFrameItemButtonTemplate:GetScript("OnLoad")(self)
     ContainerFrameItemButton_OnLoad(self)
+    self.GetInventorySlot = ButtonInventorySlot
+    self.UpdateTooltip = LiteBagItemButton_OnEnter
 end
 
 function LiteBagItemButton_OnClick(self, button)
@@ -126,13 +128,18 @@ function LiteBagItemButton_OnClick(self, button)
 end
 
 function LiteBagItemButton_OnEnter(self)
+    local bag = self:GetParent():GetID()
     -- ContainerFrameItemButtonTemplate:GetScript("OnEnter")(self)
-    ContainerFrameItemButton_OnEnter(self)
+    if bag == BANK_CONTAINER then
+        BankFrameItemButton_OnEnter(self)
+    else
+        ContainerFrameItemButton_OnEnter(self)
+    end
 end
 
 function LiteBagItemButton_OnLeave(self)
     -- ContainerFrameItemButtonTemplate:GetScript("OnLeave")(self)
-    Gametooltip:Hide()
+    GameTooltip:Hide()
     ResetCursor()
 end
 
