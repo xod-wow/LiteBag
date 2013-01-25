@@ -1,10 +1,10 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 
-<Script file="LiteBagTemplate.lua" />
+<Script file="LiteBagFrameTemplate.lua" />
 
 <!-- Copyright 2013 Mike Battersby -->
 
-<Frame name="LiteBagTemplate" frameStrata="MEDIUM" toplevel="true" movable="true" enableMouse="true" hidden="true" virtual="true">
+<Frame name="LiteBagFrameTemplate" frameStrata="MEDIUM" toplevel="true" movable="true" enableMouse="true" hidden="true" virtual="true">
 
     <Size x="192" y="512" />
 
@@ -98,10 +98,10 @@
     </Frames>
 
     <Scripts>
-        <OnLoad function="LiteBag_OnLoad" />
-        <OnEvent function="LiteBag_OnEvent" />
-        <OnHide function="LiteBag_OnHide" />
-        <OnShow function="LiteBag_OnShow" />
+        <OnLoad function="LiteBagFrame_OnLoad" />
+        <OnEvent function="LiteBagFrame_OnEvent" />
+        <OnHide function="LiteBagFrame_OnHide" />
+        <OnShow function="LiteBagFrame_OnShow" />
     </Scripts>
 </Frame>
 

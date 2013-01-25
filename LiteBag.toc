@@ -5,4 +5,4 @@
 ## Email: mib@post.com
 
 LiteBagItemButtonTemplate.xml
-LiteBagTemplate.xml
+LiteBagFrameTemplate.xml

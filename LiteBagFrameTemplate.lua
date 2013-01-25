@@ -6,13 +6,13 @@
 
 ------------------------------------------------------------------------------]]--
 
-function LiteBag_IsMyBag(self, id)
+function LiteBagFrame_IsMyBag(self, id)
     for _,bag in ipairs(self.bagIDs) do
         if id == bag then return true end
     end
 end
 
-function LiteBag_OnLoad(self)
+function LiteBagFrame_OnLoad(self)
 
     if not self.bagIDs then
         -- Error!  Needs self.bagIDs set before calling!
@@ -20,7 +20,7 @@ function LiteBag_OnLoad(self)
         --      <Scripts>
         --          <OnLoad>
         --              self.bagIDs = { 0, 1, 2, 3 }
-        --              LiteBag_OnLoad(self)
+        --              LiteBagFrame_OnLoad(self)
         return
     end
 
@@ -42,58 +42,58 @@ function LiteBag_OnLoad(self)
     self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
 end
 
-function LiteBag_OnEvent(self, event, ...)
+function LiteBagFrame_OnEvent(self, event, ...)
     if event == "BAG_OPEN" then
         local bag = ...
-        if LiteBag_IsMyBag(self, bag) then
+        if LiteBagFrame_IsMyBag(self, bag) then
             self:Show()
         end
     elseif event == "BANKFRAME_OPENED" then
-        if LiteBag_IsMyBag(self, BANK_CONTAINER) then
+        if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
             self:Show()
         end
     elseif event == "BANKFRAME_CLOSED" then
-        if LiteBag_IsMyBag(self, BANK_CONTAINER) then
+        if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
             self:Hide()
         end
     elseif event == "BAG_UPDATE" or event == "BAG_CLOSED" then
         local bag = ...
-        if LiteBag_IsMyBag(self, bag) then
-            LiteBag_Update(self)
+        if LiteBagFrame_IsMyBag(self, bag) then
+            LiteBagFrame_Update(self)
         end
     elseif event == "PLAYERBANKSLOTS_CHANGED" then
         local slot = ...
-        if LiteBag_IsMyBag(self, BANK_CONTAINER) then
+        if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
             if slot <= NUM_BANKGENERIC_SLOTS then
-                LiteBag_Update(self)
+                LiteBagFrame_Update(self)
             end
         end
     elseif event == "ITEM_LOCK_CHANGED" then
         local bag, slot = ...
-        if bag and slot and LiteBag_IsMyBag(self, bag) then
-            LiteBag_UpdateLocked(self)
+        if bag and slot and LiteBagFrame_IsMyBag(self, bag) then
+            LiteBagFrame_UpdateLocked(self)
         end
     elseif event == "BAG_UPDATE_COOLDOWN" then
         local bag = ...
-        if LiteBag_IsMyBag(self, bag) then
-            LiteBag_UpdateCooldowns(self)
+        if LiteBagFrame_IsMyBag(self, bag) then
+            LiteBagFrame_UpdateCooldowns(self)
         end
     elseif event == "QUEST_ACCEPTED" or event == "UNIT_QUEST_LOG_CHANGED" then
-        LiteBag_UpdateQuestTextures(self)
+        LiteBagFrame_UpdateQuestTextures(self)
     elseif event == "INVENTORY_SEARCH_UPDATE" then
-        LiteBag_UpdateSearchResults(self)
+        LiteBagFrame_UpdateSearchResults(self)
     elseif event == "DISPLAY_SIZE_CHANGED" then
-        LiteBag_PositionItemButtons(self)
+        LiteBagFrame_PositionItemButtons(self)
     end
 end
 
-function LiteBag_SetMainMenuBarButtons(self, checked)
-    if LiteBag_IsMyBag(BACKPACK_CONTAINER) then
+function LiteBagFrame_SetMainMenuBarButtons(self, checked)
+    if LiteBagFrame_IsMyBag(BACKPACK_CONTAINER) then
         MainMenuBarBackpackButton:SetChecked(checked)
     end
 
     for n = 1, NUM_CONTAINER_FRAMES do
-        if LiteBag_IsMyBag(n) then
+        if LiteBagFrame_IsMyBag(n) then
             local button = _G["CharacterBag"..(n-1).."Slot"]
             if button then
                 button:SetChecked(checked)
@@ -102,7 +102,7 @@ function LiteBag_SetMainMenuBarButtons(self, checked)
     end
 end
 
-function LiteBag_OnHide(self)
+function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("BAG_UPDATE")
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:UnregisterEvent("ITEM_LOCK_CHANGED")
@@ -110,15 +110,15 @@ function LiteBag_OnHide(self)
     self:UnregisterEvent("DISPLAY_SIZE_CHANGED")
     self:UnregisterEvent("INVENTORY_SEARCH_UPDATE")
 
-    LiteBag_SetMainMenuBarButtons(self, 0)
-    if LiteBag_IsMyBag(self, BANK_CONTAINER) then
+    LiteBagFrame_SetMainMenuBarButtons(self, 0)
+    if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
        CloseBankFrame()
     end
 
     PlaySound("igBackPackClose")
 end
 
-function LiteBag_OnShow(self)
+function LiteBagFrame_OnShow(self)
     self:RegisterEvent("BAG_UPDATE")
     self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:RegisterEvent("ITEM_LOCK_CHANGED")
@@ -126,50 +126,50 @@ function LiteBag_OnShow(self)
     self:RegisterEvent("DISPLAY_SIZE_CHANGED")
     self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
 
-    LiteBag_Update(self)
+    LiteBagFrame_Update(self)
 
-    LiteBag_SetMainMenuBarButtons(self, 1)
+    LiteBagFrame_SetMainMenuBarButtons(self, 1)
 
     PlaySound("igBackPackOpen")
 end
 
-function LiteBag_AttachSearchBox(self)
+function LiteBagFrame_AttachSearchBox(self)
     BagItemSearchBox:SetParent(self)
     BagItemSearchBox:SetPoint("TOPRIGHT", self, "TOPRIGHT", -10, -26)
     BagItemSearchBox.anchorBag = self
     BagItemSearchBox:Show()
 end
 
-function LiteBag_UpdateCooldowns(self)
+function LiteBagFrame_UpdateCooldowns(self)
     for i = 1, self.size do
         LiteBagItemButton_UpdateCooldown(self.itemButtons[i])
     end
 end
 
-function LiteBag_UpdateSearchResults(self)
+function LiteBagFrame_UpdateSearchResults(self)
     for i = 1, self.size do
         LiteBagItemButton_UpdateFiltered(self.itemButtons[i])
     end
 end
 
-function LiteBag_UpdateLocked(self)
+function LiteBagFrame_UpdateLocked(self)
     for i = 1, self.size do
         LiteBagItemButton_UpdateLocked(self.itemButtons[i])
     end
 end
 
-function LiteBag_UpdateQuestTextures(self)
+function LiteBagFrame_UpdateQuestTextures(self)
     for i = 1, self.size do
         LiteBagItemButton_UpdateQuestTexture(self.itemButtons[i])
     end
 end
 
-function LiteBag_CreateItemButton(self, i)
+function LiteBagFrame_CreateItemButton(self, i)
     local b = CreateFrame("Button", self:GetName().."Item"..i, self, "LiteBagItemButtonTemplate")
     self.itemButtons[i] = b
 end
 
-function LiteBag_CreateItemButtons(self)
+function LiteBagFrame_CreateItemButtons(self)
     local n = 1
 
     self.size = 0
@@ -177,7 +177,7 @@ function LiteBag_CreateItemButtons(self)
     for _,bag in ipairs(self.bagIDs) do
         for slot = 1, GetContainerNumSlots(bag) do
             if not self.itemButtons[n] then
-                LiteBag_CreateItemButton(self, n)
+                LiteBagFrame_CreateItemButton(self, n)
             end
             self.itemButtons[n]:SetID(slot)
             self.itemButtons[n]:SetParent(self.dummyContainerFrames[bag])
@@ -187,7 +187,7 @@ function LiteBag_CreateItemButtons(self)
     end
 end
 
-function LiteBag_PositionItemButtons(self)
+function LiteBagFrame_PositionItemButtons(self)
     local name = self:GetName()
 
     for i = 1, self.size do
@@ -204,14 +204,14 @@ function LiteBag_PositionItemButtons(self)
     end
 end
 
-function LiteBag_Update(self)
+function LiteBagFrame_Update(self)
 
     if not self:IsShown() then return end
 
-    LiteBag_AttachSearchBox(self)
+    LiteBagFrame_AttachSearchBox(self)
 
-    LiteBag_CreateItemButtons(self)
-    LiteBag_PositionItemButtons(self)
+    LiteBagFrame_CreateItemButtons(self)
+    LiteBagFrame_PositionItemButtons(self)
 
     for i,itemButton in ipairs(self.itemButtons) do
         if i <= self.size then
