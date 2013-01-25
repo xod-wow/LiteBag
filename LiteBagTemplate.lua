@@ -175,7 +175,7 @@ function LiteBag_CreateItemButtons(self)
     self.size = 0
 
     for _,bag in ipairs(self.bagIDs) do
-        for slot = GetContainerNumSlots(bag), 1, -1 do
+        for slot = 1, GetContainerNumSlots(bag) do
             if not self.itemButtons[n] then
                 LiteBag_CreateItemButton(self, n)
             end
@@ -195,8 +195,8 @@ function LiteBag_PositionItemButtons(self)
             itemButton:ClearAllPoints()
         if i == 1 then
             self.itemButtons[i]:SetPoint("TOPLEFT", name, "TOPLEFT", 18, -50)
-        elseif i % 4 == 1 then
-            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-4], "BOTTOMLEFT", 0, -4)
+        elseif i % 8 == 1 then
+            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-8], "BOTTOMLEFT", 0, -4)
         else
             self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-1]:GetName(), "TOPRIGHT", 5, 0)
         end
