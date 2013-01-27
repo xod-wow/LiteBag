@@ -6,11 +6,21 @@
 
 <Frame name="LiteBagFrameTemplate" frameStrata="MEDIUM" toplevel="true" movable="true" enableMouse="true" hidden="true" virtual="true">
 
-    <Size x="192" y="512" />
+    <Size x="384" y="512" />
+    <Anchors>
+        <Anchor point="CENTER" />
+    </Anchors>
 
     <Layers>
         <Layer level="BACKGROUND">
-            <Texture name="Portrait" parentKey="portrait">
+            <Texture name="$parentDummyBackground">
+                <Color r="0.1" b="0.1" g="0.1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="10" y="-90" />
+                    <Anchor point="BOTTOMRIGHT" x="-4" />
+                </Anchors>
+            </Texture>
+            <Texture name="$parentPortrait" parentKey="portrait">
                 <Size x="40" y="40" />
                 <Anchors>
                     <Anchor point="TOPLEFT" x="7" y="-5" />
@@ -18,13 +28,30 @@
             </Texture>
         </Layer>
         <Layer level="ARTWORK">
-            <Texture name="$parentBackgroundTop" file="Interface\ContainerFrame\UI-BackpackBackground">
-                <Size x="256" y="88" />
+            <Texture name="$parentBackgroundTopLeft" file="Interface\ContainerFrame\UI-Bag-Components">
+                <Size x="55" y="90" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent" x="0" y="0" />
+                </Anchors>
+                <TexCoords left="0.25" right="0.466796875" top="0" bottom="0.1767578125" />
+
+            </Texture>
+            <Texture name="$parentBackgroundTopRight" file="Interface\ContainerFrame\UI-Bag-Components">
+                <Size x="55" y="90" />
                 <Anchors>
                     <Anchor point="TOPRIGHT" relativeTo="$parent" x="0" y="0" />
                 </Anchors>
-                <TexCoords left="0" right="1" top="0" bottom="0.341796875" />
+                <TexCoords left="0.80078125" right="1" top="0" bottom="0.1767578125" />
             </Texture>
+            <Texture name="$parentBackgroundTopMiddle" file="Interface\ContainerFrame\UI-Bag-Components">
+                <Size y="90" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentBackgroundTopLeft" relativePoint="TOPRIGHT" />
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentBackgroundTopRight" relativePoint="BOTTOMLEFT" />
+                </Anchors>
+                <TexCoords left="0.5" right="0.625" top="0" bottom="0.1767578125" />
+            </Texture>
+
             <Texture name="$parentBackgroundBottom" file="Interface\ContainerFrame\UI-BackpackBackground">
                 <Size x="256" y="24" />
                 <Anchors>
@@ -32,13 +59,7 @@
                 </Anchors>
                 <TexCoords left="0" right="1" top="0.828125" bottom="0.92382812" />
             </Texture>
-            <Texture name="$parentBackgroundMiddle1" file="Interface\ContainerFrame\UI-Bag-Components">
-                <Size x="256" y="256" />
-                <Anchors>
-                    <Anchor point="TOP" relativeTo="$parentBackgroundTop" relativePoint="BOTTOM"/>
-                </Anchors>
-                <TexCoords left="0" right="1" top="0.3515625" bottom="0.8515625"/>
-            </Texture>
+
             <FontString name="$parentName" inherits="GameFontHighlight">
                 <Size x="112" y="12" />
                 <Anchors>
@@ -70,14 +91,14 @@
             <Scripts>
                 <OnEnter>
                     GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-                    GameTooltip:SetText()
+                    GameTooltip:ClearLines()
                     for i = 1, MAX_WATCHED_TOKENS do
                         local name, amount = GetBackpackCurrencyInfo(i)
                         if name then
-                            GameTooltip:AppendText(name..": "..amount)
+                            GameTooltip:AddLine(name..": "..amount)
                         end
                     end
-                    -- GameTooltip:Show()
+                    GameTooltip:Show()
                 </OnEnter>
                 <OnLeave>
                     GameTooltip:Hide()

@@ -28,13 +28,17 @@ function LiteBagFrame_OnLoad(self)
     self.itemButtons = { }
 
     for _,bag in ipairs(self.bagIDs) do
-        self.dummyContainerFrames[bag] = CreateFrame("Frame", self:GetName() .. "ContainerFrame" .. bag, self)
+        local bagName = self:GetName() .. "ContainerFrame" .. bag
+        self.dummyContainerFrames[bag] = CreateFrame("Frame",  name, self)
         self.dummyContainerFrames[bag]:SetID(bag)
     end
 
-    SetBagPortraitTexture(self.portrait, self.bagIDs[1])
+    if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
+        self.isBank = 1
+    elseif LiteBagFrame_IsMyBag(self, BACKPACK_CONTAINER) then
+        self.isBackpack = 1
+    end
 
-    self:RegisterEvent("BAG_OPEN")
     self:RegisterEvent("BANKFRAME_OPENED")
     self:RegisterEvent("BANKFRAME_CLOSED")
     self:RegisterEvent("BAG_CLOSED")
@@ -49,11 +53,11 @@ function LiteBagFrame_OnEvent(self, event, ...)
             self:Show()
         end
     elseif event == "BANKFRAME_OPENED" then
-        if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
+        if self.isBank then
             self:Show()
         end
     elseif event == "BANKFRAME_CLOSED" then
-        if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
+        if self.isBank then
             self:Hide()
         end
     elseif event == "BAG_UPDATE" or event == "BAG_CLOSED" then
@@ -63,7 +67,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
         end
     elseif event == "PLAYERBANKSLOTS_CHANGED" then
         local slot = ...
-        if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
+        if self.isBank then
             if slot <= NUM_BANKGENERIC_SLOTS then
                 LiteBagFrame_Update(self)
             end
@@ -88,12 +92,12 @@ function LiteBagFrame_OnEvent(self, event, ...)
 end
 
 function LiteBagFrame_SetMainMenuBarButtons(self, checked)
-    if LiteBagFrame_IsMyBag(BACKPACK_CONTAINER) then
+    if self.isBackpack then
         MainMenuBarBackpackButton:SetChecked(checked)
     end
 
     for n = 1, NUM_CONTAINER_FRAMES do
-        if LiteBagFrame_IsMyBag(n) then
+        if LiteBagFrame_IsMyBag(self, n) then
             local button = _G["CharacterBag"..(n-1).."Slot"]
             if button then
                 button:SetChecked(checked)
@@ -111,7 +115,7 @@ function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("INVENTORY_SEARCH_UPDATE")
 
     LiteBagFrame_SetMainMenuBarButtons(self, 0)
-    if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
+    if self.isBank then
        CloseBankFrame()
     end
 
@@ -126,6 +130,15 @@ function LiteBagFrame_OnShow(self)
     self:RegisterEvent("DISPLAY_SIZE_CHANGED")
     self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
 
+    if self.isBackpack then
+        SetPortraitTexture(self.portrait, "player")
+    elseif self.isBank then
+        SetPortraitTexture(self.portrait, "npc")
+    else
+        SetBagPortraitTexture(self.portrait, self.bagIDs[1])
+    end
+
+    self:RegisterEvent("BAG_OPEN")
     LiteBagFrame_Update(self)
 
     LiteBagFrame_SetMainMenuBarButtons(self, 1)
@@ -134,10 +147,17 @@ function LiteBagFrame_OnShow(self)
 end
 
 function LiteBagFrame_AttachSearchBox(self)
-    BagItemSearchBox:SetParent(self)
-    BagItemSearchBox:SetPoint("TOPRIGHT", self, "TOPRIGHT", -10, -26)
-    BagItemSearchBox.anchorBag = self
-    BagItemSearchBox:Show()
+    local box
+    if self.isBank then
+        box = BankItemSearchBox
+    else
+        box = BagItemSearchBox
+    end
+
+    box:SetParent(self)
+    box:SetPoint("TOPRIGHT", self, "TOPRIGHT", -10, -29)
+    box.anchorBag = self
+    box:Show()
 end
 
 function LiteBagFrame_UpdateCooldowns(self)
@@ -190,18 +210,27 @@ end
 function LiteBagFrame_PositionItemButtons(self)
     local name = self:GetName()
 
+    local wgap, hgap = 5, 4
+    local ncols = self.columns or 8
+
     for i = 1, self.size do
         local itemButton = self.itemButtons[i]
             itemButton:ClearAllPoints()
         if i == 1 then
             self.itemButtons[i]:SetPoint("TOPLEFT", name, "TOPLEFT", 18, -50)
-        elseif i % 8 == 1 then
-            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-8], "BOTTOMLEFT", 0, -4)
+        elseif i % ncols == 1 then
+            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-ncols], "BOTTOMLEFT", 0, -hgap)
         else
-            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-1]:GetName(), "TOPRIGHT", 5, 0)
+            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-1]:GetName(), "TOPRIGHT", wgap, 0)
         end
-            
+
     end
+
+    local nrows = ceil(self.size / ncols)
+    local w, h = self.itemButtons[1]:GetSize()
+
+    self:SetWidth(29 + ncols * w + (ncols-1) * wgap)
+    self:SetHeight(78 + nrows * h + (nrows-1) * hgap)
 end
 
 function LiteBagFrame_Update(self)

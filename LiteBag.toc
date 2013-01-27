@@ -6,3 +6,5 @@
 
 LiteBagItemButtonTemplate.xml
 LiteBagFrameTemplate.xml
+LiteBag.xml
+ReplaceBlizzard.lua
