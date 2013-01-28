@@ -4,7 +4,7 @@
 
 <!-- Copyright 2013 Mike Battersby -->
 
-<Frame name="LiteBagFrameTemplate" frameStrata="MEDIUM" toplevel="true" movable="true" enableMouse="true" hidden="true" inherits="PortraitFrameTemplate" virtual="true">
+<Frame name="LiteBagFrameTemplate" frameStrata="MEDIUM" toplevel="true" movable="true" enableMouse="true" hidden="true" inherits="ButtonFrameTemplate" virtual="true">
 
     <Size x="384" y="512" />
     <Anchors>
@@ -12,9 +12,16 @@
     </Anchors>
 
     <Frames>
+        <Frame name="$parentMoneyFrameBorder" inherits="ThinGoldEdgeTemplate">
+            <Size x="170" y="21" />
+            <Anchors>
+                <Anchor point="BOTTOMRIGHT" x="-8" y="5" />
+            </Anchors>
+        </Frame>
+
         <Frame name="$parentMoneyFrame" parentKey="moneyFrame" inherits="SmallMoneyFrameTemplate">
             <Anchors>
-                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-2" y="8" />
+                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-2" y="9" />
             </Anchors>
             <Scripts>
                 <OnLoad>
@@ -34,6 +41,7 @@
                 <OnEnter>
                     GameTooltip:SetOwner(self, "ANCHOR_LEFT")
                     GameTooltip:ClearLines()
+                    GameTooltip:AddLine(YELLOW_FONT_COLOR_CODE .. CURRENCY .. FONT_COLOR_CODE_CLOSE)
                     for i = 1, MAX_WATCHED_TOKENS do
                         local name, amount = GetBackpackCurrencyInfo(i)
                         if name then

@@ -34,13 +34,17 @@ function LiteBagFrame_OnLoad(self)
         self.dummyContainerFrames[bag]:SetID(bag)
     end
 
+    local insetBg = _G[self:GetName() .."InsetBg"]
+
     if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
         self.isBank = 1
         self:SetAttribute("UIPanelLayout-defined", true)
         self:SetAttribute("UIPanelLayout-area", "left")
         self:SetAttribute("UIPanelLayout-pushable", 6)
+        insetBg:SetTexture("Interface\\FrameGeneral\\UI-Background-Rock", true, true)
     elseif LiteBagFrame_IsMyBag(self, BACKPACK_CONTAINER) then
         self.isBackpack = 1
+        tinsert(UISpecialFrames, self:GetName())
     end
 
     self:RegisterEvent("BANKFRAME_OPENED")
@@ -152,12 +156,17 @@ function LiteBagFrame_OnShow(self)
     self:RegisterEvent("QUEST_ACCEPTED")
     self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
 
+    local titleText =_G[self:GetName() .. "TitleText"]
+
     if self.isBackpack then
         SetPortraitTexture(self.portrait, "player")
+        titleText:SetText(GetBagName(self.bagIDs[1]))
     elseif self.isBank then
         SetPortraitTexture(self.portrait, "npc")
+        titleText:SetText(UnitName("npc"))
     else
         SetBagPortraitTexture(self.portrait, self.bagIDs[1])
+        titleText:SetText(GetBagName(self.bagIDs[1]))
     end
 
     self:RegisterEvent("BAG_OPEN")
@@ -177,7 +186,7 @@ function LiteBagFrame_AttachSearchBox(self)
     end
 
     box:SetParent(self)
-    box:SetPoint("TOPRIGHT", self, "TOPRIGHT", -10, -29)
+    box:SetPoint("TOPRIGHT", self, "TOPRIGHT", -14, -34)
     box.anchorBag = self
     box:Show()
 end
@@ -239,7 +248,7 @@ function LiteBagFrame_PositionItemButtons(self)
         local itemButton = self.itemButtons[i]
             itemButton:ClearAllPoints()
         if i == 1 then
-            self.itemButtons[i]:SetPoint("TOPLEFT", name, "TOPLEFT", 18, -50)
+            self.itemButtons[i]:SetPoint("TOPLEFT", name, "TOPLEFT", 14, -70)
         elseif i % ncols == 1 then
             self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-ncols], "BOTTOMLEFT", 0, -hgap)
         else
@@ -252,7 +261,7 @@ function LiteBagFrame_PositionItemButtons(self)
     local w, h = self.itemButtons[1]:GetSize()
 
     self:SetWidth(29 + ncols * w + (ncols-1) * wgap)
-    self:SetHeight(78 + nrows * h + (nrows-1) * hgap)
+    self:SetHeight(105 + nrows * h + (nrows-1) * hgap)
 end
 
 function LiteBagFrame_Update(self)
