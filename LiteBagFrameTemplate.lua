@@ -46,8 +46,6 @@ function LiteBagFrame_OnLoad(self)
     self:RegisterEvent("BANKFRAME_OPENED")
     self:RegisterEvent("BANKFRAME_CLOSED")
     self:RegisterEvent("BAG_CLOSED")
-    self:RegisterEvent("QUEST_ACCEPTED")
-    self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
 end
 
 function LiteBagFrame_Show(self)
@@ -133,6 +131,8 @@ function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("BAG_UPDATE_COOLDOWN")
     self:UnregisterEvent("DISPLAY_SIZE_CHANGED")
     self:UnregisterEvent("INVENTORY_SEARCH_UPDATE")
+    self:UnregisterEvent("QUEST_ACCEPTED")
+    self:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
 
     LiteBagFrame_SetMainMenuBarButtons(self, 0)
     if self.isBank then
@@ -149,6 +149,8 @@ function LiteBagFrame_OnShow(self)
     self:RegisterEvent("BAG_UPDATE_COOLDOWN")
     self:RegisterEvent("DISPLAY_SIZE_CHANGED")
     self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
+    self:RegisterEvent("QUEST_ACCEPTED")
+    self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
 
     if self.isBackpack then
         SetPortraitTexture(self.portrait, "player")
