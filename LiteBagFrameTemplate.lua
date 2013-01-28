@@ -26,6 +26,7 @@ function LiteBagFrame_OnLoad(self)
 
     self.dummyContainerFrames = { }
     self.itemButtons = { }
+    self.size = 0
 
     for _,bag in ipairs(self.bagIDs) do
         local bagName = self:GetName() .. "ContainerFrame" .. bag
