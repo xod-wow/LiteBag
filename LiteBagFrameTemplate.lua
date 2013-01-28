@@ -35,6 +35,9 @@ function LiteBagFrame_OnLoad(self)
 
     if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
         self.isBank = 1
+        self:SetAttribute("UIPanelLayout-defined", true)
+        self:SetAttribute("UIPanelLayout-area", "left")
+        self:SetAttribute("UIPanelLayout-pushable", 6)
     elseif LiteBagFrame_IsMyBag(self, BACKPACK_CONTAINER) then
         self.isBackpack = 1
     end
@@ -46,19 +49,35 @@ function LiteBagFrame_OnLoad(self)
     self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
 end
 
+function LiteBagFrame_Show(self)
+    if self.isBank then
+        ShowUIPanel(self)
+    else
+        self:Show()
+    end
+end
+
+function LiteBagFrame_Hide(self)
+    if self.isBank then
+        HideUIPanel(self)
+    else
+        self:Show()
+    end
+end
+
 function LiteBagFrame_OnEvent(self, event, ...)
     if event == "BAG_OPEN" then
         local bag = ...
         if LiteBagFrame_IsMyBag(self, bag) then
-            self:Show()
+            LiteBagFrame_Show(self)
         end
     elseif event == "BANKFRAME_OPENED" then
         if self.isBank then
-            self:Show()
+            LiteBagFrame_Show(self)
         end
     elseif event == "BANKFRAME_CLOSED" then
         if self.isBank then
-            self:Hide()
+            LiteBagFrame_Hide(self)
         end
     elseif event == "BAG_UPDATE" or event == "BAG_CLOSED" then
         local bag = ...

@@ -24,6 +24,8 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
     hooksecurefunc('CloseBackpack', function () inventoryFrame:Hide() end)
     hooksecurefunc('CloseAllBags', function () inventoryFrame:Hide() end)
 
+    BagSlotButton_UpdateChecked = function () end
+
 end
 
 LiteBagFrame_ReplaceBlizzard(LiteBagInventory, LiteBagBank)
