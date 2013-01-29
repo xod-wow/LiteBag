@@ -12,8 +12,6 @@
         <OnLoad>
             self.bagIDs = { 0, 1, 2, 3, 4 }
             LiteBagFrame_OnLoad(self)
-            SlashCmdList["LiteBagInventory"] = function () self:Show() end
-            SLASH_LiteBagInventory1 = "/lb"
         </OnLoad>
     </Scripts>
 
