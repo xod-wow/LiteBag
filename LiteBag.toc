@@ -5,6 +5,7 @@
 ## Email: mib@post.com
 
 LiteBagItemButtonTemplate.xml
+LiteBagBagButtonTemplate.xml
 LiteBagFrameTemplate.xml
 LiteBag.xml
 ReplaceBlizzard.lua

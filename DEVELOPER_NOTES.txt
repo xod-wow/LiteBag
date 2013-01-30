@@ -1,0 +1,46 @@
+------------------------------------------------------------------------------
+* Diff since last release:
+
+    TAGDIR=svn://svn.curseforge.net/wow/litebag/mainline/tags
+    LATEST=`svn ls -v $TAGDIR | grep -v 'beta' | tail -1 | awk '{print $NF}'`
+    svn diff svn://svn.curseforge.net/wow/litebag/mainline/tags/$LATEST \
+             svn://svn.curseforge.net/wow/litebag/mainline/trunk
+
+
+------------------------------------------------------------------------------
+* XML syntax check
+
+    xmllint --noout *.xml
+
+
+------------------------------------------------------------------------------
+* TODO List
+
+    Put a background on the slots.
+
+    Anchor the bags frame further out based on number of action bars shown.
+
+    Attach or implement the BackpackTokenFrame (and remove the mouseover).
+        - OptionalDeps: Blizzard_TokenUI
+        - Need a ThinGreenEdgeTemplate
+        - Where to put it is a problem based on the size of the frames.
+
+    Add the bag buttons with ability to buy slots.
+        - MainMenuBarBagButtons.{xml,lua}
+        - BagSlotButtonTemplate and BagItemButtonBagTemplate
+        - Probably don't want the animation.
+        - Do we want to highlight the itemslots if you mouseover the
+          bag itself? button:LockHighlight() and UnlockHighlight()
+        - The unpurchased bags need an empty background texture.
+        - Show free slots on them?  Need to register CVAR_UPDATE where
+          event, cvar, onoff = ...  looking for DISPLAY_FREE_BAG_SLOTS.
+          Also GetCVar("displayFreeBagSlots") == 1 at init.
+        - Do we want to search filter them?
+
+    Check if the search box is working right when switching focus between
+    the bag and bank one.
+
+    What to do with the specialist bag types?
+
+    Is there a use for indication of "non-useable" items a-la Combuctor?
+
