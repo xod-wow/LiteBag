@@ -40,9 +40,10 @@
                     GameTooltip:ClearLines()
                     GameTooltip:AddLine(YELLOW_FONT_COLOR_CODE .. CURRENCY .. FONT_COLOR_CODE_CLOSE)
                     for i = 1, MAX_WATCHED_TOKENS do
-                        local name, amount = GetBackpackCurrencyInfo(i)
+                        local name, amount, icon = GetBackpackCurrencyInfo(i)
                         if name then
-                            GameTooltip:AddLine(name..": "..amount)
+                            GameTooltip:AddLine(amount)
+                            GameTooltip:AddTexture(icon)
                         end
                     end
                     GameTooltip:Show()
@@ -55,7 +56,7 @@
 
         <Button name="$parentBagButton1" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" y="-40" />
+                <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" y="-70" x="-2" />
             </Anchors>
         </Button>
 

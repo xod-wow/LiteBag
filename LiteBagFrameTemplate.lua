@@ -159,6 +159,7 @@ function LiteBagFrame_OnShow(self)
     local titleText =_G[self:GetName() .. "TitleText"]
 
     if self.isBackpack then
+        self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
         SetPortraitTexture(self.portrait, "player")
         titleText:SetText(GetBagName(self.bagIDs[1]))
     elseif self.isBank then

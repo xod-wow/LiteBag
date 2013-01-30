@@ -4,7 +4,7 @@
 
 <Script file="LiteBagBagButtonTemplate.lua"/>
 
-<Button name="LiteBagBagButtonTemplate" inherits="BankItemButtonBagTemplate" hidden="true" virtual="true">
+<Button name="LiteBagBagButtonTemplate" inherits="ItemButtonTemplate" hidden="true" virtual="true">
     <Scripts>
         <OnEnter function="LiteBagBagButton_OnEnter" />
     </Scripts>
