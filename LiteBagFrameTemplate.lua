@@ -128,6 +128,32 @@ function LiteBagFrame_SetMainMenuBarButtons(self, checked)
     end
 end
 
+function LiteBagFrame_HighlightBagButtons(self, id)
+    if not LiteBag_IsMyBag(self, id) then
+        return
+    end
+
+    for i = 1, self.size do
+        local button = self.itemButtons[i]
+        if button:GetParent():GetID() == id then
+            button:LockHighlight()
+        end
+    end
+end
+
+function LiteBagFrame_UnhighlightBagButtons(self, id)
+    if not LiteBag_IsMyBag(self, id) then
+        return
+    end
+
+    for i = 1, self.size do
+        local button = self.itemButtons[i]
+        if button:GetParent():GetID() == id then
+            button:UnlockHighlight()
+        end
+    end
+end
+
 function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("BAG_UPDATE")
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")

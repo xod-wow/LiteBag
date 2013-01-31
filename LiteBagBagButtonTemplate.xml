@@ -6,7 +6,13 @@
 
 <Button name="LiteBagBagButtonTemplate" inherits="ItemButtonTemplate" hidden="true" virtual="true">
     <Scripts>
+        <OnLoad function="LiteBagBagButton_OnLoad" />
+        <OnClick function="LiteBagBagButton_OnClick" />
         <OnEnter function="LiteBagBagButton_OnEnter" />
+        <OnLeave function="LiteBagBagButton_OnLeave" />
+        <OnDragStart function="LiteBagBagButton_OnDrag" />
+        <OnReceiveDrag function="LiteBagBagButton_OnClick" />
+        <OnEvent function="LiteBagBagButton_OnEvent" />
     </Scripts>
 </Button>
 
