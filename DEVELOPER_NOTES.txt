@@ -24,6 +24,8 @@
         - OptionalDeps: Blizzard_TokenUI
         - Need a ThinGreenEdgeTemplate
         - Where to put it is a problem based on the size of the frames.
+        - 3 frames inheriting BackpackTokenTemplate with id=currencyID
+        - Each one is 50x12 in size.
 
     Add the bag buttons with ability to buy slots.
         - MainMenuBarBagButtons.{xml,lua}
