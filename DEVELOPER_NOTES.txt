@@ -26,6 +26,8 @@
         - Where to put it is a problem based on the size of the frames.
         - 3 frames inheriting BackpackTokenTemplate with id=currencyID
         - Each one is 50x12 in size.
+        - Override BackpackTokenFrame_Update as there is no event for this
+          and that is called by the Token Frame.
 
     Add the bag buttons with ability to buy slots.
         - MainMenuBarBagButtons.{xml,lua}
