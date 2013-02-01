@@ -129,7 +129,7 @@ function LiteBagFrame_SetMainMenuBarButtons(self, checked)
 end
 
 function LiteBagFrame_HighlightBagButtons(self, id)
-    if not LiteBag_IsMyBag(self, id) then
+    if not LiteBagFrame_IsMyBag(self, id) then
         return
     end
 
@@ -142,7 +142,7 @@ function LiteBagFrame_HighlightBagButtons(self, id)
 end
 
 function LiteBagFrame_UnhighlightBagButtons(self, id)
-    if not LiteBag_IsMyBag(self, id) then
+    if not LiteBagFrame_IsMyBag(self, id) then
         return
     end
 
@@ -307,5 +307,12 @@ function LiteBagFrame_Update(self)
         else
             itemButton:Hide()
         end
+    end
+
+    for i = 1,5 do
+        local b = _G[self:GetName().."BagButton"..i]
+        b:SetID(self.bagIDs[i])
+        LiteBagBagButton_Update(b)
+        b:Show()
     end
 end

@@ -18,7 +18,7 @@
     <Scripts>
         <OnLoad>
             self.bagIDs = { -1, 5, 6, 7, 8, 9, 10, 11 }
-            self.columns = 14
+            self.columns = 16
             LiteBagFrame_OnLoad(self)
         </OnLoad>
     </Scripts>

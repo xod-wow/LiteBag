@@ -14,8 +14,21 @@ do
 end
 
 function LiteBagBagButton_Update(self)
-    self.slotID = ContainerIDToInventoryID(self:GetID())
+
+    self.bagID = self:GetID()
     self.isBank = BankContainers[self:GetID()]
+
+    if self.bagID == BACKPACK_CONTAINER then
+        SetItemButtonTexture(self, "Interface\\Buttons\\Button-Backpack-Up")
+        self.tooltipText = BACKPACK_TOOLTIP
+        return
+    elseif self.bagID == BANK_CONTAINER then
+        SetItemButtonTexture(self, "Interface\\Buttons\\Button-Backpack-Up")
+        self.tooltipText = "Bank"
+        return
+    end
+
+    self.slotID = ContainerIDToInventoryID(self:GetID())
 
     local texture = _G[self:GetName().."IconTexture"]
     local textureName = GetInventoryItemTexture("player", self.slotID)
@@ -31,9 +44,6 @@ function LiteBagBagButton_Update(self)
 
     if textureName then
         SetItemButtonTexture(self, textureName)
-    elseif self.bagID == BACKPACK_CONTAINER then        
-        SetItemButtonTexture(self, "Interface\\Buttons\\Button-Backpack-Up")
-        self.tooltipText = BACKPACK_TOOLTIP
     elseif self.canBuy then
         SetItemButtonTexture(self, "Interface\\GuildBankFrame\\UI-GuildBankFrame-NewTab")
         self.tooltipText = BANK_BAG_PURCHASE
@@ -42,7 +52,7 @@ function LiteBagBagButton_Update(self)
         SetItemButtonTexture(self, textureName)
     end
 
-    if self.isBank and self.bagID > buyBagSlot then
+    if self.isBank and self.bagID > buyBankSlot then
         self:Disable()
     else
         self:Enable()
@@ -67,6 +77,13 @@ function LiteBagBagButton_OnEvent(self)
 end
 
 function LiteBagBagButton_OnEnter(self)
+
+    LiteBagFrame_HighlightBagButtons(self:GetParent(), self:GetID())
+
+    if self.bagID == BACKPACK_CONTAINER or self.bagID == BANK_CONTAINER then
+        return
+    end
+
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
     local hasItem = GameTooltip:SetInventoryItem("player", self.slotID)
     if not hasItem then
@@ -80,20 +97,25 @@ function LiteBagBagButton_OnEnter(self)
             GameTooltip:AddLine(BAGSLOT)
         end
     end
-    LiteBagFrame_HighlightBagButtons(self:GetParent(), self:GetID())
 end
 
 function LiteBagBagButton_OnLeave(self)
+    LiteBagFrame_UnhighlightBagButtons(self:GetParent(), self:GetID())
     GameTooltip:Hide()
     ResetCursor()
-    LiteBagFrame_UnhighlightBagButtons(self:GetParent(), self:GetID())
 end
 
 function LiteBagBagButton_OnDrag(self)
-    PickupBagFromSlot(self.slotID)
+    if self.bagID ~= BACKPACK_CONTAINER and self.bagID ~= BANK_CONTAINER then
+        PickupBagFromSlot(self.slotID)
+    end
 end
 
 function LiteBagBagButton_OnClick(self)
-    PutItemInBag(self.slotID)
+    if self.bagID == BACKPACK_CONTAINER then
+        PutItemInBackpack()
+    else
+        PutItemInBag(self.slotID)
+    end
 end
 
