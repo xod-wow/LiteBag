@@ -89,10 +89,8 @@ function LiteBagFrame_OnEvent(self, event, ...)
         end
     elseif event == "PLAYERBANKSLOTS_CHANGED" then
         local slot = ...
-        if self.isBank then
-            if slot <= NUM_BANKGENERIC_SLOTS then
+        if self.isBank and slot > NUM_BANKGENERIC_SLOTS then
                 LiteBagFrame_Update(self)
-            end
         end
     elseif event == "ITEM_LOCK_CHANGED" then
         local bag, slot = ...

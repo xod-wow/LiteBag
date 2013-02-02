@@ -79,25 +79,26 @@ function LiteBagBagButton_OnEnter(self)
 
     LiteBagFrame_HighlightBagButtons(self:GetParent(), self:GetID())
 
-    if self.bagID == BACKPACK_CONTAINER or self.bagID == BANK_CONTAINER then
-        return
-    end
+    GameTooltip:SetOwner(self, "ANCHOR_LEFT")
 
-    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-    local hasItem = GameTooltip:SetInventoryItem("player", self.slotID)
-    if not hasItem then
-        if self.purchaseCost then
-            GameTooltip:ClearLines()
-            GameTooltip:AddLine(BANK_BAG_PURCHASE)
-            GameTooltip:AddDoubleLine(COSTS_LABEL, GetCoinTextureString(self.purchaseCost))
-        elseif self.bagID == BACKPACK_CONTAINER then        
-            GameTooltip:SetText(BACKPACK_TOOLTIP)
-        elseif self.isBank and self.bagID > GetNumBankSlots() + 4 then
-            GameTooltip:SetText(BANK_BAG_PURCHASE)
-        elseif self.isBank then
-            GameTooltip:SetText(BANK_BAG)
-        else
-            GameTooltip:SetText(BAGSLOT)
+    if self.bagID == BACKPACK_CONTAINER then
+        GameTooltip:SetText(BACKPACK_TOOLTIP)
+    elseif self.bagID == BANK_CONTAINER then
+        GameTooltip:SetText(BANK_BAG)
+    else
+        local hasItem = GameTooltip:SetInventoryItem("player", self.slotID)
+        if not hasItem then
+            if self.purchaseCost then
+                GameTooltip:ClearLines()
+                GameTooltip:AddLine(BANK_BAG_PURCHASE)
+                GameTooltip:AddDoubleLine(COSTS_LABEL, GetCoinTextureString(self.purchaseCost))
+            elseif self.isBank and self.bagID > GetNumBankSlots() + 4 then
+                GameTooltip:SetText(BANK_BAG_PURCHASE)
+            elseif self.isBank then
+                GameTooltip:SetText(BANK_BAG)
+            else
+                GameTooltip:SetText(BAGSLOT)
+            end
         end
     end
     GameTooltip:Show()
@@ -122,6 +123,7 @@ function LiteBagBagButton_OnClick(self)
         PlaySound("igMainMenuOption");
         BankFrame.nextSlotCost = self.purchaseCost
         StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
+        LiteBagFrame_Update(self:GetParent())
     else
         PutItemInBag(self.slotID)
     end
