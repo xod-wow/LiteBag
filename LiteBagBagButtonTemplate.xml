@@ -5,11 +5,16 @@
 <Script file="LiteBagBagButtonTemplate.lua"/>
 
 <Button name="LiteBagBagButtonTemplate" inherits="ItemButtonTemplate" hidden="true" virtual="true">
-    <Size x="30" y="30" />
-    <Scripts>
-        <OnLoad>
+    <Size x="26" y="26" />
+   <Scripts>
+        <OnSizeChanged>
+            -- For some reason the NormalTexture is only center anchored
+            -- which means it doesn't scale when the button does.
             local tex = _G[self:GetName().."NormalTexture"]
-            tex:SetSize(64 * 30/37, 64 * 30/37)
+            tex:SetWidth(64 *  w / 37)
+            tex:SetHeight(64 * h / 37)
+        </OnSizeChanged>
+         <OnLoad>
             LiteBagBagButton_OnLoad(self)
         </OnLoad>
         <OnClick function="LiteBagBagButton_OnClick" />

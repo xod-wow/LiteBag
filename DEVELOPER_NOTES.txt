@@ -18,8 +18,6 @@
 
     Put a background on the slots.
 
-    Anchor the bags frame further out based on number of action bars shown.
-
     Attach or implement the BackpackTokenFrame (and remove the mouseover).
         - OptionalDeps: Blizzard_TokenUI
         - Need a ThinGreenEdgeTemplate
@@ -29,22 +27,18 @@
         - Override BackpackTokenFrame_Update as there is no event for this
           and that is called by the Token Frame.
 
-    Add the bag buttons with ability to buy slots.
-        - MainMenuBarBagButtons.{xml,lua}
-        - BagSlotButtonTemplate and BagItemButtonBagTemplate
-        - Probably don't want the animation.
-        - Do we want to highlight the itemslots if you mouseover the
-          bag itself? button:LockHighlight() and UnlockHighlight()
-        - The unpurchased bags need an empty background texture.
-        - Show free slots on them?  Need to register CVAR_UPDATE where
-          event, cvar, onoff = ...  looking for DISPLAY_FREE_BAG_SLOTS.
-          Also GetCVar("displayFreeBagSlots") == 1 at init.
-        - Do we want to search filter them?
+    Search filter the bag buttons.
 
     Check if the search box is working right when switching focus between
     the bag and bank one.
+
+    Attach the bag buttons somewhere sensible.
 
     What to do with the specialist bag types?
 
     Is there a use for indication of "non-useable" items a-la Combuctor?
 
+    Redo the logic for the bag button colors/texture/tooltips, it is a mess.
+
+    Why is part of Skada showing through the background on first show?  Is it
+    my bug or theirs? Don't really want to use HIGH frame strata.

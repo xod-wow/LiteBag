@@ -34,28 +34,27 @@ function LiteBagBagButton_Update(self)
     local textureName = GetInventoryItemTexture("player", self.slotID)
 
     local numBankSlots, bankFull = GetNumBankSlots()
-    local buyBankSlot = numBankSlots + 4 + 1
+    local buyBankSlot = numBankSlots + 4
 
     if self.bagID == buyBankSlot then
-        self.canBuy = 1
+        self.purchaseCost = GetBankSlotCost()
     else
-        self.canBuy = nil
+        self.purchaseCost = nil
     end
 
     if textureName then
         SetItemButtonTexture(self, textureName)
-    elseif self.canBuy then
+    elseif self.purchaseCost then
         SetItemButtonTexture(self, "Interface\\GuildBankFrame\\UI-GuildBankFrame-NewTab")
-        self.tooltipText = BANK_BAG_PURCHASE
     else
         textureName = select(2, GetInventorySlotInfo("Bag0Slot"))
         SetItemButtonTexture(self, textureName)
     end
 
     if self.isBank and self.bagID > buyBankSlot then
-        self:Disable()
+        SetItemButtonTextureVertexColor(self, 1, 0, 0)
     else
-        self:Enable()
+        SetItemButtonTextureVertexColor(self, 1, 1, 1)
     end
 
 end
@@ -87,16 +86,21 @@ function LiteBagBagButton_OnEnter(self)
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
     local hasItem = GameTooltip:SetInventoryItem("player", self.slotID)
     if not hasItem then
-        if self.canBuy then
-            GameTooltip:SetText(BANK_BAG_PURCHASE)
+        if self.purchaseCost then
+            GameTooltip:ClearLines()
+            GameTooltip:AddLine(BANK_BAG_PURCHASE)
+            GameTooltip:AddDoubleLine(COSTS_LABEL, GetCoinTextureString(self.purchaseCost))
         elseif self.bagID == BACKPACK_CONTAINER then        
             GameTooltip:SetText(BACKPACK_TOOLTIP)
+        elseif self.isBank and self.bagID > GetNumBankSlots() + 4 then
+            GameTooltip:SetText(BANK_BAG_PURCHASE)
         elseif self.isBank then
             GameTooltip:SetText(BANK_BAG)
         else
-            GameTooltip:AddLine(BAGSLOT)
+            GameTooltip:SetText(BAGSLOT)
         end
     end
+    GameTooltip:Show()
 end
 
 function LiteBagBagButton_OnLeave(self)
@@ -114,6 +118,10 @@ end
 function LiteBagBagButton_OnClick(self)
     if self.bagID == BACKPACK_CONTAINER then
         PutItemInBackpack()
+    elseif self.purchaseCost then
+        PlaySound("igMainMenuOption");
+        BankFrame.nextSlotCost = self.purchaseCost
+        StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
     else
         PutItemInBag(self.slotID)
     end
