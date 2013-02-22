@@ -7,6 +7,11 @@
 ----------------------------------------------------------------------------]]--
 
 function LiteBagFrame_IsMyBag(self, id)
+    -- For some reason BAG_UPDATE_COOLDOWN sometimes doesn't have a bag
+    -- argument. Since we can't tell if it's us we better assume it is.
+    if not id then return true end
+
+    -- Otherwise test each of our bags.
     for _,bag in ipairs(self.bagIDs) do
         if id == bag then return true end
     end
