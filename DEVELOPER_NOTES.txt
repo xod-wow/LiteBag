@@ -16,6 +16,10 @@
 ------------------------------------------------------------------------------
 * TODO List
 
+    Don't create buttons in combat.  Full check-through for what does and
+    doesn't need InCombatLockdown() checks.  May have to create the
+    ItemButtons in the XML.
+
     Put a background on the slots.
 
     Attach or implement the BackpackTokenFrame (and remove the mouseover).
@@ -26,13 +30,15 @@
         - Each one is 50x12 in size.
         - Override BackpackTokenFrame_Update as there is no event for this
           and that is called by the Token Frame.
+        - Don't attack it to non-backpack.
 
     Search filter the bag buttons.
 
     Check if the search box is working right when switching focus between
     the bag and bank one.
 
-    Attach the bag buttons somewhere sensible.
+    Attach the bag buttons somewhere sensible.  Make the proper number of
+    them for the bank.
 
     What to do with the specialist bag types?
 
@@ -42,3 +48,11 @@
 
     Why is part of Skada showing through the background on first show?  Is it
     my bug or theirs? Don't really want to use HIGH frame strata.
+
+    Make the frames resizeable (maybe?).
+
+    Make the backpack frame moveable (maybe?).  If so it would have to dock
+    back into place if dragged towards the bottom right.
+
+    Make the bank frame default to 14 wide (since the default bank bag is 28).
+
