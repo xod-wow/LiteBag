@@ -22,6 +22,9 @@
 
     Put a background on the slots.
 
+    Put the blank spots at the top, not the bottom, so that dragging
+    bigger bags in rearranges things the least.
+
     Attach or implement the BackpackTokenFrame (and remove the mouseover).
         - OptionalDeps: Blizzard_TokenUI
         - Need a ThinGreenEdgeTemplate
