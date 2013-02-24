@@ -101,38 +101,13 @@ end
 
 
 function LiteBagItemButton_OnLoad(self)
-    -- ContainerFrameItemButtonTemplate:GetScript("OnLoad")(self)
     ContainerFrameItemButton_OnLoad(self)
     self.GetInventorySlot = ButtonInventorySlot
     self.UpdateTooltip = LiteBagItemButton_OnEnter
 end
 
-function LiteBagItemButton_OnClick(self, button)
-    -- ContainerFrameItemButtonTemplate:GetScript("OnClick")(self)
-
-    -- This buggering around with IsModifiedClick taken from the OnClick
-    -- handler for ContainerFrameItemButtonTemplate.  See ContainerFrame.xml.
-
-    local treatAsModified = IsModifiedClick()
-    if button ~= "LeftButton" and treatAsModified and IsModifiedClick("AUTOLOOTTOGGLE") then
-        local bag = self:GetParent():GetID()
-        local slot = self:GetID()
-        local lootable = select(6, GetContainerItemInfo(bag, slot))
-        if lootable then
-            treatAsModified = false
-        end
-    end
-
-    if treatAsModified then
-        ContainerFrameItemButton_OnModifiedClick(self, button)
-    else
-        ContainerFrameItemButton_OnClick(self, button)
-    end
-end
-
 function LiteBagItemButton_OnEnter(self)
     local bag = self:GetParent():GetID()
-    -- ContainerFrameItemButtonTemplate:GetScript("OnEnter")(self)
     if bag == BANK_CONTAINER then
         BankFrameItemButton_OnEnter(self)
     else
@@ -141,20 +116,17 @@ function LiteBagItemButton_OnEnter(self)
 end
 
 function LiteBagItemButton_OnLeave(self)
-    -- ContainerFrameItemButtonTemplate:GetScript("OnLeave")(self)
     GameTooltip:Hide()
     ResetCursor()
 end
 
 function LiteBagItemButton_OnHide(self)
-    -- ContainerFrameItemButtonTemplate:GetScript("OnHide")(self)
     if self.hasStackSplit and self.hasStackSplit == 1 then
         StackSplitFrame:Hide()
     end
 end
 
 function LiteBagItemButton_OnDrag(self)
-    -- ContainerFrameItemButtonTemplate:GetScript("OnDrag")(self)
     ContainerFrameItemButton_OnDrag(self)
 end
 

@@ -296,6 +296,7 @@ end
 
 function LiteBagFrame_Update(self)
 
+    -- XXX FIXME XXX can't create buttons in combat
     if not self:IsShown() then return end
 
     LiteBagFrame_AttachSearchBox(self)
