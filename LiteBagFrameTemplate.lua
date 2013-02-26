@@ -87,6 +87,14 @@ function LiteBagFrame_Hide(self)
     end
 end
 
+function LiteBagFrame_ToggleShown(self)
+    if self:IsShown() then
+        LiteBagFrame_Hide(self)
+    else
+        LiteBagFrame_Show(self)
+    end
+end
+
 -- Apart from BAG_OPEN/CLOSED and BANKFRAME_OPENED/CLOSED these events
 -- are only registered while the frames are shown, so we can call the
 -- update functions without worrying that we don't need to.
