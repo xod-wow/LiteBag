@@ -30,8 +30,6 @@ function LiteBagFrame_OnLoad(self)
     end
 
     self.dummyContainerFrames = { }
-    self.itemButtons = { }
-    self.size = 0
 
     for _,bag in ipairs(self.bagIDs) do
         local bagName = self:GetName() .. "ContainerFrame" .. bag
@@ -39,8 +37,21 @@ function LiteBagFrame_OnLoad(self)
         self.dummyContainerFrames[bag]:SetID(bag)
     end
 
+    self.itemButtons = { }
+    self.size = 0
+
+    -- We call these explicitly here because we are creating protected buttons
+    -- and we need to create them out of combat, so creating them when the bag
+    -- is first shown is not a great idea.
+    LiteBagFrame_SetupItemButtons(self)
+    LiteBagFrame_LayoutFrame(self)
+
     local insetBg = _G[self:GetName() .."InsetBg"]
 
+    -- The UIPanelLayout stuff makes the Blizzard UIParent code position a
+    -- frame automatically in the stack from the left side.  See
+    --   http://www.wowwiki.com/Creating_standard_left-sliding_frames
+    -- but note that UIPanelLayout-enabled isn't a thing at all.
     if LiteBagFrame_IsMyBag(self, BANK_CONTAINER) then
         self.isBank = 1
         self:SetAttribute("UIPanelLayout-defined", true)
@@ -54,9 +65,12 @@ function LiteBagFrame_OnLoad(self)
 
     self:RegisterEvent("BANKFRAME_OPENED")
     self:RegisterEvent("BANKFRAME_CLOSED")
+    self:RegisterEvent("BAG_OPEN")
     self:RegisterEvent("BAG_CLOSED")
 end
 
+-- Because the bank is a managed frame (Blizzard code sets its position)
+-- we have to use Show/HideUIPanel for it.
 function LiteBagFrame_Show(self)
     if self.isBank then
         ShowUIPanel(self)
@@ -73,11 +87,19 @@ function LiteBagFrame_Hide(self)
     end
 end
 
+-- Apart from BAG_OPEN/CLOSED and BANKFRAME_OPENED/CLOSED these events
+-- are only registered while the frames are shown, so we can call the
+-- update functions without worrying that we don't need to.
 function LiteBagFrame_OnEvent(self, event, ...)
     if event == "BAG_OPEN" then
         local bag = ...
         if LiteBagFrame_IsMyBag(self, bag) then
             LiteBagFrame_Show(self)
+        end
+    elseif event == "BAG_CLOSED" then
+        local bag = ...
+        if LiteBagFrame_IsMyBag(self, bag) then
+            LiteBagFrame_Hide(self)
         end
     elseif event == "BANKFRAME_OPENED" then
         if self.isBank then
@@ -87,7 +109,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
         if self.isBank then
             LiteBagFrame_Hide(self)
         end
-    elseif event == "BAG_UPDATE" or event == "BAG_CLOSED" then
+    elseif event == "BAG_UPDATE" then
         local bag = ...
         if LiteBagFrame_IsMyBag(self, bag) then
             LiteBagFrame_Update(self)
@@ -95,7 +117,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "PLAYERBANKSLOTS_CHANGED" then
         local slot = ...
         if self.isBank then
-                LiteBagFrame_Update(self)
+            LiteBagFrame_Update(self)
         end
     elseif event == "ITEM_LOCK_CHANGED" then
         local bag, slot = ...
@@ -112,7 +134,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "INVENTORY_SEARCH_UPDATE" then
         LiteBagFrame_UpdateSearchResults(self)
     elseif event == "DISPLAY_SIZE_CHANGED" then
-        LiteBagFrame_PositionItemButtons(self)
+        LiteBagFrame_LayoutFrame(self)
     end
 end
 
@@ -120,6 +142,10 @@ function LiteBagFrame_SetMainMenuBarButtons(self, checked)
     if self.isBackpack then
         MainMenuBarBackpackButton:SetChecked(checked)
     end
+
+    -- Since BACKPACK_CONTAINER is 1, CharacterBag0Slot doesn't exist and
+    -- the "if button then" check fails.  It would probably be clearer to
+    -- incorporate the above into the loop instead.
 
     for n = 1, NUM_CONTAINER_FRAMES do
         if LiteBagFrame_IsMyBag(self, n) then
@@ -130,6 +156,9 @@ function LiteBagFrame_SetMainMenuBarButtons(self, checked)
         end
     end
 end
+
+-- The bag buttons call these to highlight the relevant buttons
+-- for their particular bag when they are moused over.
 
 function LiteBagFrame_HighlightBagButtons(self, id)
     if not LiteBagFrame_IsMyBag(self, id) then
@@ -188,7 +217,13 @@ function LiteBagFrame_OnShow(self)
     local titleText =_G[self:GetName() .. "TitleText"]
 
     if self.isBackpack then
+        -- CONTAINER_OFFSET_* are globals that are updated by the Blizzard
+        -- code depending on what (default) action bars are shown.
         self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
+
+        -- This would probably be better as a backpack icon of some sort but
+        -- there isn't one: the backpack "portrait" is part of the frame
+        -- artwork for the backpack.
         SetPortraitTexture(self.portrait, "player")
         titleText:SetText(GetBagName(self.bagIDs[1]))
     elseif self.isBank then
@@ -199,7 +234,6 @@ function LiteBagFrame_OnShow(self)
         titleText:SetText(GetBagName(self.bagIDs[1]))
     end
 
-    self:RegisterEvent("BAG_OPEN")
     LiteBagFrame_Update(self)
 
     LiteBagFrame_SetMainMenuBarButtons(self, 1)
@@ -250,33 +284,46 @@ function LiteBagFrame_CreateItemButton(self, i)
     self.itemButtons[i] = b
 end
 
-function LiteBagFrame_CreateItemButtons(self)
-    local n = 1
+function LiteBagFrame_SetupItemButtons(self)
+    if InCombatLockdown() then return end
 
-    self.size = 0
+    local n = 0
+
+    -- Because of the protected nature of these buttons it _might_ be a good
+    -- idea to create 1..MAX_CONTAINER_ITEMS for each bag at the start.
+
+    -- Below code is creating the buttons, but it's also assigning the buttons
+    -- to their bag/slot.  Because the buttons are protected we are using the
+    -- Blizzard code for them, and that relies on button:GetID() being the
+    -- slot ID and button:GetParent():GetID() being the bag ID. That's why
+    -- we have the dummy parent containers.
 
     for _,bag in ipairs(self.bagIDs) do
         for slot = 1, GetContainerNumSlots(bag) do
+            n = n + 1
             if not self.itemButtons[n] then
                 LiteBagFrame_CreateItemButton(self, n)
             end
             self.itemButtons[n]:SetID(slot)
             self.itemButtons[n]:SetParent(self.dummyContainerFrames[bag])
-            self.size = self.size + 1
-            n = n + 1
         end
     end
+
+    self.size = n
 end
 
-function LiteBagFrame_PositionItemButtons(self)
+function LiteBagFrame_LayoutFrame(self)
+    if InCombatLockdown() then return end
+
     local name = self:GetName()
 
     local wgap, hgap = 5, 4
     local ncols = self.columns or 8
 
-    for i = 1, self.size do
+    for i = 1, #self.itemButtons do
         local itemButton = self.itemButtons[i]
-            itemButton:ClearAllPoints()
+
+        itemButton:ClearAllPoints()
         if i == 1 then
             self.itemButtons[i]:SetPoint("TOPLEFT", name, "TOPLEFT", 14, -70)
         elseif i % ncols == 1 then
@@ -285,6 +332,11 @@ function LiteBagFrame_PositionItemButtons(self)
             self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-1]:GetName(), "TOPRIGHT", wgap, 0)
         end
 
+        if i <= self.size then
+            itemButton:Show()
+        else
+            itemButton:Hide()
+        end
     end
 
     local nrows = ceil(self.size / ncols)
@@ -296,23 +348,22 @@ end
 
 function LiteBagFrame_Update(self)
 
-    -- XXX FIXME XXX can't create buttons in combat
+    -- It might be better to detach these from _Update and call them
+    -- explicitly from any event that might change the number or
+    -- layout of the buttons.
+
+    LiteBagFrame_SetupItemButtons(self)
+    LiteBagFrame_LayoutFrame(self)
+
     if not self:IsShown() then return end
 
     LiteBagFrame_AttachSearchBox(self)
 
-    LiteBagFrame_CreateItemButtons(self)
-    LiteBagFrame_PositionItemButtons(self)
-
-    for i,itemButton in ipairs(self.itemButtons) do
-        if i <= self.size then
-            LiteBagItemButton_Update(itemButton)
-            itemButton:Show()
-        else
-            itemButton:Hide()
-        end
+    for i = 1, self.size do
+        LiteBagItemButton_Update(self.itemButtons[i])
     end
 
+    -- This is a temporary ugly hack.
     for i = 1,5 do
         local b = _G[self:GetName().."BagButton"..i]
         b:SetID(self.bagIDs[i])
