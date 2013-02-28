@@ -62,12 +62,17 @@ function LiteBagFrame_OnLoad(self)
     -- buttons needed.
 
     LiteBagFrame_CreateItemButtons(self)
-    LiteBagFrame_Update(self)
 
     self:RegisterEvent("BANKFRAME_OPENED")
     self:RegisterEvent("BANKFRAME_CLOSED")
     self:RegisterEvent("BAG_OPEN")
     self:RegisterEvent("BAG_CLOSED")
+
+    -- We hook ADDON_LOADED to do an initial layout of the frame, as we
+    -- will know how big the bags are at that point and still not be
+    -- InCombatLockown().
+
+    self:RegisterEvent("ADDON_LOADED")
 end
 
 -- Because the bank is a managed frame (Blizzard code sets its position)
@@ -100,7 +105,9 @@ end
 -- are only registered while the frames are shown, so we can call the
 -- update functions without worrying that we don't need to.
 function LiteBagFrame_OnEvent(self, event, ...)
-    if event == "BAG_OPEN" then
+    if event == "ADDON_LOADED" then
+        LiteBagFrame_Update(self)
+    elseif event == "BAG_OPEN" then
         local bag = ...
         if LiteBagFrame_IsMyBag(self, bag) then
             LiteBagFrame_Show(self)
@@ -299,23 +306,18 @@ function LiteBagFrame_CreateItemButton(self, i)
     self.itemButtons[i] = b
 end
 
--- We mostly make the maximum number of buttons, because we want to make them
--- as early as we can in the initialization (in the OnLoad handler) and
--- on login the bag sizes aren't known yet (GetContainerNumSlots returns 0).
+-- We make the maximum number of buttons, because we make them at init
+-- time when we are guaranteed not to be InCombatLockdown.  Later when bag
+-- sizes are known or changed we might not be able to safely make protected
+-- buttons.
 
 function LiteBagFrame_CreateItemButtons(self)
-
-    local maxSlots = #self.bagIDs * MAX_CONTAINER_ITEMS
 
     local n = 0
 
     for _,bag in ipairs(self.bagIDs) do
-        n = n + 1
-        local bagsize = GetContainerNumSlots(bag)
-        if bagsize == 0 then
-            bagsize = MAX_CONTAINER_ITEMS
-        end
-        for i = 1, bagsize do
+        for i = 1, MAX_CONTAINER_ITEMS do
+            n = n + 1
             if not self.itemButtons[n] then
                 LiteBagFrame_CreateItemButton(self, n)
             end
