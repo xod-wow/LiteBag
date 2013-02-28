@@ -120,12 +120,21 @@ function LiteBagFrame_OnEvent(self, event, ...)
         if self.isBank then
             LiteBagFrame_Hide(self)
         end
-    elseif event == "BAG_UPDATE" or event == "BAG_CLOSED" then
-        -- BAG_CLOSED fires when you drag a bag out of a slot
+    elseif event == "BAG_UPDATE" then
         local bag = ...
         if LiteBagFrame_IsMyBag(self, bag) then
             LiteBagFrame_Update(self)
         end
+    elseif event == "BAG_CLOSED" then
+        -- BAG_CLOSED fires when you drag a bag out of a slot but for
+        -- the bank GetContainerNumSlots doesn't update until _DELAYED
+        local bag = ...
+        if LiteBagFrame_IsMyBag(self, bag) then
+            self:RegisterEvent("BAG_UPDATE_DELAYED")
+        end
+    elseif event == "BAG_UPDATE_DELAYED" then
+        self:UnregisterEvent("BAG_UPDATE_DELAYED")
+        LiteBagFrame_Update(self)
     elseif event == "PLAYERBANKSLOTS_CHANGED" then
         local slot = ...
         if self.isBank then
