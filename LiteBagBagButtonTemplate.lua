@@ -18,13 +18,14 @@ function LiteBagBagButton_Update(self)
     self.bagID = self:GetID()
     self.isBank = BankContainers[self:GetID()]
 
+    -- XXX FIXME XXX 
+    -- No slotID for backpack/bank, can they not be filtered?
+
     if self.bagID == BACKPACK_CONTAINER then
         SetItemButtonTexture(self, "Interface\\Buttons\\Button-Backpack-Up")
-        self.tooltipText = BACKPACK_TOOLTIP
         return
     elseif self.bagID == BANK_CONTAINER then
         SetItemButtonTexture(self, "Interface\\Buttons\\Button-Backpack-Up")
-        self.tooltipText = "Bank"
         return
     end
 
@@ -122,6 +123,8 @@ function LiteBagBagButton_OnClick(self)
     elseif self.purchaseCost then
         PlaySound("igMainMenuOption");
         BankFrame.nextSlotCost = self.purchaseCost
+        -- XXX FIXME XXX
+        -- Does StaticPopup_Show still cause taint due to blizz bugs?
         StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
         LiteBagFrame_Update(self:GetParent())
     else
