@@ -37,11 +37,6 @@ function LiteBagFrame_OnLoad(self)
         self.dummyContainerFrames[bag]:SetID(bag)
     end
 
-    self.itemButtons = { }
-    self.size = 0
-
-    local insetBg = _G[self:GetName() .."InsetBg"]
-
     -- The UIPanelLayout stuff makes the Blizzard UIParent code position a
     -- frame automatically in the stack from the left side.  See
     --   http://www.wowwiki.com/Creating_standard_left-sliding_frames
@@ -51,17 +46,28 @@ function LiteBagFrame_OnLoad(self)
         self:SetAttribute("UIPanelLayout-defined", true)
         self:SetAttribute("UIPanelLayout-area", "left")
         self:SetAttribute("UIPanelLayout-pushable", 6)
+        local insetBg = _G[self:GetName() .."InsetBg"]
         insetBg:SetTexture("Interface\\FrameGeneral\\UI-Background-Rock", true, true)
     elseif LiteBagFrame_IsMyBag(self, BACKPACK_CONTAINER) then
         self.isBackpack = 1
         tinsert(UISpecialFrames, self:GetName())
     end
 
+    self.size = 0
+    self.itemButtons = { }
+
+    -- If we knew a point where we definitely had the bag size info
+    -- but weren't already InCombatLockdown at that point we could do
+    -- that there (later).  Then we'd make only the exact number of
+    -- buttons needed.
+
+    LiteBagFrame_CreateItemButtons(self)
+    LiteBagFrame_Update(self)
+
     self:RegisterEvent("BANKFRAME_OPENED")
     self:RegisterEvent("BANKFRAME_CLOSED")
     self:RegisterEvent("BAG_OPEN")
     self:RegisterEvent("BAG_CLOSED")
-    self:RegisterEvent("PLAYER_LOGIN")
 end
 
 -- Because the bank is a managed frame (Blizzard code sets its position)
@@ -138,18 +144,6 @@ function LiteBagFrame_OnEvent(self, event, ...)
         LiteBagFrame_UpdateSearchResults(self)
     elseif event == "DISPLAY_SIZE_CHANGED" then
         LiteBagFrame_LayoutFrame(self)
-    elseif event == "PLAYER_LOGIN" or event == "PLAYER_REGEN_ENABLED" then
-        if InCombatLockdown() then
-            self:RegisterEvent("PLAYER_REGEN_ENABLED")
-        else 
-            -- We call these explicitly here because we are creating protected
-            -- buttons and we need to create them out of combat, so creating
-            -- them when the bag is first shown is not a great idea.
-            LiteBagFrame_SetupItemButtons(self)
-            LiteBagFrame_LayoutFrame(self)
-            self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-            self:UnregisterEvent("PLAYER_LOGIN")
-        end
     end
 end
 
@@ -270,6 +264,12 @@ function LiteBagFrame_AttachSearchBox(self)
     box:Show()
 end
 
+function LiteBagFrame_UpdateItemButtons(self)
+    for i = 1, self.size do
+        LiteBagItemButton_Update(self.itemButtons[i])
+    end
+end
+
 function LiteBagFrame_UpdateCooldowns(self)
     for i = 1, self.size do
         LiteBagItemButton_UpdateCooldown(self.itemButtons[i])
@@ -299,30 +299,41 @@ function LiteBagFrame_CreateItemButton(self, i)
     self.itemButtons[i] = b
 end
 
-function LiteBagFrame_SetupItemButtons(self)
-    if InCombatLockdown() then return end
+-- We mostly make the maximum number of buttons, because we want to make them
+-- as early as we can in the initialization (in the OnLoad handler) and
+-- on login the bag sizes aren't known yet (GetContainerNumSlots returns 0).
 
+function LiteBagFrame_CreateItemButtons(self)
 
-    -- print("LiteBag: SetupItemButtons: " .. self:GetName())
+    local maxSlots = #self.bagIDs * MAX_CONTAINER_ITEMS
 
     local n = 0
 
-    -- Because of the protected nature of these buttons it _might_ be a good
-    -- idea to create 1..MAX_CONTAINER_ITEMS for each bag at the start.
-
-    -- Below code is creating the buttons, but it's also assigning the buttons
-    -- to their bag/slot.  Because the buttons are protected we are using the
-    -- Blizzard code for them, and that relies on button:GetID() being the
-    -- slot ID and button:GetParent():GetID() being the bag ID. That's why
-    -- we have the dummy parent containers.
-
     for _,bag in ipairs(self.bagIDs) do
-        -- print("Bag " .. bag .. " has " .. GetContainerNumSlots(bag) .. " slots")
-        for slot = 1, GetContainerNumSlots(bag) do
-            n = n + 1
+        n = n + 1
+        local bagsize = GetContainerNumSlots(bag)
+        if bagsize == 0 then
+            bagsize = MAX_CONTAINER_ITEMS
+        end
+        for i = 1, bagsize do
             if not self.itemButtons[n] then
                 LiteBagFrame_CreateItemButton(self, n)
             end
+        end
+    end
+end
+
+-- Assign the buttons to their bag/slot. Because the buttons are
+-- protected we are using the Blizzard code for them, and that relies on
+-- button:GetID() being the slot ID and button:GetParent():GetID() being
+-- the bag ID. That's why we have the dummy parent containers.
+
+function LiteBagFrame_SetupItemButtons(self)
+    local n = 0
+
+    for _,bag in ipairs(self.bagIDs) do
+        for slot = 1, GetContainerNumSlots(bag) do
+            n = n + 1
             self.itemButtons[n]:SetID(slot)
             self.itemButtons[n]:SetParent(self.dummyContainerFrames[bag])
         end
@@ -378,9 +389,7 @@ function LiteBagFrame_Update(self)
 
     LiteBagFrame_AttachSearchBox(self)
 
-    for i = 1, self.size do
-        LiteBagItemButton_Update(self.itemButtons[i])
-    end
+    LiteBagFrame_UpdateItemButtons(self)
 
     -- This is a temporary ugly hack.
     for i = 1,5 do
