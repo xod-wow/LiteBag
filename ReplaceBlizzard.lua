@@ -15,14 +15,18 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
     inventoryFrame = inventory
     bankFrame = bank
 
-    OpenBackpack = function () inventoryFrame:Show() end
-    OpenAllBags = OpenBackpack
+    local hideFunc = function () LiteBagFrame_Hide(inventoryFrame) end
+    local showFunc = function () LiteBagFrame_Show(inventoryFrame) end
+    local toggleFunc = function () LiteBagFrame_ToggleShown(inventoryFrame) end
 
-    ToggleBag = function (id) LiteBagFrame_ToggleShown(inventoryFrame) end
-    ToggleAllBags = ToggleBag
+    OpenBackpack = showFunc
+    OpenAllBags = showFunc
 
-    hooksecurefunc('CloseBackpack', function () LiteBagFrame_Hide(inventoryFrame) end)
-    hooksecurefunc('CloseAllBags', function () LiteBagFrame_Hide(inventoryFrame) end)
+    ToggleBag = toggleFunc
+    ToggleAllBags = toggleFunc
+
+    hooksecurefunc('CloseBackpack', hideFunc)
+    hooksecurefunc('CloseAllBags', hideFunc)
 
     BagSlotButton_UpdateChecked = function () end
 
