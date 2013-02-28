@@ -112,11 +112,6 @@ function LiteBagFrame_OnEvent(self, event, ...)
         if LiteBagFrame_IsMyBag(self, bag) then
             LiteBagFrame_Show(self)
         end
-    elseif event == "BAG_CLOSED" then
-        local bag = ...
-        if LiteBagFrame_IsMyBag(self, bag) then
-            LiteBagFrame_Hide(self)
-        end
     elseif event == "BANKFRAME_OPENED" then
         if self.isBank then
             LiteBagFrame_Show(self)
@@ -125,7 +120,8 @@ function LiteBagFrame_OnEvent(self, event, ...)
         if self.isBank then
             LiteBagFrame_Hide(self)
         end
-    elseif event == "BAG_UPDATE" then
+    elseif event == "BAG_UPDATE" or event == "BAG_CLOSED" then
+        -- BAG_CLOSED fires when you drag a bag out of a slot
         local bag = ...
         if LiteBagFrame_IsMyBag(self, bag) then
             LiteBagFrame_Update(self)
@@ -394,10 +390,14 @@ function LiteBagFrame_Update(self)
     LiteBagFrame_UpdateItemButtons(self)
 
     -- This is a temporary ugly hack.
-    for i = 1,5 do
+    for i = 1,8 do
         local b = _G[self:GetName().."BagButton"..i]
-        b:SetID(self.bagIDs[i])
-        LiteBagBagButton_Update(b)
-        b:Show()
+        if self.bagIDs[i] then
+            b:SetID(self.bagIDs[i])
+            LiteBagBagButton_Update(b)
+            b:Show()
+        else
+            b:Hide()
+        end
     end
 end

@@ -56,31 +56,49 @@
 
         <Button name="$parentBagButton1" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="62" y="-31" />
+                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="60" y="-31" />
             </Anchors>
         </Button>
 
         <Button name="$parentBagButton2" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentBagButton1" relativePoint="RIGHT" x="2" />
+                <Anchor point="LEFT" relativeTo="$parentBagButton1" relativePoint="RIGHT" x="4" />
             </Anchors>
         </Button>
 
         <Button name="$parentBagButton3" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentBagButton2" relativePoint="RIGHT" x="2" />
+                <Anchor point="LEFT" relativeTo="$parentBagButton2" relativePoint="RIGHT" x="4" />
             </Anchors>
         </Button>
 
         <Button name="$parentBagButton4" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentBagButton3" relativePoint="RIGHT" x="2" />
+                <Anchor point="LEFT" relativeTo="$parentBagButton3" relativePoint="RIGHT" x="4" />
             </Anchors>
         </Button>
 
         <Button name="$parentBagButton5" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentBagButton4" relativePoint="RIGHT" x="2" />
+                <Anchor point="LEFT" relativeTo="$parentBagButton4" relativePoint="RIGHT" x="4" />
+            </Anchors>
+        </Button>
+
+        <Button name="$parentBagButton6" inherits="LiteBagBagButtonTemplate">
+            <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentBagButton5" relativePoint="RIGHT" x="4" />
+            </Anchors>
+        </Button>
+
+        <Button name="$parentBagButton7" inherits="LiteBagBagButtonTemplate">
+            <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentBagButton6" relativePoint="RIGHT" x="4" />
+            </Anchors>
+        </Button>
+
+        <Button name="$parentBagButton8" inherits="LiteBagBagButtonTemplate">
+            <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentBagButton7" relativePoint="RIGHT" x="4" />
             </Anchors>
         </Button>
 
