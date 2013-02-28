@@ -6,11 +6,19 @@
 
 <Button name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" hidden="true" virtual="true">
 
-    <Anchors>
-        <Anchor point="TOPLEFT" x="0" y="0" />
-    </Anchors>
+    <Size x="37" y="37" />
 
     <Layers>
+        <Layer level="BACKGROUND">
+            <Texture file="Interface\Buttons\UI-Slot-Background" parentKey="bg">
+                <Size x="38.5" y="38.5" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="-1" y="-1" />
+                </Anchors>
+                <TexCoords left="0" right="0.640625" top="0" bottom="0.640625" />
+                <Color r="0.5" b="0.5" g="0.5" a="0.8" />
+            </Texture>
+        </Layer>
         <Layer level="ARTWORK" textureSubLevel="1">
             <Texture name="$parentQualityTexture" parentKey="qualityTexture" file="Interface\Buttons\UI-ActionButton-Border" alphaMode="ADD" hidden="true">
                 <Size x="37" y="37" />
