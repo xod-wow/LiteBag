@@ -1,8 +1,43 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 
+<!-- Copyright 2013 Mike Battersby -->
+
 <Script file="LiteBagFrameTemplate.lua" />
 
-<!-- Copyright 2013 Mike Battersby -->
+<Frame name="LiteBag_ThinGreenEdgeTemplate" virtual="true">
+    <Size x="100" y="20" />
+    <Layers>
+        <Layer level="BACKGROUND">
+            <Texture name="$parentLeft" file="Interface\Common\Moneyframe">
+                <Size x="7" y="20" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="BOTTOMLEFT" />
+                </Anchors>
+                <TexCoords left="0.953125" right="0.9921875" top="0" bottom="0.296875" />
+                <Color r="0" g="1" b="1" />
+            </Texture>
+            <Texture name="$parentRight" file="Interface\Common\Moneyframe">
+                <Size x="7" y="20" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" />
+                    <Anchor point="BOTTOMRIGHT" />
+                </Anchors>
+                <TexCoords left="0" right="0.0546875" top="0" bottom="0.296875" />
+                <Color r="0" g="1" b="1" />
+            </Texture>
+            <Texture name="$parentMiddle" file="Interface\Common\Moneyframe">
+                <Size x="80" y="20" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentLeft" relativePoint="TOPRIGHT" />
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentRight" relativePoint="BOTTOMLEFT" />
+                </Anchors>
+                <TexCoords left="0" right="0.9921875" top="0.3125" bottom="0.609375" />
+                <Color r="0" g="1" b="1" />
+            </Texture>
+        </Layer>
+    </Layers>
+</Frame>
 
 <Frame name="LiteBagFrameTemplate" frameStrata="MEDIUM" toplevel="true" movable="true" enableMouse="true" hidden="true" inherits="ButtonFrameTemplate" virtual="true">
 
@@ -27,6 +62,31 @@
                     MoneyFrame_SetMaxDisplayWidth(self, 168)
                 </OnLoad>
             </Scripts>
+        </Frame>
+
+        <Frame name="$parentTokenFrameBorder" inherits="LiteBag_ThinGreenEdgeTemplate">
+            <Size x="170" y="21" />
+            <Anchors>
+                <Anchor point="BOTTOMLEFT" x="8" y="5" />
+            </Anchors>
+        </Frame>
+
+        <Frame name="$parentToken1" inherits="BackpackTokenTemplate" id="1">
+            <Anchors>
+                <Anchor point="LEFT" x="5" relativeTo="$parentTokenFrameBorder" />
+            </Anchors>
+        </Frame>
+
+        <Frame name="$parentToken2" inherits="BackpackTokenTemplate" id="2">
+            <Anchors>
+                <Anchor point="MIDDLE" relativeTo="$parentTokenFrameBorder" />
+            </Anchors>
+        </Frame>
+
+        <Frame name="$parentToken3" inherits="BackpackTokenTemplate" id="3">
+            <Anchors>
+                <Anchor point="RIGHT" x="-5" relativeTo="$parentTokenFrameBorder" />
+            </Anchors>
         </Frame>
 
         <Button name="$parentPortraitButton">

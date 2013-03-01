@@ -17,6 +17,24 @@ function LiteBagFrame_IsMyBag(self, id)
     end
 end
 
+function LiteBagFrame_UpdateTokens(self)
+    for i = 1,MAX_WATCHED_TOKENS do
+        local name,count,icon,currencyID = GetPackpackCurrencyInfo(i)
+        local tokenFrame = _G[self:GetName().."Token"..i]
+        if name then
+            if count <= 99999 then
+                tokenFrame.count:SetText(count)
+            else
+                tokenFrame.count:SetText("*")
+            end
+            tokenFrame.currencyID = currencyID
+            tokenFrame:Show()
+        else
+            tokenFrame:Hide()
+        end
+    end
+end
+
 function LiteBagFrame_OnLoad(self)
 
     if not self.bagIDs then
@@ -62,6 +80,15 @@ function LiteBagFrame_OnLoad(self)
     -- buttons needed.
 
     LiteBagFrame_CreateItemButtons(self)
+
+    -- There's no event for token updates, we just hook off the
+    -- Blizzard function that updates it (which is fired when the user
+    -- changes the selection in the full token frame).  We don't replace
+    -- the function because parts of the TokenFrame rely on the
+    -- BackpackTokenFrame even though it's hidden.
+
+    hooksecurefunc('BackpackTokenFrame_Update',
+                   function () LiteBagFrame_UpdateTokens(self) end)
 
     self:RegisterEvent("BANKFRAME_OPENED")
     self:RegisterEvent("BANKFRAME_CLOSED")
@@ -256,6 +283,7 @@ function LiteBagFrame_OnShow(self)
     end
 
     LiteBagFrame_Update(self)
+    LiteBagFrame_UpdateTokens(self)
 
     LiteBagFrame_SetMainMenuBarButtons(self, 1)
 

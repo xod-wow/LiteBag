@@ -3,6 +3,7 @@
 ## Version: @project-version@
 ## Author: Xodiv of Proudmoore
 ## Email: mib@post.com
+## Dependencies: Blizzard_TokenUI
 
 LiteBagItemButtonTemplate.xml
 LiteBagBagButtonTemplate.xml
