@@ -63,12 +63,14 @@ end
 function LiteBagBagButton_OnLoad(self)
     self:RegisterForDrag("LeftButton")
     self:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+
+    self:SetScript("OnEvent", LiteBagBagButton_OnEvent)
     self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
 end
 
 function LiteBagBagButton_OnEvent(self)
     if event == "INVENTORY_SEARCH_UPDATE" then
-        if IsContainerFiltered(self.slotID) then
+        if IsContainerFiltered(self.bagID) then
             self.searchOverlay:Show()
         else
             self.searchOverlay:Hide()
