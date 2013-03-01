@@ -32,8 +32,6 @@
           and that is called by the Token Frame.
         - Don't attack it to non-backpack.
 
-    Search filter the bag buttons.
-
     Check if the search box is working right when switching focus between
     the bag and bank one.
 
