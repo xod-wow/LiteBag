@@ -19,9 +19,10 @@ end
 
 function LiteBagFrame_UpdateTokens(self)
     for i = 1,MAX_WATCHED_TOKENS do
-        local name,count,icon,currencyID = GetPackpackCurrencyInfo(i)
+        local name,count,icon,currencyID = GetBackpackCurrencyInfo(i)
         local tokenFrame = _G[self:GetName().."Token"..i]
         if name then
+            tokenFrame.icon:SetTexture(icon)
             if count <= 99999 then
                 tokenFrame.count:SetText(count)
             else

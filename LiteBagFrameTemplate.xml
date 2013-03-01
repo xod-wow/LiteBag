@@ -73,19 +73,19 @@
 
         <Frame name="$parentToken1" inherits="BackpackTokenTemplate" id="1">
             <Anchors>
-                <Anchor point="LEFT" x="5" relativeTo="$parentTokenFrameBorder" />
+                <Anchor point="BOTTOMLEFT" x="13" y="8"/>
             </Anchors>
         </Frame>
 
         <Frame name="$parentToken2" inherits="BackpackTokenTemplate" id="2">
             <Anchors>
-                <Anchor point="MIDDLE" relativeTo="$parentTokenFrameBorder" />
+                <Anchor point="LEFT" relativeTo="$parentToken1" relativePoint="RIGHT" x="2" />
             </Anchors>
         </Frame>
 
         <Frame name="$parentToken3" inherits="BackpackTokenTemplate" id="3">
             <Anchors>
-                <Anchor point="RIGHT" x="-5" relativeTo="$parentTokenFrameBorder" />
+                <Anchor point="LEFT" relativeTo="$parentToken2" relativePoint="RIGHT" x="2" />
             </Anchors>
         </Frame>
 
