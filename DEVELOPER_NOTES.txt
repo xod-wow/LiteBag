@@ -32,17 +32,13 @@
           and that is called by the Token Frame.
         - Don't attack it to non-backpack.
 
-    Check if the search box is working right when switching focus between
-    the bag and bank one.
-
-    Attach the bag buttons somewhere sensible.  Make the proper number of
-    them for the bank.
+    Attach the bag buttons somewhere sensible.
 
     What to do with the specialist bag types?
 
     Is there a use for indication of "non-useable" items a-la Combuctor?
 
-    Redo the logic for the bag button colors/texture/tooltips, it is a mess.
+    Redo the logic for the BagButton colors/texture/tooltips, it is a mess.
 
     Make the frames resizeable (maybe?).
 
