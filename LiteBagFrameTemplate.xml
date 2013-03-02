@@ -39,7 +39,7 @@
     </Layers>
 </Frame>
 
-<Frame name="LiteBagFrameTemplate" frameStrata="MEDIUM" toplevel="true" movable="true" enableMouse="true" hidden="true" inherits="ButtonFrameTemplate" virtual="true">
+<Frame name="LiteBagFrameTemplate" frameStrata="HIGH" toplevel="true" movable="true" enableMouse="true" hidden="true" inherits="ButtonFrameTemplate" virtual="true">
 
     <Size x="384" y="512" />
 
