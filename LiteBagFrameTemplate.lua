@@ -18,6 +18,8 @@ function LiteBagFrame_IsMyBag(self, id)
 end
 
 function LiteBagFrame_UpdateTokens(self)
+    local border = _G[self:GetName() .. "TokenFrameBorder"]
+    local n = 0
     for i = 1,MAX_WATCHED_TOKENS do
         local name,count,icon,currencyID = GetBackpackCurrencyInfo(i)
         local tokenFrame = _G[self:GetName().."Token"..i]
@@ -30,9 +32,15 @@ function LiteBagFrame_UpdateTokens(self)
             end
             tokenFrame.currencyID = currencyID
             tokenFrame:Show()
+            n = n + 1
         else
             tokenFrame:Hide()
         end
+    end
+    if n > 0 then
+        border:Show()
+    else
+        border:Hide()
     end
 end
 
