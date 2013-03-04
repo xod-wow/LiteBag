@@ -16,21 +16,11 @@
 ------------------------------------------------------------------------------
 * TODO List
 
-    Why is part of Skada showing through the background on first show?  Is it
-    my bug or theirs? Don't really want to use HIGH frame strata.
+    Switch the Token stuff to using the CURRENCY_DISPLAY_UPDATE event?
+    Would need to call TokenFrame_LoadUI() somewhere before we have
+    access to MAX_WATCHED_TOKENS.  It might be easier to leave it.
 
-    Put the blank spots at the top, not the bottom, so that dragging
-    bigger bags in rearranges things the least.
-
-    Attach or implement the BackpackTokenFrame (and remove the mouseover).
-        - OptionalDeps: Blizzard_TokenUI
-        - Need a ThinGreenEdgeTemplate
-        - Where to put it is a problem based on the size of the frames.
-        - 3 frames inheriting BackpackTokenTemplate with id=currencyID
-        - Each one is 50x12 in size.
-        - Override BackpackTokenFrame_Update as there is no event for this
-          and that is called by the Token Frame.
-        - Don't attack it to non-backpack.
+    What to do with the Token display if we allow resizing.
 
     Attach the bag buttons somewhere sensible.
 
@@ -40,12 +30,17 @@
 
     Redo the logic for the BagButton colors/texture/tooltips, it is a mess.
 
-    Make the frames resizeable (maybe?).
+    Put the blank spots at the top, not the bottom, so that dragging
+    bigger bags in rearranges things the least.  Maybe?
+
+    Make the frames resizeable?  Can't let them get so small that the
+    search box doesn't fit any more.  Or the bag buttons if we attach
+    them to the outside.
 
     Make the backpack frame moveable (maybe?).  If so it would have to dock
     back into place if dragged towards the bottom right.
 
-    Make the bank frame default to 14 wide (since the default bank bag is 28).
+    Make the bank frame default to 14 wide? (Default bank bag is 28 slots.)
 
     Re-check the slot background.
 

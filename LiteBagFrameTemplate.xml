@@ -89,31 +89,6 @@
             </Anchors>
         </Frame>
 
-        <Button name="$parentPortraitButton">
-            <Size x="40" y="40" />
-            <Anchors>
-                <Anchor point="TOPLEFT" x="7" y="-5" />
-            </Anchors>
-            <Scripts>
-                <OnEnter>
-                    GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-                    GameTooltip:ClearLines()
-                    GameTooltip:AddLine(YELLOW_FONT_COLOR_CODE .. CURRENCY .. FONT_COLOR_CODE_CLOSE)
-                    for i = 1, MAX_WATCHED_TOKENS do
-                        local name, amount, icon = GetBackpackCurrencyInfo(i)
-                        if name then
-                            GameTooltip:AddLine(amount)
-                            GameTooltip:AddTexture(icon)
-                        end
-                    end
-                    GameTooltip:Show()
-                </OnEnter>
-                <OnLeave>
-                    GameTooltip:Hide()
-                </OnLeave>
-            </Scripts>
-        </Button>
-
         <Button name="$parentBagButton1" inherits="LiteBagBagButtonTemplate">
             <Anchors>
                 <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="60" y="-31" />
