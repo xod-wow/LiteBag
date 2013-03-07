@@ -278,10 +278,8 @@ function LiteBagFrame_OnShow(self)
         -- code depending on what (default) action bars are shown.
         self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
 
-        -- This would probably be better as a backpack icon of some sort but
-        -- there isn't one: the backpack "portrait" is part of the frame
-        -- artwork for the backpack.
-        SetPortraitTexture(self.portrait, "player")
+        -- Despite the name, this is a backpack icon
+        self.portrait:SetTexture("MERCHANTFRAME\\UI-BuyBack-Icon")
         titleText:SetText(GetBagName(self.bagIDs[1]))
     elseif self.isBank then
         SetPortraitTexture(self.portrait, "npc")
