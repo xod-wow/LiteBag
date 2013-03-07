@@ -90,11 +90,9 @@ function LiteBagFrame_OnLoad(self)
 
     LiteBagFrame_CreateItemButtons(self)
 
-    -- There's no event for token updates, we just hook off the
-    -- Blizzard function that updates it (which is fired when the user
-    -- changes the selection in the full token frame).  We don't replace
-    -- the function because parts of the TokenFrame rely on the
-    -- BackpackTokenFrame even though it's hidden.
+    -- It might be simpler to watch event CURRENCY_DISPLAY_UPDATE instead.
+    -- Don't replace the function because parts of the TokenFrame rely on
+    -- the BackpackTokenFrame even though it's hidden.
 
     hooksecurefunc('BackpackTokenFrame_Update',
                    function () LiteBagFrame_UpdateTokens(self) end)
@@ -162,8 +160,9 @@ function LiteBagFrame_OnEvent(self, event, ...)
             LiteBagFrame_Update(self)
         end
     elseif event == "BAG_CLOSED" then
-        -- BAG_CLOSED fires when you drag a bag out of a slot but for
-        -- the bank GetContainerNumSlots doesn't update until _DELAYED
+        -- BAG_CLOSED fires when you drag a bag out of a slot but for the
+        -- bank GetContainerNumSlots doesn't return the updated size yet,
+        -- so we have to wait until BAG_UPDATE_DELAYED fires.
         local bag = ...
         if LiteBagFrame_IsMyBag(self, bag) then
             self:RegisterEvent("BAG_UPDATE_DELAYED")
@@ -279,7 +278,7 @@ function LiteBagFrame_OnShow(self)
         self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
 
         -- Despite the name, this is a backpack icon
-        self.portrait:SetTexture("MERCHANTFRAME\\UI-BuyBack-Icon")
+        self.portrait:SetTexture("Interface\\MERCHANTFRAME\\UI-BuyBack-Icon")
         titleText:SetText(GetBagName(self.bagIDs[1]))
     elseif self.isBank then
         SetPortraitTexture(self.portrait, "npc")
