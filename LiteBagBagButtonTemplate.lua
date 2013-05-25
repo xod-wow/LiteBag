@@ -35,7 +35,7 @@ function LiteBagBagButton_Update(self)
     local textureName = GetInventoryItemTexture("player", self.slotID)
 
     local numBankSlots, bankFull = GetNumBankSlots()
-    local buyBankSlot = numBankSlots + 4
+    local buyBankSlot = numBankSlots + ITEM_INVENTORY_BANK_BAG_OFFSET + 1
 
     if self.bagID == buyBankSlot then
         self.purchaseCost = GetBankSlotCost()
