@@ -91,7 +91,7 @@ function LiteBagItemButton_UpdateFiltered(self)
     end
 end
 
-function LiteBagItemButton_UpdateItemSets(self)
+function LiteBagItemButton_UpdateEquipmentSets(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
@@ -111,7 +111,7 @@ function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateQuestTexture(self)
     LiteBagItemButton_UpdateLocked(self)
     LiteBagItemButton_UpdateCooldown(self)
-    LiteBagItemButton_UpdateItemSets(self)
+    LiteBagItemButton_UpdateEquipmentSets(self)
     LiteBagItemButton_UpdateFiltered(self)
 end
 
@@ -121,9 +121,12 @@ function LiteBagItemButton_OnLoad(self)
     self.GetInventorySlot = ButtonInventorySlot
     self.UpdateTooltip = LiteBagItemButton_OnEnter
 
-    -- We (mis)use the stock count text to show the equipset.  By default it's
-    -- only attached at TOPLEFT.  Attach it to BOTTOMRIGHT as well so we
-    -- get automatic truncation of the text.
+    -- We (mis)use the "number in stock at vendor" text to show the equipset.
+    -- By default it's only attached at TOPLEFT.  Attach it to BOTTOMRIGHT as
+    -- well so we get multiline and automatic truncation of the text.  And
+    -- set the font size a little smaller (by default it uses
+    -- NumberFontNormalYellow (see FontStyles.xml in the Blizzard UI source).
+
     local stockText = _G[self:GetName() .. "Stock"]
     stockText:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 0, 2)
     stockText:SetJustifyV("TOP")
