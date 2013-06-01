@@ -91,11 +91,27 @@ function LiteBagItemButton_UpdateFiltered(self)
     end
 end
 
+function LiteBagItemButton_UpdateItemSets(self)
+    local bag = self:GetParent():GetID()
+    local slot = self:GetID()
+
+    local stockText = _G[self:GetName() .. "Stock"]
+
+    local _, equipsetName = GetContainerItemEquipmentSetInfo(bag, slot)
+    if equipsetName then
+        stockText:SetText(gsub(equipsetName, ", ", "\n"))
+        stockText:Show()
+    else
+        stockText:Hide()
+    end
+end
+
 function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateItem(self)
     LiteBagItemButton_UpdateQuestTexture(self)
     LiteBagItemButton_UpdateLocked(self)
     LiteBagItemButton_UpdateCooldown(self)
+    LiteBagItemButton_UpdateItemSets(self)
     LiteBagItemButton_UpdateFiltered(self)
 end
 
@@ -104,6 +120,14 @@ function LiteBagItemButton_OnLoad(self)
     ContainerFrameItemButton_OnLoad(self)
     self.GetInventorySlot = ButtonInventorySlot
     self.UpdateTooltip = LiteBagItemButton_OnEnter
+
+    -- We (mis)use the stock count text to show the equipset.  By default it's
+    -- only attached at TOPLEFT.  Attach it to BOTTOMRIGHT as well so we
+    -- get automatic truncation of the text.
+    local stockText = _G[self:GetName() .. "Stock"]
+    stockText:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 0, 2)
+    stockText:SetJustifyV("TOP")
+    stockText:SetFont("Fonts\\ARIALN.TTF", 12, "OUTLINE")
 end
 
 function LiteBagItemButton_OnEnter(self)

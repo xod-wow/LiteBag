@@ -138,6 +138,10 @@ end
 -- Apart from BAG_OPEN/CLOSED and BANKFRAME_OPENED/CLOSED these events
 -- are only registered while the frames are shown, so we can call the
 -- update functions without worrying that we don't need to.
+--
+-- Some events that fire a lot have specific code to just update the
+-- bags or changes that they fire for (where possible).  Others are
+-- rare enough it's OK to call LiteBagFrame_Update to do everything.
 function LiteBagFrame_OnEvent(self, event, ...)
     if event == "ADDON_LOADED" then
         LiteBagFrame_Update(self)
@@ -180,6 +184,8 @@ function LiteBagFrame_OnEvent(self, event, ...)
         if bag and slot and LiteBagFrame_IsMyBag(self, bag) then
             LiteBagFrame_UpdateLocked(self)
         end
+    elseif event == "EQUIPMENT_SETS_CHANGED" then
+        LiteBagFrame_Update(self)
     elseif event == "BAG_UPDATE_COOLDOWN" then
         local bag = ...
         if LiteBagFrame_IsMyBag(self, bag) then
@@ -251,6 +257,7 @@ function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("INVENTORY_SEARCH_UPDATE")
     self:UnregisterEvent("QUEST_ACCEPTED")
     self:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
+    self:UnregisterEvent("EQUIPMENT_SETS_CHANGED")
 
     LiteBagFrame_SetMainMenuBarButtons(self, 0)
     if self.isBank then
@@ -269,6 +276,7 @@ function LiteBagFrame_OnShow(self)
     self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
     self:RegisterEvent("QUEST_ACCEPTED")
     self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
+    self:RegisterEvent("EQUIPMENT_SETS_CHANGED")
 
     local titleText =_G[self:GetName() .. "TitleText"]
 
