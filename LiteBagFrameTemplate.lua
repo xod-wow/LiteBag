@@ -285,7 +285,7 @@ function LiteBagFrame_OnShow(self)
         -- code depending on what (default) action bars are shown.
         self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
 
-        -- Despite the name, this is a backpack icon
+        -- WTB backpack icon
         self.portrait:SetTexture("Interface\\MERCHANTFRAME\\UI-BuyBack-Icon")
         titleText:SetText(GetBagName(self.bagIDs[1]))
     elseif self.isBank then
@@ -408,7 +408,7 @@ function LiteBagFrame_LayoutFrame(self)
         elseif i % ncols == 1 then
             self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-ncols], "BOTTOMLEFT", 0, -hgap)
         else
-            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-1]:GetName(), "TOPRIGHT", wgap, 0)
+            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-1], "TOPRIGHT", wgap, 0)
         end
 
         if i <= self.size then
