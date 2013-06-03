@@ -19,7 +19,7 @@ local TradeBagColorTable = {
     [0x200]     = { 1.00, 0.65, 0.98 },             -- Jewelcrafting
     [0x400]     = { 1.00, 0.81, 0.38 },             -- Mining
     [0x10000]   = { 1.00, 0.50, 0.50 },             -- Cooking
-    [0x100000]  = { 0.42, 0.59, 1.00 },             -- Fishing
+    [0x8000]  = { 0.42, 0.59, 1.00 },               -- Fishing
 }
 
 local function GetTradeBagColor(self)
@@ -44,13 +44,16 @@ function LiteBagItemButton_UpdateItem(self)
 
     self.readable = readable
 
+    local normalTexture = _G[self:GetName() .. "NormalTexture"]
     if texture then
         self.icon:SetTexture(texture)
-        self.icon:SetBlendMode(BLEND)
+        self.icon:SetBlendMode("BLEND")
+        normalTexture:SetVertexColor(1, 1, 1)
         self.hasItem = 1
     else
         self.icon:SetTexture(GetTradeBagColor(self))
-        self.icon:SetBlendMode(MOD)
+        self.icon:SetBlendMode("MOD")
+        normalTexture:SetVertexColor(GetTradeBagColor(self))
         self.hasItem = nil
     end
 
