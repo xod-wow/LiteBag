@@ -14,7 +14,7 @@
             tex:SetWidth(64 *  w / 37)
             tex:SetHeight(64 * h / 37)
         </OnSizeChanged>
-         <OnLoad>
+        <OnLoad>
             LiteBagBagButton_OnLoad(self)
         </OnLoad>
         <OnClick function="LiteBagBagButton_OnClick" />
