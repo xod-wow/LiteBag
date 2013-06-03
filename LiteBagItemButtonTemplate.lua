@@ -18,8 +18,8 @@ local TradeBagColorTable = {
     [0x80]      = { 0.68, 0.63, 0.25 },             -- Engineering
     [0x200]     = { 1.00, 0.65, 0.98 },             -- Jewelcrafting
     [0x400]     = { 1.00, 0.81, 0.38 },             -- Mining
+    [0x8000]    = { 0.42, 0.59, 1.00 },             -- Fishing
     [0x10000]   = { 1.00, 0.50, 0.50 },             -- Cooking
-    [0x8000]  = { 0.42, 0.59, 1.00 },               -- Fishing
 }
 
 local function GetTradeBagColor(self)
