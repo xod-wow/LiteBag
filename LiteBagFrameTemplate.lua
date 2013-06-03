@@ -65,6 +65,7 @@ function LiteBagFrame_OnLoad(self)
         local bagName = self:GetName() .. "ContainerFrame" .. bag
         self.dummyContainerFrames[bag] = CreateFrame("Frame",  name, self)
         self.dummyContainerFrames[bag]:SetID(bag)
+        self.dummyContainerFrames[bag].slotID = ContainerIDToInventoryID(bag)
     end
 
     -- The UIPanelLayout stuff makes the Blizzard UIParent code position a
@@ -322,6 +323,15 @@ function LiteBagFrame_AttachSearchBox(self)
 end
 
 function LiteBagFrame_UpdateItemButtons(self)
+    -- First set the families (bag type) of the parent containers
+    for id,bag in pairs(self.dummyContainerFrames) do
+        if bag.slotID then
+            local bagItemID = GetInventoryItemId("player", bag.slotID)
+            self.family = GetItemFamily(bagItemID)
+        end
+    end
+
+    -- Then update all the buttons
     for i = 1, self.size do
         LiteBagItemButton_Update(self.itemButtons[i])
     end

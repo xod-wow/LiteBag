@@ -9,6 +9,30 @@
 
 ----------------------------------------------------------------------------]]--
 
+-- See http://wowprogramming.com/docs/api/GetItemFamily
+local TradeBagColorTable = {
+    [0x8]       = { 1.00, 0.60, 0.45 },             -- Leatherworking
+    [0x10]      = { 0.64, 1.00, 0.82 },             -- Inscription
+    [0x20]      = { 0.50, 1.00, 0.50 },             -- Herbalism
+    [0x40]      = { 0.64, 0.83, 1.00 },             -- Enchanting
+    [0x80]      = { 0.68, 0.63, 0.25 },             -- Engineering
+    [0x200]     = { 1.00, 0.65, 0.98 },             -- Jewelcrafting
+    [0x400]     = { 1.00, 0.81, 0.38 },             -- Mining
+    [0x10000]   = { 1.00, 0.50, 0.50 },             -- Cooking
+    [0x100000]  = { 0.42, 0.59, 1.00 },             -- Fishing
+}
+
+local function GetTradeBagColor(self)
+    local family = self:GetParent().family
+
+    if family and family ~= 0 then
+        local c = TradeBagColorTable[family]
+        if c then return c[1], c[2], c[3] end
+    end
+
+    return 1, 1, 1
+end
+
 function LiteBagItemButton_UpdateItem(self)
 
     local bag = self:GetParent():GetID()
@@ -16,14 +40,17 @@ function LiteBagItemButton_UpdateItem(self)
 
     local texture, count, _, _, readable = GetContainerItemInfo(bag, slot)
 
-    SetItemButtonTexture(self, texture)
     SetItemButtonCount(self, count)
 
     self.readable = readable
 
     if texture then
+        self.icon:SetTexture(texture)
+        self.icon:SetBlendMode(BLEND)
         self.hasItem = 1
     else
+        self.icon:SetTexture(GetTradeBagColor(self))
+        self.icon:SetBlendMode(MOD)
         self.hasItem = nil
     end
 
