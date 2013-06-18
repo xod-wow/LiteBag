@@ -47,13 +47,14 @@ function LiteBagItemButton_UpdateItem(self)
     local normalTexture = _G[self:GetName() .. "NormalTexture"]
     if texture then
         self.icon:SetTexture(texture)
-        self.icon:SetBlendMode("BLEND")
-        normalTexture:SetVertexColor(1, 1, 1)
+        --self.icon:SetBlendMode("BLEND")
+        --normalTexture:SetVertexColor(1, 1, 1)
         self.hasItem = 1
     else
-        self.icon:SetTexture(GetTradeBagColor(self))
-        self.icon:SetBlendMode("MOD")
-        normalTexture:SetVertexColor(GetTradeBagColor(self))
+        self.icon:SetTexture(nil)
+        -- self.icon:SetTexture(GetTradeBagColor(self))
+        -- self.icon:SetBlendMode("MOD")
+        --normalTexture:SetVertexColor(GetTradeBagColor(self))
         self.hasItem = nil
     end
 
