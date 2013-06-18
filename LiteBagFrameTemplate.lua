@@ -206,6 +206,10 @@ function LiteBagFrame_OnEvent(self, event, ...)
     end
 end
 
+
+-- This updates the highlights for the bag open/closed buttons that are
+-- part of the MainMenuBar at the bottom in the default Blizzard interface.
+
 function LiteBagFrame_SetMainMenuBarButtons(self, checked)
     if self.isBackpack then
         MainMenuBarBackpackButton:SetChecked(checked)
@@ -254,7 +258,7 @@ function LiteBagFrame_UnhighlightBagButtons(self, id)
     end
 end
 
-local function GetDistanceFromDefault(self)
+local function GetDistanceFromBackpackDefault(self)
     local defaultX = UIParent:GetRight() - CONTAINER_OFFSET_X
     local defaultY = UIParent:GetBottom() + CONTAINER_OFFSET_Y
     local selfX = self:GetRight()
@@ -281,7 +285,9 @@ end
 function LiteBagFrame_StopMoving(self)
     if self.isBank then return end
     self:StopMovingOrSizing()
-    if self.isBackpack and GetDistanceFromDefault(self) < 64 then
+
+    -- Snap back into place
+    if self.isBackpack and GetDistanceFromBackpackDefault(self) < 64 then
         self:SetUserPlaced(false)
         LiteBagFrame_SetPosition(self)
     end
@@ -451,11 +457,11 @@ function LiteBagFrame_LayoutFrame(self)
 
         itemButton:ClearAllPoints()
         if i == 1 then
-            self.itemButtons[i]:SetPoint("TOPLEFT", name, "TOPLEFT", 14, -70)
+            itemButton:SetPoint("TOPLEFT", name, "TOPLEFT", 14, -70)
         elseif i % ncols == 1 then
-            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-ncols], "BOTTOMLEFT", 0, -hgap)
+            itemButton:SetPoint("TOPLEFT", self.itemButtons[i-ncols], "BOTTOMLEFT", 0, -hgap)
         else
-            self.itemButtons[i]:SetPoint("TOPLEFT", self.itemButtons[i-1], "TOPRIGHT", wgap, 0)
+            itemButton:SetPoint("TOPLEFT", self.itemButtons[i-1], "TOPRIGHT", wgap, 0)
         end
 
         if i <= self.size then
