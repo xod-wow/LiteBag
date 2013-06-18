@@ -254,6 +254,39 @@ function LiteBagFrame_UnhighlightBagButtons(self, id)
     end
 end
 
+local function GetDistanceFromDefault(self)
+    local defaultX = UIParent:GetRight() - CONTAINER_OFFSET_X
+    local defaultY = UIParent:GetBottom() + CONTAINER_OFFSET_Y
+    local selfX = self:GetRight()
+    local selfY = self:GetBottom()
+    return sqrt((defaultX-selfX)^2 + (defaultY-selfY)^2)
+end
+
+-- CONTAINER_OFFSET_* are globals that are updated by the Blizzard
+-- code depending on which (default) action bars are shown.
+
+function LiteBagFrame_SetPosition(self)
+    if self:IsUserPlaced() then return end
+    self:ClearAllPoints()
+    self:SetClampedToScreen(nil)
+    self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
+end
+
+function LiteBagFrame_StartMoving(self)
+    if self.isBank then return end
+    self:StartMoving()
+    self:SetClampedToScreen(true)
+end
+
+function LiteBagFrame_StopMoving(self)
+    if self.isBank then return end
+    self:StopMovingOrSizing()
+    if self.isBackpack and GetDistanceFromDefault(self) < 64 then
+        self:SetUserPlaced(false)
+        LiteBagFrame_SetPosition(self)
+    end
+end
+
 function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("BAG_UPDATE")
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
@@ -287,9 +320,7 @@ function LiteBagFrame_OnShow(self)
     local titleText =_G[self:GetName() .. "TitleText"]
 
     if self.isBackpack then
-        -- CONTAINER_OFFSET_* are globals that are updated by the Blizzard
-        -- code depending on what (default) action bars are shown.
-        self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
+        LiteBagFrame_SetPosition(self)
 
         -- WTB backpack icon
         self.portrait:SetTexture("Interface\\MERCHANTFRAME\\UI-BuyBack-Icon")
@@ -298,6 +329,7 @@ function LiteBagFrame_OnShow(self)
         SetPortraitTexture(self.portrait, "npc")
         titleText:SetText(UnitName("npc"))
     else
+        LiteBagFrame_SetPosition(self)
         SetBagPortraitTexture(self.portrait, self.bagIDs[1])
         titleText:SetText(GetBagName(self.bagIDs[1]))
     end

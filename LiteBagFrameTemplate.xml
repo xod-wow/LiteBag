@@ -44,6 +44,28 @@
     <Size x="384" y="512" />
 
     <Frames>
+        <Button name="$parentDragButton">
+            <Size x="0" y="20"/>
+            <Anchors>
+                <Anchor point="TOPLEFT"/>
+                <Anchor point="TOPRIGHT"/>
+            </Anchors>
+            <Scripts>
+                <OnLoad>
+                    self:RegisterForClicks("LeftButton")
+                </OnLoad>
+                <OnMouseDown>
+                    LiteBagFrame_StartMoving(self:GetParent())
+                </OnMouseDown>
+                <OnMouseUp>
+                    LiteBagFrame_StopMoving(self:GetParent())
+                </OnMouseUp>
+                <OnHide>
+                    LiteBagFrame_StopMoving(self:GetParent())
+                </OnHide>
+            </Scripts>
+        </Button>
+
         <Frame name="$parentMoneyFrameBorder" inherits="ThinGoldEdgeTemplate">
             <Size x="170" y="21" />
             <Anchors>
