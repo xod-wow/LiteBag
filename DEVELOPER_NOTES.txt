@@ -37,12 +37,7 @@
     search box doesn't fit any more.  Or the bag buttons if we attach
     them to the outside.
 
-    Make the backpack frame moveable (maybe?).  If so it would have to dock
-    back into place if dragged towards the bottom right.
-
     Make the bank frame default to 14 wide? (Default bank bag is 28 slots.)
-
-    Re-check the slot background.
 
 
 ------------------------------------------------------------------------------
