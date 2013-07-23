@@ -131,7 +131,6 @@ function LiteBagBagButton_OnClick(self)
         -- XXX FIXME XXX
         -- Does StaticPopup_Show still cause taint due to blizz bugs?
         StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
-        LiteBagFrame_Update(self:GetParent())
     else
         PutItemInBag(self.slotID)
     end

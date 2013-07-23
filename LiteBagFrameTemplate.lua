@@ -149,6 +149,8 @@ end
 -- bags or changes that they fire for (where possible).  Others are
 -- rare enough it's OK to call LiteBagFrame_Update to do everything.
 function LiteBagFrame_OnEvent(self, event, ...)
+    -- if self.isBank then print("DEBUG " .. event) end
+
     if event == "ADDON_LOADED" then
         LiteBagFrame_Update(self)
     elseif event == "BAG_OPEN" then
@@ -184,6 +186,12 @@ function LiteBagFrame_OnEvent(self, event, ...)
         local slot = ...
         if self.isBank then
             LiteBagFrame_Update(self)
+        end
+    elseif event == "PLAYER_MONEY" then
+        -- The only way to notice we bought a bag button is to see we
+        -- spent money while the bank is open.
+        if self.isBank then
+            LiteBagFrame_UpdateBagButtons(self)
         end
     elseif event == "ITEM_LOCK_CHANGED" then
         local bag, slot = ...
@@ -303,6 +311,7 @@ function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("QUEST_ACCEPTED")
     self:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
     self:UnregisterEvent("EQUIPMENT_SETS_CHANGED")
+    self:UnregisterEvent("PLAYER_MONEY")
 
     LiteBagFrame_SetMainMenuBarButtons(self, 0)
     if self.isBank then
@@ -322,6 +331,7 @@ function LiteBagFrame_OnShow(self)
     self:RegisterEvent("QUEST_ACCEPTED")
     self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
     self:RegisterEvent("EQUIPMENT_SETS_CHANGED")
+    self:RegisterEvent("PLAYER_MONEY")
 
     local titleText =_G[self:GetName() .. "TitleText"]
 
@@ -360,6 +370,20 @@ function LiteBagFrame_AttachSearchBox(self)
     box:SetPoint("TOPRIGHT", self, "TOPRIGHT", -14, -34)
     box.anchorBag = self
     box:Show()
+end
+
+function LiteBagFrame_UpdateBagButtons(self)
+    -- This is a temporary ugly hack.
+    for i = 1,8 do
+        local b = _G[self:GetName().."BagButton"..i]
+        if self.bagIDs[i] then
+            b:SetID(self.bagIDs[i])
+            LiteBagBagButton_Update(b)
+            b:Show()
+        else
+            b:Hide()
+        end
+    end
 end
 
 function LiteBagFrame_UpdateItemButtons(self)
@@ -493,15 +517,5 @@ function LiteBagFrame_Update(self)
 
     LiteBagFrame_UpdateItemButtons(self)
 
-    -- This is a temporary ugly hack.
-    for i = 1,8 do
-        local b = _G[self:GetName().."BagButton"..i]
-        if self.bagIDs[i] then
-            b:SetID(self.bagIDs[i])
-            LiteBagBagButton_Update(b)
-            b:Show()
-        else
-            b:Hide()
-        end
-    end
+    LiteBagFrame_UpdateBagButtons(self)
 end
