@@ -313,6 +313,8 @@ function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("EQUIPMENT_SETS_CHANGED")
     self:UnregisterEvent("PLAYER_MONEY")
 
+    LiteBagFrame_ClearNewItems(self)
+
     LiteBagFrame_SetMainMenuBarButtons(self, 0)
     if self.isBank then
        CloseBankFrame()
@@ -383,6 +385,12 @@ function LiteBagFrame_UpdateBagButtons(self)
         else
             b:Hide()
         end
+    end
+end
+
+function LiteBagFrame_ClearNewItems(self)
+    for i = 1, self.size do
+        LiteBagItemButton_ClearNewItem(self)
     end
 end
 
