@@ -313,6 +313,9 @@ function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("EQUIPMENT_SETS_CHANGED")
     self:UnregisterEvent("PLAYER_MONEY")
 
+    -- Judging by the code in FrameXML/ContainerFrame.lua items are tagged
+    -- by the server as "new" in some cases, and you're supposed to clear
+    -- the new flag after you see it the first time.
     LiteBagFrame_ClearNewItems(self)
 
     LiteBagFrame_SetMainMenuBarButtons(self, 0)
@@ -390,7 +393,8 @@ end
 
 function LiteBagFrame_ClearNewItems(self)
     for i = 1, self.size do
-        LiteBagItemButton_ClearNewItem(self)
+        -- C_NewItems.ClearAll()
+        LiteBagItemButton_ClearNewItem(self.itemButtons[i])
     end
 end
 

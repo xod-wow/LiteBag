@@ -111,14 +111,14 @@ function LiteBagItemButton_ClearNewItem(self)
     C_NewItems.RemoveNewItem(bag, slot)
 end
 
-function LiteBagItemButton_UpdateNewTexture(self)
+function LiteBagItemButton_UpdateNewItemTexture(self)
     -- Test for 5.4 and onwards, can remove after 5.4 goes live
     if not C_NewItems then return end
 
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
-    local newItemTexture = _G[self:GetName() .. "newItemTexture"]
+    local newItemTexture = _G[self:GetName() .. "NewItemTexture"]
     local isNewItem = C_NewItems.IsNewItem(bag, slot)
     local isBattlePayItem = IsBattlePayItem(bag, slot)
     if isNewItem and isBattlePayItem then
@@ -169,7 +169,7 @@ end
 
 function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateItem(self)
-    LiteBagItemButton_UpdateNewTexture(self)
+    LiteBagItemButton_UpdateNewItemTexture(self)
     LiteBagItemButton_UpdateQuestTexture(self)
     LiteBagItemButton_UpdateLocked(self)
     LiteBagItemButton_UpdateCooldown(self)
