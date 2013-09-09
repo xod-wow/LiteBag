@@ -9,6 +9,42 @@
 
 ----------------------------------------------------------------------------]]--
 
+--[[----------------------------------------------------------------------------
+  Frame components of a LiteBagItemButtonTemplate frame.
+
+  Inherited from ContainerFrameItemButtonTemplate:
+    $parentIconTexture (Texture) also frame.icon
+        The main icon image for the item
+    $parentCount (FontString)
+        The stack count (a number) attached at the bottom right.
+    $parentStock (FontString)
+        The number in stock at the vendor.  It's unused in for the bag items
+        so we re-size it and re-font it and use it for the Equipment Set name.
+        Attached at the top left.
+    $parentSearchOverlay (Texture)
+        Shown when the item does not match a bag search.  It's a black texture
+        with 0.8 alpha that covers the entire icon and blacks it out.
+    $parentNormalTexture (Texture)
+        This is the button outline stuff.  There's also corresponding Pushed
+        and Highlight texture that aren't named.  We don't touch this, it's
+        just part of the normal button click behaviour stuff.
+    $parentIconQuestTexture (Texture)
+        Shows the gold ! on items that will start a quest if you click them.
+    $parentNewItemTexture (Texture)
+        Show something (not sure what yet) for items you just bought from the
+        in-game store.
+    $parentCooldown (Cooldown)
+        Normal item cooldown frame (does the sweep etc.).
+
+  Added by LiteBagItemButtonTemplate:
+    $parentQualityTexture (Texture) also frame.qualityTexture
+        An overlay for the button border that colors it according to the
+        quality of the item.
+    $parentBackgroundTexture (Texture) also frame.backgroundTexture
+        The slot background, so that empty slots have a texture.
+
+----------------------------------------------------------------------------]]--
+
 -- See http://wowprogramming.com/docs/api/GetItemFamily
 local TradeBagColorTable = {
     [0x8]       = { 1.00, 0.60, 0.45 },             -- Leatherworking
@@ -44,7 +80,7 @@ function LiteBagItemButton_UpdateItem(self)
 
     self.readable = readable
 
-    local normalTexture = _G[self:GetName() .. "NormalTexture"]
+    -- local normalTexture = _G[self:GetName() .. "NormalTexture"]
     if texture then
         self.icon:SetTexture(texture)
         --self.icon:SetBlendMode("BLEND")

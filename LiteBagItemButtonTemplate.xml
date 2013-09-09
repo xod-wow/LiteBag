@@ -10,7 +10,7 @@
 
     <Layers>
         <Layer level="BACKGROUND">
-            <Texture file="Interface\Buttons\UI-Slot-Background" parentKey="bg">
+            <Texture name="$parentBackgroundTexture" file="Interface\Buttons\UI-Slot-Background" parentKey="backgroundTexture">
                 <Size x="38.5" y="38.5" />
                 <Anchors>
                     <Anchor point="TOPLEFT" x="-1" y="-1" />
