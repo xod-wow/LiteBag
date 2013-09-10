@@ -160,7 +160,7 @@ function LiteBagItemButton_UpdateNewItemTexture(self)
     if isNewItem and isBattlePayItem then
         newItemTexture:Show()
     else
-        newItemTexture:hide()
+        newItemTexture:Hide()
     end
 
 end
