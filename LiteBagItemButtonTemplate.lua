@@ -139,18 +139,12 @@ function LiteBagItemButton_UpdateQuestTexture(self)
 end
 
 function LiteBagItemButton_ClearNewItem(self)
-    -- Test for 5.4 and onwards, can remove after 5.4 goes live
-    if not C_NewItems then return end
-
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
     C_NewItems.RemoveNewItem(bag, slot)
 end
 
 function LiteBagItemButton_UpdateNewItemTexture(self)
-    -- Test for 5.4 and onwards, can remove after 5.4 goes live
-    if not C_NewItems then return end
-
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
