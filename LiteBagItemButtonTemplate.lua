@@ -35,11 +35,12 @@
         in-game store.
     $parentCooldown (Cooldown)
         Normal item cooldown frame (does the sweep etc.).
+    $parent.IconBorder
+        An overlay for the button border that colors it according to the
+        quality of the item.  Used to be LiteBag's qualityTexture prior to
+        Blizzard adding it in 6.0.2.
 
   Added by LiteBagItemButtonTemplate:
-    $parentQualityTexture (Texture) also frame.qualityTexture
-        An overlay for the button border that colors it according to the
-        quality of the item.
     $parentBackgroundTexture (Texture) also frame.backgroundTexture
         The slot background, so that empty slots have a texture.
 
@@ -113,14 +114,7 @@ function LiteBagItemButton_UpdateQuestTexture(self)
     local slot = self:GetID()
 
     local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bag, slot)
-    local quality, _, _, link = select(4, GetContainerItemInfo(bag, slot))
-    if link and quality < 0 then
-        quality = select(3, GetItemInfo(link))
-    end
-
     local questTexture = _G[self:GetName() .. "IconQuestTexture"]
-
-    self.qualityTexture:Hide()
 
     if questId and not isActive then
         questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG)
@@ -130,12 +124,30 @@ function LiteBagItemButton_UpdateQuestTexture(self)
         questTexture:Show()
     else
         questTexture:Hide()
-        if quality and quality > 1 then
-            local r, g, b = GetItemQualityColor(quality)
-            self.qualityTexture:SetVertexColor(r, g, b)
-            self.qualityTexture:Show()
-        end
     end
+
+end
+
+function LiteBagItemButton_UpdateQuality(self)
+    local bag = self:GetParent():GetID()
+    local slot = self:GetID()
+
+    local quality, _, _, _, noValue = select(4, GetContainerItemInfo(bag, slot))
+
+    self.JunkIcon:Hide()
+    self.IconBorder:Hide()
+
+    if not quality then return end
+
+    if quality >= LE_ITEM_QUALITY_COMMON and BAG_ITEM_QUALITY_COLORS[quality] then
+        self.IconBorder:SetVertexColor(BAG_ITEM_QUALITY_COLORS[quality].r,
+                                       BAG_ITEM_QUALITY_COLORS[quality].g,
+                                       BAG_ITEM_QUALITY_COLORS[quality].b)
+        self.IconBorder:Show()
+    elseif quality == LE_ITEM_QUALITY_POOR and not noValue and MerchantFrame:IsShown() then
+        self.JunkIcon:Show()
+    end
+    
 end
 
 function LiteBagItemButton_ClearNewItem(self)
@@ -148,13 +160,37 @@ function LiteBagItemButton_UpdateNewItemTexture(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
-    local newItemTexture = _G[self:GetName() .. "NewItemTexture"]
+    local newItemTexture = self.NewItemTexture
+    local battlepayItemTexture = self.BattlepayItemTexture
     local isNewItem = C_NewItems.IsNewItem(bag, slot)
     local isBattlePayItem = IsBattlePayItem(bag, slot)
+    local flash = self.flashAnim
+    local newItemAnim = self.newitemglowAnim
+
+    local quality = select(4, GetContainerItemInfo(bag, slot))
+
     if isNewItem and isBattlePayItem then
+        newItemTexture:Hide()
+        battlepayItemTexture:Show()
+    elseif isNewItem then
+        if quality and NEW_ITEM_ATLAS_BY_QUALITY[quality] then
+            newItemTexture:SetAtlas(NEW_ITEM_ATLAS_BY_QUALITY[quality])
+        else
+            newItemTexture:SetAtlas("bags-glow-white")
+        end
+        if not flash:IsPlaying() and not newItemAnim:IsPlaying() then
+            flash:Play()
+            newItemAnim:Play()
+        end
         newItemTexture:Show()
+        battlepayItemTexture:Hide()
     else
         newItemTexture:Hide()
+        battlepayItemTexture:Hide()
+        if flash:IsPlaying() or newItemAnim:IsPlaying() then
+            flash:Stop()
+            newItemAnim:Stop()
+        end
     end
 
 end
@@ -199,9 +235,10 @@ end
 
 function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateItem(self)
-    LiteBagItemButton_UpdateNewItemTexture(self)
-    LiteBagItemButton_UpdateQuestTexture(self)
     LiteBagItemButton_UpdateLocked(self)
+    LiteBagItemButton_UpdateQuestTexture(self)
+    LiteBagItemButton_UpdateNewItemTexture(self)
+    LiteBagItemButton_UpdateQuality(self)
     LiteBagItemButton_UpdateCooldown(self)
     LiteBagItemButton_UpdateEquipmentSets(self)
     LiteBagItemButton_UpdateFiltered(self)

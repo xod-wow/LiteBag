@@ -19,16 +19,6 @@
                 <Color r="0.5" b="0.5" g="0.5" a="0.8" />
             </Texture>
         </Layer>
-        <Layer level="ARTWORK" textureSubLevel="1">
-            <Texture name="$parentQualityTexture" parentKey="qualityTexture" file="Interface\Buttons\UI-ActionButton-Border" alphaMode="ADD" hidden="true">
-                <Size x="37" y="37" />
-                <Anchors>
-                    <Anchor point="CENTER" />
-                </Anchors>
-                <TexCoords left="0.22" right="0.78" top="0.22" bottom="0.78" />
-                <Color r="1" g="1" b="1" a="0.5" />
-            </Texture>
-        </Layer>
     </Layers>
 
     <Scripts>
