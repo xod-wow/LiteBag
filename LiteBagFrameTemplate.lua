@@ -81,6 +81,11 @@ function LiteBagFrame_OnLoad(self)
         self:SetAttribute("UIPanelLayout-pushable", 6)
         local insetBg = _G[self:GetName() .."InsetBg"]
         insetBg:SetTexture("Interface\\FrameGeneral\\UI-Background-Rock", true, true)
+        self.Tab1:Show()
+        self.Tab2:Show()
+        PanelTemplates_SetNumTabs(self, 2)
+        PanelTemplates_SetTab(self, 1)
+        self.selectedTab = 1
     elseif LiteBagFrame_IsMyBag(self, BACKPACK_CONTAINER) then
         self.isBackpack = 1
         tinsert(UISpecialFrames, self:GetName())
@@ -150,6 +155,7 @@ end
 -- rare enough it's OK to call LiteBagFrame_Update to do everything.
 function LiteBagFrame_OnEvent(self, event, ...)
     -- if self.isBank then print("DEBUG " .. event) end
+    print("DEBUG " .. event)
 
     if event == "ADDON_LOADED" then
         LiteBagFrame_Update(self)
@@ -166,7 +172,12 @@ function LiteBagFrame_OnEvent(self, event, ...)
         if self.isBank then
             LiteBagFrame_Hide(self)
         end
-    elseif event == "BAG_UPDATE" then
+    elseif event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
+        local bag = ...
+        if LiteBagFrame_IsMyBag(self, bag) then
+            LiteBagFrame_UpdateQuality(self)
+        end
+    elseif event == "BAG_UPDATE" or event == "BAG_NEW_ITEMS_UPDATED" then
         local bag = ...
         if LiteBagFrame_IsMyBag(self, bag) then
             LiteBagFrame_Update(self)
@@ -312,13 +323,17 @@ function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
     self:UnregisterEvent("EQUIPMENT_SETS_CHANGED")
     self:UnregisterEvent("PLAYER_MONEY")
+    self:UnregisterEvent("BAG_NEW_ITEMS_UPDATED")
+    self:UnregisterEvent("BAG_SLOT_FLAGS_UPDATED")
+    self:UnregisterEvent("MERCHANT_SHOW")
+    self:UnregisterEvent("MERCHANT_CLOSED")
 
     -- Judging by the code in FrameXML/ContainerFrame.lua items are tagged
     -- by the server as "new" in some cases, and you're supposed to clear
     -- the new flag after you see it the first time.
     LiteBagFrame_ClearNewItems(self)
 
-    LiteBagFrame_SetMainMenuBarButtons(self, 0)
+    LiteBagFrame_SetMainMenuBarButtons(self, false)
     if self.isBank then
        CloseBankFrame()
     end
@@ -337,6 +352,10 @@ function LiteBagFrame_OnShow(self)
     self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
     self:RegisterEvent("EQUIPMENT_SETS_CHANGED")
     self:RegisterEvent("PLAYER_MONEY")
+    self:RegisterEvent("BAG_NEW_ITEMS_UPDATED")
+    self:RegisterEvent("BAG_SLOT_FLAGS_UPDATED")
+    self:RegisterEvent("MERCHANT_SHOW")
+    self:RegisterEvent("MERCHANT_CLOSED")
 
     local titleText =_G[self:GetName() .. "TitleText"]
 
@@ -358,7 +377,7 @@ function LiteBagFrame_OnShow(self)
     LiteBagFrame_Update(self)
     LiteBagFrame_UpdateTokens(self)
 
-    LiteBagFrame_SetMainMenuBarButtons(self, 1)
+    LiteBagFrame_SetMainMenuBarButtons(self, true)
 
     PlaySound("igBackPackOpen")
 end
@@ -428,6 +447,12 @@ end
 function LiteBagFrame_UpdateLocked(self)
     for i = 1, self.size do
         LiteBagItemButton_UpdateLocked(self.itemButtons[i])
+    end
+end
+
+function LiteBagFrame_UpdateQuality(self)
+    for i = 1, self.size do
+        LiteBagItemButton_UpdateQuality(self.itemButtons[i])
     end
 end
 
@@ -530,4 +555,10 @@ function LiteBagFrame_Update(self)
     LiteBagFrame_UpdateItemButtons(self)
 
     LiteBagFrame_UpdateBagButtons(self)
+end
+
+function LiteBagFrame_TabOnClick(self)
+    if self:GetID() == 2 then
+        UIErrorsFrame:AddMessage("LiteBag doesn't support Reagent Bank yet...", 1.0, 0.1, 0.1, 1.0)
+    end
 end

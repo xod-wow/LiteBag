@@ -159,6 +159,24 @@
             </Anchors>
         </Button>
 
+        <Button name="$parentTab1" inherits="CharacterFrameTabButtonTemplate" parentKey="Tab1" id="1" text="BANK" hidden="true">
+            <Anchors>
+                <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="11" y="2" />
+            </Anchors>
+            <Scripts>
+                <OnClick function="LiteBagFrame_TabOnClick" />
+            </Scripts>
+        </Button>
+
+        <Button name="$parentTab2" inherits="CharacterFrameTabButtonTemplate" parentKey="Tab2" id="2" text="REAGENT_BANK" hidden="true">
+            <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-15" y="0" />
+            </Anchors>
+            <Scripts>
+                <OnClick function="LiteBagFrame_TabOnClick" />
+            </Scripts>
+        </Button>
+
     </Frames>
 
     <Scripts>

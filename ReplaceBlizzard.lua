@@ -13,7 +13,7 @@ local inventoryFrame, bankFrame
 
 function LiteBagFrame_TabOnClick(self)
     PlaySound("igCharacterInfoTab")
-    print(self:GetID())
+    PanelTemplates_SetTab(self:GetParent(), self:GetID())
 end
 
 function LiteBagFrame_ReplaceBlizzard(inventory, bank)
@@ -22,6 +22,9 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
 
     inventoryFrame = inventory
     bankFrame = bank
+
+    PanelTemplates_SetNumTabs(bank, 2)
+    bank.selectedTab = 1
 
     local hideFunc = function () LiteBagFrame_Hide(inventoryFrame) end
     local showFunc = function () LiteBagFrame_Show(inventoryFrame) end
@@ -39,11 +42,6 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
     BagSlotButton_UpdateChecked = function () end
 
     BankItemAutoSortButton:Hide()
-    BankFrameTab1:SetParent(bank)
-    BankFrameTab2:SetParent(bank)
-    BankFrameTab1:SetPoint("TOPLEFT", bank, "BOTTOMLEFT", 11, 2)
-    BankFrameTab1:SetScript("OnClick", LiteBagFrame_TabOnClick)
-    BankFrameTab2:SetScript("OnClick", LiteBagFrame_TabOnClick)
 end
 
 LiteBagFrame_ReplaceBlizzard(LiteBagInventory, LiteBagBank)
