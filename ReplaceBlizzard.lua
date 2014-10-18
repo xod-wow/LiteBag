@@ -11,11 +11,6 @@
 
 local inventoryFrame, bankFrame
 
-function LiteBagFrame_TabOnClick(self)
-    PlaySound("igCharacterInfoTab")
-    PanelTemplates_SetTab(self:GetParent(), self:GetID())
-end
-
 function LiteBagFrame_ReplaceBlizzard(inventory, bank)
 
     BankFrame:UnregisterAllEvents()
@@ -52,10 +47,11 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
         end)
 
     BankItemAutoSortButton:SetScript("OnClick", function (self)
+            local parent = self:GetParent()
             PlaySound("UI_BagSorting_01")
-            if (self:GetParent().selectedTab == 1) then
+            if (parent.selectedTab == 1) then
                     SortBankBags();
-            elseif (self.selectedTab == 2) then
+            elseif (parent.selectedTab == 2) then
                     SortReagentBankBags()
             end
         end)

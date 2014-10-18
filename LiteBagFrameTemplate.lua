@@ -197,6 +197,11 @@ function LiteBagFrame_OnEvent(self, event, ...)
         if self.isBank then
             LiteBagFrame_Update(self)
         end
+    elseif event == "PLAYERREAGENTBANKSLOTS_CHANGED" then
+        local slot = ...
+        if self.isBank then
+            BankFrameItemButton_Update(ReagentBankFrame["Item"..(slot)])
+        end
     elseif event == "PLAYER_MONEY" then
         -- The only way to notice we bought a bag button is to see we
         -- spent money while the bank is open.
@@ -207,6 +212,8 @@ function LiteBagFrame_OnEvent(self, event, ...)
         local bag, slot = ...
         if bag and slot and LiteBagFrame_IsMyBag(self, bag) then
             LiteBagFrame_UpdateLocked(self)
+        elseif bag == REAGENTBANK_CONTAINER then
+            BankFrameItemButton_UpdateLocked(ReagentBankFrame["Item"..(slot)])
         end
     elseif event == "EQUIPMENT_SETS_CHANGED" then
         LiteBagFrame_Update(self)
@@ -219,6 +226,9 @@ function LiteBagFrame_OnEvent(self, event, ...)
         LiteBagFrame_UpdateQuestTextures(self)
     elseif event == "INVENTORY_SEARCH_UPDATE" then
         LiteBagFrame_UpdateSearchResults(self)
+        if self.isBank then
+            ContainerFrame_UpdateSearchResults(ReagentBankFrame)
+        end
     elseif event == "DISPLAY_SIZE_CHANGED" then
         LiteBagFrame_LayoutFrame(self)
     end
@@ -314,6 +324,7 @@ end
 function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("BAG_UPDATE")
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
+    self:UnregisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
     self:UnregisterEvent("ITEM_LOCK_CHANGED")
     self:UnregisterEvent("BAG_UPDATE_COOLDOWN")
     self:UnregisterEvent("DISPLAY_SIZE_CHANGED")
@@ -343,6 +354,7 @@ end
 function LiteBagFrame_OnShow(self)
     self:RegisterEvent("BAG_UPDATE")
     self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
+    self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
     self:RegisterEvent("ITEM_LOCK_CHANGED")
     self:RegisterEvent("BAG_UPDATE_COOLDOWN")
     self:RegisterEvent("DISPLAY_SIZE_CHANGED")
@@ -545,9 +557,51 @@ function LiteBagFrame_LayoutFrame(self)
     self:SetHeight(105 + nrows * h + (nrows-1) * hgap)
 end
 
+function LiteBagFrame_ShowButtonsAndBags(self)
+    for i = 1, self.size do
+        self.itemButtons[i]:Show()
+    end
+    for i = 1,8 do
+        local b = _G[self:GetName().."BagButton"..i]
+        b:Show()
+    end
+end
+
+function LiteBagFrame_HideButtonsAndBags(self)
+    for i = 1, self.size do
+        self.itemButtons[i]:Hide()
+    end
+    for i = 1,8 do
+        local b = _G[self:GetName().."BagButton"..i]
+        b:Hide()
+    end
+end
+
+function LiteBagFrame_UpdateReagentBank(self)
+    for i = 1, ReagentBankFrame.size do
+        BankFrameItemButton_Update(ReagentBankFrame["Item"..i])
+    end
+end
+
 function LiteBagFrame_Update(self)
 
-    -- It might be better to detach these from _Update and call them
+    if self.isBank then
+        if self.selectedTab == 2 then
+            LiteBagFrame_HideButtonsAndBags(self)  
+            self:SetSize(738, 415)
+            ReagentBankFrame:SetParent(self)
+            ReagentBankFrame:SetAllPoints()
+            ReagentBankFrame:Show()
+            LiteBagFrame_UpdateReagentBank(self)
+            return
+        else
+            ReagentBankFrame:Hide()
+            LiteBagFrame_ShowButtonsAndBags(self)
+        end
+    end
+
+
+    -- It might be better to detach SetupItemButtons from _Update and call them
     -- explicitly from any event that might change the number or
     -- layout of the buttons.
 
@@ -564,7 +618,14 @@ function LiteBagFrame_Update(self)
 end
 
 function LiteBagFrame_TabOnClick(self)
-    if self:GetID() == 2 then
-        UIErrorsFrame:AddMessage("LiteBag doesn't support Reagent Bank yet...", 1.0, 0.1, 0.1, 1.0)
+    local parent = self:GetParent()
+    PanelTemplates_SetTab(parent, self:GetID())
+    LiteBagFrame_Update(parent)
+
+    local titleText =_G[parent:GetName() .. "TitleText"]
+    if self:GetID() == 1 then
+        titleText:SetText(UnitName("npc"))
+    else
+        titleText:SetText(REAGENT_BANK)
     end
 end
