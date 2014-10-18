@@ -155,7 +155,6 @@ end
 -- rare enough it's OK to call LiteBagFrame_Update to do everything.
 function LiteBagFrame_OnEvent(self, event, ...)
     -- if self.isBank then print("DEBUG " .. event) end
-    print("DEBUG " .. event)
 
     if event == "ADDON_LOADED" then
         LiteBagFrame_Update(self)
