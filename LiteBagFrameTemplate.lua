@@ -205,7 +205,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "PLAYER_MONEY" then
         -- The only way to notice we bought a bag button is to see we
         -- spent money while the bank is open.
-        if self.isBank then
+        if self.isBank and self.selectedTab == 1 then
             LiteBagFrame_UpdateBagButtons(self)
         end
     elseif event == "ITEM_LOCK_CHANGED" then
