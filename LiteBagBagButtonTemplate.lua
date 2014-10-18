@@ -16,6 +16,37 @@ do
     end
 end
 
+function LiteBagBagButton_GetFilter(self)
+
+    if self.bagID == BACKPACK_CONTAINER or self.bagID == BANK_CONTAINER then
+        return
+    end
+
+    if IsInventoryItemProfessionBag("player", self.slotID) then
+        return
+    end
+
+    for i = LE_BAG_FILTER_FLAG_EQUIPMENT, NUM_LE_BAG_FILTER_FLAGS do
+        if self.isBank and GetBankBagSlotFlag(self.bagID - NUM_BAG_SLOTS, i) then
+            return i
+        elseif GetBagSlotFlag(self.bagID, i) then
+            return i
+        end
+    end
+end
+
+function LiteBagBagButton_SetFilterIcon(self)
+
+    local i = LiteBagBagButton_GetFilter(self)
+    if i then
+        self.FilterIcon:SetAtlas(BAG_FILTER_ICONS[i], true)
+        self.FilterIcon:Show()
+    else
+        self.FilterIcon:Hide()
+    end
+
+end
+
 function LiteBagBagButton_Update(self)
 
     self.bagID = self:GetID()
@@ -33,6 +64,8 @@ function LiteBagBagButton_Update(self)
     end
 
     self.slotID = ContainerIDToInventoryID(self:GetID())
+
+    LiteBagBagButton_SetFilterIcon(self)
 
     local texture = _G[self:GetName().."IconTexture"]
     local textureName = GetInventoryItemTexture("player", self.slotID)
@@ -69,6 +102,10 @@ function LiteBagBagButton_OnLoad(self)
 
     self:SetScript("OnEvent", LiteBagBagButton_OnEvent)
     self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
+
+    -- Blizzard's ContainerFrameFilterDropDown expects the texture
+    -- to be attached to a button.  Fake it.
+    self.FilterIcon.Icon = self.FilterIcon
 end
 
 function LiteBagBagButton_OnEvent(self)
@@ -105,6 +142,11 @@ function LiteBagBagButton_OnEnter(self)
             else
                 GameTooltip:SetText(BAGSLOT)
             end
+        else
+            local i = LiteBagBagButton_GetFilter(self)
+            if i then
+                GameTooltip:AddLine(BAG_FILTER_ASSIGNED_TO:format(BAG_FILTER_LABELS[i]))
+            end
         end
     end
     GameTooltip:Show()
@@ -123,16 +165,28 @@ function LiteBagBagButton_OnDrag(self)
 end
 
 function LiteBagBagButton_OnClick(self)
-    if self.bagID == BACKPACK_CONTAINER then
-        PutItemInBackpack()
-    elseif self.purchaseCost then
+    if CursorHasItem() then
+        if self.bagID == BACKPACK_CONTAINER then
+            PutItemInBackpack()
+        elseif not self.purchaseCost then
+            PutItemInBag(self.slotID)
+        end
+        return
+    end
+
+    if self.purchaseCost then
         PlaySound("igMainMenuOption");
         BankFrame.nextSlotCost = self.purchaseCost
         -- XXX FIXME XXX
         -- Does StaticPopup_Show still cause taint due to blizz bugs?
         StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
-    else
-        PutItemInBag(self.slotID)
+        return
     end
+
+    PlaySound("igMainMenuOptionCheckBoxOn")
+    ToggleDropDownMenu(1, nil, self.FilterDropDown, self, 0, 0)
 end
 
+function LiteBagBagButtonFilterDropdown_OnLoad(self)
+    UIDropDownMenu_Initialize(self, ContainerFrameFilterDropDown_Initialize, "MENU")
+end

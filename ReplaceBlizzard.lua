@@ -41,7 +41,24 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
 
     BagSlotButton_UpdateChecked = function () end
 
-    BankItemAutoSortButton:Hide()
+    BankItemAutoSortButton:SetScript("OnEnter", function (self)
+            GameTooltip:SetOwner(self)
+            if self:GetParent().selectedTab == 1 then
+                GameTooltip:SetText(BAG_CLEANUP_BANK)
+            else
+                GameTooltip:SetText(BAG_CLEANUP_REAGENT_BANK)
+            end
+            GameTooltip:Show()
+        end)
+
+    BankItemAutoSortButton:SetScript("OnClick", function (self)
+            PlaySound("UI_BagSorting_01")
+            if (self:GetParent().selectedTab == 1) then
+                    SortBankBags();
+            elseif (self.selectedTab == 2) then
+                    SortReagentBankBags()
+            end
+        end)
 end
 
 LiteBagFrame_ReplaceBlizzard(LiteBagInventory, LiteBagBank)

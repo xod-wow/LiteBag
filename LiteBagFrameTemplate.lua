@@ -382,17 +382,24 @@ function LiteBagFrame_OnShow(self)
 end
 
 function LiteBagFrame_AttachSearchBox(self)
-    local box
+    local box, button
     if self.isBank then
         box = BankItemSearchBox
+        button = BankItemAutoSortButton
     else
         box = BagItemSearchBox
+        button = BagItemAutoSortButton
     end
 
     box:SetParent(self)
-    box:SetPoint("TOPRIGHT", self, "TOPRIGHT", -14, -34)
+    box:SetPoint("TOPRIGHT", self, "TOPRIGHT", -38, -35)
     box.anchorBag = self
     box:Show()
+
+    button:SetParent(self)
+    button:SetPoint("TOPRIGHT", self, "TOPRIGHT", -7, -32)
+    button.anchorBag = self
+    button:Show()
 end
 
 function LiteBagFrame_UpdateBagButtons(self)
