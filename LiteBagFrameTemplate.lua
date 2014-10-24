@@ -210,10 +210,13 @@ function LiteBagFrame_OnEvent(self, event, ...)
         end
     elseif event == "ITEM_LOCK_CHANGED" then
         local bag, slot = ...
-        if bag and slot and LiteBagFrame_IsMyBag(self, bag) then
+        if LiteBagFrame_IsMyBag(self, bag) then
             LiteBagFrame_UpdateLocked(self)
         elseif bag == REAGENTBANK_CONTAINER then
-            BankFrameItemButton_UpdateLocked(ReagentBankFrame["Item"..(slot)])
+            local button = ReagentBankFrame["Item"..(slot)]
+            if button then
+                BankFrameItemButton_UpdateLocked(button)
+            end
         end
     elseif event == "EQUIPMENT_SETS_CHANGED" then
         LiteBagFrame_Update(self)
