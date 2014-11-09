@@ -97,7 +97,7 @@ function LiteBagItemButton_UpdateItem(self)
 
     if self == GameTooltip:GetOwner() then
         if self.hasItem then
-            LiteBagItemButton:UpdateTooltip()
+            self:UpdateTooltip()
         else
             GameTooltip:Hide()
         end
