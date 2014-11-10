@@ -1,4 +1,26 @@
 ------------------------------------------------------------------------------
+* Tag-fu
+
+    List tags;
+        git tag 
+    Tag a release:
+        git tag -a -m 'Tagging x.y.z' x.y.z
+    Tag a beta:
+        git tag -a -m 'Tagging x.y.zbeta' x.y.zbeta
+    Automatically fetch tags:
+        git config remote.origin.tagopt --tags
+    Manually get tags:
+        git pull --tags
+    Push tags:
+        git push --tags
+    Deleting a tag (and at remote):
+        git tag -d x.y.z
+        git push origin :refs/tags/x.y.z
+            or
+        git push --delete origin x.y.z
+
+
+------------------------------------------------------------------------------
 * Diff since last release:
 
     git diff <previoustag>
