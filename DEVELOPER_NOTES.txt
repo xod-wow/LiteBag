@@ -1,10 +1,9 @@
 ------------------------------------------------------------------------------
 * Diff since last release:
 
-    TAGDIR=svn://svn.curseforge.net/wow/litebag/mainline/tags
-    LATEST=`svn ls -v $TAGDIR | grep -v 'beta' | tail -1 | awk '{print $NF}'`
-    svn diff svn://svn.curseforge.net/wow/litebag/mainline/tags/$LATEST \
-             svn://svn.curseforge.net/wow/litebag/mainline/trunk
+    git diff <previoustag>
+
+    All hail git.
 
 
 ------------------------------------------------------------------------------
