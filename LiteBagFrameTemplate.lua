@@ -113,6 +113,14 @@ function LiteBagFrame_OnLoad(self)
     self:RegisterEvent("BAG_OPEN")
     self:RegisterEvent("BAG_CLOSED")
 
+    if self.isBank then
+        self.searchBox = BankItemSearchBox
+        self.sortButton = BankItemAutoSortButton
+    else
+        self.searchBox = BagItemSearchBox
+        self.sortButton = BagItemAutoSortButton
+    end
+
     -- We hook ADDON_LOADED to do an initial layout of the frame, as we
     -- will know how big the bags are at that point and still not be
     -- InCombatLockown().
@@ -397,24 +405,16 @@ function LiteBagFrame_OnShow(self)
 end
 
 function LiteBagFrame_AttachSearchBox(self)
-    local box, button
-    if self.isBank then
-        box = BankItemSearchBox
-        button = BankItemAutoSortButton
-    else
-        box = BagItemSearchBox
-        button = BagItemAutoSortButton
-    end
+    self.searchBox:SetParent(self)
+    self.searchBox:SetPoint("TOPRIGHT", self, "TOPRIGHT", -38, -35)
+    self.searchBox.anchorBag = self
+    self.searchBox:Show()
 
-    box:SetParent(self)
-    box:SetPoint("TOPRIGHT", self, "TOPRIGHT", -38, -35)
-    box.anchorBag = self
-    box:Show()
-
-    button:SetParent(self)
-    button:SetPoint("TOPRIGHT", self, "TOPRIGHT", -7, -32)
-    button.anchorBag = self
-    button:Show()
+    self.sortButton:SetParent(self)
+    self.sortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -7, -32)
+    self.sortButton.anchorBag = self
+    self.sortButton:Disable()
+    self.sortButton:Show()
 end
 
 function LiteBagFrame_UpdateBagButtons(self)
@@ -439,15 +439,6 @@ function LiteBagFrame_ClearNewItems(self)
 end
 
 function LiteBagFrame_UpdateItemButtons(self)
-    -- First set the families (bag type) of the parent containers
-    for id,dummy in pairs(self.dummyContainerFrames) do
-        if dummy.slotID then
-            local bagItemID = GetInventoryItemID("player", dummy.slotID)
-            dummy.family = GetItemFamily(bagItemID)
-        end
-    end
-
-    -- Then update all the buttons
     for i = 1, self.size do
         LiteBagItemButton_Update(self.itemButtons[i])
     end
@@ -632,3 +623,16 @@ function LiteBagFrame_TabOnClick(self)
         titleText:SetText(REAGENT_BANK)
     end
 end
+
+function LiteBagFrame_OnKeyDown(self, key)
+    if key == "LSHIFT" or key == "RSHIFT" then
+        self.sortButton:Enable()
+    end
+end
+
+function LiteBagFrame_OnKeyUp(self, key)
+    if key == "LSHIFT" or key == "RSHIFT" then
+        self.sortButton:Disable()
+    end
+end
+
