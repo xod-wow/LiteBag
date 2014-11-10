@@ -21,6 +21,12 @@
 
 
 ------------------------------------------------------------------------------
+* Git reset to curseforge version
+
+    git fetch origin
+    git reset --hard origin/master
+
+------------------------------------------------------------------------------
 * Diff since last release:
 
     git diff <previoustag>
