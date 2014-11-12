@@ -1,10 +1,37 @@
 ------------------------------------------------------------------------------
+* Tag-fu
+
+    List tags;
+        git tag 
+    Tag a release:
+        git tag -a -m 'Tagging x.y.z' x.y.z
+    Tag a beta:
+        git tag -a -m 'Tagging x.y.zbeta' x.y.zbeta
+    Automatically fetch tags:
+        git config remote.origin.tagopt --tags
+    Manually get tags:
+        git pull --tags
+    Push tags:
+        git push --tags
+    Deleting a tag (and at remote):
+        git tag -d x.y.z
+        git push origin :refs/tags/x.y.z
+            or
+        git push --delete origin x.y.z
+
+
+------------------------------------------------------------------------------
+* Git reset to curseforge version
+
+    git fetch origin
+    git reset --hard origin/master
+
+------------------------------------------------------------------------------
 * Diff since last release:
 
-    TAGDIR=svn://svn.curseforge.net/wow/litebag/mainline/tags
-    LATEST=`svn ls -v $TAGDIR | grep -v 'beta' | tail -1 | awk '{print $NF}'`
-    svn diff svn://svn.curseforge.net/wow/litebag/mainline/tags/$LATEST \
-             svn://svn.curseforge.net/wow/litebag/mainline/trunk
+    git diff <previoustag>
+
+    All hail git.
 
 
 ------------------------------------------------------------------------------
@@ -15,6 +42,16 @@
 
 ------------------------------------------------------------------------------
 * TODO List
+
+    Hello, I had a feature request for you. I was using the addon
+    RandomCompanion for a long time, but recently switched to your
+    addon. I was wondering though if you could add the ability to
+    summon the same mount someone is on when you are targeting them
+    using the same macro, so it overrides your selection list and
+    will force you to mount your targets mount. RandomCompanion has
+    this feature and I would like to have it still using just your
+    addon. It's always nice to be able to quickly summon whatever
+    mount your friend is using at the time. -- Shroomblaze
 
     Switch the Token stuff to using the CURRENCY_DISPLAY_UPDATE event?
     Would need to call TokenFrame_LoadUI() somewhere before we have
