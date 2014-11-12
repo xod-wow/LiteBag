@@ -184,8 +184,6 @@
         <OnEvent function="LiteBagFrame_OnEvent" />
         <OnHide function="LiteBagFrame_OnHide" />
         <OnShow function="LiteBagFrame_OnShow" />
-        <OnKeyDown function="LiteBagFrame_OnKeyDown" />
-        <OnKeyUp function="LiteBagFrame_OnKeyUp" />
     </Scripts>
 </Frame>
 

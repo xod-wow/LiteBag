@@ -410,7 +410,6 @@ function LiteBagFrame_AttachSearchBox(self)
     self.sortButton:SetParent(self)
     self.sortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -7, -32)
     self.sortButton.anchorBag = self
-    self.sortButton:Disable()
     self.sortButton:Show()
 end
 
@@ -618,18 +617,6 @@ function LiteBagFrame_TabOnClick(self)
         titleText:SetText(UnitName("npc"))
     else
         titleText:SetText(REAGENT_BANK)
-    end
-end
-
-function LiteBagFrame_OnKeyDown(self, key)
-    if key == "LSHIFT" or key == "RSHIFT" then
-        self.sortButton:Enable()
-    end
-end
-
-function LiteBagFrame_OnKeyUp(self, key)
-    if key == "LSHIFT" or key == "RSHIFT" then
-        self.sortButton:Disable()
     end
 end
 

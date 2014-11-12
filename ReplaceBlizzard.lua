@@ -11,6 +11,17 @@
 
 local inventoryFrame, bankFrame
 
+StaticPopupDialogs["LM_CONFIRM_SORT"] = {
+    preferredIndex = STATICPOPUPS_NUMDIALOGS,
+    text = "%s\n"..CONFIRM_CONTINUE,
+    button1 = YES,
+    button2 = NO,
+    -- sound = "UI_BagSorting_01",
+    OnAccept = function (self, func) func() end,
+    hideOnEscape = 1,
+    timeout = 0,
+}
+
 function LiteBagFrame_ReplaceBlizzard(inventory, bank)
 
     BankFrame:UnregisterAllEvents()
@@ -48,12 +59,15 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
 
     BankItemAutoSortButton:SetScript("OnClick", function (self)
             local parent = self:GetParent()
-            PlaySound("UI_BagSorting_01")
             if (parent.selectedTab == 1) then
-                    SortBankBags();
+                StaticPopup_Show("LM_CONFIRM_SORT", BAG_CLEANUP_BANK, nil, SortBankBags)
             elseif (parent.selectedTab == 2) then
-                    SortReagentBankBags()
+                StaticPopup_Show("LM_CONFIRM_SORT", BAG_CLEANUP_REAGENT_BANK, nil, SortReagentBankBags)
             end
+        end)
+
+    BagItemAutoSortButton:SetScript("OnClick", function (self)
+            StaticPopup_Show("LM_CONFIRM_SORT", BAG_CLEANUP_BAGS, nil, SortBags)
         end)
 end
 
