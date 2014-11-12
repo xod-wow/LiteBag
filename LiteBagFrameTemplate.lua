@@ -172,13 +172,10 @@ function LiteBagFrame_OnEvent(self, event, ...)
             LiteBagFrame_Show(self)
         end
     elseif event == "BANKFRAME_OPENED" then
-        if self.isBank then
-            LiteBagFrame_Show(self)
-        end
+        -- Note that we hide/show all bags and bank when bank is opened
+        LiteBagFrame_Show(self)
     elseif event == "BANKFRAME_CLOSED" then
-        if self.isBank then
-            LiteBagFrame_Hide(self)
-        end
+        LiteBagFrame_Hide(self)
     elseif event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
         local bag = ...
         if LiteBagFrame_IsMyBag(self, bag) then
