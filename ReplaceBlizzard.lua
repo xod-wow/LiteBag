@@ -22,6 +22,14 @@ StaticPopupDialogs["LM_CONFIRM_SORT"] = {
     timeout = 0,
 }
 
+local function DoOrStaticPopup(text, func)
+    if IsShiftKeyDown() then
+        func()
+    else
+        StaticPopup_Show("LM_CONFIRM_SORT", text, nil, func)
+    end
+end
+
 function LiteBagFrame_ReplaceBlizzard(inventory, bank)
 
     BankFrame:UnregisterAllEvents()
@@ -60,14 +68,14 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
     BankItemAutoSortButton:SetScript("OnClick", function (self)
             local parent = self:GetParent()
             if (parent.selectedTab == 1) then
-                StaticPopup_Show("LM_CONFIRM_SORT", BAG_CLEANUP_BANK, nil, SortBankBags)
+                DoOrStaticPopup(BAG_CLEANUP_BANK, SortBankBags)
             elseif (parent.selectedTab == 2) then
-                StaticPopup_Show("LM_CONFIRM_SORT", BAG_CLEANUP_REAGENT_BANK, nil, SortReagentBankBags)
+                DoOrStaticPopup(BAG_CLEANUP_REAGENT_BANK, SortReagentBankBags)
             end
         end)
 
     BagItemAutoSortButton:SetScript("OnClick", function (self)
-            StaticPopup_Show("LM_CONFIRM_SORT", BAG_CLEANUP_BAGS, nil, SortBags)
+            DoOrStaticPopup(BAG_CLEANUP_BAGS, SortBags)
         end)
 end
 
