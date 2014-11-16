@@ -32,13 +32,20 @@ end
 
 function LiteBagFrame_ReplaceBlizzard(inventory, bank)
 
-    BankFrame:UnregisterAllEvents()
 
     inventoryFrame = inventory
     bankFrame = bank
 
-    PanelTemplates_SetNumTabs(bank, 2)
-    bank.selectedTab = 1
+    -- The reagent bank in WoW 6.0 changed UseContainerItem() to have a
+    -- fourth argument which is true/false "should we put this thing into
+    -- the reagent bank", which ContainerFrameItemButton_OnClick sets with
+    --      BankFrame:IsShown() and (BankFrame.selectedTab == 2)
+    -- Since we can't override the secure OnClick handler we have to do
+    -- something with BankFrame.  I have a horrible feeling this might
+    -- cause taint.
+
+    BankFrame:UnregisterAllEvents()
+    BankFrame = bankFrame
 
     local hideFunc = function () LiteBagFrame_Hide(inventoryFrame) end
     local showFunc = function () LiteBagFrame_Show(inventoryFrame) end
