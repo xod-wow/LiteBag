@@ -122,7 +122,7 @@ function LiteBagItemButton_UpdateQuality(self)
     elseif quality == LE_ITEM_QUALITY_POOR and not noValue and MerchantFrame:IsShown() then
         self.JunkIcon:Show()
     end
-    
+
 end
 
 function LiteBagItemButton_ClearNewItem(self)
