@@ -577,7 +577,7 @@ function LiteBagFrame_Update(self)
 
     if self.isBank then
         if self.selectedTab == 2 then
-            LiteBagFrame_HideButtonsAndBags(self)  
+            LiteBagFrame_HideButtonsAndBags(self)
             self:SetSize(738, 415)
             ReagentBankFrame:SetParent(self)
             ReagentBankFrame:SetAllPoints()
