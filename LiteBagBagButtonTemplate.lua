@@ -52,7 +52,7 @@ function LiteBagBagButton_Update(self)
     self.bagID = self:GetID()
     self.isBank = BankContainers[self:GetID()]
 
-    -- XXX FIXME XXX 
+    -- XXX FIXME XXX
     -- No slotID for backpack/bank, can they not be filtered?
 
     if self.bagID == BACKPACK_CONTAINER then
