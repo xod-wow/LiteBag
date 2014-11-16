@@ -2,7 +2,7 @@
 * Tag-fu
 
     List tags;
-        git tag 
+        git tag
     Tag a release:
         git tag -a -m 'Tagging x.y.z' x.y.z
     Tag a beta:
