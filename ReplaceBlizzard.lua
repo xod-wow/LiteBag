@@ -41,11 +41,11 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
     -- the reagent bank", which ContainerFrameItemButton_OnClick sets with
     --      BankFrame:IsShown() and (BankFrame.selectedTab == 2)
     -- Since we can't override the secure OnClick handler we have to do
-    -- something with BankFrame.  I have a horrible feeling this might
-    -- cause taint.
+    -- something with BankFrame.
 
     BankFrame:UnregisterAllEvents()
-    BankFrame = bankFrame
+    -- This taints, can't do it
+    -- BankFrame = bankFrame
 
     local hideFunc = function () LiteBagFrame_Hide(inventoryFrame) end
     local showFunc = function () LiteBagFrame_Show(inventoryFrame) end
