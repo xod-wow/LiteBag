@@ -32,20 +32,8 @@ end
 
 function LiteBagFrame_ReplaceBlizzard(inventory, bank)
 
-
     inventoryFrame = inventory
     bankFrame = bank
-
-    -- The reagent bank in WoW 6.0 changed UseContainerItem() to have a
-    -- fourth argument which is true/false "should we put this thing into
-    -- the reagent bank", which ContainerFrameItemButton_OnClick sets with
-    --      BankFrame:IsShown() and (BankFrame.selectedTab == 2)
-    -- Since we can't override the secure OnClick handler we have to do
-    -- something with BankFrame.
-
-    BankFrame:UnregisterAllEvents()
-    -- This taints, can't do it
-    -- BankFrame = bankFrame
 
     local hideFunc = function () LiteBagFrame_Hide(inventoryFrame) end
     local showFunc = function () LiteBagFrame_Show(inventoryFrame) end
@@ -84,6 +72,22 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
     BagItemAutoSortButton:SetScript("OnClick", function (self)
             DoOrStaticPopup(BAG_CLEANUP_BAGS, SortBags)
         end)
+
+    -- The reagent bank in WoW 6.0 changed UseContainerItem() to have a
+    -- fourth argument which is true/false "should we put this thing into
+    -- the reagent bank", which ContainerFrameItemButton_OnClick sets with
+    --      BankFrame:IsShown() and (BankFrame.selectedTab == 2)
+    -- Since we can't override the secure OnClick handler and we can't
+    -- change BankFrame without tainting, we have to reparent it, hide it
+    -- via the parent, and set its selectedTab manually in sync with ours.
+
+    local hiddenBankParent = CreateFrame("Frame")
+    hiddenBankParent:Hide()
+    BankFrame:SetParent(hiddenBankParent)
+    BankFrame:UnregisterAllEvents()
+    LiteBagBank.Tab1:HookScript("OnClick", function() BankFrame.selectedTab = 1 end)
+    LiteBagBank.Tab2:HookScript("OnClick", function() BankFrame.selectedTab = 2 end)
+
 end
 
 LiteBagFrame_ReplaceBlizzard(LiteBagInventory, LiteBagBank)
