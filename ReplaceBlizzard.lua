@@ -9,8 +9,6 @@
 
 ----------------------------------------------------------------------------]]--
 
-local inventoryFrame, bankFrame
-
 StaticPopupDialogs["LM_CONFIRM_SORT"] = {
     preferredIndex = STATICPOPUPS_NUMDIALOGS,
     text = "%s\n"..CONFIRM_CONTINUE,
@@ -30,14 +28,10 @@ local function DoOrStaticPopup(text, func)
     end
 end
 
-function LiteBagFrame_ReplaceBlizzard(inventory, bank)
-
-    inventoryFrame = inventory
-    bankFrame = bank
-
-    local hideFunc = function () LiteBagFrame_Hide(inventoryFrame) end
-    local showFunc = function () LiteBagFrame_Show(inventoryFrame) end
-    local toggleFunc = function () LiteBagFrame_ToggleShown(inventoryFrame) end
+function LiteBag_ReplaceBlizzardInventory()
+    local hideFunc = function () LiteBagFrame_Hide(LiteBagInventory) end
+    local showFunc = function () LiteBagFrame_Show(LiteBagInventory) end
+    local toggleFunc = function () LiteBagFrame_ToggleShown(LiteBagInventory) end
 
     OpenBackpack = showFunc
     OpenAllBags = showFunc
@@ -50,28 +44,12 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
 
     BagSlotButton_UpdateChecked = function () end
 
-    BankItemAutoSortButton:SetScript("OnEnter", function (self)
-            GameTooltip:SetOwner(self)
-            if self:GetParent().selectedTab == 1 then
-                GameTooltip:SetText(BAG_CLEANUP_BANK)
-            else
-                GameTooltip:SetText(BAG_CLEANUP_REAGENT_BANK)
-            end
-            GameTooltip:Show()
-        end)
-
-    BankItemAutoSortButton:SetScript("OnClick", function (self)
-            local parent = self:GetParent()
-            if (parent.selectedTab == 1) then
-                DoOrStaticPopup(BAG_CLEANUP_BANK, SortBankBags)
-            elseif (parent.selectedTab == 2) then
-                DoOrStaticPopup(BAG_CLEANUP_REAGENT_BANK, SortReagentBankBags)
-            end
-        end)
-
     BagItemAutoSortButton:SetScript("OnClick", function (self)
             DoOrStaticPopup(BAG_CLEANUP_BAGS, SortBags)
         end)
+end
+
+function LiteBag_ReplaceBlizzardBank()
 
     -- The reagent bank in WoW 6.0 changed UseContainerItem() to have a
     -- fourth argument which is true/false "should we put this thing into
@@ -93,6 +71,26 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
     LiteBagBank.Tab2:HookScript("OnClick", function () BankFrame.selectedTab = 2 end)
     LiteBagBank:HookScript("OnShow", function () BankFrame:Show() end)
     LiteBagBank:HookScript("OnHide", function () BankFrame:Hide() end)
+
+    BankItemAutoSortButton:SetScript("OnEnter", function (self)
+            GameTooltip:SetOwner(self)
+            if self:GetParent().selectedTab == 1 then
+                GameTooltip:SetText(BAG_CLEANUP_BANK)
+            else
+                GameTooltip:SetText(BAG_CLEANUP_REAGENT_BANK)
+            end
+            GameTooltip:Show()
+        end)
+
+    BankItemAutoSortButton:SetScript("OnClick", function (self)
+            local parent = self:GetParent()
+            if (parent.selectedTab == 1) then
+                DoOrStaticPopup(BAG_CLEANUP_BANK, SortBankBags)
+            elseif (parent.selectedTab == 2) then
+                DoOrStaticPopup(BAG_CLEANUP_REAGENT_BANK, SortReagentBankBags)
+            end
+        end)
 end
 
-LiteBagFrame_ReplaceBlizzard(LiteBagInventory, LiteBagBank)
+LiteBag_ReplaceBlizzardInventory()
+LiteBag_ReplaceBlizzardBank()
