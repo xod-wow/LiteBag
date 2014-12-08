@@ -610,10 +610,6 @@ end
 function LiteBagFrame_TabOnClick(self)
     local parent = self:GetParent()
 
-    if self.isBank then
-        BankFrame.selectedTab = self:GetID()
-    end
-
     PanelTemplates_SetTab(parent, self:GetID())
     LiteBagFrame_Update(parent)
 
