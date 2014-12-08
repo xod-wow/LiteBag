@@ -79,15 +79,20 @@ function LiteBagFrame_ReplaceBlizzard(inventory, bank)
     --      BankFrame:IsShown() and (BankFrame.selectedTab == 2)
     -- Since we can't override the secure OnClick handler and we can't
     -- change BankFrame without tainting, we have to reparent it, hide it
-    -- via the parent, and set its selectedTab manually in sync with ours.
+    -- via the parent, and set its selectedTab and hide/show manually in sync
+    -- with ours.
 
     local hiddenBankParent = CreateFrame("Frame")
     hiddenBankParent:Hide()
     BankFrame:SetParent(hiddenBankParent)
     BankFrame:UnregisterAllEvents()
-    LiteBagBank.Tab1:HookScript("OnClick", function() BankFrame.selectedTab = 1 end)
-    LiteBagBank.Tab2:HookScript("OnClick", function() BankFrame.selectedTab = 2 end)
+    BankFrame:SetScript("OnShow", function () end)
+    BankFrame:SetScript("OnHide", function () end)
 
+    LiteBagBank.Tab1:HookScript("OnClick", function () BankFrame.selectedTab = 1 end)
+    LiteBagBank.Tab2:HookScript("OnClick", function () BankFrame.selectedTab = 2 end)
+    LiteBagBank:HookScript("OnShow", function () BankFrame:Show() end)
+    LiteBagBank:HookScript("OnHide", function () BankFrame:Hide() end)
 end
 
 LiteBagFrame_ReplaceBlizzard(LiteBagInventory, LiteBagBank)
