@@ -22,13 +22,11 @@
     </Layers>
 
     <Scripts>
-        <!-- No OnClick, we have to inherit it because it's secure. -->
+        <!-- No OnClick/OnDrag, we have to inherit them because it's secure. -->
         <OnLoad function="LiteBagItemButton_OnLoad" />
         <OnEnter function="LiteBagItemButton_OnEnter" />
         <OnLeave function="LiteBagItemButton_OnLeave" />
         <OnHide function="LiteBagItemButton_OnHide" />
-        <OnDragStart function="LiteBagItemButton_OnDrag" />
-        <OnReceiveDrag function="LiteBagItemButton_OnDrag" />
     </Scripts>
 
 </Button>

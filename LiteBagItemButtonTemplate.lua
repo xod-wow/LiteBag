@@ -256,8 +256,3 @@ function LiteBagItemButton_OnHide(self)
         StackSplitFrame:Hide()
     end
 end
-
-function LiteBagItemButton_OnDrag(self)
-    ContainerFrameItemButton_OnDrag(self)
-end
-
