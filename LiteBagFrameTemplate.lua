@@ -47,6 +47,20 @@ function LiteBagFrame_UpdateTokens(self)
     end
 end
 
+function LiteBagFrame_RegisterHideShowEvents(self)
+    self:RegisterEvent("BANKFRAME_OPENED")
+    self:RegisterEvent("BANKFRAME_CLOSED")
+    self:RegisterEvent("BAG_OPEN")
+    self:RegisterEvent("BAG_CLOSED")
+end
+
+function LiteBagFrame_UnregisterHideShowEvents(self)
+    self:UnregisterEvent("BANKFRAME_OPENED")
+    self:UnregisterEvent("BANKFRAME_CLOSED")
+    self:UnregisterEvent("BAG_OPEN")
+    self:UnregisterEvent("BAG_CLOSED")
+end
+
 function LiteBagFrame_OnLoad(self)
 
     if not self.bagIDs then
@@ -108,10 +122,7 @@ function LiteBagFrame_OnLoad(self)
     hooksecurefunc('BackpackTokenFrame_Update',
                    function () LiteBagFrame_UpdateTokens(self) end)
 
-    self:RegisterEvent("BANKFRAME_OPENED")
-    self:RegisterEvent("BANKFRAME_CLOSED")
-    self:RegisterEvent("BAG_OPEN")
-    self:RegisterEvent("BAG_CLOSED")
+    LiteBagFrame_RegisterHideShowEvents(self)
 
     if self.isBank then
         self.searchBox = BankItemSearchBox

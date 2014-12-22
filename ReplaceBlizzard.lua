@@ -33,6 +33,8 @@ function LiteBag_ReplaceBlizzardInventory()
     local showFunc = function () LiteBagFrame_Show(LiteBagInventory) end
     local toggleFunc = function () LiteBagFrame_ToggleShown(LiteBagInventory) end
 
+    LiteBagFrame_RegisterHideShowEvents(LiteBagInventory)
+
     OpenBackpack = showFunc
     OpenAllBags = showFunc
 
@@ -50,6 +52,8 @@ function LiteBag_ReplaceBlizzardInventory()
 end
 
 function LiteBag_ReplaceBlizzardBank()
+
+    LiteBagFrame_RegisterHideShowEvents(LiteBagBank)
 
     -- The reagent bank in WoW 6.0 changed UseContainerItem() to have a
     -- fourth argument which is true/false "should we put this thing into
