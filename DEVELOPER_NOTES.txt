@@ -1,4 +1,48 @@
 ------------------------------------------------------------------------------
+* Basics of LiteBag code
+
+    The Blizzard code for bags is in:
+        FrameXML/ContainerFrame.xml
+        FrameXML/ContainerFrame.lua
+        FrameXML/BankFrame.xml
+        FrameXML/BankFrame.lua
+
+    See https://github.com/tekkub/wow-ui-source/blob/live/FrameXML
+
+    The Blizzard code is very bag-focused, most of the bag/bank-related API
+    calls take a (bag, slot) pair as the identifier.  There is a global
+    inventory slot ID but it's almost unused.
+
+    The Blizzard bags/banks are holders for the item buttons, which are either:
+        * ContainerFrameItemButtonTemplate
+        * BankItemButtonGenericTemplate
+        * ReagentBankItemButtonGenericTemplate
+    which all inherit from ItemButtonTemplate
+
+    In the Blizzard code the container frames themselves are responsible for
+    doing all of the updates on the item buttons.
+
+    LiteBag is pretty simple, all of the complexity is in the detail:
+
+        LiteBagItemButtonTemplate is an item button that inherits from
+        ContainerFrameItemButtonTemplate.  It can do all its own updating,
+        plus we add a few extra indicators on it.  The updating code is
+        more or less split out and copied from ContainerFrame.lua.
+
+        LiteBagBagButtonTemplate is a button to hold the actual bag iself,
+        where you drag a new bag on when you buy one.
+
+        LiteBagFrameTemplate is a template for our one-bag frames.  It is
+        assigned some bag IDs and a size, and automatically knows how to do
+        things a bit differently if one of its bag IDs is the bank.
+
+        In LiteBag.xml we define two one-bag frames, inventory and bank.
+
+        In ReplaceBlizzard.lua are the various functions to replace the
+        Blizzard standard bag and bank UI with ours.
+
+
+------------------------------------------------------------------------------
 * Tag-fu
 
     List tags;
