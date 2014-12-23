@@ -122,8 +122,6 @@ function LiteBagFrame_OnLoad(self)
     hooksecurefunc('BackpackTokenFrame_Update',
                    function () LiteBagFrame_UpdateTokens(self) end)
 
-    LiteBagFrame_RegisterHideShowEvents(self)
-
     if self.isBank then
         self.searchBox = BankItemSearchBox
         self.sortButton = BankItemAutoSortButton
