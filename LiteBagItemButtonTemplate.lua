@@ -193,6 +193,27 @@ function LiteBagItemButton_UpdateFiltered(self)
     end
 end
 
+function  LiteBagItemButton_UpdateItemLevel(self)
+    local bag = self:GetParent():GetID()
+    local slot = self:GetID()
+
+    local stockText = _G[self:GetName() .. "Stock"]
+
+    local _, _, _, quality, _, _, link, _ = GetContainerItemInfo(bag, slot)
+    if link then
+        local iLevel = select(4, GetItemInfo(link))
+        if iLevel then
+            local r, g, b = GetItemQualityColor(quality)
+            stockText:SetText(iLeveL)
+            stockText:Show()
+            stockText:SetTextColor(r,g,b)
+            return
+        end
+    end
+
+    stockText:Hide()
+end
+
 function LiteBagItemButton_UpdateEquipmentSets(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
@@ -216,6 +237,7 @@ function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateQuality(self)
     LiteBagItemButton_UpdateCooldown(self)
     LiteBagItemButton_UpdateEquipmentSets(self)
+    -- LiteBagItemButton_UpdateItemLevel(self)
     LiteBagItemButton_UpdateFiltered(self)
 end
 
