@@ -214,18 +214,42 @@ function  LiteBagItemButton_UpdateItemLevel(self)
     stockText:Hide()
 end
 
+local function ContainerItemIsPartOfEquipmentSet(bag, slot, i)
+    local _,equipSetNames = GetContainerItemEquipmentSetInfo(bag, slot)
+
+    if not equipSetNames then return end
+
+    local name = GetEquipmentSetInfo(i)
+    for _,n in ipairs({ strsplit("," , equipSetNames) }) do
+        if n == name then return true end
+    end
+    return false
+
+--  local _, equipsetNames = GetContainerItemEquipmentSetInfo(bag, slot)
+--  if equipsetNames then
+--      for _,name in ipairs({ strsplit(",", equipSetNames) })  do
+--          local n = nameMap[name]
+--      for i=1,3 do
+--          local n = GetEquipmentSetInfo(i)
+--      local icon, setID, isEquipped, numItems, numEquipped, _, numMissing, numIgnored = GetEquipmentSetInfoByName(equipstName)
+--      stockText:SetText(gsub(equipsetName, ", ", "\n"))
+--      stockText:Show()
+--  else
+--      stockText:Hide()
+--  end
+end
+
 function LiteBagItemButton_UpdateEquipmentSets(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
-    local stockText = _G[self:GetName() .. "Stock"]
-
-    local _, equipsetName = GetContainerItemEquipmentSetInfo(bag, slot)
-    if equipsetName then
-        stockText:SetText(gsub(equipsetName, ", ", "\n"))
-        stockText:Show()
-    else
-        stockText:Hide()
+    for i=1,3 do
+        local tex = self["eqTexture"..i]
+        if ContainerItemIsPartOfEquipmentSet(bag, slot, i) then
+            tex:Show()
+        else
+            tex:Hide()
+        end
     end
 end
 

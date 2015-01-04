@@ -22,21 +22,21 @@
         <Layer level="OVERLAY" textureSubLevel="1">
             <Texture name="$parentEquipsetTexture1" file="Interface\MINIMAP\ObjectIcons" parentKey="eqTexture1" hidden="true">
                 <TexCoords left="0.65" right="0.725" top="0.025" bottom="0.1" />
-                <Size x="10" y="10" />
+                <Size x="12" y="12" />
                 <Anchors>
                     <Anchor point="TOPRIGHT" />
                 </Anchors>
             </Texture>
             <Texture name="$parentEquipsetTexture2" file="Interface\MINIMAP\ObjectIcons" parentKey="eqTexture2" hidden="true">
                 <TexCoords left="0.775" right="0.85" top="0.025" bottom="0.1" />
-                <Size x="10" y="10" />
+                <Size x="12" y="12" />
                 <Anchors>
                     <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.eqTexture1" y="1"/>
                 </Anchors>
             </Texture>
             <Texture name="$parentEquipsetTexture3" file="Interface\MINIMAP\ObjectIcons" parentKey="eqTexture3" hidden="true">
                 <TexCoords left="0.9" right="0.975" top="0.025" bottom="0.1" />
-                <Size x="10" y="10" />
+                <Size x="12" y="12" />
                 <Anchors>
                     <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.eqTexture2" y="1"/>
                 </Anchors>
