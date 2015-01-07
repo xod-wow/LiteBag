@@ -106,6 +106,20 @@
 
 
 ------------------------------------------------------------------------------
+* Possible icons for equipment sets
+
+    GuildFrame/GuildLogo-NoLogo
+        - a helmet with horns, grey/black with transparent background 64x64
+        - also GuildLogo-NoLogoSm 16x16
+    PvPRankBadges/PvPRank{01,02,03}
+        - gold rank stripes 1/2/3 32x32
+        - also Rank10 is a gold fist, Rank11 a gold fist with underbar
+          Rank12 a gold helmet, Rank13 a gold helmet with underbar
+    TARGETINGFRAME/UI-RaidTargetingIcons
+        - the marking charms {star} etc.
+
+
+------------------------------------------------------------------------------
 * TODO List
 
     Switch the Token stuff to using the CURRENCY_DISPLAY_UPDATE event?
