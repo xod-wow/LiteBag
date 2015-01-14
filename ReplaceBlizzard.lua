@@ -28,6 +28,8 @@ local function DoOrStaticPopup(text, func)
     end
 end
 
+local TOOLTIP_NOCONFIRM_TEXT = format("%s: No confirmation", SHIFT_KEY)
+
 function LiteBag_ReplaceBlizzardInventory()
     local hideFunc = function () LiteBagFrame_Hide(LiteBagInventory) end
     local showFunc = function () LiteBagFrame_Show(LiteBagInventory) end
@@ -45,6 +47,11 @@ function LiteBag_ReplaceBlizzardInventory()
     hooksecurefunc('CloseAllBags', hideFunc)
 
     BagSlotButton_UpdateChecked = function () end
+
+    BagItemAutoSortButton:HookScript("OnEnter", function (self)
+        GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
+        GameTooltip:Show()
+        end)
 
     BagItemAutoSortButton:SetScript("OnClick", function (self)
             DoOrStaticPopup(BAG_CLEANUP_BAGS, SortBags)
@@ -85,6 +92,7 @@ function LiteBag_ReplaceBlizzardBank()
             else
                 GameTooltip:SetText(BAG_CLEANUP_REAGENT_BANK)
             end
+            GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
             GameTooltip:Show()
         end)
 
