@@ -243,7 +243,7 @@ function LiteBagItemButton_UpdateEquipmentSets(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
-    for i=1,3 do
+    for i=1,4 do
         local tex = self["eqTexture"..i]
         if ContainerItemIsPartOfEquipmentSet(bag, slot, i) then
             tex:Show()

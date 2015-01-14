@@ -20,25 +20,32 @@
             </Texture>
         </Layer>
         <Layer level="OVERLAY" textureSubLevel="1">
-            <Texture name="$parentEquipsetTexture1" file="Interface\MINIMAP\ObjectIcons" parentKey="eqTexture1" hidden="true">
-                <TexCoords left="0.65" right="0.725" top="0.025" bottom="0.1" />
-                <Size x="12" y="12" />
+            <Texture name="$parentEquipsetTexture1" file="Interface\Addons\LiteBag\Artwork\EquipSets" parentKey="eqTexture1" hidden="true">
+                <TexCoords left="0.0" right="0.5" top="0.0" bottom="0.5" />
+                <Size x="16" y="16" />
                 <Anchors>
-                    <Anchor point="LEFT" />
+                    <Anchor point="BOTTOMRIGHT" relativePoint="CENTER" />
                 </Anchors>
             </Texture>
-            <Texture name="$parentEquipsetTexture2" file="Interface\MINIMAP\ObjectIcons" parentKey="eqTexture2" hidden="true">
-                <TexCoords left="0.775" right="0.85" top="0.025" bottom="0.1" />
-                <Size x="12" y="12" />
+            <Texture name="$parentEquipsetTexture2" file="Interface\Addons\LiteBag\Artwork\EquipSets" parentKey="eqTexture2" hidden="true">
+                <TexCoords left="0.5" right="1.0" top="0.0" bottom="0.5" />
+                <Size x="16" y="16" />
                 <Anchors>
-                    <Anchor point="CENTER" />
+                    <Anchor point="BOTTOMLEFT" relativePoint="CENTER" />
                 </Anchors>
             </Texture>
-            <Texture name="$parentEquipsetTexture3" file="Interface\MINIMAP\ObjectIcons" parentKey="eqTexture3" hidden="true">
-                <TexCoords left="0.9" right="0.975" top="0.025" bottom="0.1" />
-                <Size x="12" y="12" />
+            <Texture name="$parentEquipsetTexture3" file="Interface\Addons\LiteBag\Artwork\EquipSets" parentKey="eqTexture3" hidden="true">
+                <TexCoords left="0" right="0.5" top="0.5" bottom="1.0" />
+                <Size x="16" y="16" />
                 <Anchors>
-                    <Anchor point="RIGHT" />
+                    <Anchor point="TOPLEFT" relativePoint="CENTER" />
+                </Anchors>
+            </Texture>
+            <Texture name="$parentEquipsetTexture4" file="Interface\Addons\LiteBag\Artwork\EquipSets" parentKey="eqTexture4" hidden="true">
+                <TexCoords left="0.5" right="1.0" top="0.5" bottom="1.0" />
+                <Size x="16" y="16" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativePoint="CENTER" />
                 </Anchors>
             </Texture>
         </Layer>
