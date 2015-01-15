@@ -19,7 +19,7 @@
                 <Color r="0.5" b="0.5" g="0.5" a="0.8" />
             </Texture>
         </Layer>
-        <Layer level="OVERLAY" textureSubLevel="1">
+        <Layer level="ARTWORK" textureSubLevel="1">
             <Texture name="$parentEquipsetTexture1" file="Interface\Addons\LiteBag\Artwork\EquipSets" parentKey="eqTexture1" hidden="true">
                 <TexCoords left="0.0" right="0.5" top="0.0" bottom="0.5" />
                 <Size x="16" y="16" />
