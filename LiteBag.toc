@@ -10,3 +10,4 @@ LiteBagBagButtonTemplate.xml
 LiteBagFrameTemplate.xml
 LiteBag.xml
 ReplaceBlizzard.lua
+DebugCommand.lua
