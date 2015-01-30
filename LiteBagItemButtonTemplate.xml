@@ -4,7 +4,7 @@
 
 <Script file="LiteBagItemButtonTemplate.lua"/>
 
-<Texture name="LiteBagEquipSetsTexture" file="Interface\Addons\LiteBag\Artwork\EquipSetsBB" virtual="true" />
+<Texture name="LiteBagEquipSetsTexture" file="Interface\Addons\LiteBag\Artwork\EquipSets" virtual="true" />
 
 <Button name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" hidden="true" virtual="true">
 
