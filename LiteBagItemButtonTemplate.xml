@@ -37,14 +37,14 @@
                 </Anchors>
             </Texture>
             <Texture name="$parentEquipsetTexture3" inherits="LiteBagEquipSetsTexture" parentKey="eqTexture3" hidden="true">
-                <TexCoords left="0" right="0.5" top="0.5" bottom="1.0" />
+                <TexCoords left="0.5" right="1.0" top="0.5" bottom="1.0" />
                 <Size x="16" y="16" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="CENTER" />
                 </Anchors>
             </Texture>
             <Texture name="$parentEquipsetTexture4" inherits="LiteBagEquipSetsTexture" parentKey="eqTexture4" hidden="true">
-                <TexCoords left="0.5" right="1.0" top="0.5" bottom="1.0" />
+                <TexCoords left="0.0" right="0.5" top="0.5" bottom="1.0" />
                 <Size x="16" y="16" />
                 <Anchors>
                     <Anchor point="TOPRIGHT" relativePoint="CENTER" />
