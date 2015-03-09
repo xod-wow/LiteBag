@@ -46,6 +46,12 @@ function LiteBag_ReplaceBlizzardInventory()
     hooksecurefunc('CloseBackpack', hideFunc)
     hooksecurefunc('CloseAllBags', hideFunc)
 
+    OpenBag = function (bag)
+                    if LiteBagFrame_IsMyBag(LiteBagInventory, bag) then
+                        LiteBagFrame_Show(LiteBagInventory)
+                    end
+                end
+
     BagSlotButton_UpdateChecked = function () end
 
     BagItemAutoSortButton:HookScript("OnEnter", function (self)
