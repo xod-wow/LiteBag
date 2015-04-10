@@ -43,6 +43,14 @@
 
 
 ------------------------------------------------------------------------------
+* Hello programmers!
+
+    If you are ever doing any work on LiteBag, read the git log comments.
+    Everything intelligent I've ever written is in there. Unfortunately
+    so is every dumb thing I've ever written. You win some, you lose some.
+
+
+------------------------------------------------------------------------------
 * Tag-fu
 
     List tags;
