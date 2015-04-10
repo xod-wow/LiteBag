@@ -1,6 +1,6 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/LiteBagTemplate.lua
+  LiteBag/LiteBagFrameTemplate.lua
 
   Copyright 2013-2015 Mike Battersby
 
@@ -8,6 +8,9 @@
   See the file LICENSE.txt.
 
 ----------------------------------------------------------------------------]]--
+
+local BUTTON_W_GAP, BUTTON_H_GAP = 5, 4
+local MIN_COLUMNS = 8
 
 function LiteBagFrame_IsMyBag(self, id)
     -- For some reason BAG_UPDATE_COOLDOWN sometimes doesn't have a bag
@@ -71,6 +74,10 @@ function LiteBagFrame_OnLoad(self)
         --              self.bagIDs = { 0, 1, 2, 3 }
         --              LiteBagFrame_OnLoad(self)
         return
+    end
+
+    if not self.columns or self.columns < MIN_COLUMNS then
+        self.columns = MIN_COLUMNS
     end
 
     self.dummyContainerFrames = { }
@@ -527,8 +534,7 @@ function LiteBagFrame_LayoutFrame(self)
 
     local name = self:GetName()
 
-    local wgap, hgap = 5, 4
-    local ncols = self.columns or 8
+    local ncols = self.columns
 
     for i = 1, #self.itemButtons do
         local itemButton = self.itemButtons[i]
@@ -537,9 +543,9 @@ function LiteBagFrame_LayoutFrame(self)
         if i == 1 then
             itemButton:SetPoint("TOPLEFT", name, "TOPLEFT", 14, -70)
         elseif i % ncols == 1 then
-            itemButton:SetPoint("TOPLEFT", self.itemButtons[i-ncols], "BOTTOMLEFT", 0, -hgap)
+            itemButton:SetPoint("TOPLEFT", self.itemButtons[i-ncols], "BOTTOMLEFT", 0, -BUTTON_H_GAP)
         else
-            itemButton:SetPoint("TOPLEFT", self.itemButtons[i-1], "TOPRIGHT", wgap, 0)
+            itemButton:SetPoint("TOPLEFT", self.itemButtons[i-1], "TOPRIGHT", BUTTON_W_GAP, 0)
         end
 
         if i <= self.size then
@@ -552,8 +558,8 @@ function LiteBagFrame_LayoutFrame(self)
     local nrows = ceil(self.size / ncols)
     local w, h = self.itemButtons[1]:GetSize()
 
-    self:SetWidth(29 + ncols * w + (ncols-1) * wgap)
-    self:SetHeight(105 + nrows * h + (nrows-1) * hgap)
+    self:SetWidth(29 + ncols * w + (ncols-1) * BUTTON_W_GAP)
+    self:SetHeight(105 + nrows * h + (nrows-1) * BUTTON_H_GAP)
 end
 
 function LiteBagFrame_ShowButtonsAndBags(self)
