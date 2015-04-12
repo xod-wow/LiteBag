@@ -4,7 +4,9 @@
 ## Author: Xodiv of Proudmoore
 ## Email: mib@post.com
 ## Dependencies: Blizzard_TokenUI
+## SavedVariablesPerCharacter: LiteBag_OptionsDB
 
+Options.lua
 LiteBagItemButtonTemplate.xml
 LiteBagBagButtonTemplate.xml
 LiteBagFrameTemplate.xml

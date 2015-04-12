@@ -64,6 +64,22 @@ function LiteBagFrame_UnregisterHideShowEvents(self)
     self:UnregisterEvent("BAG_CLOSED")
 end
 
+
+-- SavedVariables aren't available at OnLoad time, only once ADDON_LOADED fires.
+function LiteBagFrame_Initialize(self)
+
+    if not self.columns then
+        print("Setting columns for frame " .. self:GetName())
+        self.columns = LiteBag_GetFrameOption(self, "columns")
+                        or self.default_columns
+                        or MIN_COLUMNS
+        print("Set columns to " .. self.columns)
+    end
+
+    self.columns = max(self.columns, MIN_COLUMNS)
+
+end
+
 function LiteBagFrame_OnLoad(self)
 
     if not self.bagIDs then
@@ -74,10 +90,6 @@ function LiteBagFrame_OnLoad(self)
         --              self.bagIDs = { 0, 1, 2, 3 }
         --              LiteBagFrame_OnLoad(self)
         return
-    end
-
-    if not self.columns or self.columns < MIN_COLUMNS then
-        self.columns = MIN_COLUMNS
     end
 
     self.dummyContainerFrames = { }
@@ -181,6 +193,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
     -- if self.isBank then print("DEBUG " .. event) end
 
     if event == "ADDON_LOADED" then
+        LiteBagFrame_Initialize(self)
         LiteBagFrame_Update(self)
     elseif event == "BAG_OPEN" then
         local bag = ...
