@@ -69,11 +69,9 @@ end
 function LiteBagFrame_Initialize(self)
 
     if not self.columns then
-        print("Setting columns for frame " .. self:GetName())
         self.columns = LiteBag_GetFrameOption(self, "columns")
                         or self.default_columns
                         or MIN_COLUMNS
-        print("Set columns to " .. self.columns)
     end
 
     self.columns = max(self.columns, MIN_COLUMNS)

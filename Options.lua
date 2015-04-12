@@ -43,7 +43,6 @@ end
 local f = CreateFrame("Frame")
 f:SetScript("OnEvent", function (self, event, arg1, ...)
         if event == "ADDON_LOADED" and arg1 == addonName then
-            print("Initializing options from ADDON_LOADED handler.")
             LiteBag_InitializeOptions()
             self:UnregisterEvent("ADDON_LOADED")
         end
