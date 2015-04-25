@@ -11,6 +11,7 @@
 
 local BUTTON_W_GAP, BUTTON_H_GAP = 5, 4
 local MIN_COLUMNS = 8
+local MIN_SCALE, MAX_SCALE = -5, 5
 
 function LiteBagFrame_IsMyBag(self, id)
     -- For some reason BAG_UPDATE_COOLDOWN sometimes doesn't have a bag
@@ -64,7 +65,6 @@ function LiteBagFrame_UnregisterHideShowEvents(self)
     self:UnregisterEvent("BAG_CLOSED")
 end
 
-
 -- SavedVariables aren't available at OnLoad time, only once ADDON_LOADED fires.
 function LiteBagFrame_Initialize(self)
 
@@ -72,9 +72,12 @@ function LiteBagFrame_Initialize(self)
         self.columns = LiteBag_GetFrameOption(self, "columns")
                         or self.default_columns
                         or MIN_COLUMNS
+        self.scale = LiteBag_GetFrameOption(self, "scale")
+                        or 0
     end
 
     self.columns = max(self.columns, MIN_COLUMNS)
+    self.scale = max(min(self.scale, MAX_SCALE), MIN_SCALE)
 
 end
 
@@ -571,6 +574,7 @@ function LiteBagFrame_LayoutFrame(self)
 
     self:SetWidth(29 + ncols * w + (ncols-1) * BUTTON_W_GAP)
     self:SetHeight(105 + nrows * h + (nrows-1) * BUTTON_H_GAP)
+    self:SetScale(1.0 + 0.05 * self.scale)
 end
 
 function LiteBagFrame_ShowButtonsAndBags(self)
