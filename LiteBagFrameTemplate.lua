@@ -66,7 +66,7 @@ function LiteBagFrame_UnregisterHideShowEvents(self)
 end
 
 -- SavedVariables aren't available at OnLoad time, only once ADDON_LOADED fires.
-function LiteBagFrame_Initialize(self)
+function LiteBagFrame_SetSizeAndScale(self)
 
     self.columns = LiteBag_GetFrameOption(self, "columns")
                     or self.default_columns
@@ -193,7 +193,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
     -- if self.isBank then print("DEBUG " .. event) end
 
     if event == "ADDON_LOADED" then
-        LiteBagFrame_Initialize(self)
+        LiteBagFrame_SetSizeAndScale(self)
         LiteBagFrame_Update(self)
     elseif event == "BAG_OPEN" then
         local bag = ...
@@ -323,9 +323,14 @@ function LiteBagFrame_UnhighlightBagButtons(self, id)
     end
 end
 
+-- If we ever aren't children of UIParent we'll need to handle the scale
+-- stuff differently, I suspect with GetEffectiveScale.
+
 local function GetDistanceFromBackpackDefault(self)
-    local defaultX = UIParent:GetRight() - CONTAINER_OFFSET_X
-    local defaultY = UIParent:GetBottom() + CONTAINER_OFFSET_Y
+    local selfScale = self:GetScale()
+
+    local defaultX = (UIParent:GetRight() - CONTAINER_OFFSET_X) / selfScale
+    local defaultY = (UIParent:GetBottom() + CONTAINER_OFFSET_Y) / selfScale
     local selfX = self:GetRight()
     local selfY = self:GetBottom()
     return sqrt((defaultX-selfX)^2 + (defaultY-selfY)^2)
@@ -336,9 +341,12 @@ end
 
 function LiteBagFrame_SetPosition(self)
     if self:IsUserPlaced() then return end
+    local scale = self:GetScale()
+    local xOffset = CONTAINER_OFFSET_X / scale
+    local yOffset = CONTAINER_OFFSET_Y / scale
     self:ClearAllPoints()
     self:SetClampedToScreen(nil)
-    self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
+    self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -xOffset, yOffset)
 end
 
 function LiteBagFrame_StartMoving(self)
