@@ -341,12 +341,17 @@ end
 
 function LiteBagFrame_SetPosition(self)
     if self:IsUserPlaced() then return end
+
     local scale = self:GetScale()
     local xOffset = CONTAINER_OFFSET_X / scale
     local yOffset = CONTAINER_OFFSET_Y / scale
-    self:ClearAllPoints()
-    self:SetClampedToScreen(nil)
-    self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -xOffset, yOffset)
+    if self.isBank then
+        self:SetAttribute("UIPanelLayout-width", self:GetWidth() / scale)
+    else
+        self:ClearAllPoints()
+        self:SetClampedToScreen(nil)
+        self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -xOffset, yOffset)
+    end
 end
 
 function LiteBagFrame_StartMoving(self)
@@ -415,9 +420,9 @@ function LiteBagFrame_OnShow(self)
 
     local titleText =_G[self:GetName() .. "TitleText"]
 
-    if self.isBackpack then
-        LiteBagFrame_SetPosition(self)
+    LiteBagFrame_SetPosition(self)
 
+    if self.isBackpack then
         -- WTB backpack icon
         self.portrait:SetTexture("Interface\\MERCHANTFRAME\\UI-BuyBack-Icon")
         titleText:SetText(GetBagName(self.bagIDs[1]))
@@ -425,7 +430,6 @@ function LiteBagFrame_OnShow(self)
         SetPortraitTexture(self.portrait, "npc")
         titleText:SetText(UnitName("npc"))
     else
-        LiteBagFrame_SetPosition(self)
         SetBagPortraitTexture(self.portrait, self.bagIDs[1])
         titleText:SetText(GetBagName(self.bagIDs[1]))
     end
