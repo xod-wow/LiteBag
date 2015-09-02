@@ -23,7 +23,7 @@ StaticPopupDialogs["LM_CONFIRM_SORT"] = {
 
 -- Don't show the confirm popup if the shift key is held.
 local function DoOrStaticPopup(text, func)
-    if IsShiftKeyDown() then
+    if IsShiftKeyDown() or LiteBag_GetGlobalOption("NoConfirmSort") then
         func()
     else
         StaticPopup_Show("LM_CONFIRM_SORT", text, nil, func)
@@ -66,7 +66,9 @@ function LiteBag_ReplaceBlizzardInventory()
 
     -- Add the confirm text to the sort button mouseover tooltip.
     BagItemAutoSortButton:HookScript("OnEnter", function (self)
-        GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
+        if not LiteBag_GetGlobalOption("NoConfirmSort") then
+            GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
+        end
         GameTooltip:Show()
         end)
 
@@ -110,7 +112,9 @@ function LiteBag_ReplaceBlizzardBank()
     -- left over from when we weren't doing the BankFrame tab fake-up, above.
     -- 
     -- BankItemAutoSortButton:HookScript("OnEnter", function (self)
-    --     GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
+    --     if not LM_GetGlobalOption("NoConfirmSort") then
+    --         GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
+    --     end
     --     GameTooltip:Show()
     --     end)
     BankItemAutoSortButton:SetScript("OnEnter", function (self)
