@@ -276,7 +276,7 @@ function LiteBagItemButton_OnEnter(self)
 end
 
 function LiteBagItemButton_OnLeave(self)
-    GameTooltip:Hide()
+    GameTooltip_Hide()
     ResetCursor()
 end
 
