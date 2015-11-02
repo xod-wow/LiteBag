@@ -12,3 +12,5 @@ LiteBagBagButtonTemplate.xml
 LiteBagFrameTemplate.xml
 LiteBag.xml
 ReplaceBlizzard.lua
+UI\UIOptionsPanelTemplate.xml
+UI\UIOptions.xml
