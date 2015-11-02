@@ -181,3 +181,53 @@
     /dump MyDebugFrame.eventList
 
 
+------------------------------------------------------------------------------
+* Interface Options Panels
+
+    Look inside FrameXML/OptionsPanelTemplates.{xml,lua}
+
+    Making the base frame(s).
+
+    <Script file="MyOptionsPanel.lua" />
+    <Frame name="MyOptionsPanel" hidden="true">
+        <Scripts>
+            <OnLoad>
+                self.name = "NameForLeftMenu"
+                BlizzardOptionsPanel_OnLoad(self)
+                InterfaceOptionsFrame_AddCategory(self)
+                -- or for a sub-options frame
+                -- InterfaceOptionsFrame_AddCategory(self, parentPanel)
+            </OnLoad>
+        </Scripts>
+    </Frame>
+
+    These frames inherently have "Okay", "Cancel" and "Default" buttons. These
+    by default these loop over all the UI elements inserted into the
+    MyOptionsPanel.controls table and call their okay, cancel and default
+    methods.
+
+    The theory is that you twiddle the controls which stores the updated values
+    inside the control itself (in a .value attribute) and then (for example)
+    OK loops over them and actually sets it outside the GUI.
+
+    There are defaults for the okay/cancel/default functions but remembering
+    how they work is way more effort than doing your own every time.
+
+    Putting controls in it.
+
+    <CheckButton name="$parentMySetting1" inherits="OptionsCheckButtonTemplate">
+        <Scripts>
+            <OnLoad>
+                self.text:SetText("abcdef")
+                self.refresh = function (self)
+                    end
+                self.okay = function (self)
+                    end
+                self.cancel = function (self)
+                    end
+                self.default = function (self)
+                    end
+                BlizzardOptionsPanel_RegisterControl(self, self:GetParent())
+            </OnLoad>
+        </Scripts>
+    </CheckButton>
