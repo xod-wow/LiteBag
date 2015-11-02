@@ -93,23 +93,23 @@
             </Anchors>
         </Frame>
 
-        <Frame name="$parentToken1" inherits="BackpackTokenTemplate" id="1">
+        <Button name="$parentToken1" inherits="BackpackTokenTemplate" id="1">
             <Anchors>
                 <Anchor point="BOTTOMLEFT" x="13" y="8"/>
             </Anchors>
-        </Frame>
+        </Button>
 
-        <Frame name="$parentToken2" inherits="BackpackTokenTemplate" id="2">
+        <Button name="$parentToken2" inherits="BackpackTokenTemplate" id="2">
             <Anchors>
                 <Anchor point="LEFT" relativeTo="$parentToken1" relativePoint="RIGHT" x="2" />
             </Anchors>
-        </Frame>
+        </Button>
 
-        <Frame name="$parentToken3" inherits="BackpackTokenTemplate" id="3">
+        <Button name="$parentToken3" inherits="BackpackTokenTemplate" id="3">
             <Anchors>
                 <Anchor point="LEFT" relativeTo="$parentToken2" relativePoint="RIGHT" x="2" />
             </Anchors>
-        </Frame>
+        </Button>
 
         <Button name="$parentBagButton1" inherits="LiteBagBagButtonTemplate">
             <Anchors>
