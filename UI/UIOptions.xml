@@ -12,6 +12,69 @@
             </FontString>
         </Layer>
     </Layers>
+
+    <Frames>
+        <CheckButton name="$parentConfirmSort" inherits="InterfaceOptionsCheckButtonTemplate">
+            <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="$parentTitle" relativePoint="BOTTOMLEFT" x="0" y="-24" />
+            </Anchors>
+            <Scripts>
+                <OnLoad>
+                    self.Text:SetText("Confirm before sorting.")
+                    self.SetOption = function (self, setting)
+                            if not setting or setting == "0" then
+                                LiteBag_SetGlobalOption("NoConfirmSort", true)
+                            else
+                                LiteBag_SetGlobalOption("NoConfirmSort", nil)
+                            end
+                        end
+                    self.GetOption = function (self)
+                            return not LiteBag_GetGlobalOption("NoConfirmSort")
+                        end
+                    self.GetOptionDefault = function (self) return true end
+                    LiteBagOptionsControl_OnLoad(self)
+                </OnLoad>
+            </Scripts>
+        </CheckButton>
+        <Slider name="$parentInventoryColumns" minValue="8" maxValue="24" valueStep="1" defaultValue="8" inherits="OptionsSliderTemplate">
+            <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="$parentConfirmSort" relativePoint="BOTTOMLEFT" x="0" y="-16" />
+            </Anchors>
+            <Scripts>
+                <OnLoad>
+                    local t = _G[self:GetName() .. "Text"]
+                    t:SetText("Inventory frame columns.")
+                    self.SetOption = function (self, setting)
+                            LiteBag_SetFrameOption(LiteBagInventory, "columns", v)
+                        end
+                    self.GetOption = function (self)
+                            return LiteBag_GetFrameOption(LiteBagInventory, "columns")
+                        end
+                    self.GetOptionDefault = function (self) return 8 end
+                    LiteBagOptionsControl_OnLoad(self)
+                </OnLoad>
+            </Scripts>
+        </Slider>
+        <Slider name="$parentBankColumns" minValue="8" maxValue="24" valueStep="1" defaultValue="14" inherits="OptionsSliderTemplate">
+            <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="$parentInventoryColumns" relativePoint="BOTTOMLEFT" x="0" y="-16" />
+            </Anchors>
+            <Scripts>
+                <OnLoad>
+                    local t = _G[self:GetName() .. "Text"]
+                    t:SetText("Bank frame columns.")
+                    self.SetOption = function (self, setting)
+                            LiteBag_SetFrameOption(LiteBagBank, "columns", v)
+                        end
+                    self.GetOption = function (self)
+                            return LiteBag_GetFrameOption(LiteBagBank, "columns")
+                        end
+                    self.GetOptionDefault = function (self) return 14 end
+                    LiteBagOptionsControl_OnLoad(self)
+                </OnLoad>
+            </Scripts>
+        </Slider>
+    </Frames>
 </Frame>
 
 </Ui>
