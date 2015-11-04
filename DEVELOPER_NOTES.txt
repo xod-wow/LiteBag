@@ -7,7 +7,7 @@
         FrameXML/BankFrame.xml
         FrameXML/BankFrame.lua
 
-    See https://github.com/tekkub/wow-ui-source/blob/live/FrameXML
+    See https://github.com/gethe/wow-ui-source/blob/live/FrameXML
 
     The Blizzard code is very bag-focused, most of the bag/bank-related API
     calls take a (bag, slot) pair as the identifier.  There is a global
