@@ -41,6 +41,12 @@ function LiteBag_ReplaceBlizzardInventory()
     -- Turn our Inventory frame on.
     LiteBagFrame_RegisterHideShowEvents(LiteBagInventory)
 
+    -- Turn the Blizzard frames off
+    for i=1, NUM_CONTAINER_FRAMES do
+        local f = _G["ContainerFrame"..i]
+        f:UnregisterAllEvents()
+    end
+                
     -- Override or hook various Blizzard UI functions to operate on our
     -- frame instead.
     OpenBackpack = showFunc
@@ -76,6 +82,7 @@ function LiteBag_ReplaceBlizzardInventory()
     BagItemAutoSortButton:SetScript("OnClick", function (self)
             DoOrStaticPopup(BAG_CLEANUP_BAGS, SortBags)
         end)
+
 end
 
 function LiteBag_ReplaceBlizzardBank()
@@ -139,5 +146,26 @@ function LiteBag_ReplaceBlizzardBank()
         end)
 end
 
-LiteBag_ReplaceBlizzardInventory()
-LiteBag_ReplaceBlizzardBank()
+function LiteBag_ReplaceBlizzard()
+    LiteBag_ReplaceBlizzardInventory()
+    LiteBag_ReplaceBlizzardBank()
+
+    -- Some other addons either replace the open functions themselves after
+    -- us and cause the bag frames to show.
+    for i=1, NUM_CONTAINER_FRAMES do
+        local f = _G["ContainerFrame"..i]
+        f:SetScript("OnShow", function (self)
+                self:Hide()
+                LiteBagFrame_Show(LiteBagInventory)
+                LiteBag_ReplaceBlizzardInventory()
+            end)
+        f:SetScript("OnHide", nil)
+    end
+end
+
+-- This is a bit of an arms race with other addon authors who want to hook
+-- the bags too, try to hook later than them all.
+
+local replacer = CreateFrame('Frame', UIParent)
+replacer:SetScript("OnEvent", LiteBag_ReplaceBlizzard)
+replacer:RegisterEvent("PLAYER_LOGIN")
