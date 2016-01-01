@@ -41,7 +41,7 @@ end
 
 function LiteBagOptionsInventoryColumns_OnValueChanged(self)
     local n = self:GetName()
-    _G[n.."Text"]:SetText(format("Bank columns: %d", self:GetValue()))
+    _G[n.."Text"]:SetText(format("Inventory columns: %d", self:GetValue()))
 end
 
 function LiteBagOptionsBankColumns_OnLoad(self)

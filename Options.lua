@@ -49,7 +49,13 @@ function LiteBag_OptionSlashFunc(argstr)
 
     local args = { strsplit(" ", argstr) }
 
-    for i = 1, #args do
+    if #args == 1 then
+        InterfaceOptionsFrame:Show()
+        InterfaceOptionsFrame_OpenToCategory(LiteBagOptions)
+        return
+    end
+
+    for i = 2, #args do
         local arg = strlower(args[i])
         if arg == "confirm" then
             if args[i+1] == "on" then
@@ -110,6 +116,7 @@ f:SetScript("OnEvent", function (self, event, arg1, ...)
             LiteBag_InitializeOptions()
             SlashCmdList["LiteBag"] = LiteBag_OptionSlashFunc
             SLASH_LiteBag1 = "/litebag"
+            SLASH_LiteBag2 = "/lbg"
             self:UnregisterEvent("ADDON_LOADED")
         end
     end)
