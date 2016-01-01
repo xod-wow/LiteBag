@@ -2,6 +2,8 @@
 
 <!-- Copyright 2015 Mike Battersby -->
 
+<Script file="UIOptions.lua" />
+
 <Frame name="LiteBagOptions" hidden="true" inherits="LiteBagOptionsPanelTemplate">
     <Layers>
         <Layer level="ARTWORK">
@@ -19,21 +21,7 @@
                 <Anchor point="TOPLEFT" relativeTo="$parentTitle" relativePoint="BOTTOMLEFT" x="0" y="-32" />
             </Anchors>
             <Scripts>
-                <OnLoad>
-                    self.Text:SetText("Confirm before sorting.")
-                    self.SetOption = function (self, setting)
-                            if not setting or setting == "0" then
-                                LiteBag_SetGlobalOption("NoConfirmSort", true)
-                            else
-                                LiteBag_SetGlobalOption("NoConfirmSort", nil)
-                            end
-                        end
-                    self.GetOption = function (self)
-                            return not LiteBag_GetGlobalOption("NoConfirmSort")
-                        end
-                    self.GetOptionDefault = function (self) return true end
-                    LiteBagOptionsControl_OnLoad(self)
-                </OnLoad>
+                <OnLoad function="LiteBagOptionsConfirmSort_OnLoad" />
             </Scripts>
         </CheckButton>
         <Slider name="$parentInventoryColumns" minValue="8" maxValue="24" valueStep="2" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
@@ -41,21 +29,8 @@
                 <Anchor point="TOPLEFT" relativeTo="$parentConfirmSort" relativePoint="BOTTOMLEFT" x="32" y="-32" />
             </Anchors>
             <Scripts>
-                <OnLoad>
-                    self.Text = _G[self:GetName() .. "Text"]
-                    self.Text:SetText("Inventory frame columns.")
-                    _G[self:GetName() .. "Low"]:SetText("8")
-                    _G[self:GetName() .. "High"]:SetText("24")
-                    self.SetOption = function (self, v)
-                            LiteBag_SetFrameOption(LiteBagInventory, "columns", v)
-                            LiteBagInventory.columns = v
-                        end
-                    self.GetOption = function (self)
-                            return LiteBag_GetFrameOption(LiteBagInventory, "columns") or 8
-                        end
-                    self.GetOptionDefault = function (self) return 8 end
-                    LiteBagOptionsControl_OnLoad(self)
-                </OnLoad>
+                <OnLoad function="LiteBagOptionsInventoryColumns_OnLoad" />
+                <OnValueChanged function="LiteBagOptionsInventoryColumns_OnValueChanged" />
             </Scripts>
         </Slider>
         <Slider name="$parentBankColumns" minValue="8" maxValue="24" valueStep="2" obeyStepOnDrag="true" defaultValue="14" inherits="OptionsSliderTemplate">
@@ -63,21 +38,8 @@
                 <Anchor point="TOPLEFT" relativeTo="$parentInventoryColumns" relativePoint="BOTTOMLEFT" x="0" y="-32" />
             </Anchors>
             <Scripts>
-                <OnLoad>
-                    local t = _G[self:GetName() .. "Text"]
-                    t:SetText("Bank frame columns.")
-                    _G[self:GetName() .. "Low"]:SetText("8")
-                    _G[self:GetName() .. "High"]:SetText("24")
-                    self.SetOption = function (self, v)
-                            LiteBag_SetFrameOption(LiteBagBank, "columns", v)
-                            LiteBagBank.columns = v
-                        end
-                    self.GetOption = function (self)
-                            return LiteBag_GetFrameOption(LiteBagBank, "columns") or 14
-                        end
-                    self.GetOptionDefault = function (self) return 14 end
-                    LiteBagOptionsControl_OnLoad(self)
-                </OnLoad>
+                <OnLoad function="LiteBagOptionsBankColumns_OnLoad" />
+                <OnValueChanged function="LiteBagOptionsBankColumns_OnValueChanged" />
             </Scripts>
         </Slider>
     </Frames>

@@ -2,33 +2,9 @@
 
   LiteBag/UIOptionsPanelTemplate.lua
 
-  Copyright 2015 Mike Battersby
+  Copyright 2015-2016 Mike Battersby
 
 ----------------------------------------------------------------------------]]--
-
-local L = LM_Localize
-
--- Recurse all children finding any FontStrings and replacing their texts
--- with localized copies.
-function LiteBagOptionsPanel_AutoLocalize(f)
-    if not L then return end
-
-    local regions = { f:GetRegions() }
-    for _,r in ipairs(regions) do
-        if r and r:IsObjectType("FontString") and not r.autoLocalized then
-            r:SetText(L[r:GetText()])
-            r.autoLocalized = true
-        end
-    end
-
-    local children = { f:GetChildren() }
-    for _,c in ipairs(children) do
-        if not c.autoLocalized then
-            LiteBagOptionsPanel_AutoLocalize(c)
-            c.autoLocalized = true
-        end
-    end
-end
 
 function LiteBagOptionsPanel_Open()
     local f = LiteBagOptions
@@ -92,8 +68,6 @@ function LiteBagOptionsPanel_OnLoad(self)
     self.cancel = self.cancel or LiteBagOptionsPanel_Cancel
     self.default = self.default or LiteBagOptionsPanel_Default
     self.refresh = self.refresh or LiteBagOptionsPanel_Refresh
-
-    LiteBagOptionsPanel_AutoLocalize(self)
 
     InterfaceOptions_AddCategory(self)
 end
