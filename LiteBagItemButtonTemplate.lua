@@ -114,21 +114,13 @@ function LiteBagItemButton_UpdateQuality(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
-    local quality, _, _, _, noValue = select(4, GetContainerItemInfo(bag, slot))
+    local texture, itemCount, locked, quality, readable, _, _, isFiltered, noValue, itemID = GetContainerItemInfo(bag, slot)
 
+    SetItemButtonQuality(self, quality, itemID)
     self.JunkIcon:Hide()
     self.IconBorder:Hide()
 
-    if not quality then return end
-
-    if quality >= LE_ITEM_QUALITY_COMMON and BAG_ITEM_QUALITY_COLORS[quality] then
-        self.IconBorder:SetVertexColor(BAG_ITEM_QUALITY_COLORS[quality].r,
-                                       BAG_ITEM_QUALITY_COLORS[quality].g,
-                                       BAG_ITEM_QUALITY_COLORS[quality].b)
-        self.IconBorder:Show()
-    elseif quality == LE_ITEM_QUALITY_POOR and not noValue and MerchantFrame:IsShown() then
-        self.JunkIcon:Show()
-    end
+    self.JunkIcon:SetShown(quality == LE_ITEM_QUALITY_POOR and not noValue and MerchantFrame:IsShown())
 
 end
 
