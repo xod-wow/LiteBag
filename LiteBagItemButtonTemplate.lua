@@ -192,6 +192,25 @@ function LiteBagItemButton_UpdateFiltered(self)
     end
 end
 
+function LiteBagItemButton_UpdateRelicTutorial(self)
+
+    if self.searchOverlay:IsShown() then return end
+    if GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_ARTIFACT_RELIC_MATCH) then return end
+
+    local bag = self:GetParent():GetID()
+    local slot = self:GetID()
+
+    local itemID = select(10, GetContainerItemInfo(bag, slot))
+    ContainerFrame_ConsiderItemButtonForRelicTutorial(self, itemID);
+
+    -- Blizzard sets the owner to the container frame but we set it to the
+    -- itembutton that contains the Artifact.
+
+    if ArtifactRelicHelpBox.owner == self:GetParent() then
+        ArtifactRelicHelpBox.owner = self
+    end
+end
+
 function  LiteBagItemButton_UpdateItemLevel(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
@@ -249,6 +268,7 @@ function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateEquipmentSets(self)
     -- LiteBagItemButton_UpdateItemLevel(self)
     LiteBagItemButton_UpdateFiltered(self)
+    LiteBagItemButton_UpdateRelicTutorial(self)
 end
 
 
@@ -268,8 +288,8 @@ function LiteBagItemButton_OnEnter(self)
 end
 
 function LiteBagItemButton_OnLeave(self)
-    GameTooltip_Hide()
-    ResetCursor()
+    -- Bank inherits the ContainerFrameItemButton_OnLeave so no "if" test
+    ContainerFrameItemButton_OnLeave(self)
 end
 
 function LiteBagItemButton_OnHide(self)
