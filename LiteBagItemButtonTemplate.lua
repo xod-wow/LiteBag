@@ -266,9 +266,9 @@ function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateQuality(self)
     LiteBagItemButton_UpdateCooldown(self)
     LiteBagItemButton_UpdateEquipmentSets(self)
-    -- LiteBagItemButton_UpdateItemLevel(self)
     LiteBagItemButton_UpdateFiltered(self)
-    LiteBagItemButton_UpdateRelicTutorial(self)
+    -- LiteBagItemButton_UpdateRelicTutorial(self)
+    -- LiteBagItemButton_UpdateItemLevel(self)
 end
 
 
