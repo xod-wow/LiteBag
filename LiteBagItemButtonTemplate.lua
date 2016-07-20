@@ -114,11 +114,9 @@ function LiteBagItemButton_UpdateQuality(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
-    local texture, itemCount, locked, quality, readable, _, _, isFiltered, noValue, itemID = GetContainerItemInfo(bag, slot)
+    local _, _, _, quality, _, _, _, isFiltered, noValue, itemID = GetContainerItemInfo(bag, slot)
 
     SetItemButtonQuality(self, quality, itemID)
-    self.JunkIcon:Hide()
-    self.IconBorder:Hide()
 
     self.JunkIcon:SetShown(quality == LE_ITEM_QUALITY_POOR and not noValue and MerchantFrame:IsShown())
 
