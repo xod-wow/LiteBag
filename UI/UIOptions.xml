@@ -24,9 +24,17 @@
                 <OnLoad function="LiteBagOptionsConfirmSort_OnLoad" />
             </Scripts>
         </CheckButton>
+        <CheckButton name="$parentEquipsetDisplay" inherits="InterfaceOptionsCheckButtonTemplate">
+            <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="$parentConfirmSort" relativePoint="BOTTOMLEFT" x="0" y="-32" />
+            </Anchors>
+            <Scripts>
+                <OnLoad function="LiteBagOptionsEquipsetDisplay_OnLoad" />
+            </Scripts>
+        </CheckButton>
         <Slider name="$parentInventoryColumns" minValue="8" maxValue="24" valueStep="2" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentConfirmSort" relativePoint="BOTTOMLEFT" x="32" y="-32" />
+                <Anchor point="TOPLEFT" relativeTo="$parentEquipsetDisplay" relativePoint="BOTTOMLEFT" x="32" y="-32" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsInventoryColumns_OnLoad" />

@@ -4,7 +4,7 @@
 
 <Script file="LiteBagItemButtonTemplate.lua"/>
 
-<Texture name="LiteBagEquipSetsTexture" file="Interface\Addons\LiteBag\Artwork\EquipSets" virtual="true" />
+<Texture name="LiteBagEquipsetsTexture" file="Interface\Addons\LiteBag\Artwork\EquipSets" virtual="true" />
 
 <Button name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" hidden="true" virtual="true">
 
@@ -22,28 +22,28 @@
             </Texture>
         </Layer>
         <Layer level="ARTWORK" textureSubLevel="1">
-            <Texture name="$parentEquipsetTexture1" inherits="LiteBagEquipSetsTexture" parentKey="eqTexture1" hidden="true">
+            <Texture name="$parentEquipsetTexture1" inherits="LiteBagEquipsetsTexture" parentKey="eqTexture1" hidden="true">
                 <TexCoords left="0.0" right="0.5" top="0.0" bottom="0.5" />
                 <Size x="16" y="16" />
                 <Anchors>
                     <Anchor point="BOTTOMRIGHT" relativePoint="CENTER" />
                 </Anchors>
             </Texture>
-            <Texture name="$parentEquipsetTexture2" inherits="LiteBagEquipSetsTexture" parentKey="eqTexture2" hidden="true">
+            <Texture name="$parentEquipsetTexture2" inherits="LiteBagEquipsetsTexture" parentKey="eqTexture2" hidden="true">
                 <TexCoords left="0.5" right="1.0" top="0.0" bottom="0.5" />
                 <Size x="16" y="16" />
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" relativePoint="CENTER" />
                 </Anchors>
             </Texture>
-            <Texture name="$parentEquipsetTexture3" inherits="LiteBagEquipSetsTexture" parentKey="eqTexture3" hidden="true">
+            <Texture name="$parentEquipsetTexture3" inherits="LiteBagEquipsetsTexture" parentKey="eqTexture3" hidden="true">
                 <TexCoords left="0.5" right="1.0" top="0.5" bottom="1.0" />
                 <Size x="16" y="16" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="CENTER" />
                 </Anchors>
             </Texture>
-            <Texture name="$parentEquipsetTexture4" inherits="LiteBagEquipSetsTexture" parentKey="eqTexture4" hidden="true">
+            <Texture name="$parentEquipsetTexture4" inherits="LiteBagEquipsetsTexture" parentKey="eqTexture4" hidden="true">
                 <TexCoords left="0.0" right="0.5" top="0.5" bottom="1.0" />
                 <Size x="16" y="16" />
                 <Anchors>

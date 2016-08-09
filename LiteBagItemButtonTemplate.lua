@@ -248,7 +248,8 @@ function LiteBagItemButton_UpdateEquipmentSets(self)
 
     for i=1,4 do
         local tex = self["eqTexture"..i]
-        if ContainerItemIsPartOfEquipmentSet(bag, slot, i) then
+        if LiteBag_GetGlobalOption("HideEquipsetIcon") == nil and
+           ContainerItemIsPartOfEquipmentSet(bag, slot, i) then
             tex:Show()
         else
             tex:Hide()

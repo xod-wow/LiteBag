@@ -67,6 +67,16 @@ function LiteBag_OptionSlashFunc(argstr)
             end
             return
         end
+        if arg == "equipset" then
+            if args[i+1] == "on" then
+                LiteBag_SetGlobalOption("HideEquipsetIcon", nil)
+                LiteBag_Print("Equipment set icon display enabled.")
+            elseif args[i+1] == "off" then
+                LiteBag_SetGlobalOption("HideEquipsetIcon", true)
+                LiteBag_Print("Equipment set icon display disabled.")
+            end
+            return
+        end
         if arg == "inventory.columns" then
             local n = tonumber(args[i+1])
             if n and n >= 8 then
