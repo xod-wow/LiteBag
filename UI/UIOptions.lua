@@ -31,6 +31,8 @@ function LiteBagOptionsEquipsetDisplay_OnLoad(self)
                 else
                     LiteBag_SetGlobalOption("HideEquipsetIcon", nil)
                 end
+                LiteBagFrame_Update(LiteBagInventory)
+                LiteBagFrame_Update(LiteBagBank)
             end
         self.GetOption = function (self)
                 return not LiteBag_GetGlobalOption("HideEquipsetIcon")

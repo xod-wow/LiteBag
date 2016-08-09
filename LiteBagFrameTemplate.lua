@@ -68,11 +68,9 @@ end
 -- SavedVariables aren't available at OnLoad time, only once ADDON_LOADED fires.
 function LiteBagFrame_Initialize(self)
 
-    if not self.columns then
-        self.columns = LiteBag_GetFrameOption(self, "columns")
-                        or self.default_columns
-                        or MIN_COLUMNS
-    end
+    self.columns = LiteBag_GetFrameOption(self, "columns")
+                    or self.default_columns
+                    or MIN_COLUMNS
 
     self.columns = max(self.columns, MIN_COLUMNS)
 
