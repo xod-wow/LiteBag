@@ -108,8 +108,7 @@ function LiteBagFrame_OnLoad(self)
         self:SetAttribute("UIPanelLayout-defined", true)
         self:SetAttribute("UIPanelLayout-area", "left")
         self:SetAttribute("UIPanelLayout-pushable", 6)
-        local insetBg = _G[self:GetName() .."InsetBg"]
-        insetBg:SetTexture("Interface\\FrameGeneral\\UI-Background-Rock", true, true)
+        self.Inset.Bg:SetTexture("Interface\\FrameGeneral\\UI-Background-Rock", true, true)
         self.Tab1:Show()
         self.Tab2:Show()
         PanelTemplates_SetNumTabs(self, 2)
@@ -276,7 +275,7 @@ function LiteBagFrame_SetMainMenuBarButtons(self, checked)
         MainMenuBarBackpackButton:SetChecked(checked)
     end
 
-    -- Since BACKPACK_CONTAINER is 1, CharacterBag0Slot doesn't exist and
+    -- Since BACKPACK_CONTAINER is 0, CharacterBag-1Slot doesn't exist and
     -- the "if button then" check fails.  It would probably be clearer to
     -- incorporate the above into the loop instead.
 
