@@ -201,6 +201,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "BANKFRAME_CLOSED" then
         LiteBagFrame_Hide(self)
     elseif event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
+        -- Sets and unsets the coin icon and the relic border
         local bag = ...
         if LiteBagFrame_IsMyBag(self, bag) then
             LiteBagFrame_UpdateQuality(self)
