@@ -2,7 +2,7 @@
 
   LiteBag/ReplaceBlizzard.lua
 
-  Copyright 2013-2015 Mike Battersby
+  Copyright 2013-2016 Mike Battersby
 
   Released under the terms of the GNU General Public License version 2 (GPLv2).
   See the file LICENSE.txt.
@@ -33,7 +33,7 @@ end
 -- Added to the bag sort tooltip.  Would be nice if it were localized.
 local TOOLTIP_NOCONFIRM_TEXT = format("%s: No confirmation", SHIFT_KEY)
 
-function LiteBag_ReplaceBlizzardInventory()
+local function ReplaceBlizzardInventory()
     local hideFunc = function () LiteBagFrame_Hide(LiteBagInventory) end
     local showFunc = function () LiteBagFrame_Show(LiteBagInventory) end
     local toggleFunc = function () LiteBagFrame_ToggleShown(LiteBagInventory) end
@@ -85,7 +85,7 @@ function LiteBag_ReplaceBlizzardInventory()
 
 end
 
-function LiteBag_ReplaceBlizzardBank()
+local function ReplaceBlizzardBank()
 
     -- Turn our Bag frame on.
     LiteBagFrame_RegisterHideShowEvents(LiteBagBank)
@@ -146,9 +146,9 @@ function LiteBag_ReplaceBlizzardBank()
         end)
 end
 
-function LiteBag_ReplaceBlizzard()
-    LiteBag_ReplaceBlizzardInventory()
-    LiteBag_ReplaceBlizzardBank()
+local function ReplaceBlizzard()
+    ReplaceBlizzardInventory()
+    ReplaceBlizzardBank()
 
     -- Some other addons either replace the open functions themselves after
     -- us and cause the bag frames to show.
@@ -157,7 +157,7 @@ function LiteBag_ReplaceBlizzard()
         f:SetScript("OnShow", function (self)
                 self:Hide()
                 LiteBagFrame_Show(LiteBagInventory)
-                LiteBag_ReplaceBlizzardInventory()
+                ReplaceBlizzardInventory()
             end)
         f:SetScript("OnHide", nil)
     end

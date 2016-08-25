@@ -3,14 +3,16 @@
 ## Version: @project-version@
 ## Author: Xodiv of Proudmoore
 ## Email: mib@post.com
-## Dependencies: Blizzard_TokenUI
 ## SavedVariablesPerCharacter: LiteBag_OptionsDB
 
 Options.lua
-LiteBagItemButtonTemplate.xml
-LiteBagBagButtonTemplate.xml
-LiteBagFrameTemplate.xml
+ItemButton.xml
+BagButton.xml
+Frame.xml
 LiteBag.xml
 ReplaceBlizzard.lua
+
+Plugin_EquipSets\EquipSets.xml
+
 UI\UIOptionsPanelTemplate.xml
 UI\UIOptions.xml

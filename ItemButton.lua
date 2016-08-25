@@ -1,8 +1,8 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/LiteBagItemButtonTemplate.lua
+  LiteBag/ItemButton.lua
 
-  Copyright 2013-2015 Mike Battersby
+  Copyright 2013-2016 Mike Battersby
 
   Released under the terms of the GNU General Public License version 2 (GPLv2).
   See the file LICENSE.txt.
@@ -47,9 +47,6 @@
   Added by LiteBagItemButtonTemplate:
     self.backgroundTexture (Texture level=BACKGROUND/0)
         The slot background, so that empty slots have a texture.
-    self.eqTexture1/2/3/4 (Texture level=ARTWORK/1)
-        Textures shown when the item is part of one of the first
-        four EquipmentSets.
 
 ----------------------------------------------------------------------------]]--
 
@@ -209,54 +206,6 @@ function LiteBagItemButton_UpdateRelicTutorial(self)
     end
 end
 
-function  LiteBagItemButton_UpdateItemLevel(self)
-    local bag = self:GetParent():GetID()
-    local slot = self:GetID()
-
-    -- XXX FIXME XXX self.itemLevel isn't in the XML yet.
-    local _, _, _, quality, _, _, link, _ = GetContainerItemInfo(bag, slot)
-    if link then
-        local iLevel = select(4, GetItemInfo(link))
-        if iLevel then
-            local r, g, b = GetItemQualityColor(quality)
-            self.itemLevel:SetText(iLevel)
-            self.itemLevel:Show()
-            self.itemLevel:SetTextColor(r,g,b)
-            return
-        end
-    end
-
-    stockText:Hide()
-end
-
-local function ContainerItemIsPartOfEquipmentSet(bag, slot, i)
-    local _,equipSetNames = GetContainerItemEquipmentSetInfo(bag, slot)
-
-    if not equipSetNames then return end
-
-    local name = GetEquipmentSetInfo(i)
-    for _,n in ipairs({ strsplit(", " , equipSetNames) }) do
-        if n == name then return true end
-    end
-    return false
-
-end
-
-function LiteBagItemButton_UpdateEquipmentSets(self)
-    local bag = self:GetParent():GetID()
-    local slot = self:GetID()
-
-    for i=1,4 do
-        local tex = self["eqTexture"..i]
-        if LiteBag_GetGlobalOption("HideEquipsetIcon") == nil and
-           ContainerItemIsPartOfEquipmentSet(bag, slot, i) then
-            tex:Show()
-        else
-            tex:Hide()
-        end
-    end
-end
-
 function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateItem(self)
     LiteBagItemButton_UpdateLocked(self)
@@ -264,10 +213,8 @@ function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateNewItemTexture(self)
     LiteBagItemButton_UpdateQuality(self)
     LiteBagItemButton_UpdateCooldown(self)
-    LiteBagItemButton_UpdateEquipmentSets(self)
     LiteBagItemButton_UpdateFiltered(self)
     -- LiteBagItemButton_UpdateRelicTutorial(self)
-    -- LiteBagItemButton_UpdateItemLevel(self)
 end
 
 

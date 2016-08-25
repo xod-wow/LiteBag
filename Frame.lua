@@ -1,8 +1,8 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/LiteBagFrameTemplate.lua
+  LiteBag/Frame.lua
 
-  Copyright 2013-2015 Mike Battersby
+  Copyright 2013-2016 Mike Battersby
 
   Released under the terms of the GNU General Public License version 2 (GPLv2).
   See the file LICENSE.txt.
@@ -153,20 +153,13 @@ end
 
 -- Because the bank is a managed frame (Blizzard code sets its position)
 -- we have to use Show/HideUIPanel for it.
+-- ShowUIPanel just calls :Show() when UIPanelLayout-area is not set
 function LiteBagFrame_Show(self)
-    if self.isBank then
-        ShowUIPanel(self)
-    else
-        self:Show()
-    end
+    ShowUIPanel(self)
 end
 
 function LiteBagFrame_Hide(self)
-    if self.isBank then
-        HideUIPanel(self)
-    else
-        self:Hide()
-    end
+    HideUIPanel(self)
 end
 
 function LiteBagFrame_ToggleShown(self)
