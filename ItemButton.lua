@@ -187,7 +187,12 @@ function LiteBagItemButton_UpdateFiltered(self)
     end
 end
 
+-- Make sure to do this after the search overlay update
 function LiteBagItemButton_UpdateRelicTutorial(self)
+
+    if ArtifactRelicHelpBox.owner == self then
+	ArtifactRelicHelpBox:Hide()
+    end
 
     if self.searchOverlay:IsShown() then return end
     if GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_ARTIFACT_RELIC_MATCH) then return end
@@ -196,7 +201,7 @@ function LiteBagItemButton_UpdateRelicTutorial(self)
     local slot = self:GetID()
 
     local itemID = select(10, GetContainerItemInfo(bag, slot))
-    ContainerFrame_ConsiderItemButtonForRelicTutorial(self, itemID);
+    ContainerFrame_ConsiderItemButtonForRelicTutorial(self, itemID)
 
     -- Blizzard sets the owner to the container frame but we set it to the
     -- itembutton that contains the Artifact.
@@ -214,7 +219,7 @@ function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateQuality(self)
     LiteBagItemButton_UpdateCooldown(self)
     LiteBagItemButton_UpdateFiltered(self)
-    -- LiteBagItemButton_UpdateRelicTutorial(self)
+    LiteBagItemButton_UpdateRelicTutorial(self)
 end
 
 
@@ -241,5 +246,9 @@ end
 function LiteBagItemButton_OnHide(self)
     if self.hasStackSplit and self.hasStackSplit == 1 then
         StackSplitFrame:Hide()
+    end
+
+    if ArtifactRelicHelpBox.owner == self then
+        ArtifactRelicHelpBox:Hide()
     end
 end
