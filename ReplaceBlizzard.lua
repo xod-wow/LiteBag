@@ -167,5 +167,5 @@ end
 -- the bags too, try to hook later than them all.
 
 local replacer = CreateFrame('Frame', UIParent)
-replacer:SetScript("OnEvent", LiteBag_ReplaceBlizzard)
+replacer:SetScript("OnEvent", function () ReplaceBlizzard() end)
 replacer:RegisterEvent("PLAYER_LOGIN")

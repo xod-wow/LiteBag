@@ -27,21 +27,6 @@ local function ContainerItemIsPartOfEquipmentSet(bag, slot, i)
 
 end
 
-local function Update(button)
-    local bag = button:GetParent():GetID()
-    local slot = button:GetID()
-
-    for i = 1,4 do
-        local tex = button["eqTexture"..i]
-        if LiteBag_GetGlobalOption("HideEquipsetIcon") == nil and
-           ContainerItemIsPartOfEquipmentSet(bag, slot, i) then
-            tex:Show()
-        else
-            tex:Hide()
-        end
-    end
-end
-
 local texData = {
     [1] = {
         point = "BOTTOMRIGHT",
@@ -59,16 +44,35 @@ local texData = {
         point = "TOPRIGHT",
         coords = { 0.0, 0.5, 0.5, 1.0 },
     },
+}
 
 local function AddTextures(b)
     for i = 1,4 do
-        local n = button:GetName() .. "eqTexture" .. i
+        local n = b:GetName() .. "eqTexture" .. i
         local tex = b:CreateTexture(n, "ARTWORK", "LiteBagEquipSetsTexture", 1)
         tex:SetSize(16, 16)
         tex:SetPoint(texData[i].point, b, "CENTER")
-        tex:SetTexCoords(unpack(texData[i].coords))
+        tex:SetTexCoord(unpack(texData[i].coords))
     end
 end
 
-hooksecurefunc("LiteBagItemButton_OnLoad", function (b) AddTextures(b) end)
+local function Update(button)
+    local bag = button:GetParent():GetID()
+    local slot = button:GetID()
+
+    if not _G[button:GetName() .. "eqTexture1"] then
+        AddTextures(button)
+    end
+
+    for i = 1,4 do
+        local tex = _G[button:GetName() .. "eqTexture" .. i]
+        if LiteBag_GetGlobalOption("HideEquipsetIcon") == nil and
+           ContainerItemIsPartOfEquipmentSet(bag, slot, i) then
+            tex:Show()
+        else
+            tex:Hide()
+        end
+    end
+end
+
 hooksecurefunc("LiteBagItemButton_Update", function (b) Update(b) end)
