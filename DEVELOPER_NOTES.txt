@@ -25,9 +25,9 @@
     LiteBag is pretty simple, all of the complexity is in the detail:
 
         LiteBagItemButtonTemplate is an item button that inherits from
-        ContainerFrameItemButtonTemplate.  It can do all its own updating,
-        plus we add a few extra indicators on it.  The updating code is
-        more or less split out and copied from ContainerFrame.lua.
+        ContainerFrameItemButtonTemplate.  It can do all its own updating.
+        The updating code is more or less split out and copied from
+	ContainerFrame.lua.
 
         LiteBagBagButtonTemplate is a button to hold the actual bag iself,
         where you drag a new bag on when you buy one.
@@ -125,38 +125,6 @@
     Attach the bag buttons somewhere sensible.
 
     What to do with the specialist bag types?
-
-    Is there a use for indication of "non-useable" items a-la Combuctor?
-
-    Redo the logic for the BagButton colors/texture/tooltips, it is a mess.
-
-    Put the blank spots at the top, not the bottom, so that dragging
-    bigger bags in rearranges things the least.  Maybe?
-
-    Make the frames resizeable?  Can't let them get so small that the
-    search box doesn't fit any more.  Or the bag buttons if we attach
-    them to the outside.
-
-    Make the bank frame default to 14 wide? (Default bank bag is 28 slots.)
-
-
-------------------------------------------------------------------------------
-* Slot colors
-
-    FWIW, these are the colors for different bags from Bagnon.
-
-        slotColors = {
-                leather = {1, .6, .45},
-                enchant = {0.64, 0.83, 1},
-                inscri = {.64, 1, .82},
-                engineer = {.68, .63, .25},
-                tackle = {0.42, 0.59, 1},
-                cooking = {1, .5, .5},
-                gem = {1, .65, .98},
-                mine = {1, .81, .38},
-                herb = {.5, 1, .5},
-                normal = {1, 1, 1},
-        }
 
 
 ------------------------------------------------------------------------------
