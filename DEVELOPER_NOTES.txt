@@ -27,7 +27,7 @@
         LiteBagItemButtonTemplate is an item button that inherits from
         ContainerFrameItemButtonTemplate.  It can do all its own updating.
         The updating code is more or less split out and copied from
-	ContainerFrame.lua.
+        ContainerFrame.lua.
 
         LiteBagBagButtonTemplate is a button to hold the actual bag iself,
         where you drag a new bag on when you buy one.

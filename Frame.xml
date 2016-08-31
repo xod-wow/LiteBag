@@ -40,7 +40,8 @@
 </Frame>
 
 <Frame name="LiteBagFrameTemplate"
-       movable="true" resizable="true" enableMouse="true"
+       movable="true" resizable="true" clampedToScreen="true"
+       enableMouse="true"
        frameStrata="HIGH" topLevel="true" hidden="true"
        inherits="ButtonFrameTemplate" virtual="true">
 
@@ -73,21 +74,23 @@
             </Scripts>
         </Button>
 
-        <Button name="$parentResizeLeft">
-            <Size x="8" y="48" />
+        <Button name="$parentResizeBottomRight">
+            <Size x="16" y="16" />
             <Anchors>
-                <Anchor point="CENTER" relativePoint="LEFT" />
+                <Anchor point="BOTTOMRIGHT" x="-2" y="2" />
             </Anchors>
+            <NormalTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up" setAllPoints="true" />
             <Scripts>
+                <OnLoad function="RaiseFrameLevel" />
                 <OnMouseDown>
-                    self:GetParent():StartSizing("LEFT")
+                    self:GetParent().sizing = true
+                    self:GetParent():StartSizing("BOTTOMRIGHT")
                 </OnMouseDown>
                 <OnMouseUp>
+                    self:GetParent().sizing = nil
+                    self:GetParent():StartSizing("BOTTOMRIGHT")
                     LiteBagFrame_StopSizing(self:GetParent())
                 </OnMouseUp>
-                <OnHide>
-                    LiteBagFrame_StopSizing(self:GetParent())
-                </OnHide>
             </Scripts>
         </Button>
 
@@ -209,6 +212,7 @@
         <OnEvent function="LiteBagFrame_OnEvent" />
         <OnHide function="LiteBagFrame_OnHide" />
         <OnShow function="LiteBagFrame_OnShow" />
+        <OnSizeChanged function="LiteBagFrame_OnSizeChanged" />
     </Scripts>
 </Frame>
 

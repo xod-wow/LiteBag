@@ -191,7 +191,7 @@ end
 function LiteBagItemButton_UpdateRelicTutorial(self)
 
     if ArtifactRelicHelpBox.owner == self then
-	ArtifactRelicHelpBox:Hide()
+        ArtifactRelicHelpBox:Hide()
     end
 
     if self.searchOverlay:IsShown() then return end

@@ -256,6 +256,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
             ContainerFrame_UpdateSearchResults(ReagentBankFrame)
         end
     elseif event == "DISPLAY_SIZE_CHANGED" then
+        self:SetSize(LiteBagFrame_CalcSize(self, self.columns))
         LiteBagFrame_LayoutFrame(self)
     end
 end
@@ -326,14 +327,12 @@ end
 function LiteBagFrame_SetPosition(self)
     if self:IsUserPlaced() then return end
     self:ClearAllPoints()
-    self:SetClampedToScreen(nil)
     self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
 end
 
 function LiteBagFrame_StartMoving(self)
     if self.isBank then return end
     self:StartMoving()
-    self:SetClampedToScreen(true)
 end
 
 function LiteBagFrame_StopMoving(self)
@@ -347,12 +346,18 @@ function LiteBagFrame_StopMoving(self)
     end
 end
 
--- We don't use OnSizeChanged because we'll end up in a loop changing the
--- size ourselves when we call LiteBagFrame_LayoutFrame
-
 function LiteBagFrame_StopSizing(self)
     self:StopMovingOrSizing()
-    self.columns = LiteBagFrame_CalcCols(self, self:GetWidth())
+    local w, h = LiteBagFrame_CalcSize(self, self.columns)
+    self:SetSize(w, h)
+    LiteBag_SetFrameOption(self, "columns", self.columns)
+end
+
+function LiteBagFrame_OnSizeChanged(self, w, h)
+    if not self.sizing then return end
+    self.columns = LiteBagFrame_CalcCols(self, w)
+    local w, h = LiteBagFrame_CalcSize(self, self.columns)
+    self:SetHeight(h)
     LiteBagFrame_LayoutFrame(self)
 end
 
@@ -587,8 +592,6 @@ function LiteBagFrame_LayoutFrame(self)
             itemButton:Hide()
         end
     end
-
-    self:SetSize(LiteBagFrame_CalcSize(self, ncols))
 end
 
 function LiteBagFrame_ShowButtonsAndBags(self)
@@ -640,6 +643,7 @@ function LiteBagFrame_Update(self)
     -- layout of the buttons.
 
     LiteBagFrame_SetupItemButtons(self)
+    self:SetSize(LiteBagFrame_CalcSize(self, self.columns))
     LiteBagFrame_LayoutFrame(self)
 
     if not self:IsShown() then return end
