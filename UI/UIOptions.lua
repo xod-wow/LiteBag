@@ -2,7 +2,7 @@
 
   LiteBag/UIOptions.lua
 
-  Copyright 2016 Mike Battersby
+  Copyright 2015-2016 Mike Battersby
 
 ----------------------------------------------------------------------------]]--
 
