@@ -24,35 +24,56 @@ local function ContainerItemIsPartOfEquipmentSet(bag, slot, i)
         if n == name then return true end
     end
     return false
-
 end
 
 local texData = {
     [1] = {
+        parentKey = "eqTexture1",
         point = "BOTTOMRIGHT",
+        level = "ARTWORK",
+        subLevel = 1,
         coords = { 0.0, 0.5, 0.0, 0.5 }
     },
     [2] = {
+        parent = "LiteBagEquipSetsTexture",
+        parentKey = "eqTexture2",
         point = "BOTTOMLEFT",
+        level = "ARTWORK",
+        subLevel = 1,
         coords = { 0.5, 1.0, 0.0, 0.5 },
     },
     [3] = {
+        parentKey = "eqTexture3",
         point = "TOPLEFT",
+        level = "ARTWORK",
+        subLevel = 1,
         coords = { 0.5, 1.0, 0.5, 1.0 },
     },
     [4] = {
+        parentKey = "eqTexture4",
         point = "TOPRIGHT",
+        level = "ARTWORK",
+        subLevel = 1,
         coords = { 0.0, 0.5, 0.5, 1.0 },
     },
 }
 
+local function MakeTexture(frame, td)
+    local tex = frame:CreateTexture(
+                    frame:GetName() .. td.parentKey,
+                    td.level,
+                    "LiteBagEquipSetsTexture",
+                    td.subLevel
+                )
+    tex:SetSize(16, 16)
+    tex:SetTexCoord(unpack(td.coords))
+    tex:SetPoint(td.point, b, "CENTER")
+    return tex
+end
+
 local function AddTextures(b)
-    for i = 1,4 do
-        local n = b:GetName() .. "eqTexture" .. i
-        local tex = b:CreateTexture(n, "ARTWORK", "LiteBagEquipSetsTexture", 1)
-        tex:SetSize(16, 16)
-        tex:SetPoint(texData[i].point, b, "CENTER")
-        tex:SetTexCoord(unpack(texData[i].coords))
+    for i, td in ipairs(texData) do
+        b[td.parentKey] = MakeTexture(b, td)
     end
 end
 
@@ -60,7 +81,7 @@ local function Update(button)
     local bag = button:GetParent():GetID()
     local slot = button:GetID()
 
-    if not _G[button:GetName() .. "eqTexture1"] then
+    if not button.eqTexture1 then
         AddTextures(button)
     end
 
