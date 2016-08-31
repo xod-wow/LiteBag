@@ -352,7 +352,7 @@ end
 
 function LiteBagFrame_StopSizing(self)
     self:StopMovingOrSizing()
-    self.ncols = LiteBagFrame_CalcCols(self, w)
+    self.columns = LiteBagFrame_CalcCols(self, self:GetWidth())
     LiteBagFrame_LayoutFrame(self)
 end
 
@@ -555,7 +555,7 @@ end
 function LiteBagFrame_CalcCols(self, width)
     local w = self.itemButtons[1]:GetWidth()
     local framew = floor( (width - 29 + BUTTON_W_GAP) / (w + BUTTON_W_GAP) )
-    if framew < 8
+    if framew < 8 then
         return 8
     else
         return framew
