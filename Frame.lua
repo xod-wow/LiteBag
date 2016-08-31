@@ -347,6 +347,15 @@ function LiteBagFrame_StopMoving(self)
     end
 end
 
+-- We don't use OnSizeChanged because we'll end up in a loop changing the
+-- size ourselves when we call LiteBagFrame_LayoutFrame
+
+function LiteBagFrame_StopSizing(self)
+    self:StopMovingOrSizing()
+    self.ncols = LiteBagFrame_CalcCols(self, w)
+    LiteBagFrame_LayoutFrame(self)
+end
+
 function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("BAG_UPDATE")
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
@@ -533,6 +542,26 @@ function LiteBagFrame_SetupItemButtons(self)
     self.size = n
 end
 
+function LiteBagFrame_CalcSize(self, ncols)
+    local w, h = self.itemButtons[1]:GetSize()
+    local nrows = ceil(self.size / ncols)
+
+    local framew = 29 + ncols * w + (ncols-1) * BUTTON_W_GAP
+    local frameh = 105 + nrows * h + (nrows-1) * BUTTON_H_GAP
+
+    return framew, frameh
+end
+
+function LiteBagFrame_CalcCols(self, width)
+    local w = self.itemButtons[1]:GetWidth()
+    local framew = floor( (width - 29 + BUTTON_W_GAP) / (w + BUTTON_W_GAP) )
+    if framew < 8
+        return 8
+    else
+        return framew
+    end
+end
+
 function LiteBagFrame_LayoutFrame(self)
     if InCombatLockdown() then return end
 
@@ -559,11 +588,7 @@ function LiteBagFrame_LayoutFrame(self)
         end
     end
 
-    local nrows = ceil(self.size / ncols)
-    local w, h = self.itemButtons[1]:GetSize()
-
-    self:SetWidth(29 + ncols * w + (ncols-1) * BUTTON_W_GAP)
-    self:SetHeight(105 + nrows * h + (nrows-1) * BUTTON_H_GAP)
+    self:SetSize(LiteBagFrame_CalcSize(self, ncols))
 end
 
 function LiteBagFrame_ShowButtonsAndBags(self)

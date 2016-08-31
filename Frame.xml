@@ -39,9 +39,16 @@
     </Layers>
 </Frame>
 
-<Frame name="LiteBagFrameTemplate" frameStrata="HIGH" toplevel="true" movable="true" enableMouse="true" hidden="true" inherits="ButtonFrameTemplate" virtual="true">
+<Frame name="LiteBagFrameTemplate"
+       movable="true" enableMouse="true"
+       frameStrata="HIGH" topLevel="true" hidden="true"
+       inherits="ButtonFrameTemplate" virtual="true">
 
     <Size x="384" y="512" />
+
+    <ResizeBounds>
+        <minResize x="360" y="183" />
+    </ResizeBounds>
 
     <Frames>
         <Button name="$parentDragButton">
@@ -62,6 +69,24 @@
                 </OnMouseUp>
                 <OnHide>
                     LiteBagFrame_StopMoving(self:GetParent())
+                </OnHide>
+            </Scripts>
+        </Button>
+
+        <Button name="$parentResizeLeft">
+            <Size x="8" y="48" />
+            <Anchors>
+                <Anchor point="CENTER" relativePoint="LEFT" />
+            </Anchors>
+            <Scripts>
+                <OnMouseDown>
+                    self:GetParent():StartSizing("LEFT")
+                </OnMouseDown>
+                <OnMouseUp>
+                    LiteBagFrame_StopSizing(self:GetParent())
+                </OnMouseUp>
+                <OnHide>
+                    LiteBagFrame_StopSizing(self:GetParent())
                 </OnHide>
             </Scripts>
         </Button>
