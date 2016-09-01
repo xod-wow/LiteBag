@@ -65,9 +65,10 @@ local function MakeTexture(frame, td)
                     "LiteBagEquipSetsTexture",
                     td.subLevel
                 )
+    tex:ClearAllPoints()
+    tex:SetPoint(td.point, frame, "CENTER")
     tex:SetSize(16, 16)
     tex:SetTexCoord(unpack(td.coords))
-    tex:SetPoint(td.point, b, "CENTER")
     return tex
 end
 
