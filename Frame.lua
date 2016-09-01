@@ -612,6 +612,10 @@ function LiteBagFrame_Update(self)
         end
     end
 
+    if self.isBank and self.selectedTab > 1 then
+        return
+    end
+
     self.slots:Show()
 
     -- It might be better to detach SetupItemButtons from _Update and call them
