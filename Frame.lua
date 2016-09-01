@@ -90,13 +90,11 @@ function LiteBagFrame_OnLoad(self)
 
     self.dummyContainerFrames = { }
 
-    for _,bag in ipairs(self.bagIDs) do
-        local bagName = self:GetName() .. "ContainerFrame" .. bag
-        self.dummyContainerFrames[bag] = CreateFrame("Frame",  name, self)
-        self.dummyContainerFrames[bag]:SetID(bag)
-        if bag ~= BACKPACK_CONTAINER and bag ~= BANK_CONTAINER then
-            self.dummyContainerFrames[bag].slotID = ContainerIDToInventoryID(bag)
-        end
+    for _,id in ipairs(self.bagIDs) do
+        local bagName = self:GetName() .. "ContainerFrame" .. id
+        local bag = CreateFrame("Frame",  name, self.slots)
+        bag:SetId(id)
+        self.dummyContainerFrames[id] = bag
     end
 
     -- The UIPanelLayout stuff makes the Blizzard UIParent code position a
@@ -228,9 +226,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "PLAYER_MONEY" then
         -- The only way to notice we bought a bag button is to see we
         -- spent money while the bank is open.
-        if self.isBank and self.selectedTab == 1 then
-            LiteBagFrame_UpdateBagButtons(self)
-        end
+        LiteBagFrame_UpdateBagButtons(self)
     elseif event == "ITEM_LOCK_CHANGED" then
         local bag, slot = ...
         if LiteBagFrame_IsMyBag(self, bag) then
@@ -253,11 +249,14 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "INVENTORY_SEARCH_UPDATE" then
         LiteBagFrame_UpdateSearchResults(self)
         if self.isBank then
-            ContainerFrame_UpdateSearchResults(ReagentBankFrame)
+            for i = 2, #BANK_PANELS do
+                local panel = _G[BANK_PANELS[i].name]
+                ContainerFrame_UpdateSearchResults(panel)
+            end
         end
     elseif event == "DISPLAY_SIZE_CHANGED" then
         self:SetSize(LiteBagFrame_CalcSize(self, self.columns))
-        LiteBagFrame_LayoutFrame(self)
+        LiteBagFrame_LayoutSlots(self.slots)
     end
 end
 
@@ -358,7 +357,7 @@ function LiteBagFrame_OnSizeChanged(self, w, h)
     self.columns = LiteBagFrame_CalcCols(self, w)
     local w, h = LiteBagFrame_CalcSize(self, self.columns)
     self:SetHeight(h)
-    LiteBagFrame_LayoutFrame(self)
+    LiteBagFrame_LayoutSlots(self.slots)
 end
 
 function LiteBagFrame_OnHide(self)
@@ -450,7 +449,7 @@ end
 -- Note that this should not be called if we are on one of the other
 -- bank tabs.
 function LiteBagFrame_UpdateBagButtons(self)
-    for i,b in ipairs(self.bagButtons) do
+    for i,b in ipairs(self.slots.bagButtons) do
         if self.bagIDs[i] then
             b:SetID(self.bagIDs[i])
             LiteBagBagButton_Update(b)
@@ -563,10 +562,8 @@ function LiteBagFrame_CalcCols(self, width)
     return max(ncols, MIN_COLUMNS)
 end
 
-function LiteBagFrame_LayoutFrame(self)
+function LiteBagFrame_LayoutSlots(self)
     if InCombatLockdown() then return end
-
-    local name = self:GetName()
 
     local ncols = self.columns
 
@@ -575,7 +572,7 @@ function LiteBagFrame_LayoutFrame(self)
 
         itemButton:ClearAllPoints()
         if i == 1 then
-            itemButton:SetPoint("TOPLEFT", name, "TOPLEFT", 14, -70)
+            itemButton:SetPoint("TOPLEFT", self, "TOPLEFT", 14, -70)
         elseif i % ncols == 1 then
             itemButton:SetPoint("TOPLEFT", self.itemButtons[i-ncols], "BOTTOMLEFT", 0, -BUTTON_H_GAP)
         else
@@ -590,49 +587,32 @@ function LiteBagFrame_LayoutFrame(self)
     end
 end
 
-function LiteBagFrame_ShowButtonsAndBags(self)
-    for i = 1, self.size do
-        self.itemButtons[i]:Show()
-    end
-    for i = 1,8 do
-        local b = _G[self:GetName().."BagButton"..i]
-        b:Show()
-    end
-end
-
-function LiteBagFrame_HideButtonsAndBags(self)
-    for i = 1, self.size do
-        self.itemButtons[i]:Hide()
-    end
-    for i = 1,8 do
-        local b = _G[self:GetName().."BagButton"..i]
-        b:Hide()
-    end
-end
-
-function LiteBagFrame_UpdateReagentBank(self)
-    for i = 1, ReagentBankFrame.size do
-        BankFrameItemButton_Update(ReagentBankFrame["Item"..i])
+function LiteBagFrame_UpdateBankItemButtons(panel)
+    for i = 1, panel.size do
+        BankFrameItemButton_Update(panel["Item"..i])
     end
 end
 
 function LiteBagFrame_Update(self)
 
     if self.isBank then
-        if self.selectedTab == 2 then
-            LiteBagFrame_HideButtonsAndBags(self)
-            self:SetSize(738, 415)
-            ReagentBankFrame:SetParent(self)
-            ReagentBankFrame:SetAllPoints()
-            ReagentBankFrame:Show()
-            LiteBagFrame_UpdateReagentBank(self)
-            return
-        else
-            ReagentBankFrame:Hide()
-            LiteBagFrame_ShowButtonsAndBags(self)
+        for i = 2, #BANK_PANELS do
+            local data = BANK_PANELS[i]
+            local panel = _G[data.name]
+            if self.selectedTab == i then
+                LiteBagFrame_UpdateBankItemButtons(panel)
+                self:SetSize(data.size.x, data.size.y)
+                panel:SetParent(self)
+                panel:SetAllPoints()
+                panel:Show()
+                self.slots:Hide()
+            else
+                panel:Hide()
+            end
         end
     end
 
+    self.slots:Show()
 
     -- It might be better to detach SetupItemButtons from _Update and call them
     -- explicitly from any event that might change the number or
@@ -640,7 +620,7 @@ function LiteBagFrame_Update(self)
 
     LiteBagFrame_SetupItemButtons(self)
     self:SetSize(LiteBagFrame_CalcSize(self, self.columns))
-    LiteBagFrame_LayoutFrame(self)
+    LiteBagFrame_LayoutSlots(self.slots)
 
     if not self:IsShown() then return end
 
