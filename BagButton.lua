@@ -120,7 +120,8 @@ end
 
 function LiteBagBagButton_OnEnter(self)
 
-    LiteBagFrame_HighlightBagButtons(self:GetParent(), self:GetID())
+    local frame = self:GetParent():GetParent()
+    LiteBagFrame_HighlightBagButtons(frame, self:GetID())
 
     GameTooltip:SetOwner(self, "ANCHOR_LEFT")
 
@@ -153,7 +154,8 @@ function LiteBagBagButton_OnEnter(self)
 end
 
 function LiteBagBagButton_OnLeave(self)
-    LiteBagFrame_UnhighlightBagButtons(self:GetParent(), self:GetID())
+    local frame = self:GetParent():GetParent()
+    LiteBagFrame_UnhighlightBagButtons(frame, self:GetID())
     GameTooltip:Hide()
     ResetCursor()
 end

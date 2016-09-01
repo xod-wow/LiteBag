@@ -93,7 +93,7 @@ function LiteBagFrame_OnLoad(self)
     for _,id in ipairs(self.bagIDs) do
         local bagName = self:GetName() .. "ContainerFrame" .. id
         local bag = CreateFrame("Frame",  name, self.slots)
-        bag:SetId(id)
+        bag:SetID(id)
         self.dummyContainerFrames[id] = bag
     end
 
@@ -256,7 +256,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
         end
     elseif event == "DISPLAY_SIZE_CHANGED" then
         self:SetSize(LiteBagFrame_CalcSize(self, self.columns))
-        LiteBagFrame_LayoutSlots(self.slots)
+        LiteBagFrame_LayoutSlots(self)
     end
 end
 
@@ -357,7 +357,7 @@ function LiteBagFrame_OnSizeChanged(self, w, h)
     self.columns = LiteBagFrame_CalcCols(self, w)
     local w, h = LiteBagFrame_CalcSize(self, self.columns)
     self:SetHeight(h)
-    LiteBagFrame_LayoutSlots(self.slots)
+    LiteBagFrame_LayoutSlots(self)
 end
 
 function LiteBagFrame_OnHide(self)
@@ -572,7 +572,7 @@ function LiteBagFrame_LayoutSlots(self)
 
         itemButton:ClearAllPoints()
         if i == 1 then
-            itemButton:SetPoint("TOPLEFT", self, "TOPLEFT", 14, -70)
+            itemButton:SetPoint("TOPLEFT", self.slots, "TOPLEFT", 14, -70)
         elseif i % ncols == 1 then
             itemButton:SetPoint("TOPLEFT", self.itemButtons[i-ncols], "BOTTOMLEFT", 0, -BUTTON_H_GAP)
         else
@@ -620,7 +620,7 @@ function LiteBagFrame_Update(self)
 
     LiteBagFrame_SetupItemButtons(self)
     self:SetSize(LiteBagFrame_CalcSize(self, self.columns))
-    LiteBagFrame_LayoutSlots(self.slots)
+    LiteBagFrame_LayoutSlots(self)
 
     if not self:IsShown() then return end
 
