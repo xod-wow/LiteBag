@@ -447,10 +447,10 @@ function LiteBagFrame_AttachSearchBox(self)
     self.sortButton:Show()
 end
 
+-- Note that this should not be called if we are on one of the other
+-- bank tabs.
 function LiteBagFrame_UpdateBagButtons(self)
-    -- This is a temporary ugly hack.
-    for i = 1,8 do
-        local b = _G[self:GetName().."BagButton"..i]
+    for i,b in ipairs(self.bagButtons) do
         if self.bagIDs[i] then
             b:SetID(self.bagIDs[i])
             LiteBagBagButton_Update(b)
@@ -559,12 +559,8 @@ end
 
 function LiteBagFrame_CalcCols(self, width)
     local w = self.itemButtons[1]:GetWidth()
-    local framew = floor( (width - 29 + BUTTON_W_GAP) / (w + BUTTON_W_GAP) )
-    if framew < 8 then
-        return 8
-    else
-        return framew
-    end
+    local ncols = floor( (width - 29 + BUTTON_W_GAP) / (w + BUTTON_W_GAP) )
+    return max(ncols, MIN_COLUMNS)
 end
 
 function LiteBagFrame_LayoutFrame(self)
