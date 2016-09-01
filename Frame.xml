@@ -83,13 +83,19 @@
             <Scripts>
                 <OnLoad function="RaiseFrameLevel" />
                 <OnMouseDown>
-                    self:GetParent().sizing = true
-                    self:GetParent():StartSizing("BOTTOMRIGHT")
+                    local parent = self:GetParent()
+                    if not parent.isBank or parent.selectedTab == 1 then
+                        parent.sizing = true
+                        parent:StartSizing("BOTTOMRIGHT")
+                    end
                 </OnMouseDown>
                 <OnMouseUp>
-                    self:GetParent().sizing = nil
-                    self:GetParent():StartSizing("BOTTOMRIGHT")
-                    LiteBagFrame_StopSizing(self:GetParent())
+                    local parent = self:GetParent()
+                    if not parent.isBank or parent.selectedTab == 1 then
+                        parent.sizing = nil
+                        parent:StartSizing("BOTTOMRIGHT")
+                        LiteBagFrame_StopSizing(parent)
+                    end
                 </OnMouseUp>
             </Scripts>
         </Button>
