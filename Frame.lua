@@ -23,33 +23,6 @@ function LiteBagFrame_IsMyBag(self, id)
     end
 end
 
-function LiteBagFrame_UpdateTokens(self)
-    local border = _G[self:GetName() .. "TokenFrameBorder"]
-    local n = 0
-    for i = 1,MAX_WATCHED_TOKENS do
-        local name,count,icon,currencyID = GetBackpackCurrencyInfo(i)
-        local tokenFrame = _G[self:GetName().."Token"..i]
-        if name then
-            tokenFrame.icon:SetTexture(icon)
-            if count <= 99999 then
-                tokenFrame.count:SetText(count)
-            else
-                tokenFrame.count:SetText("*")
-            end
-            tokenFrame.currencyID = currencyID
-            tokenFrame:Show()
-            n = n + 1
-        else
-            tokenFrame:Hide()
-        end
-    end
-    if n > 0 then
-        border:Show()
-    else
-        border:Hide()
-    end
-end
-
 function LiteBagFrame_RegisterHideShowEvents(self)
     self:RegisterEvent("BANKFRAME_OPENED")
     self:RegisterEvent("BANKFRAME_CLOSED")
@@ -126,13 +99,6 @@ function LiteBagFrame_OnLoad(self)
     -- buttons needed.
 
     LiteBagFrame_CreateItemButtons(self)
-
-    -- It might be simpler to watch event CURRENCY_DISPLAY_UPDATE instead.
-    -- Don't replace the function because parts of the TokenFrame rely on
-    -- the BackpackTokenFrame even though it's hidden.
-
-    hooksecurefunc('BackpackTokenFrame_Update',
-                   function () LiteBagFrame_UpdateTokens(self) end)
 
     if self.isBank then
         self.searchBox = BankItemSearchBox
@@ -425,7 +391,7 @@ function LiteBagFrame_OnShow(self)
     end
 
     LiteBagFrame_Update(self)
-    LiteBagFrame_UpdateTokens(self)
+    LiteBagTokensFrame_Update(self)
 
     LiteBagFrame_SetMainMenuBarButtons(self, true)
 

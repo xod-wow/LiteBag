@@ -4,41 +4,6 @@
 
 <Script file="Frame.lua" />
 
-<Frame name="LiteBag_ThinGreenEdgeTemplate" virtual="true">
-    <Size x="100" y="20" />
-    <Layers>
-        <Layer level="BACKGROUND">
-            <Texture name="$parentLeft" file="Interface\Common\Moneyframe">
-                <Size x="7" y="20" />
-                <Anchors>
-                    <Anchor point="TOPLEFT" />
-                    <Anchor point="BOTTOMLEFT" />
-                </Anchors>
-                <TexCoords left="0.953125" right="0.9921875" top="0" bottom="0.296875" />
-                <Color r="0" g="1" b="1" />
-            </Texture>
-            <Texture name="$parentRight" file="Interface\Common\Moneyframe">
-                <Size x="7" y="20" />
-                <Anchors>
-                    <Anchor point="TOPRIGHT" />
-                    <Anchor point="BOTTOMRIGHT" />
-                </Anchors>
-                <TexCoords left="0" right="0.0546875" top="0" bottom="0.296875" />
-                <Color r="0" g="1" b="1" />
-            </Texture>
-            <Texture name="$parentMiddle" file="Interface\Common\Moneyframe">
-                <Size x="80" y="20" />
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parentLeft" relativePoint="TOPRIGHT" />
-                    <Anchor point="BOTTOMRIGHT" relativeTo="$parentRight" relativePoint="BOTTOMLEFT" />
-                </Anchors>
-                <TexCoords left="0" right="0.9921875" top="0.3125" bottom="0.609375" />
-                <Color r="0" g="1" b="1" />
-            </Texture>
-        </Layer>
-    </Layers>
-</Frame>
-
 <Frame name="LiteBagFrameTemplate"
        movable="true" resizable="true" clampedToScreen="true"
        enableMouse="true"
@@ -110,7 +75,7 @@
 
         <Frame name="$parentMoneyFrame" parentKey="moneyFrame" inherits="SmallMoneyFrameTemplate">
             <Anchors>
-                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-2" y="9" />
+                <Anchor point="BOTTOMRIGHT" x="-2" y="9" />
             </Anchors>
             <Scripts>
                 <OnLoad>
@@ -128,23 +93,11 @@
             </Anchors>
         </Frame>
 
-        <Button name="$parentToken1" inherits="BackpackTokenTemplate" id="1">
+        <Frame name="$parentTokenFrame" inherits="LiteBagTokenFrameTemplate">
             <Anchors>
-                <Anchor point="BOTTOMLEFT" x="13" y="8"/>
+                <Anchor point="BOTTOMRIGHT" x="2" y="9" />
             </Anchors>
-        </Button>
-
-        <Button name="$parentToken2" inherits="BackpackTokenTemplate" id="2">
-            <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentToken1" relativePoint="RIGHT" x="2" />
-            </Anchors>
-        </Button>
-
-        <Button name="$parentToken3" inherits="BackpackTokenTemplate" id="3">
-            <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentToken2" relativePoint="RIGHT" x="2" />
-            </Anchors>
-        </Button>
+        </Frame>
 
         <!--
           BagButtons and ItemButtons inside slots for group hide/show

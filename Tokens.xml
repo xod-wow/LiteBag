@@ -1,0 +1,47 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+
+<!-- Copyright 2013-2016 Mike Battersby -->
+
+<Script file="Tokens.lua" />
+
+<Frame name="LiteBag_ThinGreenEdgeTemplate" inherits="ThinGoldEdgeTemplate" virtual="true">
+    <Scripts>
+        <OnLoad>
+            for _, tex in ipairs({ self:GetRegions() }) do
+                tex:SetVertexColor(0.0, 1.0, 1.0, 1.0)
+            end
+        </OnLoad>
+    </Scripts>
+</Frame>
+
+<Frame name="LiteBagTokenFrameTemplate" virtual="true">
+
+    <Size x="128" y="13" />
+
+    <Frames>
+        <Button name="$parentToken1" inherits="BackpackTokenTemplate" id="1">
+            <Anchors>
+                <Anchor point="BOTTOMLEFT" x="5" y="3"/>
+            </Anchors>
+        </Button>
+
+        <Button name="$parentToken2" inherits="BackpackTokenTemplate" id="2">
+            <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentToken1" relativePoint="RIGHT" x="2" />
+            </Anchors>
+        </Button>
+
+        <Button name="$parentToken3" inherits="BackpackTokenTemplate" id="3">
+            <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentToken2" relativePoint="RIGHT" x="2" />
+            </Anchors>
+        </Button>
+    </Frames>
+
+    <Scripts>
+        <OnLoad function="LiteBagTokensFrame_OnLoad" />
+        <OnShow function="LiteBagTokensFrame_OnShow" />
+    </Scripts>
+</Frame>
+
+</Ui>
