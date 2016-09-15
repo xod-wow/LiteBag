@@ -12,25 +12,24 @@
 -- Mostly copied from BackpackTokenFrame_Update in Blizzard_TokenUI.lua
 
 function LiteBagTokensFrame_Update(self)
-    local n = 0
+    local watchButton
+    local name, count, icon, currencyID
+
+    self.shouldShow = false
     for i = 1,MAX_WATCHED_TOKENS do
-        local name, count, icon, currencyID = GetBackpackCurrencyInfo(i)
-        local tokenFrame = _G[self:GetName().."Token"..i]
+        name, count, icon, currencyID = GetBackpackCurrencyInfo(i)
+        watchButton = _G[self:GetName().."Token"..i]
         if name then
-            tokenFrame.icon:SetTexture(icon)
-            if count <= 99999 then
-                tokenFrame.count:SetText(count)
-            else
-                tokenFrame.count:SetText("*")
-            end
-            tokenFrame.currencyID = currencyID
-            tokenFrame:Show()
-            n = n + 1
+            watchButton.icon:SetTexture(icon)
+            watchButton.count:SetText(count <= 99999 and count or "*")
+            watchButton.currencyID = currencyID
+            watchButton:Show()
+            self.shouldShow = true
         else
-            tokenFrame:Hide()
+            watchButton:Hide()
         end
     end
-    if n > 0 then
+    if self.shouldShow then
         self:Show()
     else
         self:Hide()
