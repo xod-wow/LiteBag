@@ -4,16 +4,6 @@
 
 <Script file="Tokens.lua" />
 
-<Frame name="LiteBag_ThinGreenEdgeTemplate" inherits="ThinGoldEdgeTemplate" virtual="true">
-    <Scripts>
-        <OnLoad>
-            for _, tex in ipairs({ self:GetRegions() }) do
-                tex:SetVertexColor(0.0, 1.0, 1.0, 1.0)
-            end
-        </OnLoad>
-    </Scripts>
-</Frame>
-
 <Frame name="LiteBagTokenFrameTemplate" virtual="true">
 
     <Size x="128" y="13" />

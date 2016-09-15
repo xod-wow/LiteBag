@@ -4,6 +4,16 @@
 
 <Script file="Frame.lua" />
 
+<Frame name="LiteBag_ThinGreenEdgeTemplate" inherits="ThinGoldEdgeTemplate" virtual="true">
+    <Scripts>
+        <OnLoad>
+            for _, tex in ipairs({ self:GetRegions() }) do
+                tex:SetVertexColor(0.0, 1.0, 1.0, 1.0)
+            end
+        </OnLoad>
+    </Scripts>
+</Frame>
+
 <Frame name="LiteBagFrameTemplate"
        movable="true" resizable="true" clampedToScreen="true"
        enableMouse="true"
