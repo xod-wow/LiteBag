@@ -262,11 +262,11 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "DISPLAY_SIZE_CHANGED" then
         self:SetSize(LiteBagFrame_CalcSize(self, self.columns))
         LiteBagFrame_LayoutFrame(self)
-    elsif event == "OBLITERUM_FORGE_SHOW" then
+    elseif event == "OBLITERUM_FORGE_SHOW" then
         if not self.isBank then
             LiteBagFrame_Show(self)
         end
-    elsif event == "OBLITERUM_FORGE_CLOSE" then
+    elseif event == "OBLITERUM_FORGE_CLOSE" then
         LiteBagFrame_Hide(self)
     end
 end
