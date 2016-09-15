@@ -55,6 +55,8 @@ function LiteBagFrame_RegisterHideShowEvents(self)
     self:RegisterEvent("BANKFRAME_CLOSED")
     self:RegisterEvent("BAG_OPEN")
     self:RegisterEvent("BAG_CLOSED")
+    self:RegisterEvent("OBLITERUM_FORGE_SHOW")
+    self:RegisterEvent("OBLITERUM_FORGE_CLOSE")
 end
 
 function LiteBagFrame_UnregisterHideShowEvents(self)
@@ -62,6 +64,8 @@ function LiteBagFrame_UnregisterHideShowEvents(self)
     self:UnregisterEvent("BANKFRAME_CLOSED")
     self:UnregisterEvent("BAG_OPEN")
     self:UnregisterEvent("BAG_CLOSED")
+    self:UnregisterEvent("OBLITERUM_FORGE_SHOW")
+    self:UnregisterEvent("OBLITERUM_FORGE_CLOSE")
 end
 
 
@@ -258,6 +262,12 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "DISPLAY_SIZE_CHANGED" then
         self:SetSize(LiteBagFrame_CalcSize(self, self.columns))
         LiteBagFrame_LayoutFrame(self)
+    elsif event == "OBLITERUM_FORGE_SHOW" then
+        if not self.isBank then
+            LiteBagFrame_Show(self)
+        end
+    elsif event == "OBLITERUM_FORGE_CLOSE" then
+        LiteBagFrame_Hide(self)
     end
 end
 
