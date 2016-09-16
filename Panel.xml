@@ -1,0 +1,17 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+
+<!-- Copyright 2013-2016 Mike Battersby -->
+
+<Script file="Panel.lua" />
+
+<Frame name="LiteBagPanelTemplate" virtual="true">
+    <Scripts>
+        <OnLoad function="LiteBagPanel_OnLoad" />
+        <OnShow function="LiteBagPanel_OnShow" />
+        <OnHide function="LiteBagPanel_OnHide" />
+        <OnEvent function="LiteBagPanel_OnEvent" />
+        <OnSizeChanged function="LiteBagPanel_OnSizeChanged" />
+    </Scripts>
+</Frame>
+
+</Ui>
