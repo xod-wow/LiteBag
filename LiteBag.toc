@@ -7,8 +7,8 @@
 
 Options.lua
 ItemButton.xml
-BagButton.xml
-Tokens.xml
+BagFrame.xml
+TokenFrame.xml
 Frame.xml
 LiteBag.xml
 ReplaceBlizzard.lua

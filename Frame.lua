@@ -70,6 +70,9 @@ function LiteBagFrame_OnLoad(self)
         self.dummyContainerFrames[id] = bag
     end
 
+    LiteBagBagFrame_SetBagIDs(self.slots.bags, self.bagIDs)
+    LiteBagBagFrame_Update(self.slots.bags)
+
     -- The UIPanelLayout stuff makes the Blizzard UIParent code position a
     -- frame automatically in the stack from the left side.  See
     --   http://www.wowwiki.com/Creating_standard_left-sliding_frames
@@ -192,7 +195,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "PLAYER_MONEY" then
         -- The only way to notice we bought a bag button is to see we
         -- spent money while the bank is open.
-        LiteBagFrame_UpdateBagButtons(self)
+        LiteBagBagFrame_Update(self.slots.bags)
     elseif event == "ITEM_LOCK_CHANGED" then
         local bag, slot = ...
         if LiteBagFrame_IsMyBag(self, bag) then
@@ -260,11 +263,7 @@ end
 -- The bag buttons call these to highlight the relevant buttons
 -- for their particular bag when they are moused over.
 
-function LiteBagFrame_HighlightBagButtons(self, id)
-    if not LiteBagFrame_IsMyBag(self, id) then
-        return
-    end
-
+function LiteBagFrame_HighlightButtons(self, id)
     for i = 1, self.size do
         local button = self.itemButtons[i]
         if button:GetParent():GetID() == id then
@@ -274,10 +273,6 @@ function LiteBagFrame_HighlightBagButtons(self, id)
 end
 
 function LiteBagFrame_UnhighlightBagButtons(self, id)
-    if not LiteBagFrame_IsMyBag(self, id) then
-        return
-    end
-
     for i = 1, self.size do
         local button = self.itemButtons[i]
         if button:GetParent():GetID() == id then
@@ -418,20 +413,6 @@ function LiteBagFrame_AttachSearchBox(self)
     self.sortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -7, -32)
     self.sortButton.anchorBag = self
     self.sortButton:Show()
-end
-
--- Note that this should not be called if we are on one of the other
--- bank tabs.
-function LiteBagFrame_UpdateBagButtons(self)
-    for i,b in ipairs(self.slots.bagButtons) do
-        if self.bagIDs[i] then
-            b:SetID(self.bagIDs[i])
-            LiteBagBagButton_Update(b)
-            b:Show()
-        else
-            b:Hide()
-        end
-    end
 end
 
 function LiteBagFrame_ClearNewItems(self)
@@ -605,8 +586,6 @@ function LiteBagFrame_Update(self)
     LiteBagFrame_AttachSearchBox(self)
 
     LiteBagFrame_UpdateItemButtons(self)
-
-    LiteBagFrame_UpdateBagButtons(self)
 end
 
 function LiteBagFrame_TabOnClick(self)
