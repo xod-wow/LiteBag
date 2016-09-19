@@ -2,9 +2,9 @@
 
 <!-- Copyright 2013-2016 Mike Battersby -->
 
-<Script file="BankFrame.lua" />
+<Script file="LiteBagBank.lua" />
 
-<Frame name="LiteBagBank" inherits="LiteBagFrameTemplate">
+<Frame name="LiteBagBank" parent="UIParent" inherits="LiteBagFrameTemplate">
 
     <Size x="384" y="512" />
 

@@ -25,7 +25,9 @@ function LiteBagFrame_Initialize(self)
                         or self.default_columns
                         or MIN_COLUMNS
 
-    self.items.ncols = max(self.columns, MIN_COLUMNS)
+    self.items.ncols = max(self.items.ncols, MIN_COLUMNS)
+
+    LiteBagPanel_Initialize(self.items, self.bagIDs)
 
 end
 
@@ -40,8 +42,6 @@ function LiteBagFrame_OnLoad(self)
         --              LiteBagFrame_OnLoad(self)
         return
     end
-
-    LiteBagPanel_Initialize(self.items, self.bagIDs)
 
     -- We hook ADDON_LOADED to do an initial layout of the frame, as we
     -- will know how big the bags are at that point and still not be
@@ -58,7 +58,10 @@ end
 -- rare enough it's OK to call LiteBagPanel_UpdateItemButtons to do everything.
 function LiteBagFrame_OnEvent(self, event, ...)
     if event == "ADDON_LOADED" then
-        LiteBagFrame_Initialize(self)
+        local name = ...
+        if name == "LiteBag" then
+            LiteBagFrame_Initialize(self)
+        end
     elseif event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
         LiteBagPanel_UpdateQuality(self.items)
         local bag = ...
@@ -71,7 +74,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "BAG_UPDATE_DELAYED" then
         self:UnregisterEvent("BAG_UPDATE_DELAYED")
         LiteBagPanel_UpdateBagSizes(self.items)
-        LiteBagPanel_Update(self.items)
+        LiteBagPanel_UpdateItemButtons(self.items)
     elseif event == "PLAYER_MONEY" then
         -- The only way to notice we bought a bag button is to see that we
         -- spent money while the bank is open.
@@ -88,7 +91,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "INVENTORY_SEARCH_UPDATE" then
         LiteBagPanel_UpdateSearchResults(self.items)
     else
-        LiteBagPanel_Update(self.items)
+        LiteBagPanel_UpdateItemButtons(self.items)
     end
 end
 
@@ -125,15 +128,15 @@ end
 
 function LiteBagFrame_StopSizing(self)
     self:StopMovingOrSizing()
-    local w, h = LiteBagFrame_CalcSize(self, self.columns)
+    local w, h = LiteBagPanel_CalcSize(self.items, self.items.ncols)
     self:SetSize(w, h)
-    LiteBag_SetFrameOption(self, "columns", self.columns)
+    LiteBag_SetFrameOption(self, "columns", self.items.ncols)
 end
 
 function LiteBagFrame_OnSizeChanged(self, w, h)
     if not self.sizing then return end
-    self.items.ncolumns = LiteBagFrame_CalcCols(self, w)
-    local w, h = LiteBagFrame_CalcSize(self, self.columns)
+    self.items.ncolumns = LiteBagPanel_CalcCols(self.items, w)
+    local w, h = LiteBagPanel_CalcSize(self.items, self.items.ncols)
     self:SetHeight(h)
     LiteBagPanel_Layout(self.items)
 end

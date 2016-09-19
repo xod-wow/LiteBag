@@ -24,10 +24,10 @@ function LiteBagBank_ShowPanel(self, n)
     local panel, data
     for i = 1, #BANK_PANELS do
         if i == 1 then
-            panel = self.slots
+            panel = self.items
         else
             data = BANK_PANELS[i]
-            panel = _D[data.name]
+            panel = _G[data.name]
             if i == n then
                 self:SetSize(data.size.x, data.size.y)
                 panel:SetParent(self)
@@ -48,7 +48,7 @@ function LiteBagBank_OnLoad(self)
     self.default_columns = 16
     self.isBank = true
 
-    LiteBagPanel_OnLoad(self)
+    LiteBagFrame_OnLoad(self)
 
     -- UIPanelLayout stuff so the Blizzard UIParent code will position us
     -- automatically. See
@@ -70,7 +70,6 @@ function LiteBagBank_OnLoad(self)
     PanelTemplates_SetNumTabs(self, 2)
     PanelTemplates_SetTab(self, 1)
     self.selectedTab = 1
-    LiteBagBank_ShowPanel(self, 1)
 
     -- Select the right search box 
     self.searchBox = BankItemSearchBox
@@ -109,7 +108,7 @@ function LiteBagBank_OnEvent(self, event, ...)
 end
 
 function LiteBagBank_OnShow(self)
-    LiteBagFrame_OnShow(self, event, ...)
+    LiteBagFrame_OnShow(self)
     self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
 end

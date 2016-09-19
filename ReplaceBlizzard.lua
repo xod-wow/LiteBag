@@ -10,7 +10,7 @@
 ----------------------------------------------------------------------------]]--
 
 -- A popup dialog for confirming the bag sort.
-StaticPopupDialogs["LM_CONFIRM_SORT"] = {
+StaticPopupDialogs["LB_CONFIRM_SORT"] = {
     preferredIndex = STATICPOPUPS_NUMDIALOGS,
     text = "%s\n"..CONFIRM_CONTINUE,
     button1 = YES,
@@ -26,7 +26,7 @@ local function DoOrStaticPopup(text, func)
     if IsShiftKeyDown() or LiteBag_GetGlobalOption("NoConfirmSort") then
         func()
     else
-        StaticPopup_Show("LM_CONFIRM_SORT", text, nil, func)
+        StaticPopup_Show("LB_CONFIRM_SORT", text, nil, func)
     end
 end
 
@@ -118,7 +118,7 @@ local function ReplaceBlizzardBank()
     -- Add the confirm text to the sort button tooltip.
 
     BankItemAutoSortButton:HookScript("OnEnter", function (self)
-        if not LM_GetGlobalOption("NoConfirmSort") then
+        if not LiteBag_GetGlobalOption("NoConfirmSort") then
             GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
         end
         GameTooltip:Show()

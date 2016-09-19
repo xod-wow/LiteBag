@@ -17,7 +17,8 @@ local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
 local LEFT_OFFSET, TOP_OFFSET = 14, 70
 local RIGHT_OFFSET, BOTTOM_OFFSET = 15, 35
 
-function LiteBagPanel_Initialize(bagIDs)
+function LiteBagPanel_Initialize(self, bagIDs)
+    LiteBag_Print("Initialize " .. self:GetName())
 
     -- Create the dummy container frames, so each itembutton can be parented
     -- by one allowing us to use all the Blizzard container frame code
@@ -49,7 +50,7 @@ end
 function LiteBagPanel_UpdateBagSizes(self)
     local n = 0
 
-    for _, bag in self.bagFrames do
+    for _, bag in ipairs(self.bagFrames) do
         for slot = 1, GetContainerNumSlots(bag:GetID()) do
             n = n + 1
             if not self.itemButtons[n] then
@@ -121,7 +122,7 @@ local function IterateItemButtonsByBag(self, bagID)
         while true do
             n = n + 1
             if n > self.size then return end
-            if self.itemButtons[n]:GetID() == bagID then
+            if self.itemButtons[n]:GetParent():GetID() == bagID then
                 return self.itemButtons[n]
             end
         end
@@ -141,48 +142,49 @@ function LiteBagPanel_UnhighlightBagButtons(self, bagID)
 end
 
 function LiteBagPanel_ClearNewItems(self)
-    for b in LiteBagPanel_IterateItemButtons(self) do
+    for b in IterateItemButtons(self) do
         LiteBagItemButton_ClearNewItem(b)
     end
 end
 
 function LiteBagPanel_UpdateItemButtons(self)
-    for b in LiteBagPanel_IterateItemButtons(self) do
+    for b in IterateItemButtons(self) do
         LiteBagItemButton_Update(b)
     end
 end
 
 function LiteBagPanel_UpdateCooldowns(self)
-    for b in LiteBagPanel_IterateItemButtons(self) do
+    for b in IterateItemButtons(self) do
         LiteBagItemButton_UpdateCooldown(b)
     end
 end
 
 function LiteBagPanel_UpdateSearchResults(self)
-    for b in LiteBagPanel_IterateItemButtons(self) do
+    for b in IterateItemButtons(self) do
         LiteBagItemButton_UpdateFiltered(b)
     end
 end
 
 function LiteBagPanel_UpdateLocked(self)
-    for b in LiteBagPanel_IterateItemButtons(self) do
+    for b in IterateItemButtons(self) do
         LiteBagItemButton_UpdateLocked(b)
     end
 end
 
 function LiteBagPanel_UpdateQuality(self)
-    for b in LiteBagPanel_IterateItemButtons(self) do
+    for b in IterateItemButtons(self) do
         LiteBagItemButton_UpdateQuality(b)
     end
 end
 
 function LiteBagPanel_UpdateQuestTextures(self)
-    for b in LiteBagPanel_IterateItemButtons(self) do
+    for b in IterateItemButtons(self) do
         LiteBagItemButton_UpdateQuestTexture(b)
     end
 end
 
 function LiteBagPanel_OnLoad(self)
+    LiteBag_Print("OnLoad " .. self:GetName())
     self.size = 0
     self.ncols = 8
     self.itemButtons = { }
@@ -190,15 +192,17 @@ function LiteBagPanel_OnLoad(self)
 end
 
 function LiteBagPanel_OnShow(self)
+    LiteBag_Print("OnShow")
     LiteBagPanel_Layout(self)
-    LiteBagBagFrame_Update(self.bags)
+    LiteBagPanel_UpdateItemButtons(self)
 end
 
 function LiteBagPanel_OnHide(self)
+    LiteBag_Print("OnHide")
     -- Judging by the code in FrameXML/ContainerFrame.lua items are tagged
     -- by the server as "new" in some cases, and you're supposed to clear
     -- the new flag after you see it the first time.
-    LiteBagFrame_ClearNewItems(self)
+    LiteBagPanel_ClearNewItems(self)
 end
 
 -- Not hooked in (yet?)

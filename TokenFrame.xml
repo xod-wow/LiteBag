@@ -2,7 +2,7 @@
 
 <!-- Copyright 2013-2016 Mike Battersby -->
 
-<Script file="Tokens.lua" />
+<Script file="TokenFrame.lua" />
 
 <Frame name="LiteBagTokenFrameTemplate" virtual="true">
 

@@ -40,7 +40,7 @@ function LiteBagInventory_OnLoad(self)
     self.default_columns = 8
     self.isBackpack = true
 
-    LiteBagPanel_OnLoad(self)
+    LiteBagFrame_OnLoad(self)
 
     -- Close with ESC key
     tinsert(UISpecialFrames, self:GetName())
@@ -49,30 +49,9 @@ function LiteBagInventory_OnLoad(self)
     self.searchBox = BagItemSearchBox
     self.sortButton = BagItemAutoSortButton
 
-    -- UIPanelLayout stuff so the Blizzard UIParent code will position us
-    -- automatically. See
-    --   http://www.wowwiki.com/Creating_standard_left-sliding_frames
-    -- but note that UIPanelLayout-enabled isn't a thing at all.
-
-    self:SetAttribute("UIPanelLayout-defined", true)
-    self:SetAttribute("UIPanelLayout-area", "left")
-    self:SetAttribute("UIPanelLayout-pushable", 6)
-
-    -- Different inset texture for the bank
-
-    self.Inset.Bg:SetTexture("Interface\\FrameGeneral\\UI-Background-Rock", true, true)
-
-    -- Set up the tabs
-
-    self.Tab1:Show()
-    self.Tab2:Show()
-    PanelTemplates_SetNumTabs(self, 2)
-    PanelTemplates_SetTab(self, 1)
-    self.selectedTab = 1
-
     -- Select the right search box 
-    self.searchBox = BankItemSearchBox
-    self.sortButton = BankItemAutoSortButton
+    self.searchBox = BagItemSearchBox
+    self.sortButton = BagItemAutoSortButton
 
     -- Frame open/close events for Inventory
     for _, event in ipairs(OPEN_EVENTS) do self:RegisterEvent(event) end
@@ -91,7 +70,7 @@ function LiteBagInventory_OnEvent(self, event, ...)
 end
 
 function LiteBagInventory_OnShow(self, ...)
-    self.TitleText:SetText(GetBagName(self.BagIDS[1]))
+    self.TitleText:SetText(GetBagName(self.bagIDs[1]))
     self.portrait:SetTexture("Interface\\MERCHANTFRAME\\UI-BuyBack-Icon")
     SetMainMenuBarButtons(true)
     LiteBagFrame_SetPosition(self)
