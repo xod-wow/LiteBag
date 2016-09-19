@@ -130,9 +130,45 @@ function LiteBagPanel_UnhighlightBagButtons(self, bagID)
     end
 end
 
-function LiteBagFrame_ClearNewItems(self)
+function LiteBagPanel_ClearNewItems(self)
     for b in LiteBagPanel_IterateItemButtons(self)
         LiteBagItemButton_ClearNewItem(b)
+    end
+end
+
+function LiteBagPanel_UpdateItemButtons(self)
+    for b in LiteBagPanel_IterateItemButtons(self)
+        LiteBagItemButton_Update(b)
+    end
+end
+
+function LiteBagPanel_UpdateCooldowns(self)
+    for b in LiteBagPanel_IterateItemButtons(self)
+        LiteBagItemButton_UpdateCooldown(b)
+    end
+end
+
+function LiteBagPanel_UpdateSearchResults(self)
+    for b in LiteBagPanel_IterateItemButtons(self)
+        LiteBagItemButton_UpdateFiltered(b)
+    end
+end
+
+function LiteBagPanel_UpdateLocked(self)
+    for b in LiteBagPanel_IterateItemButtons(self)
+        LiteBagItemButton_UpdateLocked(b)
+    end
+end
+
+function LiteBagPanel_UpdateQuality(self)
+    for b in LiteBagPanel_IterateItemButtons(self)
+        LiteBagItemButton_UpdateQuality(b)
+    end
+end
+
+function LiteBagPanel_UpdateQuestTextures(self)
+    for b in LiteBagPanel_IterateItemButtons(self)
+        LiteBagItemButton_UpdateQuestTexture(b)
     end
 end
 
