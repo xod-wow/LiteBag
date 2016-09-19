@@ -80,6 +80,9 @@ function LiteBagPanel_Layout(self)
     end
 end
 
+-- Note again, this is SetAllPoints() onto a Portrait frame, so there is
+-- padding on the edges to align the buttons into the inset.
+
 function LiteBagPanel_CalcSize(self,  ncols)
     local w, h = self.itemButtons[1]:GetSize()
     local nrows = ceil(self.size / ncols)
