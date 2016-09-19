@@ -97,4 +97,15 @@ local function Update(button)
     end
 end
 
-hooksecurefunc("LiteBagItemButton_Update", function (b) Update(b) end)
+hooksecurefunc(
+    "LiteBagItemButton_Update",
+    function (b) Update(b) end
+)
+hooksecurefunc(
+    "LiteBagFrame_OnShow",
+    function (f) f:RegisterEvent("EQUIPMENT_SETS_CHANGED") end
+)
+hooksecurefunc(
+    "LiteBagFrame_OnHide",
+    function (f) f:UnregisterEvent("EQUIPMENT_SETS_CHANGED") end
+)

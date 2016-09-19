@@ -34,12 +34,15 @@ end
 local TOOLTIP_NOCONFIRM_TEXT = format("%s: No confirmation", SHIFT_KEY)
 
 local function ReplaceBlizzardInventory()
-    local hideFunc = function () LiteBagFrame_Hide(LiteBagInventory) end
-    local showFunc = function () LiteBagFrame_Show(LiteBagInventory) end
-    local toggleFunc = function () LiteBagFrame_ToggleShown(LiteBagInventory) end
-
-    -- Turn our Inventory frame on.
-    LiteBagFrame_RegisterHideShowEvents(LiteBagInventory)
+    local hideFunc = function () LiteBagInventory:Hide() end
+    local showFunc = function () LiteBagInventory:Show() end
+    local toggleFunc = function () 
+            if LiteBagInventory:IsShown() then
+                LiteBagInventory:Hide()
+            else
+                LiteBagInventory:Show()
+            end
+        end
 
     -- Turn the Blizzard frames off
     for i=1, NUM_CONTAINER_FRAMES do
@@ -87,9 +90,6 @@ end
 
 local function ReplaceBlizzardBank()
 
-    -- Turn our Bag frame on.
-    LiteBagFrame_RegisterHideShowEvents(LiteBagBank)
-
     -- The reagent bank in WoW 6.0 changed UseContainerItem() to have a
     -- fourth argument which is true/false "should we put this thing into
     -- the reagent bank", which ContainerFrameItemButton_OnClick sets with
@@ -108,34 +108,24 @@ local function ReplaceBlizzardBank()
     BankFrame:SetScript("OnShow", function () end)
     BankFrame:SetScript("OnHide", function () end)
 
-    LiteBagBank.Tab1:HookScript("OnClick", function () BankFrame.selectedTab = 1 end)
-    LiteBagBank.Tab2:HookScript("OnClick", function () BankFrame.selectedTab = 2 end)
+    local OnClick = function (tab) BankFrame.selectedTab = tab:GetID() end
+    LiteBagBank.Tab1:HookScript("OnClick", OnClick)
+    LiteBagBank.Tab2:HookScript("OnClick", OnClick)
     LiteBagBank:HookScript("OnShow", function () BankFrame:Show() end)
     LiteBagBank:HookScript("OnHide", function () BankFrame:Hide() end)
 
 
-    -- Add the confirm text to the sort button tooltip. I think we could
-    -- probably HookScript this now instead of SetScript.  The SetScript is
-    -- left over from when we weren't doing the BankFrame tab fake-up, above.
-    -- 
-    -- BankItemAutoSortButton:HookScript("OnEnter", function (self)
-    --     if not LM_GetGlobalOption("NoConfirmSort") then
-    --         GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
-    --     end
-    --     GameTooltip:Show()
-    --     end)
-    BankItemAutoSortButton:SetScript("OnEnter", function (self)
-            GameTooltip:SetOwner(self)
-            if self:GetParent().selectedTab == 1 then
-                GameTooltip:SetText(BAG_CLEANUP_BANK)
-            else
-                GameTooltip:SetText(BAG_CLEANUP_REAGENT_BANK)
-            end
+    -- Add the confirm text to the sort button tooltip.
+
+    BankItemAutoSortButton:HookScript("OnEnter", function (self)
+        if not LM_GetGlobalOption("NoConfirmSort") then
             GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
-            GameTooltip:Show()
+        end
+        GameTooltip:Show()
         end)
 
     -- Change the sort button to call our confirm function.
+
     BankItemAutoSortButton:SetScript("OnClick", function (self)
             local parent = self:GetParent()
             if (parent.selectedTab == 1) then

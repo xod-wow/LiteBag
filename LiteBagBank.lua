@@ -1,0 +1,111 @@
+--[[----------------------------------------------------------------------------
+
+  LiteBag/BankFrame.lua
+
+  Copyright 2013-2016 Mike Battersby
+
+  Released under the terms of the GNU General Public License version 2 (GPLv2).
+  See the file LICENSE.txt.
+
+----------------------------------------------------------------------------]]--
+
+function LiteBagBank_TabOnClick(self)
+    local parent = self:GetParent()
+    PanelTemplates_SetTab(parent, self:GetID())
+    LiteBagBank_ShowPanel(parent, self:GetID())
+end
+
+local BANK_PANEL_NAMES = {
+    [1] = function () return UnitName("npc") end,
+    [2] = function () return REAGENT_BANK end,
+}
+
+function LiteBagBank_ShowPanel(self, n)
+    local panel, data
+    for i = 1, #BANK_PANELS do
+        if i == 1 then
+            panel = self.slots
+        else
+            data = BANK_PANELS[i]
+            panel = _D[data.name]
+            if i == n then
+                self:SetSize(data.size.x, data.size.y)
+                panel:SetParent(self)
+                panel:SetAllPoints()
+            end
+        end
+        if i == n then
+            self.TitleText:SetText(BANK_PANEL_NAMES[i]())
+            panel:Show()
+        else
+            panel:Hide()
+        end
+    end
+end
+
+function LiteBagBank_OnLoad(self)
+    self.bagIDs = { -1, 5, 6, 7, 8, 9, 10, 11 }
+    self.default_columns = 16
+    self.isBank = true
+
+    LiteBagPanel_OnLoad(self)
+
+    -- UIPanelLayout stuff so the Blizzard UIParent code will position us
+    -- automatically. See
+    --   http://www.wowwiki.com/Creating_standard_left-sliding_frames
+    -- but note that UIPanelLayout-enabled isn't a thing at all.
+
+    self:SetAttribute("UIPanelLayout-defined", true)
+    self:SetAttribute("UIPanelLayout-area", "left")
+    self:SetAttribute("UIPanelLayout-pushable", 6)
+
+    -- Different inset texture for the bank
+
+    self.Inset.Bg:SetTexture("Interface\\FrameGeneral\\UI-Background-Rock", true, true)
+
+    -- Set up the tabs
+
+    self.Tab1:Show()
+    self.Tab2:Show()
+    PanelTemplates_SetNumTabs(self, 2)
+    PanelTemplates_SetTab(self, 1)
+    self.selectedTab = 1
+
+    -- Select the right search box 
+    self.searchBox = BankItemSearchBox
+    self.sortButton = BankItemAutoSortButton
+
+    -- Bank frame specific events
+    self:RegisterEvent("BANKFRAME_OPENED")
+    self:RegisterEvent("BANKFRAME_CLOSED")
+end
+
+function LiteBagBank_OnEvent(self, event, ...)
+    if event == "BANKFRAME_OPENED" then
+        ShowUIPanel(self)
+    elseif event == "BANKFRAME_CLOSED" then
+        HideUIPanel(self)
+    elseif event == "INVENTORY_SEARCH_UPDATE" then
+        ContainerFrame_UpdateSearchResults(ReagentbankFrame)
+        LiteBagFrame_OnEvent(self, event, ...)
+    elseif event == "ITEM_LOCK_CHANGED" then
+        local bag, slot = ...
+        if bag == REAGENTBANK_CONTAINER then
+            local button = ReagentBankFrame["Item"..(slot)]
+            if button then
+                BankFrameItemButton_UpdateLocked(button)
+            end
+        else
+            LiteBagFrame_OnEvent(self, event, ...)
+        end
+    else
+        LiteBagFrame_OnEvent(self, event, ...)
+    end
+end
+
+function LiteBagBank_OnShow(self, event, ...)
+    self.TitleText:SetText(UnitName("npc"))
+    SetPortraitTexture(self.portrait, "npc")
+    LiteBagFrame_OnShow(self, event, ...)
+end
+

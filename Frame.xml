@@ -15,40 +15,15 @@
 </Frame>
 
 <Frame name="LiteBagFrameTemplate"
-       movable="true" resizable="true" clampedToScreen="true"
        enableMouse="true"
        frameStrata="HIGH" topLevel="true" hidden="true"
        inherits="ButtonFrameTemplate" virtual="true">
 
     <Size x="384" y="512" />
 
-    <ResizeBounds>
-        <minResize x="360" y="183" />
-    </ResizeBounds>
-
     <Frames>
 
-        <Button name="$parentDragButton">
-            <Size x="0" y="20"/>
-            <Anchors>
-                <Anchor point="TOPLEFT"/>
-                <Anchor point="TOPRIGHT"/>
-            </Anchors>
-            <Scripts>
-                <OnLoad>
-                    self:RegisterForClicks("LeftButton")
-                </OnLoad>
-                <OnMouseDown>
-                    LiteBagFrame_StartMoving(self:GetParent())
-                </OnMouseDown>
-                <OnMouseUp>
-                    LiteBagFrame_StopMoving(self:GetParent())
-                </OnMouseUp>
-                <OnHide>
-                    LiteBagFrame_StopMoving(self:GetParent())
-                </OnHide>
-            </Scripts>
-        </Button>
+        <Frame name="$parentItems" parentKey="items" setAllPoints="true" />
 
         <Button name="$parentResizeBottomRight">
             <Size x="16" y="16" />
@@ -108,26 +83,6 @@
                 <Anchor point="BOTTOMRIGHT" x="2" y="9" />
             </Anchors>
         </Frame>
-
-        <Frame name="$parentSlots" parentKey="slots" setAllPoints="true" />
-
-        <Button name="$parentTab1" inherits="CharacterFrameTabButtonTemplate" parentKey="Tab1" id="1" text="BANK" hidden="true">
-            <Anchors>
-                <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="11" y="2" />
-            </Anchors>
-            <Scripts>
-                <OnClick function="LiteBagFrame_TabOnClick" />
-            </Scripts>
-        </Button>
-
-        <Button name="$parentTab2" inherits="CharacterFrameTabButtonTemplate" parentKey="Tab2" id="2" text="REAGENT_BANK" hidden="true">
-            <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-15" y="0" />
-            </Anchors>
-            <Scripts>
-                <OnClick function="LiteBagFrame_TabOnClick" />
-            </Scripts>
-        </Button>
 
     </Frames>
 

@@ -44,10 +44,6 @@
     $parentCooldown (Cooldown)
         Normal item cooldown frame (does the sweep etc.).
 
-  Added by LiteBagItemButtonTemplate:
-    self.backgroundTexture (Texture level=BACKGROUND/0)
-        The slot background, so that empty slots have a texture.
-
 ----------------------------------------------------------------------------]]--
 
 function LiteBagItemButton_UpdateItem(self)

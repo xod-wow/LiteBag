@@ -6,11 +6,14 @@
 ## SavedVariablesPerCharacter: LiteBag_OptionsDB
 
 Options.lua
+
+BagButton.xml
 ItemButton.xml
-BagFrame.xml
 TokenFrame.xml
+Panel.xml
 Frame.xml
-LiteBag.xml
+LiteBagBank.xml
+LiteBagInventory.xml
 ReplaceBlizzard.lua
 
 Plugin_EquipSets\EquipSets.xml

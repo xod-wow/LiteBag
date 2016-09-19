@@ -120,8 +120,8 @@ end
 
 function LiteBagBagButton_OnEnter(self)
 
-    local frame = self:GetParent():GetParent()
-    LiteBagFrame_HighlightButtons(frame, self:GetID())
+    local frame = self:GetParent()
+    LiteBagPanel_HighlightButtons(frame, self:GetID())
 
     GameTooltip:SetOwner(self, "ANCHOR_LEFT")
 
@@ -154,8 +154,8 @@ function LiteBagBagButton_OnEnter(self)
 end
 
 function LiteBagBagButton_OnLeave(self)
-    local frame = self:GetParent():GetParent()
-    LiteBagFrame_UnhighlightButtons(frame, self:GetID())
+    local frame = self:GetParent()
+    LiteBagPanel_UnhighlightButtons(frame, self:GetID())
     GameTooltip:Hide()
     ResetCursor()
 end
@@ -191,28 +191,4 @@ end
 
 function LiteBagBagButtonFilterDropdown_OnLoad(self)
     UIDropDownMenu_Initialize(self, ContainerFrameFilterDropDown_Initialize, "MENU")
-end
-
-function LiteBagBagFrame_SetBagIDs(self, bagIDs)
-    wipe(self.bagIDs)
-
-    for _,id in ipairs(bagIDS) do
-        tinsert(self.bagIDS, id)
-    end
-end
-
-function LiteBagBagFrame_Update(self)
-    for i,b in ipairs(self.bagButtons) do
-        if self.bagIDs[i] then
-            b:SetID(self.bagIDs[i])
-            LiteBagBagButton_Update(b)
-            b:Show()
-        else
-            b:Hide()
-        end
-    end
-end
-
-function LiteBagBagFrame_OnLoad(self)
-    self.bagIDs = { }
 end

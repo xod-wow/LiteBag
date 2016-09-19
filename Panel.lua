@@ -22,12 +22,26 @@ function LiteBagPanel_Initialize(bagIDs)
     -- Create the dummy container frames, so each itembutton can be parented
     -- by one allowing us to use all the Blizzard container frame code
 
-    for i, id in bagIDs do
+    for i, id in ipairs(bagIDs) do
         local name = format("%sContainerFrame%d", self:GetName(), i)
         local bagFrame = CreateFrame("Frame", name, self)
         bagFrame:SetID(id)
         tinsert(self.bagFrames, bagFrame)
     end
+
+    -- Set up the bag buttons with their bag IDs
+
+    for i, b in ipairs(self.bagButtons) do
+        if bagIDs[i] then
+            b:SetID(bagIDs[i])
+            LiteBagBagButton_Update(b)
+            b:Show()
+        else
+            b:Hide()
+        end
+    end
+
+    -- And update ourself for the bag sizes
 
     LiteBagPanel_UpdateBagSizes(self)
 end
@@ -49,13 +63,6 @@ function LiteBagPanel_UpdateBagSizes(self)
     end
 
     self.size = n
-end
-
-function LiteBagPanel_SetColumns(self, ncols)
-    self.ncols = ncols
-    if self:IsShown() then
-        LiteBagPanel_Layout(self)
-    end
 end
 
 function LiteBagPanel_Layout(self)
@@ -184,6 +191,7 @@ end
 
 function LiteBagPanel_OnShow(self)
     LiteBagPanel_Layout(self)
+    LiteBagBagFrame_Update(self.bags)
 end
 
 function LiteBagPanel_OnHide(self)
@@ -191,4 +199,9 @@ function LiteBagPanel_OnHide(self)
     -- by the server as "new" in some cases, and you're supposed to clear
     -- the new flag after you see it the first time.
     LiteBagFrame_ClearNewItems(self)
+end
+
+-- Not hooked in (yet?)
+function LiteBagPanel_OnSizeChanged(self)
+    LiteBagPanel_Layout(self)
 end
