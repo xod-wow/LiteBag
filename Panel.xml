@@ -5,6 +5,13 @@
 <Script file="Panel.lua" />
 
 <Frame name="LiteBagPanelTemplate" virtual="true">
+    <Frames>
+        <Frame name="$parentBagFrame" parentKey="bags" inherits="LiteBagBagFrameTemplate" />
+            <Anchors>
+                <Anchor point="TOPLEFT" x="60" y="-31" />
+            </Anchors>
+        </Frame>
+    </Frames>
     <Scripts>
         <OnLoad function="LiteBagPanel_OnLoad" />
         <OnShow function="LiteBagPanel_OnShow" />

@@ -109,18 +109,7 @@
             </Anchors>
         </Frame>
 
-        <!--
-          BagButtons and ItemButtons inside slots for group hide/show
-        -->
-
-        <Frame name="$parentSlots" parentKey="slots" setAllPoints="true">
-            <Frames>
-                <Frame name="$parentBagFrame" parentKey="bags" inherits="LiteBagBagFrameTemplate" />
-                <Anchors>
-                    <Anchor point="TOPLEFT" x="60" y="-31" />
-                </Anchors>
-            </Frames>
-        </Frame>
+        <Frame name="$parentSlots" parentKey="slots" setAllPoints="true" />
 
         <Button name="$parentTab1" inherits="CharacterFrameTabButtonTemplate" parentKey="Tab1" id="1" text="BANK" hidden="true">
             <Anchors>

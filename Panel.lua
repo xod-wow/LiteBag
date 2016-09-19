@@ -1,6 +1,6 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag2/Panel.lua
+  LiteBag/Panel.lua
 
   Copyright 2013-2016 Mike Battersby
 
@@ -36,7 +36,7 @@ function LiteBagPanel_UpdateBagSizes(self)
     local n = 0
 
     for _, bag in self.bagFrames do
-        for slot = 1, GetContainerNumSlots(bag:GetID())
+        for slot = 1, GetContainerNumSlots(bag:GetID()) do
             n = n + 1
             if not self.itemButtons[n] then
                 local name = format("%sItemButton%d", self:GetName(), n)
@@ -72,7 +72,7 @@ function LiteBagPanel_Layout(self)
             itemButton:SetPoint("TOPLEFT", self.itemButtons[i-1], "TOPRIGHT", BUTTON_X_GAP, 0)
         end
 
-        if i < = self.size then
+        if i <= self.size then
             itemButton:Show()
         else
             itemButton:Hide()
@@ -134,43 +134,43 @@ function LiteBagPanel_UnhighlightBagButtons(self, bagID)
 end
 
 function LiteBagPanel_ClearNewItems(self)
-    for b in LiteBagPanel_IterateItemButtons(self)
+    for b in LiteBagPanel_IterateItemButtons(self) do
         LiteBagItemButton_ClearNewItem(b)
     end
 end
 
 function LiteBagPanel_UpdateItemButtons(self)
-    for b in LiteBagPanel_IterateItemButtons(self)
+    for b in LiteBagPanel_IterateItemButtons(self) do
         LiteBagItemButton_Update(b)
     end
 end
 
 function LiteBagPanel_UpdateCooldowns(self)
-    for b in LiteBagPanel_IterateItemButtons(self)
+    for b in LiteBagPanel_IterateItemButtons(self) do
         LiteBagItemButton_UpdateCooldown(b)
     end
 end
 
 function LiteBagPanel_UpdateSearchResults(self)
-    for b in LiteBagPanel_IterateItemButtons(self)
+    for b in LiteBagPanel_IterateItemButtons(self) do
         LiteBagItemButton_UpdateFiltered(b)
     end
 end
 
 function LiteBagPanel_UpdateLocked(self)
-    for b in LiteBagPanel_IterateItemButtons(self)
+    for b in LiteBagPanel_IterateItemButtons(self) do
         LiteBagItemButton_UpdateLocked(b)
     end
 end
 
 function LiteBagPanel_UpdateQuality(self)
-    for b in LiteBagPanel_IterateItemButtons(self)
+    for b in LiteBagPanel_IterateItemButtons(self) do
         LiteBagItemButton_UpdateQuality(b)
     end
 end
 
 function LiteBagPanel_UpdateQuestTextures(self)
-    for b in LiteBagPanel_IterateItemButtons(self)
+    for b in LiteBagPanel_IterateItemButtons(self) do
         LiteBagItemButton_UpdateQuestTexture(b)
     end
 end

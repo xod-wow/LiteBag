@@ -70,8 +70,8 @@ function LiteBagFrame_OnLoad(self)
         self.dummyContainerFrames[id] = bag
     end
 
-    LiteBagBagFrame_SetBagIDs(self.slots.bags, self.bagIDs)
-    LiteBagBagFrame_Update(self.slots.bags)
+    LiteBagBagFrame_Initialize(self.bags, self.bagIDs)
+    LiteBagBagFrame_Update(self.bags)
 
     -- The UIPanelLayout stuff makes the Blizzard UIParent code position a
     -- frame automatically in the stack from the left side.  See
@@ -195,7 +195,7 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "PLAYER_MONEY" then
         -- The only way to notice we bought a bag button is to see we
         -- spent money while the bank is open.
-        LiteBagBagFrame_Update(self.slots.bags)
+        LiteBagBagFrame_Update(self.bags)
     elseif event == "ITEM_LOCK_CHANGED" then
         local bag, slot = ...
         if LiteBagFrame_IsMyBag(self, bag) then
