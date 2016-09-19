@@ -30,6 +30,7 @@
     </Frames>
     <Scripts>
         <OnLoad function="LiteBagBank_OnLoad" />
+        <OnShow function="LiteBagBank_OnShow" />
         <OnEvent function="LiteBagBank_OnEvent" />
     </Scripts>
 

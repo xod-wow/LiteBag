@@ -36,6 +36,7 @@
         <OnLoad function="LiteBagInventory_OnLoad" />
         <OnShow function="LiteBagInventory_OnShow" />
         <OnHide function="LiteBagInventory_OnHide" />
+        <OnEvent function="LiteBagInventory_OnEvent" />
     </Scripts>
 
 </Frame>
