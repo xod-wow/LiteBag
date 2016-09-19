@@ -109,8 +109,6 @@ function LiteBagBank_OnEvent(self, event, ...)
 end
 
 function LiteBagBank_OnShow(self)
-    self.TitleText:SetText(UnitName("npc"))
-    SetPortraitTexture(self.portrait, "npc")
     LiteBagFrame_OnShow(self, event, ...)
     self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")

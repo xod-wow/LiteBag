@@ -55,30 +55,27 @@ end
 --
 -- Some events that fire a lot have specific code to just update the
 -- bags or changes that they fire for (where possible).  Others are
--- rare enough it's OK to call LiteBagFrame_Update to do everything.
+-- rare enough it's OK to call LiteBagPanel_UpdateItemButtons to do everything.
 function LiteBagFrame_OnEvent(self, event, ...)
     if event == "ADDON_LOADED" then
         LiteBagFrame_Initialize(self)
-        LiteBagFrame_Update(self)
     elseif event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
         LiteBagPanel_UpdateQuality(self.items)
         local bag = ...
-        LiteBagPanel_UpdateQuality(self, bag)
-    elseif event == "BAG_UPDATE" or event == "BAG_NEW_ITEMS_UPDATED" then
-        local bag = ...
-        LiteBagPanel_Update(self.items, bag)
+        LiteBagPanel_UpdateQuality(self.items, bag)
     elseif event == "BAG_CLOSED" then
         -- BAG_CLOSED fires when you drag a bag out of a slot but for the
         -- bank GetContainerNumSlots doesn't return the updated size yet,
         -- so we have to wait until BAG_UPDATE_DELAYED fires.
-        local bag = ...
         self:RegisterEvent("BAG_UPDATE_DELAYED")
     elseif event == "BAG_UPDATE_DELAYED" then
         self:UnregisterEvent("BAG_UPDATE_DELAYED")
+        LiteBagPanel_UpdateBagSizes(self.items)
         LiteBagPanel_Update(self.items)
     elseif event == "PLAYER_MONEY" then
         -- The only way to notice we bought a bag button is to see that we
         -- spent money while the bank is open.
+        LiteBagPanel_UpdateBagSizes(self.items)
         LiteBagPanel_Update(self.items)
     elseif event == "ITEM_LOCK_CHANGED" then
         local bag, slot = ...
@@ -175,8 +172,6 @@ function LiteBagFrame_OnShow(self)
     self:RegisterEvent("MERCHANT_CLOSED")
 
     LiteBagFrame_AttachSearchBox(self)
-    LiteBagFrame_Update(self)
-    LiteBagTokensFrame_Update(self)
 
     PlaySound("igBackPackOpen")
 end
@@ -193,9 +188,4 @@ function LiteBagFrame_AttachSearchBox(self)
     self.sortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -7, -32)
     self.sortButton.anchorBag = self
     self.sortButton:Show()
-end
-
-function LiteBagFrame_Update(self)
-    if not self:IsShown() then return end
-    LiteBagPanel_UpdateItemButtons(self.items)
 end

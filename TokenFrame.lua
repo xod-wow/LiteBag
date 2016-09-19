@@ -48,5 +48,5 @@ function LiteBagTokensFrame_OnLoad(self)
 end
 
 function LiteBagTokensFrame_OnShow(self)
-    LiteBagTokens_Update(self)
+    LiteBagTokensFrame_Update(self)
 end
