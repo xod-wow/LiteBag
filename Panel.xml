@@ -10,7 +10,6 @@
         <OnShow function="LiteBagPanel_OnShow" />
         <OnHide function="LiteBagPanel_OnHide" />
         <OnEvent function="LiteBagPanel_OnEvent" />
-        <OnSizeChanged function="LiteBagPanel_OnSizeChanged" />
     </Scripts>
 </Frame>
 

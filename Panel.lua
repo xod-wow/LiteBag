@@ -96,7 +96,7 @@ function LiteBagPanel_CalcCols(self, width)
     return ncols
 end
 
-function LiteBagPanel_IterateItemButtons(self)
+local function IterateItemButtons(self)
     local n = 0
     return function ()
         n = n + 1
@@ -105,7 +105,7 @@ function LiteBagPanel_IterateItemButtons(self)
     end
 end
 
-function LiteBagPanel_IterateItemButtonsByBag(self, bagID)
+local function IterateItemButtonsByBag(self, bagID)
     local n = 0
     return function ()
         while true do
@@ -119,14 +119,20 @@ function LiteBagPanel_IterateItemButtonsByBag(self, bagID)
 end
         
 function LiteBagPanel_HighlightBagButtons(self, bagID)
-    for b in LiteBagPanel_IterateItemButtonsByBag(self, bagID) do
+    for b in IterateItemButtonsByBag(self, bagID) do
         b:LockHighlight()
     end
 end
 
 function LiteBagPanel_UnhighlightBagButtons(self, bagID)
-    for b in LiteBagPanel_IterateItemButtonsByBag(self, bagID) do
+    for b in IterateItemButtonsByBag(self, bagID) do
         b:UnlockHighlight()
+    end
+end
+
+function LiteBagFrame_ClearNewItems(self)
+    for b in LiteBagPanel_IterateItemButtons(self)
+        LiteBagItemButton_ClearNewItem(b)
     end
 end
 
@@ -142,8 +148,8 @@ function LiteBagPanel_OnShow(self)
 end
 
 function LiteBagPanel_OnHide(self)
-end
-
-function LiteBagPanel_OnSizeChanged(self)
-    LiteBagPanel_Layout(self)
+    -- Judging by the code in FrameXML/ContainerFrame.lua items are tagged
+    -- by the server as "new" in some cases, and you're supposed to clear
+    -- the new flag after you see it the first time.
+    LiteBagFrame_ClearNewItems(self)
 end
