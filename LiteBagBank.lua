@@ -70,6 +70,7 @@ function LiteBagBank_OnLoad(self)
     PanelTemplates_SetNumTabs(self, 2)
     PanelTemplates_SetTab(self, 1)
     self.selectedTab = 1
+    LiteBagBank_ShowPanel(self, 1)
 
     -- Select the right search box 
     self.searchBox = BankItemSearchBox
@@ -82,6 +83,7 @@ end
 
 function LiteBagBank_OnEvent(self, event, ...)
     if event == "BANKFRAME_OPENED" then
+        LiteBagBank_ShowPanel(self, 1)
         ShowUIPanel(self)
     elseif event == "BANKFRAME_CLOSED" then
         HideUIPanel(self)
@@ -98,14 +100,23 @@ function LiteBagBank_OnEvent(self, event, ...)
         else
             LiteBagFrame_OnEvent(self, event, ...)
         end
+    elseif event == "PLAYERREAGENTBANKSLOTS_CHANGED" then
+        local slot = ...
+        BankFrameItemButton_Update(ReagentBankFrame["Item"..(slot)])
     else
         LiteBagFrame_OnEvent(self, event, ...)
     end
 end
 
-function LiteBagBank_OnShow(self, event, ...)
+function LiteBagBank_OnShow(self)
     self.TitleText:SetText(UnitName("npc"))
     SetPortraitTexture(self.portrait, "npc")
     LiteBagFrame_OnShow(self, event, ...)
+    self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
+    self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
 end
 
+function LiteBagBank_OnHide(self)
+    self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
+    self:UnregisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
+end

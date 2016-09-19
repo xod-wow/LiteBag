@@ -31,6 +31,7 @@
     <Scripts>
         <OnLoad function="LiteBagBank_OnLoad" />
         <OnShow function="LiteBagBank_OnShow" />
+        <OnHide function="LiteBagBank_OnHide" />
         <OnEvent function="LiteBagBank_OnEvent" />
     </Scripts>
 

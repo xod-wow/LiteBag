@@ -76,11 +76,6 @@ function LiteBagFrame_OnEvent(self, event, ...)
     elseif event == "BAG_UPDATE_DELAYED" then
         self:UnregisterEvent("BAG_UPDATE_DELAYED")
         LiteBagPanel_Update(self.items)
-    elseif event == "PLAYERBANKSLOTS_CHANGED" then
-        LiteBagPanel_Update(self.items)
-    elseif event == "PLAYERREAGENTBANKSLOTS_CHANGED" then
-        local slot = ...
-        LiteBagPanel_Update(self.items)
     elseif event == "PLAYER_MONEY" then
         -- The only way to notice we bought a bag button is to see that we
         -- spent money while the bank is open.
@@ -150,7 +145,6 @@ function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("BAG_CLOSED")
     self:UnregisterEvent("BAG_UPDATE")
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
-    self:UnregisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
     self:UnregisterEvent("ITEM_LOCK_CHANGED")
     self:UnregisterEvent("BAG_UPDATE_COOLDOWN")
     self:UnregisterEvent("INVENTORY_SEARCH_UPDATE")
@@ -169,7 +163,6 @@ function LiteBagFrame_OnShow(self)
     self:RegisterEvent("BAG_CLOSED")
     self:RegisterEvent("BAG_UPDATE")
     self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
-    self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
     self:RegisterEvent("ITEM_LOCK_CHANGED")
     self:RegisterEvent("BAG_UPDATE_COOLDOWN")
     self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
@@ -200,12 +193,6 @@ function LiteBagFrame_AttachSearchBox(self)
     self.sortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -7, -32)
     self.sortButton.anchorBag = self
     self.sortButton:Show()
-end
-
-function LiteBagFrame_UpdateBankItemButtons(panel)
-    for i = 1, panel.size do
-        BankFrameItemButton_Update(panel["Item"..i])
-    end
 end
 
 function LiteBagFrame_Update(self)
