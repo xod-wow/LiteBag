@@ -158,6 +158,8 @@ function LiteBagFrame_OnHide(self)
     self:UnregisterEvent("BAG_SLOT_FLAGS_UPDATED")
     self:UnregisterEvent("MERCHANT_SHOW")
     self:UnregisterEvent("MERCHANT_CLOSED")
+    self:UnregisterEvent("UNIT_INVENTORY_CHANGED")
+    self:UnregisterEvent("PLAYER_SPECIALIZATION_CHANGED")
 
     PlaySound("igBackPackClose")
 end
@@ -176,6 +178,8 @@ function LiteBagFrame_OnShow(self)
     self:RegisterEvent("BAG_SLOT_FLAGS_UPDATED")
     self:RegisterEvent("MERCHANT_SHOW")
     self:RegisterEvent("MERCHANT_CLOSED")
+    self:RegisterEvent("UNIT_INVENTORY_CHANGED")
+    self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
 
     local panel = self.currentPanel or self.items
     self:SetSize(panel:GetSize())

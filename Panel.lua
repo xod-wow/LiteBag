@@ -108,6 +108,11 @@ function LiteBagPanel_SetColsFromWidth(self, width)
     return ncols
 end
 
+function LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
+    if tContains(self.bagFrames, ArtifactRelicHelpBox.owner) then
+        ArtifactRelicHelpBox:Hide()
+    end
+end
 local function IterateItemButtons(self)
     local n = 0
     return function ()
@@ -148,7 +153,10 @@ function LiteBagPanel_ClearNewItems(self)
     end
 end
 
+
 function LiteBagPanel_UpdateItemButtons(self)
+    LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
+
     for b in IterateItemButtons(self) do
         LiteBagItemButton_Update(b)
     end
@@ -203,4 +211,5 @@ function LiteBagPanel_OnHide(self)
     -- by the server as "new" in some cases, and you're supposed to clear
     -- the new flag after you see it the first time.
     LiteBagPanel_ClearNewItems(self)
+    LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
 end
