@@ -55,7 +55,7 @@ function LiteBagPanel_UpdateBagSizes(self)
             n = n + 1
             if not self.itemButtons[n] then
                 local name = format("%sItemButton%d", self:GetName(), n)
-                self.itemButtons[n] = CreateFrame("Button", name, nil, "ContainerFrameItemButtonTemplate")
+                self.itemButtons[n] = CreateFrame("Button", name, nil, "LiteBagItemButtonTemplate")
                 self.itemButtons[n]:SetSize(37, 37)
             end
             self.itemButtons[n]:SetID(slot)

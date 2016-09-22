@@ -10,7 +10,7 @@
 ----------------------------------------------------------------------------]]--
 
 --[[----------------------------------------------------------------------------
-  Frame components of a ContainerFrameItemButton frame.
+  Frame components of a LiteBagItemButtonTemplate frame.
 
   Inherited from ItemButtonTemplate:
     $parentIconTexture (Texture level=BORDER/0) also self.icon
@@ -30,7 +30,7 @@
         and Highlight texture that aren't named.  We don't touch this, it's
         just part of the normal button click behaviour stuff.
 
-  From ContainerFrameItemButtonTemplate:
+  Inherited from ContainerFrameItemButtonTemplate:
     $parentIconQuestTexture (Texture level=ARTWORK/1)
         Shows the gold ! on items that will start a quest if you click them.
     self.JunkIcon (Texture level=OVERLAY/1)
@@ -45,6 +45,10 @@
         Normal item cooldown frame (does the sweep etc.).
     self.UpgradeItem
         Arrow shown when an item is an upgrade (added in 7.1).
+
+  Added by LiteBagItemButtonTemplate:
+    self.BackgroundTexture
+        Slot background to show through if the slot is empty.
 
 ----------------------------------------------------------------------------]]--
 
