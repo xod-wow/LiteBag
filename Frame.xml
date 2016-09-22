@@ -23,7 +23,10 @@
 
     <Frames>
 
-        <Frame name="$parentItems" parentKey="items" inherits="LiteBagPanelTemplate" setAllPoints="true" />
+        <Frame name="$parentItems" parentKey="items" inherits="LiteBagPanelTemplate" />
+        <Anchors>
+            <Anchor point="TOPLEFT" />
+        </Anchors>
 
         <Button name="$parentResizeBottomRight">
             <Size x="16" y="16" />

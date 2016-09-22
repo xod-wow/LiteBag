@@ -128,17 +128,20 @@ end
 
 function LiteBagFrame_StopSizing(self)
     self:StopMovingOrSizing()
-    local w, h = LiteBagPanel_CalcSize(self.items, self.items.ncols)
-    self:SetSize(w, h)
+
+    self:SetSize(self.items:GetSize())
+
     LiteBag_SetFrameOption(self, "columns", self.items.ncols)
 end
 
 function LiteBagFrame_OnSizeChanged(self, w, h)
     if not self.sizing then return end
-    self.items.ncolumns = LiteBagPanel_CalcCols(self.items, w)
-    local w, h = LiteBagPanel_CalcSize(self.items, self.items.ncols)
-    self:SetHeight(h)
+
+    LiteBagPanel_SetColsFromWidth(self.items, w)
     LiteBagPanel_Layout(self.items)
+    LiteBagPanel_UpdateSize(self.items)
+
+    self:SetHeight(self.items:GetHeight())
 end
 
 function LiteBagFrame_OnHide(self)
@@ -173,6 +176,9 @@ function LiteBagFrame_OnShow(self)
     self:RegisterEvent("BAG_SLOT_FLAGS_UPDATED")
     self:RegisterEvent("MERCHANT_SHOW")
     self:RegisterEvent("MERCHANT_CLOSED")
+
+    local panel = self.currentPanel or self.items
+    self:SetSize(panel:GetSize())
 
     LiteBagFrame_AttachSearchBox(self)
 

@@ -31,7 +31,7 @@ function LiteBagBank_ShowPanel(self, n)
             if i == n then
                 self:SetSize(data.size.x, data.size.y)
                 panel:SetParent(self)
-                panel:SetAllPoints()
+                panel:SetPoint("TOPLEFT", self, "TOPLEFT")
             end
         end
         if i == n then
@@ -41,6 +41,8 @@ function LiteBagBank_ShowPanel(self, n)
             panel:Hide()
         end
     end
+
+    self.currentPanel = panel
 end
 
 function LiteBagBank_OnLoad(self)
@@ -70,6 +72,9 @@ function LiteBagBank_OnLoad(self)
     PanelTemplates_SetNumTabs(self, 2)
     PanelTemplates_SetTab(self, 1)
     self.selectedTab = 1
+
+    -- Start with normal bank items panel
+    self.currentPanel = self.items
 
     -- Select the right search box 
     self.searchBox = BankItemSearchBox

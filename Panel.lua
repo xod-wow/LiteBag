@@ -12,8 +12,8 @@
 -- These are the gaps between the buttons
 local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
 
--- Because this Panel is meant to go SetAllPoints onto a PortraitFrame, this
--- is to position the buttons into the Inset part of the PortraitFrame.
+-- Because this Panel should overlay a PortraitFrame, this will position the
+-- buttons into the Inset part of the PortraitFrame.
 local LEFT_OFFSET, TOP_OFFSET = 14, 70
 local RIGHT_OFFSET, BOTTOM_OFFSET = 15, 35
 
@@ -88,22 +88,23 @@ function LiteBagPanel_Layout(self)
     end
 end
 
--- Note again, this is SetAllPoints() onto a Portrait frame, so there is
+-- Note again, this is overlayed onto a Portrait frame, so there is
 -- padding on the edges to align the buttons into the inset.
 
-function LiteBagPanel_CalcSize(self,  ncols)
+function LiteBagPanel_UpdateSize(self)
     local w, h = self.itemButtons[1]:GetSize()
-    local nrows = ceil(self.size / ncols)
+    local nrows = ceil(self.size / self.ncols)
 
-    local frameW = ncols * w + (ncols-1) * BUTTON_X_GAP + LEFT_OFFSET + RIGHT_OFFSET
+    local frameW = self.ncols * w + (self.ncols-1) * BUTTON_X_GAP + LEFT_OFFSET + RIGHT_OFFSET
     local frameH = nrows * h + (nrows-1) * BUTTON_Y_GAP + TOP_OFFSET + BOTTOM_OFFSET
 
-    return frameW, frameH
+    self:SetSize(frameW, frameH)
 end
 
-function LiteBagPanel_CalcCols(self, width)
+function LiteBagPanel_SetColsFromWidth(self, width)
     local w = self.itemButtons[1]:GetWidth()
     local ncols = floor( (width - LEFT_OFFSET - RIGHT_OFFSET + BUTTON_X_GAP) / (w + BUTTON_X_GAP) )
+    self.ncols = ncols
     return ncols
 end
 
@@ -193,7 +194,6 @@ end
 
 function LiteBagPanel_OnShow(self)
     LiteBag_Print("OnShow")
-    LiteBagPanel_Layout(self)
     LiteBagPanel_UpdateItemButtons(self)
 end
 
@@ -203,9 +203,4 @@ function LiteBagPanel_OnHide(self)
     -- by the server as "new" in some cases, and you're supposed to clear
     -- the new flag after you see it the first time.
     LiteBagPanel_ClearNewItems(self)
-end
-
--- Not hooked in (yet?)
-function LiteBagPanel_OnSizeChanged(self)
-    LiteBagPanel_Layout(self)
 end
