@@ -75,8 +75,9 @@
         </Frame>
 
         <Frame name="$parentTokenFrame" parentKey="tokenFrame" inherits="LiteBagTokenFrameTemplate">
+            <Size x="168" y="13" />
             <Anchors>
-                <Anchor point="BOTTOMRIGHT" x="2" y="9" />
+                <Anchor point="BOTTOMLEFT" x="2" y="9" />
             </Anchors>
         </Frame>
 
