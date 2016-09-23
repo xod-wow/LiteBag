@@ -106,13 +106,11 @@ hooksecurefunc(
 
 LiteBagInventoryPanel:HookScript("OnShow",
     function (f)
-        LiteBag_Print("Hooked OnShow!")
         f:RegisterEvent("EQUIPMENT_SETS_CHANGED")
     end
 )
 LiteBagBankPanel:HookScript("OnShow", 
     function (f)
-        LiteBag_Print("Hooked OnHide!")
         f:UnregisterEvent("EQUIPMENT_SETS_CHANGED")
     end
 )
