@@ -52,8 +52,10 @@ function LiteBagPanel_Initialize(self, bagIDs)
         end
     end
 
-    -- And update ourself for the bag sizes
-
+    -- And update ourself for the bag sizes. Need to watch PLAYER_LOGIN
+    -- because the size of the bags isn't known until then the first
+    -- time you start the game.
+    self:RegisterEvent("PLAYER_LOGIN")
     LiteBagPanel_UpdateBagSizes(self)
 end
 
@@ -275,6 +277,12 @@ end
 -- rare enough it's OK to call LiteBagPanel_UpdateItemButtons to do everything.
 function LiteBagPanel_OnEvent(self, event, ...)
     LiteBag_Print(format("Panel OnEvent %s %s", self:GetName(), event))
+
+    if event == "PLAYER_LOGIN" then
+        LiteBagPanel_UpdateBagSizes(self)
+        return
+    end
+
     if event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
         local bag = ...
         LiteBagPanel_UpdateQuality(self, bag)

@@ -109,7 +109,7 @@ LiteBagInventoryPanel:HookScript("OnShow",
         f:RegisterEvent("EQUIPMENT_SETS_CHANGED")
     end
 )
-LiteBagBankPanel:HookScript("OnShow", 
+LiteBagBankPanel:HookScript("OnHide", 
     function (f)
         f:UnregisterEvent("EQUIPMENT_SETS_CHANGED")
     end
