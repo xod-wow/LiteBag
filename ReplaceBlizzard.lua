@@ -64,9 +64,7 @@ local function ReplaceBlizzardInventory()
     -- This one is called when you click on a loot popup and you have
     -- one of those items in your bag already.
     OpenBag = function (bag)
-                    if LiteBagFrame_IsMyBag(LiteBagInventory, bag) then
-                        LiteBagFrame_Show(LiteBagInventory)
-                    end
+                    LiteBagFrame_Show(LiteBagInventory)
                 end
 
     -- These are the bag buttons in the menu bar at the bottom which are
@@ -88,6 +86,8 @@ local function ReplaceBlizzardInventory()
 
 end
 
+local hiddenBankParent = CreateFrame("Frame")
+
 local function ReplaceBlizzardBank()
 
     -- The reagent bank in WoW 6.0 changed UseContainerItem() to have a
@@ -99,7 +99,6 @@ local function ReplaceBlizzardBank()
     -- via the parent, and set its selectedTab and hide/show manually in sync
     -- with ours.
 
-    local hiddenBankParent = CreateFrame("Frame")
     hiddenBankParent:Hide()
     BankFrame:SetParent(hiddenBankParent)
     BankFrame:ClearAllPoints()
@@ -109,11 +108,11 @@ local function ReplaceBlizzardBank()
     BankFrame:SetScript("OnHide", function () end)
 
     local OnClick = function (tab) BankFrame.selectedTab = tab:GetID() end
-    LiteBagBank.Tab1:HookScript("OnClick", OnClick)
-    LiteBagBank.Tab2:HookScript("OnClick", OnClick)
+    for i = 1, #BANK_PANELS do
+        LiteBagBank.Tabs[i]:HookScript("OnClick", OnClick)
+    end
     LiteBagBank:HookScript("OnShow", function () BankFrame:Show() end)
     LiteBagBank:HookScript("OnHide", function () BankFrame:Hide() end)
-
 
     -- Add the confirm text to the sort button tooltip.
 
