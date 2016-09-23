@@ -20,7 +20,7 @@ local LEFT_OFFSET, TOP_OFFSET = 14, 70
 local RIGHT_OFFSET, BOTTOM_OFFSET = 15, 35
 
 function LiteBagPanel_Initialize(self, bagIDs)
-    LiteBag_Print("Initialize " .. self:GetName())
+    LiteBag_Print("Panel Initialize " .. self:GetName())
 
     -- Create the dummy container frames, so each itembutton can be parented
     -- by one allowing us to use all the Blizzard container frame code
@@ -58,6 +58,7 @@ function LiteBagPanel_Initialize(self, bagIDs)
 end
 
 function LiteBagPanel_UpdateBagSizes(self)
+    LiteBag_Print("Panel UpdateBagSizes " .. self:GetName())
     local n = 0
 
     for _, bag in ipairs(self.bagFrames) do
@@ -77,6 +78,7 @@ function LiteBagPanel_UpdateBagSizes(self)
 end
 
 function LiteBagPanel_Layout(self)
+    LiteBag_Print("Panel Layout " .. self:GetName())
     -- We process all the ItemButtons even if many of them are not
     -- shown, so that we hide the leftovers
 
@@ -102,6 +104,7 @@ end
 -- padding on the edges to align the buttons into the inset.
 
 function LiteBagPanel_UpdateSize(self)
+    LiteBag_Print("Panel UpdateSize " .. self:GetName())
     local w, h = self.itemButtons[1]:GetSize()
     local nrows = ceil(self.size / self.ncols)
 
@@ -112,6 +115,7 @@ function LiteBagPanel_UpdateSize(self)
 end
 
 function LiteBagPanel_SetWidth(self, width)
+    LiteBag_Print(format("Panel SetWidth %s %d", self:GetName(), w))
     local w = self.itemButtons[1]:GetWidth()
     local ncols = floor( (width - LEFT_OFFSET - RIGHT_OFFSET + BUTTON_X_GAP) / (w + BUTTON_X_GAP) )
     self.ncols = max(ncols, MIN_COLUMNS)
@@ -163,7 +167,6 @@ function LiteBagPanel_ClearNewItems(self)
     end
 end
 
-
 function LiteBagPanel_UpdateItemButtons(self)
     LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
 
@@ -203,7 +206,7 @@ function LiteBagPanel_UpdateQuestTextures(self)
 end
 
 function LiteBagPanel_OnLoad(self)
-    LiteBag_Print("OnLoad " .. self:GetName())
+    LiteBag_Print("Panel OnLoad " .. self:GetName())
     self.size = 0
     self.ncols = 8
     self.itemButtons = { }
@@ -211,7 +214,7 @@ function LiteBagPanel_OnLoad(self)
 end
 
 function LiteBagPanel_OnShow(self)
-    LiteBag_Print("OnShow")
+    LiteBag_Print("Panel OnShow " .. self:GetName())
     LiteBagPanel_UpdateItemButtons(self)
 
     self:RegisterEvent("BAG_CLOSED")
@@ -235,6 +238,7 @@ function LiteBagPanel_OnShow(self)
 end
 
 function LiteBagPanel_OnHide(self)
+    LiteBag_Print("Panel OnHide " .. self:GetName())
     -- Judging by the code in FrameXML/ContainerFrame.lua items are tagged
     -- by the server as "new" in some cases, and you're supposed to clear
     -- the new flag after you see it the first time.
@@ -268,6 +272,7 @@ end
 -- bags or changes that they fire for (where possible).  Others are
 -- rare enough it's OK to call LiteBagPanel_UpdateItemButtons to do everything.
 function LiteBagPanel_OnEvent(self, event, ...)
+    LiteBag_Print(format("Panel OnEvent %s %d", self:GetName(), event))
     if event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
         local bag = ...
         LiteBagPanel_UpdateQuality(self, bag)
