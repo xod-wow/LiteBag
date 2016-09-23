@@ -2,7 +2,7 @@
 
 <!-- Copyright 2013-2016 Mike Battersby -->
 
-<Script file="EquipSets.lua"/>
+<Script file="EquipSets.lua" />
 
 <Texture name="LiteBagEquipsetsTexture"
          file="Interface\Addons\LiteBag\Plugin_EquipSets\EquipSets"
