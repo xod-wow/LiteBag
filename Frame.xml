@@ -23,7 +23,6 @@
 
     <Frames>
 
-        <Frame name="$parentItems" parentKey="items" inherits="LiteBagPanelTemplate" />
         <Anchors>
             <Anchor point="TOPLEFT" />
         </Anchors>
@@ -38,18 +37,11 @@
                 <OnLoad function="RaiseFrameLevel" />
                 <OnMouseDown>
                     local parent = self:GetParent()
-                    if not parent.isBank or parent.selectedTab == 1 then
-                        parent.sizing = true
-                        parent:StartSizing("BOTTOMRIGHT")
-                    end
+                    LiteBagFrame_StartSizing(parent, "BOTTOMRIGHT")
                 </OnMouseDown>
                 <OnMouseUp>
                     local parent = self:GetParent()
-                    if not parent.isBank or parent.selectedTab == 1 then
-                        parent.sizing = nil
-                        parent:StartSizing("BOTTOMRIGHT")
-                        LiteBagFrame_StopSizing(parent)
-                    end
+                    LiteBagFrame_StopSizing(parent)
                 </OnMouseUp>
             </Scripts>
         </Button>
@@ -91,7 +83,6 @@
 
     <Scripts>
         <OnLoad function="LiteBagFrame_OnLoad" />
-        <OnEvent function="LiteBagFrame_OnEvent" />
         <OnHide function="LiteBagFrame_OnHide" />
         <OnShow function="LiteBagFrame_OnShow" />
         <OnSizeChanged function="LiteBagFrame_OnSizeChanged" />

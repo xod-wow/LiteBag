@@ -9,48 +9,31 @@
 
 ----------------------------------------------------------------------------]]--
 
-function LiteBagBank_TabOnClick(self)
-    local parent = self:GetParent()
-    PanelTemplates_SetTab(parent, self:GetID())
-    LiteBagBank_ShowPanel(parent, self:GetID())
-end
-
 local BANK_PANEL_NAMES = {
     [1] = function () return UnitName("npc") end,
     [2] = function () return REAGENT_BANK end,
 }
 
-function LiteBagBank_ShowPanel(self, n)
-    local panel, data
-    for i = 1, #BANK_PANELS do
-        if i == 1 then
-            panel = self.items
-        else
-            data = BANK_PANELS[i]
-            panel = _G[data.name]
-            if i == n then
-                self:SetSize(data.size.x, data.size.y)
-                panel:SetParent(self)
-                panel:SetPoint("TOPLEFT", self, "TOPLEFT")
-            end
-        end
-        if i == n then
-            self.TitleText:SetText(BANK_PANEL_NAMES[i]())
-            panel:Show()
-        else
-            panel:Hide()
-        end
+function LiteBagBank_OnLoad(self)
+    LiteBagFrame_OnLoad(self)
+
+    local panel = CreateFrame("Frame", "LiteBagBankPanel", self, "LiteBagPanelTemplate")
+    LiteBagPanel_Initialize(panel, { -1, 5, 6, 7, 8, 9, 10, 11 })
+    panel.title = BANK_PANEL_NAMES[1]
+    panel.portrait = "Interface\\MERCHANTFRAME\\UI-BuyBack-Icon"
+    panel.canResize = true
+    LiteBagFrame_AddPanel(self, panel)
+
+    for i = 2, #BANK_PANELS do
+        local data = BANK_PANELS[i]
+        panel = _G[data.name]
+        panel:SetSize(data.size.x, data.size.y)
+        panel.title = BANK_PANEL_NAMES[i]
+        panel.tabTitle = _G["BankFrameTab"..i]:GetText()
+        LiteBagFrame_AddPanel(self, panel)
     end
 
-    self.currentPanel = panel
-end
-
-function LiteBagBank_OnLoad(self)
-    self.bagIDs = { -1, 5, 6, 7, 8, 9, 10, 11 }
     self.default_columns = 16
-    self.isBank = true
-
-    LiteBagFrame_OnLoad(self)
 
     -- UIPanelLayout stuff so the Blizzard UIParent code will position us
     -- automatically. See
@@ -64,17 +47,6 @@ function LiteBagBank_OnLoad(self)
     -- Different inset texture for the bank
 
     self.Inset.Bg:SetTexture("Interface\\FrameGeneral\\UI-Background-Rock", true, true)
-
-    -- Set up the tabs
-
-    self.Tab1:Show()
-    self.Tab2:Show()
-    PanelTemplates_SetNumTabs(self, 2)
-    PanelTemplates_SetTab(self, 1)
-    self.selectedTab = 1
-
-    -- Start with normal bank items panel
-    self.currentPanel = self.items
 
     -- Select the right search box 
     self.searchBox = BankItemSearchBox

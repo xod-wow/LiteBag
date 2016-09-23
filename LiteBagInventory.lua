@@ -1,6 +1,6 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/InventoryFrame.lua
+  LiteBag/LiteBagInventory.lua
 
   Copyright 2013-2016 Mike Battersby
 
@@ -36,11 +36,14 @@ local function SetMainMenuBarButtons(self, checked)
 end
 
 function LiteBagInventory_OnLoad(self)
-    self.bagIDs = { 0, 1, 2, 3, 4 }
-    self.default_columns = 8
-    self.isBackpack = true
-
     LiteBagFrame_OnLoad(self)
+
+    local panel = CreateFrame("Frame", "LiteBagInventoryPanel", self, "LiteBagPanelTemplate")
+    LiteBagPanel_Initialize(panel, { 0, 1, 2, 3, 4 })
+    panel.title = function () return GetBagName(0) end
+    panel.portrait = "Interface\\MERCHANTFRAME\\UI-BuyBack-Icon"
+    panel.canResize = true
+    LiteBagFrame_AddPanel(self, panel)
 
     -- Close with ESC key
     tinsert(UISpecialFrames, self:GetName())
@@ -63,21 +66,16 @@ function LiteBagInventory_OnEvent(self, event, ...)
         self:Show()
     elseif tContains(CLOSE_EVENTS, event) then
         self:Hide()
-    else
-        LiteBagFrame_OnEvent(self, event, ...)
     end
-
 end
 
 function LiteBagInventory_OnShow(self, ...)
-    self.TitleText:SetText(GetBagName(self.bagIDs[1]))
-    self.portrait:SetTexture("Interface\\MERCHANTFRAME\\UI-BuyBack-Icon")
+    LiteBagFrame_OnShow(self, ...)
     SetMainMenuBarButtons(true)
     LiteBagFrame_SetPosition(self)
-    LiteBagFrame_OnShow(self, ...)
 end
 
 function LiteBagInventory_OnHide(self, ...)
+    LiteBagFrame_OnHide(self, ...)
     SetMainMenuBarButtons(false)
-    LiteBagFrame_OnShow(self, ...)
 end

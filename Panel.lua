@@ -9,6 +9,8 @@
 
 ----------------------------------------------------------------------------]]--
 
+local MIN_COLUMNS = 8
+
 -- These are the gaps between the buttons
 local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
 
@@ -28,6 +30,14 @@ function LiteBagPanel_Initialize(self, bagIDs)
         local bagFrame = CreateFrame("Frame", name, self)
         bagFrame:SetID(id)
         tinsert(self.bagFrames, bagFrame)
+    end
+
+    if tContains(bagIDs, BANK_CONTAINER) then
+        self.isBank = true
+    end
+
+    if tContains(bagIDs, BACKPACK_CONTAINER) then
+        self.isBackpack = true
     end
 
     -- Set up the bag buttons with their bag IDs
@@ -101,11 +111,11 @@ function LiteBagPanel_UpdateSize(self)
     self:SetSize(frameW, frameH)
 end
 
-function LiteBagPanel_SetColsFromWidth(self, width)
+function LiteBagPanel_SetWidth(self, width)
     local w = self.itemButtons[1]:GetWidth()
     local ncols = floor( (width - LEFT_OFFSET - RIGHT_OFFSET + BUTTON_X_GAP) / (w + BUTTON_X_GAP) )
-    self.ncols = ncols
-    return ncols
+    self.ncols = max(ncols, MIN_COLUMNS)
+    LiteBagPanel_UpdateSize(self)
 end
 
 function LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
@@ -203,13 +213,117 @@ end
 function LiteBagPanel_OnShow(self)
     LiteBag_Print("OnShow")
     LiteBagPanel_UpdateItemButtons(self)
+
+    self:RegisterEvent("BAG_CLOSED")
+    self:RegisterEvent("BAG_UPDATE")
+    self:RegisterEvent("ITEM_LOCK_CHANGED")
+    self:RegisterEvent("BAG_UPDATE_COOLDOWN")
+    self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
+    self:RegisterEvent("QUEST_ACCEPTED")
+    self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
+    self:RegisterEvent("PLAYER_MONEY")
+    self:RegisterEvent("BAG_NEW_ITEMS_UPDATED")
+    self:RegisterEvent("BAG_SLOT_FLAGS_UPDATED")
+    self:RegisterEvent("MERCHANT_SHOW")
+    self:RegisterEvent("MERCHANT_CLOSED")
+    self:RegisterEvent("UNIT_INVENTORY_CHANGED")
+    self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+
+    if self.isBank then
+        self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
+    end
 end
 
 function LiteBagPanel_OnHide(self)
-    LiteBag_Print("OnHide")
     -- Judging by the code in FrameXML/ContainerFrame.lua items are tagged
     -- by the server as "new" in some cases, and you're supposed to clear
     -- the new flag after you see it the first time.
     LiteBagPanel_ClearNewItems(self)
     LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
+
+    self:UnregisterEvent("BAG_CLOSED")
+    self:UnregisterEvent("BAG_UPDATE")
+    self:UnregisterEvent("ITEM_LOCK_CHANGED")
+    self:UnregisterEvent("BAG_UPDATE_COOLDOWN")
+    self:UnregisterEvent("INVENTORY_SEARCH_UPDATE")
+    self:UnregisterEvent("QUEST_ACCEPTED")
+    self:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
+    self:UnregisterEvent("PLAYER_MONEY")
+    self:UnregisterEvent("BAG_NEW_ITEMS_UPDATED")
+    self:UnregisterEvent("BAG_SLOT_FLAGS_UPDATED")
+    self:UnregisterEvent("MERCHANT_SHOW")
+    self:UnregisterEvent("MERCHANT_CLOSED")
+    self:UnregisterEvent("UNIT_INVENTORY_CHANGED")
+    self:UnregisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+
+    if self.isBank then
+        self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
+    end
+end
+
+-- These events are only registered while the panel is shown, so we can call
+-- the update functions without worrying that we don't need to.
+--
+-- Some events that fire a lot have specific code to just update the
+-- bags or changes that they fire for (where possible).  Others are
+-- rare enough it's OK to call LiteBagPanel_UpdateItemButtons to do everything.
+function LiteBagPanel_OnEvent(self, event, ...)
+    if event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
+        local bag = ...
+        LiteBagPanel_UpdateQuality(self, bag)
+        return
+    end
+
+    if event == "BAG_CLOSED" then
+        -- BAG_CLOSED fires when you drag a bag out of a slot but for the
+        -- bank GetContainerNumSlots doesn't return the updated size yet,
+        -- so we have to wait until BAG_UPDATE_DELAYED fires.
+        self:RegisterEvent("BAG_UPDATE_DELAYED")
+        return
+    end
+
+    if event == "BAG_UPDATE_DELAYED" then
+        self:UnregisterEvent("BAG_UPDATE_DELAYED")
+        LiteBagPanel_UpdateBagSizes(self)
+        -- FALLTHROUGH
+    end
+
+    if event == "PLAYER_MONEY" then
+        -- The only way to notice we bought a bag button is to see that we
+        -- spent money while the bank is open.
+        LiteBagPanel_UpdateBagSizes(self)
+        -- FALLTHROUGH
+    end
+
+    if event == "ITEM_LOCK_CHANGED" then
+        local bag, slot = ...
+        LiteBagPanel_UpdateLocked(self, bag)
+        return
+    end
+
+    if event == "BAG_UPDATE_COOLDOWN" then
+        local bag = ...
+        LiteBagPanel_UpdateCooldowns(self, bag)
+        return
+    end
+
+    if event == "QUEST_ACCEPTED" or event == "UNIT_QUEST_LOG_CHANGED" then
+        LiteBagPanel_UpdateQuestTextures(self)
+        return
+    end
+
+    if event == "INVENTORY_SEARCH_UPDATE" then
+        LiteBagPanel_UpdateSearchResults(self)
+        return
+    end
+
+    if event == "PLAYERBANKSLOTS_CHANGED" then
+        local slot = ...
+        if self.isBank and slot > NUM_BANKGENERIC_SLOTS then
+            LiteBagPanel_UpdateBagSizes(self)
+        end
+    end
+
+    -- Default action (some above fall through to do this as well).
+    LiteBagPanel_UpdateItemButtons(self)
 end
