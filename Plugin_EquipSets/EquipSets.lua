@@ -102,10 +102,10 @@ hooksecurefunc(
     function (b) Update(b) end
 )
 hooksecurefunc(
-    "LiteBagFrame_OnShow",
+    "LiteBagPanel_OnShow",
     function (f) f:RegisterEvent("EQUIPMENT_SETS_CHANGED") end
 )
 hooksecurefunc(
-    "LiteBagFrame_OnHide",
+    "LiteBagPanel_OnHide",
     function (f) f:UnregisterEvent("EQUIPMENT_SETS_CHANGED") end
 )
