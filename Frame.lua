@@ -135,7 +135,7 @@ function LiteBagFrame_AddPanel(self, panel)
 end
 
 function LiteBagFrame_ShowPanel(self, n)
-    LiteBag_Print(format("Frame ShowPanel %s %d", self:GetName(), n)
+    LiteBag_Print(format("Frame ShowPanel %s %d", self:GetName(), n))
     for i,panel in ipairs(self.panels) do
         panel:SetShown(i == n)
     end

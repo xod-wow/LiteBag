@@ -5,8 +5,7 @@
 <Script file="LiteBagInventory.lua" />
 
 <Frame name="LiteBagInventory" parent="UIParent"
-       inherits="LiteBagFrameTemplate"
-       movable="true" resizable="true" clampedToScreen="true">
+       inherits="LiteBagFrameTemplate">
 
     <ResizeBounds>
         <minResize x="360" y="183" />

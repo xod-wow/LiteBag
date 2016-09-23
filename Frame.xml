@@ -17,6 +17,7 @@
 <Frame name="LiteBagFrameTemplate"
        enableMouse="true"
        frameStrata="HIGH" topLevel="true" hidden="true"
+       movable="true" resizable="true" clampedToScreen="true"
        inherits="ButtonFrameTemplate" virtual="true">
 
     <Size x="384" y="512" />

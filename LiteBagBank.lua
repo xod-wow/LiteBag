@@ -22,6 +22,7 @@ function LiteBagBank_OnLoad(self)
     local panel = CreateFrame("Frame", "LiteBagBankPanel", self, "LiteBagPanelTemplate")
     LiteBagPanel_Initialize(panel, { -1, 5, 6, 7, 8, 9, 10, 11 })
     panel.title = BANK_PANEL_NAMES[1]
+    panel.tabTitle = BANK
     panel.portrait = "Interface\\MERCHANTFRAME\\UI-BuyBack-Icon"
     panel.canResize = true
     LiteBagFrame_AddPanel(self, panel)
@@ -32,6 +33,7 @@ function LiteBagBank_OnLoad(self)
     for i = 2, #BANK_PANELS do
         local data = BANK_PANELS[i]
         panel = _G[data.name]
+        panel:ClearAllPoints()
         panel:SetSize(data.size.x, data.size.y)
         panel.title = BANK_PANEL_NAMES[i]
         panel.tabTitle = _G["BankFrameTab"..i]:GetText()
@@ -63,8 +65,9 @@ function LiteBagBank_OnLoad(self)
 end
 
 function LiteBagBank_OnEvent(self, event, ...)
+    LiteBag_Print("Bank OnEvent " .. event)
     if event == "BANKFRAME_OPENED" then
-        LiteBagBank_ShowPanel(self, 1)
+        LiteBagFrame_ShowPanel(self, 1)
         ShowUIPanel(self)
     elseif event == "BANKFRAME_CLOSED" then
         HideUIPanel(self)
@@ -84,8 +87,6 @@ function LiteBagBank_OnEvent(self, event, ...)
     elseif event == "PLAYERREAGENTBANKSLOTS_CHANGED" then
         local slot = ...
         BankFrameItemButton_Update(ReagentBankFrame["Item"..(slot)])
-    else
-        LiteBagFrame_OnEvent(self, event, ...)
     end
 end
 
@@ -99,6 +100,7 @@ function LiteBagBank_OnShow(self)
 end
 
 function LiteBagBank_OnHide(self)
+    CloseBankFrame()
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:UnregisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
 end

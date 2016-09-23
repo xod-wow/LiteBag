@@ -77,7 +77,21 @@ function LiteBagPanel_UpdateBagSizes(self)
     self.size = n
 end
 
-function LiteBagPanel_Layout(self)
+-- Note again, this is overlayed onto a Portrait frame, so there is
+-- padding on the edges to align the buttons into the inset.
+
+function LiteBagPanel_UpdateSizeAndLayout(self)
+    LiteBag_Print("Panel UpdateSize " .. self:GetName())
+    local w, h = self.itemButtons[1]:GetSize()
+    local nrows = ceil(self.size / self.ncols)
+
+    local frameW = self.ncols * w + (self.ncols-1) * BUTTON_X_GAP + LEFT_OFFSET + RIGHT_OFFSET
+    local frameH = nrows * h + (nrows-1) * BUTTON_Y_GAP + TOP_OFFSET + BOTTOM_OFFSET
+
+    LiteBag_Print(format("Panel SetSize %d,%d", frameW, frameH))
+
+    self:SetSize(frameW, frameH)
+
     LiteBag_Print("Panel Layout " .. self:GetName())
     -- We process all the ItemButtons even if many of them are not
     -- shown, so that we hide the leftovers
@@ -100,26 +114,13 @@ function LiteBagPanel_Layout(self)
     end
 end
 
--- Note again, this is overlayed onto a Portrait frame, so there is
--- padding on the edges to align the buttons into the inset.
-
-function LiteBagPanel_UpdateSize(self)
-    LiteBag_Print("Panel UpdateSize " .. self:GetName())
-    local w, h = self.itemButtons[1]:GetSize()
-    local nrows = ceil(self.size / self.ncols)
-
-    local frameW = self.ncols * w + (self.ncols-1) * BUTTON_X_GAP + LEFT_OFFSET + RIGHT_OFFSET
-    local frameH = nrows * h + (nrows-1) * BUTTON_Y_GAP + TOP_OFFSET + BOTTOM_OFFSET
-
-    self:SetSize(frameW, frameH)
-end
-
 function LiteBagPanel_SetWidth(self, width)
-    LiteBag_Print(format("Panel SetWidth %s %d", self:GetName(), w))
+    LiteBag_Print(format("Panel SetWidth %s %d", self:GetName(), width))
     local w = self.itemButtons[1]:GetWidth()
     local ncols = floor( (width - LEFT_OFFSET - RIGHT_OFFSET + BUTTON_X_GAP) / (w + BUTTON_X_GAP) )
+    ncols = min(ncols, self.size)
     self.ncols = max(ncols, MIN_COLUMNS)
-    LiteBagPanel_UpdateSize(self)
+    LiteBagPanel_UpdateSizeAndLayout(self)
 end
 
 function LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
@@ -215,6 +216,7 @@ end
 
 function LiteBagPanel_OnShow(self)
     LiteBag_Print("Panel OnShow " .. self:GetName())
+    LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBagPanel_UpdateItemButtons(self)
 
     self:RegisterEvent("BAG_CLOSED")
@@ -272,7 +274,7 @@ end
 -- bags or changes that they fire for (where possible).  Others are
 -- rare enough it's OK to call LiteBagPanel_UpdateItemButtons to do everything.
 function LiteBagPanel_OnEvent(self, event, ...)
-    LiteBag_Print(format("Panel OnEvent %s %d", self:GetName(), event))
+    LiteBag_Print(format("Panel OnEvent %s %s", self:GetName(), event))
     if event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
         local bag = ...
         LiteBagPanel_UpdateQuality(self, bag)
