@@ -17,12 +17,17 @@ local BANK_PANEL_NAMES = {
 function LiteBagBank_OnLoad(self)
     LiteBagFrame_OnLoad(self)
 
+    -- Basic slots panel for the bank slots
+
     local panel = CreateFrame("Frame", "LiteBagBankPanel", self, "LiteBagPanelTemplate")
     LiteBagPanel_Initialize(panel, { -1, 5, 6, 7, 8, 9, 10, 11 })
     panel.title = BANK_PANEL_NAMES[1]
     panel.portrait = "Interface\\MERCHANTFRAME\\UI-BuyBack-Icon"
     panel.canResize = true
     LiteBagFrame_AddPanel(self, panel)
+
+    -- Attach in the other Blizzard bank panels. Note that we are also
+    -- responsible for handling their events!
 
     for i = 2, #BANK_PANELS do
         local data = BANK_PANELS[i]
@@ -83,6 +88,9 @@ function LiteBagBank_OnEvent(self, event, ...)
         LiteBagFrame_OnEvent(self, event, ...)
     end
 end
+
+-- Note that the reagent bank frame refreshes all its own slots in its
+-- OnShow handler so we don't have to do that for it.
 
 function LiteBagBank_OnShow(self)
     LiteBagFrame_OnShow(self)

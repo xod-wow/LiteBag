@@ -113,6 +113,7 @@ function LiteBagFrame_AddPanel(self, panel)
 
     if #self.panels < 2 then
         self.currentPanel = panel
+        self.selectedTab = 1
         return
     end
 
@@ -133,8 +134,8 @@ function LiteBagFrame_ShowPanel(self, n)
 
     if #self.panels > 1 then
         PanelTemplates_SetTab(self, n)
-        self.seletedTab = n
     end
+    self.selectedTab = n
 end
 
 function LiteBagFrame_OnLoad(self)
