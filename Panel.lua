@@ -223,6 +223,7 @@ end
 
 function LiteBagPanel_OnShow(self)
     LiteBag_Print("Panel OnShow " .. self:GetName())
+    LiteBagPanel_UpdateBagSizes(self)
     LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBagPanel_UpdateItemButtons(self)
 
