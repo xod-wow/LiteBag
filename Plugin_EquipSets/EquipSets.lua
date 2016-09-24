@@ -104,13 +104,10 @@ hooksecurefunc(
     end
 )
 
-LiteBagInventoryPanel:HookScript("OnShow",
-    function (f)
-        f:RegisterEvent("EQUIPMENT_SETS_CHANGED")
-    end
-)
-LiteBagBankPanel:HookScript("OnHide", 
-    function (f)
-        f:UnregisterEvent("EQUIPMENT_SETS_CHANGED")
-    end
-)
+local regIt = function(f) f:RegisterEvent("EQUIPMENT_SETS_CHANGED") end
+local unregIt = function(f) f:UnregisterEvent("EQUIPMENT_SETS_CHANGED") end
+
+for _,p in ipairs({ LiteBagInventoryPanel, LiteBagBankPanel }) do
+    p:HookScript("OnShow", regIt)
+    p:HookScript("OnHide", unregIt)
+end

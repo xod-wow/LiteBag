@@ -63,7 +63,7 @@ function LiteBagPanel_UpdateBagSizes(self)
     LiteBag_Print("Panel UpdateBagSizes " .. self:GetName())
     local n = 0
 
-    for _, b in ipairs(self.bagbuttons) do
+    for _, b in ipairs(self.bagButtons) do
         LiteBagBagButton_Update(b)
     end
 

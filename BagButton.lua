@@ -177,7 +177,7 @@ function LiteBagBagButton_OnClick(self)
     end
 
     if self.purchaseCost then
-        PlaySound("igMainMenuOption");
+        PlaySound("igMainMenuOption")
         BankFrame.nextSlotCost = self.purchaseCost
         -- XXX FIXME XXX
         -- Does StaticPopup_Show still cause taint due to blizz bugs?
