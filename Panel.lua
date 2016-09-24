@@ -63,8 +63,13 @@ function LiteBagPanel_UpdateBagSizes(self)
     LiteBag_Print("Panel UpdateBagSizes " .. self:GetName())
     local n = 0
 
+    for _, b in ipairs(self.bagbuttons) do
+        LiteBagBagButton_Update(b)
+    end
+
     for _, bag in ipairs(self.bagFrames) do
-        for slot = 1, GetContainerNumSlots(bag:GetID()) do
+        local bagID = bag:GetID()
+        for slot = 1, GetContainerNumSlots(bagID) do
             n = n + 1
             if not self.itemButtons[n] then
                 local name = format("%sItemButton%d", self:GetName(), n)
