@@ -11,25 +11,39 @@
 
 local addonName, addonTable = ...
 
+local function UpgradeDBVersion()
+    local db = LiteBag_OptionsDB
+    local oldkey, newkey
+
+    for _,frameName in ipairs({ "LiteBagInventory", "LiteBagBank" }) do
+        oldkey = format("Frame:%s", frameName)
+        newkey = format("Panel:%sPanel", frameName)
+        if db[oldkey] then
+            db[newkey] = db[oldkey]
+            db[oldkey] = nil
+        end
+    end
+
+end
+
 function LiteBag_InitializeOptions()
     if not LiteBag_OptionsDB then
         LiteBag_OptionsDB = { }
+    else
+        UpgradeDBVersion()
     end
 end
 
-function LiteBag_SetFrameOption(frame, option, value)
-    local n = "Frame:" .. frame:GetName()
-    if not LiteBag_OptionsDB[n] then
-        LiteBag_OptionsDB[n] = { }
-    end
+function LiteBag_SetPanelOption(frame, option, value)
+    local n = "Panel:" .. frame:GetName()
+    LiteBag_OptionsDB[n] = LiteBag_OptionsDB[n] or { }
     LiteBag_OptionsDB[n][option] = value
 end
 
-function LiteBag_GetFrameOption(frame, option)
-    local n = "Frame:" .. frame:GetName()
-    if LiteBag_OptionsDB[n] then
-        return LiteBag_OptionsDB[n][option]
-    end
+function LiteBag_GetPanelOption(frame, option)
+    local n = "Panel:" .. frame:GetName()
+    LiteBag_OptionsDB[n] = LiteBag_OptionsDB[n] or { }
+    return LiteBag_OptionsDB[n][option]
 end
 
 function LiteBag_SetGlobalOption(option, value)
@@ -74,16 +88,16 @@ function LiteBag_OptionSlashFunc(argstr)
                 LiteBag_SetGlobalOption("HideEquipsetIcon", true)
                 LiteBag_Print("Equipment set icon display disabled.")
             end
-            LiteBagFrame_Update(LiteBagInventory)
-            LiteBagFrame_Update(LiteBagBank)
+            LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
+            LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
             return
         end
         if arg == "inventory.columns" then
             local n = tonumber(args[i+1])
             if n and n >= 8 then
-                LiteBag_SetFrameOption(LiteBagInventory, "columns", n)
-                LiteBagFrame_Initialize(LiteBagInventory)
-                LiteBagFrame_Update(LiteBagInventory)
+                LiteBagInventoryPanel.ncols = n
+                LiteBag_SetPanelOption(LiteBagInventoryPanel, "columns", n)
+                LiteBagPanel_UpdateSizeAndLayout(LiteBagInventoryPanel)
                 LiteBag_Print("Inventory frame width set to "..n.." columns")
             else
                 LiteBag_Print("Can't set frame width to less than 8")
@@ -93,9 +107,9 @@ function LiteBag_OptionSlashFunc(argstr)
         if arg == "bank.columns" then
             local n = tonumber(args[i+1])
             if n and n >= 8 then
-                LiteBag_SetFrameOption(LiteBagBank, "columns", n)
-                LiteBagFrame_Initialize(LiteBagBank)
-                LiteBagFrame_Update(LiteBagBank)
+                LiteBagBankPanel.ncols = n
+                LiteBag_SetPanelOption(LiteBagBankPanel, "columns", n)
+                LiteBagPanel_UpdateSizeAndLayout(LiteBagBankPanel)
                 LiteBag_Print("Bank frame width set to "..n.." columns")
             else
                 LiteBag_Print("Can't set frame width to less than 8")
