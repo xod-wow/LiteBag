@@ -6,24 +6,26 @@
 
 <Frame name="LiteBagTokenFrameTemplate" virtual="true">
 
-    <Size x="128" y="13" />
+    <Size x="150" y="12" />
+
+    <!-- 50, 12 = BackpackTokenTemplate:GetSize() -->
 
     <Frames>
         <Button name="$parentToken1" inherits="BackpackTokenTemplate" id="1">
             <Anchors>
-                <Anchor point="BOTTOMLEFT" x="5" y="3"/>
+                <Anchor point="TOPLEFT" />
             </Anchors>
         </Button>
 
         <Button name="$parentToken2" inherits="BackpackTokenTemplate" id="2">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentToken1" relativePoint="RIGHT" x="2" />
+                <Anchor point="CENTER" />
             </Anchors>
         </Button>
 
         <Button name="$parentToken3" inherits="BackpackTokenTemplate" id="3">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentToken2" relativePoint="RIGHT" x="2" />
+                <Anchor point="TOPRIGHT" />
             </Anchors>
         </Button>
     </Frames>
