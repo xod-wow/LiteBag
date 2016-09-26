@@ -82,6 +82,8 @@ end
 function LiteBagFrame_OnShow(self)
     LiteBag_Print("Frame OnShow " .. self:GetName())
 
+    self:SetSize(self.currentPanel:GetSize())
+
     LiteBagFrame_AttachSearchBox(self)
 
     PlaySound("igBackPackOpen")
