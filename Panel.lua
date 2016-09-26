@@ -89,10 +89,13 @@ end
 
 function LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBag_Print("Panel UpdateSize " .. self:GetName())
+    local ncols = LiteBag_GetPanelOption(self, "columns") or
+                    self.defaultColumns or
+                    MIN_COLUMNS
+    local nrows = ceil(self.size / ncols)
     local w, h = self.itemButtons[1]:GetSize()
-    local nrows = ceil(self.size / self.ncols)
 
-    local frameW = self.ncols * w + (self.ncols-1) * BUTTON_X_GAP + LEFT_OFFSET + RIGHT_OFFSET
+    local frameW = ncols * w + (ncols-1) * BUTTON_X_GAP + LEFT_OFFSET + RIGHT_OFFSET
     local frameH = nrows * h + (nrows-1) * BUTTON_Y_GAP + TOP_OFFSET + BOTTOM_OFFSET
 
     LiteBag_Print(format("Panel SetSize %d,%d", frameW, frameH))
@@ -107,8 +110,8 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
         itemButton:ClearAllPoints()
         if i == 1 then
             itemButton:SetPoint("TOPLEFT", self, LEFT_OFFSET, -TOP_OFFSET)
-        elseif i % self.ncols == 1 then
-            itemButton:SetPoint("TOPLEFT", self.itemButtons[i-self.ncols], "BOTTOMLEFT", 0, -BUTTON_Y_GAP)
+        elseif i % ncols == 1 then
+            itemButton:SetPoint("TOPLEFT", self.itemButtons[i-ncols], "BOTTOMLEFT", 0, -BUTTON_Y_GAP)
         else
             itemButton:SetPoint("TOPLEFT", self.itemButtons[i-1], "TOPRIGHT", BUTTON_X_GAP, 0)
         end
@@ -126,7 +129,8 @@ function LiteBagPanel_SetWidth(self, width)
     local w = self.itemButtons[1]:GetWidth()
     local ncols = floor( (width - LEFT_OFFSET - RIGHT_OFFSET + BUTTON_X_GAP) / (w + BUTTON_X_GAP) )
     ncols = min(ncols, self.size)
-    self.ncols = max(ncols, MIN_COLUMNS)
+    ncols = max(ncols, MIN_COLUMNS)
+    LiteBag_SetPanelOption(self, "columns", ncols)
     LiteBagPanel_UpdateSizeAndLayout(self)
 end
 
@@ -216,7 +220,6 @@ end
 function LiteBagPanel_OnLoad(self)
     LiteBag_Print("Panel OnLoad " .. self:GetName())
     self.size = 0
-    self.ncols = 8
     self.itemButtons = { }
     self.bagFrames = { }
 end

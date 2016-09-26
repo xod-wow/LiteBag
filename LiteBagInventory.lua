@@ -9,6 +9,8 @@
 
 ----------------------------------------------------------------------------]]--
 
+local INVENTORY_BAG_IDS = { 0, 1, 2, 3, 4 }
+
 local OPEN_EVENTS = {
     "BAG_OPEN",
     "BANKFRAME_OPENED",
@@ -38,12 +40,13 @@ end
 function LiteBagInventory_OnLoad(self)
     LiteBagFrame_OnLoad(self)
 
+    self.TitleText:SetText(GetBagName(0))
+    self.portrait:SetTexture("Interface\\MERCHANTFRAME\\UI-BuyBack-Icon")
+
     local panel = CreateFrame("Frame", "LiteBagInventoryPanel", self, "LiteBagPanelTemplate")
-    LiteBagPanel_Initialize(panel, { 0, 1, 2, 3, 4 })
-    panel.title = function () return GetBagName(0) end
-    panel.portrait = "Interface\\MERCHANTFRAME\\UI-BuyBack-Icon"
+    LiteBagPanel_Initialize(panel, INVENTORY_BAG_IDS)
     panel.canResize = true
-    LiteBagFrame_AddPanel(self, panel)
+    LiteBagFrame_AddPanel(self, panel, GetBagName(0))
 
     -- Close with ESC key
     tinsert(UISpecialFrames, self:GetName())

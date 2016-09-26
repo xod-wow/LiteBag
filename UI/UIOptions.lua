@@ -48,7 +48,6 @@ function LiteBagOptionsInventoryColumns_OnLoad(self)
     _G[n.."High"]:SetText("24")
     self.SetOption = function (self, v)
             LiteBag_SetPanelOption(LiteBagInventoryPanel, "columns", v)
-            LiteBagInventoryPanel.ncols = v
         end
     self.GetOption = function (self)
             return LiteBag_GetPanelOption(LiteBagInventoryPanel, "columns") or 8
@@ -69,7 +68,6 @@ function LiteBagOptionsBankColumns_OnLoad(self)
     _G[n.."High"]:SetText("24")
     self.SetOption = function (self, v)
             LiteBag_SetPanelOption(LiteBagBankPanel, "columns", v)
-            LiteBagBankPanel.ncols = v
         end
     self.GetOption = function (self)
             return LiteBag_GetPanelOption(LiteBagBankPanel, "columns") or 14

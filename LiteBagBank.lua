@@ -9,10 +9,7 @@
 
 ----------------------------------------------------------------------------]]--
 
-local BANK_PANEL_NAMES = {
-    [1] = function () return UnitName("npc") end,
-    [2] = function () return REAGENT_BANK end,
-}
+local BANK_BAG_IDS = { -1, 5, 6, 7, 8, 9, 10, 11 }
 
 function LiteBagBank_OnLoad(self)
     LiteBagFrame_OnLoad(self)
@@ -20,12 +17,10 @@ function LiteBagBank_OnLoad(self)
     -- Basic slots panel for the bank slots
 
     local panel = CreateFrame("Frame", "LiteBagBankPanel", self, "LiteBagPanelTemplate")
-    LiteBagPanel_Initialize(panel, { -1, 5, 6, 7, 8, 9, 10, 11 })
-    panel.title = BANK_PANEL_NAMES[1]
-    panel.tabTitle = BANK
-    panel.portrait = "Interface\\MERCHANTFRAME\\UI-BuyBack-Icon"
+    LiteBagPanel_Initialize(panel, BANK_BAG_IDS)
+    panel.defaultColumns = 16
     panel.canResize = true
-    LiteBagFrame_AddPanel(self, panel)
+    LiteBagFrame_AddPanel(self, panel, BankFrameTab1:GetText())
 
     -- Attach in the other Blizzard bank panels. Note that we are also
     -- responsible for handling their events!
@@ -35,12 +30,14 @@ function LiteBagBank_OnLoad(self)
         panel = _G[data.name]
         panel:ClearAllPoints()
         panel:SetSize(data.size.x, data.size.y)
-        panel.title = BANK_PANEL_NAMES[i]
-        panel.tabTitle = _G["BankFrameTab"..i]:GetText()
-        LiteBagFrame_AddPanel(self, panel)
+        LiteBagFrame_AddPanel(self, panel, _G["BankFrameTab"..i]:GetText())
     end
 
-    self.default_columns = 16
+    self.OnShowPanel = function (self, n)
+            -- Use the title text from the Bank Frame itself
+            BANK_PANELS[self.selectedTab].SetTitle()
+            self.TitleText:SetText(BankFrameTitleText)
+        end
 
     -- UIPanelLayout stuff so the Blizzard UIParent code will position us
     -- automatically. See
@@ -92,11 +89,16 @@ end
 
 function LiteBagBank_OnShow(self)
     LiteBagFrame_OnShow(self)
+
+    SetPortraitTexture(self, "npc")
+
     self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
 end
 
 function LiteBagBank_OnHide(self)
+    -- Call this so the server knows we closed and it needs to send us a
+    -- new BANKFRAME_OPENED event if we interact with the NPC again.
     CloseBankFrame()
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:UnregisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")

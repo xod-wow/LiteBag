@@ -82,12 +82,6 @@ end
 function LiteBagFrame_OnShow(self)
     LiteBag_Print("Frame OnShow " .. self:GetName())
 
-    if self.currentPanel then
-        self:SetSize(self.currentPanel:GetSize())
-        self.TitleText:SetText(self.currentPanel.title())
-        self.portrait:SetTexture(self.currentPanel.portrait)
-    end
-
     LiteBagFrame_AttachSearchBox(self)
 
     PlaySound("igBackPackOpen")
@@ -114,7 +108,7 @@ function LiteBagFrame_TabOnClick(tab)
     LiteBagFrame_ShowPanel(parent, tab:GetID())
 end
 
-function LiteBagFrame_AddPanel(self, panel)
+function LiteBagFrame_AddPanel(self, panel, tabTitle)
     LiteBag_Print(format("Frame AddPanel %s %s", self:GetName(), panel:GetName()))
     panel:SetParent(self)
     panel:SetPoint("TOPLEFT", self, "TOPLEFT")
@@ -128,7 +122,7 @@ function LiteBagFrame_AddPanel(self, panel)
     end
 
     for i = 1, #self.panels do
-        self.Tabs[i]:SetText(self.panels[i].tabTitle)
+        self.Tabs[i]:SetText(tabTitle)
         self.Tabs[i]:Show()
     end
     PanelTemplates_SetNumTabs(self, #self.panels)
@@ -142,11 +136,16 @@ function LiteBagFrame_ShowPanel(self, n)
 
     self.currentPanel = self.panels[n]
     self:SetSize(self.currentPanel:GetSize())
+    self.TitleText:SetText(self.currentPanel.title)
 
     if #self.panels > 1 then
         PanelTemplates_SetTab(self, n)
     end
     self.selectedTab = n
+
+    if self.OnShowPanel then
+        self.OnShowPanel(self, n)
+    end
 end
 
 function LiteBagFrame_OnLoad(self)

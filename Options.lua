@@ -95,7 +95,6 @@ function LiteBag_OptionSlashFunc(argstr)
         if arg == "inventory.columns" then
             local n = tonumber(args[i+1])
             if n and n >= 8 then
-                LiteBagInventoryPanel.ncols = n
                 LiteBag_SetPanelOption(LiteBagInventoryPanel, "columns", n)
                 LiteBagPanel_UpdateSizeAndLayout(LiteBagInventoryPanel)
                 LiteBag_Print("Inventory frame width set to "..n.." columns")
@@ -107,7 +106,6 @@ function LiteBag_OptionSlashFunc(argstr)
         if arg == "bank.columns" then
             local n = tonumber(args[i+1])
             if n and n >= 8 then
-                LiteBagBankPanel.ncols = n
                 LiteBag_SetPanelOption(LiteBagBankPanel, "columns", n)
                 LiteBagPanel_UpdateSizeAndLayout(LiteBagBankPanel)
                 LiteBag_Print("Bank frame width set to "..n.." columns")
