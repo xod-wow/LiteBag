@@ -5,6 +5,7 @@
 ## Email: mib@post.com
 ## SavedVariablesPerCharacter: LiteBag_OptionsDB
 
+Print.lua
 Options.lua
 
 BagButton.xml

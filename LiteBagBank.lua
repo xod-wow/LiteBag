@@ -62,7 +62,7 @@ function LiteBagBank_OnLoad(self)
 end
 
 function LiteBagBank_OnEvent(self, event, ...)
-    LiteBag_Print("Bank OnEvent " .. event)
+    LiteBag_Debug("Bank OnEvent " .. event)
     if event == "BANKFRAME_OPENED" then
         LiteBagFrame_ShowPanel(self, 1)
         ShowUIPanel(self)

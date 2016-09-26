@@ -122,24 +122,6 @@ function LiteBag_OptionSlashFunc(argstr)
     end
 end
 
-
---[[----------------------------------------------------------------------------
-    Printing to active chat frame.
-----------------------------------------------------------------------------]]--
-
-local function ActiveChatFrame()
-    for i = 1, NUM_CHAT_WINDOWS do
-        local f = _G["ChatFrame"..i]
-        if f and f:IsShown() then return f end
-    end
-    return DEFAULT_CHAT_FRAME
-end
-
-function LiteBag_Print(msg)
-    ActiveChatFrame():AddMessage("|cff00ff00LiteBag:|r " .. msg)
-end
-
-
 --[[----------------------------------------------------------------------------
     Initialization.
 ----------------------------------------------------------------------------]]--
