@@ -220,8 +220,8 @@ function LiteBagPanel_UpdateLocked(self, bagID)
     end
 end
 
-function LiteBagPanel_UpdateQualityByBag(self, bagID)
-    for _, b in ipairs(self.itemButtonsByBag[bagID] or {}) do
+function LiteBagPanel_UpdateQuality(self)
+    for _, b in ipairs(self.itemButtons) do
         LiteBagItemButton_UpdateQuality(b)
     end
 end
@@ -308,8 +308,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
     end
 
     if event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
-        -- arg1 == bag
-        LiteBagPanel_UpdateQualityByBag(self, arg1)
+        LiteBagPanel_UpdateQuality(self)
         return
     end
 
