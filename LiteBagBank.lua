@@ -66,7 +66,9 @@ function LiteBagBank_OnLoad(self)
 end
 
 function LiteBagBank_OnEvent(self, event, ...)
-    LiteBag_Debug("Bank OnEvent " .. event)
+    local arg1, arg2 = ...
+
+    LiteBag_Debug(format("Bank OnEvent %s %s %s", event, arg1, arg2))
     if event == "BANKFRAME_OPENED" then
         LiteBagFrame_ShowPanel(self, 1)
         ShowUIPanel(self)
@@ -75,16 +77,16 @@ function LiteBagBank_OnEvent(self, event, ...)
     elseif event == "INVENTORY_SEARCH_UPDATE" then
         ContainerFrame_UpdateSearchResults(ReagentbankFrame)
     elseif event == "ITEM_LOCK_CHANGED" then
-        local bag, slot = ...
+        -- bag, slot = arg1, arg2
         if bag == REAGENTBANK_CONTAINER then
-            local button = ReagentBankFrame["Item"..(slot)]
+            local button = ReagentBankFrame["Item"..(arg2)]
             if button then
                 BankFrameItemButton_UpdateLocked(button)
             end
         end
     elseif event == "PLAYERREAGENTBANKSLOTS_CHANGED" then
-        local slot = ...
-        BankFrameItemButton_Update(ReagentBankFrame["Item"..(slot)])
+        -- slot = arg1
+        BankFrameItemButton_Update(ReagentBankFrame["Item"..(arg1)])
     end
 end
 
