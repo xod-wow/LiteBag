@@ -92,6 +92,14 @@ function LiteBag_OptionSlashFunc(argstr)
             LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
             return
         end
+        if arg == "debug" then
+            if args[i+1] == "on" then
+                LiteBag_SetDebug(true)
+            elseif args[i+1] == "off" then
+                LiteBag_SetDebug(false)
+            end
+            return
+        end
         if arg == "inventory.columns" then
             local n = tonumber(args[i+1])
             if n and n >= 8 then
@@ -111,14 +119,6 @@ function LiteBag_OptionSlashFunc(argstr)
                 LiteBag_Print("Bank frame width set to "..n.." columns")
             else
                 LiteBag_Print("Can't set frame width to less than 8")
-            end
-            return
-        end
-        if arg == "debug" then
-            if args[i+1] == "on" then
-                LiteBag_SetDebug(true)
-            elseif args[i+1] == "on" then
-                LiteBag_SetDebug(false)
             end
             return
         end
