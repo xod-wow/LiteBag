@@ -117,6 +117,8 @@ function LiteBagFrame_AddPanel(self, panel, tabTitle)
 
     tinsert(self.panels, panel)
 
+    self.Tabs[#self.panels]:SetText(tabTitle)
+
     if #self.panels < 2 then
         self.currentPanel = panel
         self.selectedTab = 1
@@ -124,7 +126,6 @@ function LiteBagFrame_AddPanel(self, panel, tabTitle)
     end
 
     for i = 1, #self.panels do
-        self.Tabs[i]:SetText(tabTitle)
         self.Tabs[i]:Show()
     end
     PanelTemplates_SetNumTabs(self, #self.panels)

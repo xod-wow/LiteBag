@@ -39,7 +39,7 @@ function LiteBagBank_OnLoad(self)
     self.OnShowPanel = function (self, n)
             -- Use the title text from the Bank Frame itself
             BANK_PANELS[self.selectedTab].SetTitle()
-            self.TitleText:SetText(BankFrameTitleText)
+            self.TitleText:SetText(BankFrameTitleText:GetText())
         end
 
     -- UIPanelLayout stuff so the Blizzard UIParent code will position us
@@ -68,7 +68,7 @@ end
 function LiteBagBank_OnEvent(self, event, ...)
     local arg1, arg2 = ...
 
-    LiteBag_Debug(format("Bank OnEvent %s %s %s", event, arg1, arg2))
+    LiteBag_Debug(format("Bank OnEvent %s %s %s", event, tostring(arg1), tostring(arg2)))
     if event == "BANKFRAME_OPENED" then
         LiteBagFrame_ShowPanel(self, 1)
         ShowUIPanel(self)
@@ -96,7 +96,7 @@ end
 function LiteBagBank_OnShow(self)
     LiteBagFrame_OnShow(self)
 
-    SetPortraitTexture(self, "npc")
+    SetPortraitTexture(self.portrait, "npc")
 
     self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
