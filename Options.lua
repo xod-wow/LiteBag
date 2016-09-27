@@ -120,6 +120,7 @@ function LiteBag_OptionSlashFunc(argstr)
             elseif args[i+1] == "on" then
                 LiteBag_SetDebug(false)
             end
+            return
         end
         LiteBag_Print("Usage:")
         LiteBag_Print("  /litebag bank.columns <n>")
