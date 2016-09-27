@@ -41,38 +41,59 @@ function LiteBagOptionsEquipsetDisplay_OnLoad(self)
         LiteBagOptionsControl_OnLoad(self)
 end
 
-function LiteBagOptionsInventoryColumns_OnLoad(self)
+local function SetupColumnsControl(self, panel, default)
     local n = self:GetName()
 
     _G[n.."Low"]:SetText("8")
     _G[n.."High"]:SetText("24")
     self.SetOption = function (self, v)
-            LiteBag_SetPanelOption(LiteBagInventoryPanel, "columns", v)
+            LiteBag_SetPanelOption(panel, "columns", v)
         end
     self.GetOption = function (self)
-            return LiteBag_GetPanelOption(LiteBagInventoryPanel, "columns") or 8
+            return LiteBag_GetPanelOption(panel, "columns") or default
         end
-    self.GetOptionDefault = function (self) return 8 end
+    self.GetOptionDefault = function (self) return default end
+end
+
+local function SetupScaleControl(self, panel)
+    local n = self:GetName()
+    _G[n.."Low"]:SetText(0.75)
+    _G[n.."High"]:SetText(1.25)
+    self.SetOption = function (self, v)
+            LiteBag_SetPanelOption(panel, "scale", v)
+        end
+    self.GetOption = function (self)
+            return LiteBag_GetPanelOption(panel, "scale") or 1.0
+        end
+    self.GetOptionDefault = function (self) return 1.0 end
+end
+
+function LiteBagOptionsInventoryColumns_OnLoad(self)
+    SetupColumnsControl(self, LiteBagInventory, 8)
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsInventoryColumns_OnValueChanged(self)
     local n = self:GetName()
     _G[n.."Text"]:SetText(format("Inventory columns: %d", self:GetValue()))
+    if LiteBagInventoryPanel:IsShown() then
+        LiteBagPanel_UpdateSizeAndLayout(LiteBagInventoryPanel)
+        LiteBagFrame_OnShow(LiteBagInventory)
+    end
+end
+
+function LiteBagOptionsInventoryScale_OnLoad(self)
+    SetupScaleControL(self, LiteBagInventoryPanel)
+    LiteBagOptionsControl_OnLoad(self)
+end
+
+function LiteBagOptionsInventoryscale_OnValueChanged(self)
+    local n = self:GetName()
+    _G[n.."Text"]:SetText(format("Inventory scale: %0.2f", self:GetValue()))
 end
 
 function LiteBagOptionsBankColumns_OnLoad(self)
-    local n = self:GetName()
-
-    _G[n.."Low"]:SetText("8")
-    _G[n.."High"]:SetText("24")
-    self.SetOption = function (self, v)
-            LiteBag_SetPanelOption(LiteBagBankPanel, "columns", v)
-        end
-    self.GetOption = function (self)
-            return LiteBag_GetPanelOption(LiteBagBankPanel, "columns") or 14
-        end
-    self.GetOptionDefault = function (self) return 14 end
+    SetupColumnsControl(self, LiteBagBankPanel, 14)
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -80,3 +101,14 @@ function LiteBagOptionsBankColumns_OnValueChanged(self)
     local n = self:GetName()
     _G[n.."Text"]:SetText(format("Bank columns: %d", self:GetValue()))
 end
+
+function LiteBagOptionsBankScale_OnLoad(self)
+    SetupScaleControL(self, LiteBagBankPanel)
+    LiteBagOptionsControl_OnLoad(self)
+end
+
+function LiteBagOptionsBankscale_OnValueChanged(self)
+    local n = self:GetName()
+    _G[n.."Text"]:SetText(format("Bank scale: %0.2f", self:GetValue()))
+end
+
