@@ -21,18 +21,6 @@ local LEFT_OFFSET, TOP_OFFSET = 14, 70
 local RIGHT_OFFSET, BOTTOM_OFFSET = 15, 35
 
 
-local function LiteBagPanel_ClearMapping(self)
-    wipe(self.mapBagSlotToButton)
-end
-
-local function LiteBagPanel_UpdateMapping(self, bag, slot, button)
-    self.mapBagSlotToButton[format("%d/%d", bag, slot)] = button
-end
-
-local function LiteBagPanel_GetMapping(self, bag, slot)
-    return self.mapBagSlotToButton[format("%d/%d", bag, slot)]
-end
-
 function LiteBagPanel_Initialize(self, bagIDs)
     LiteBag_Debug("Panel Initialize " .. self:GetName())
 
@@ -64,6 +52,7 @@ function LiteBagPanel_Initialize(self, bagIDs)
         else
             b:Hide()
         end
+        self.itemButtonsByBag[bagIDs[i]] = { }
     end
 
     -- And update ourself for the bag sizes. Need to watch PLAYER_LOGIN
@@ -78,6 +67,7 @@ function LiteBagPanel_UpdateBagSizes(self)
     local n = 0
 
     for _, b in ipairs(self.bagButtons) do
+        wipe(self.itemButtonsByBag[b:GetID()])
         LiteBagBagButton_Update(b)
     end
 
@@ -94,6 +84,7 @@ function LiteBagPanel_UpdateBagSizes(self)
             end
             self.itemButtons[n]:SetID(slot)
             self.itemButtons[n]:SetParent(bag)
+            self.itemButtonsByBag[bagID][slot] = self.itemButtons[n]
             LiteBagPanel_UpdateMapping(self, bagId, slot, self.iteButtons[n])
         end
     end
@@ -188,42 +179,20 @@ function LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
     end
 end
 
-local function IterateItemButtons(self)
-    local n = 0
-    return function ()
-        n = n + 1
-        if n > self.size then return end
-        return self.itemButtons[n]
-    end
-end
-
-local function IterateItemButtonsByBag(self, bagID)
-    local n = 0
-    return function ()
-        while true do
-            n = n + 1
-            if n > self.size then return end
-            if self.itemButtons[n]:GetParent():GetID() == bagID then
-                return self.itemButtons[n]
-            end
-        end
-    end
-end
-        
 function LiteBagPanel_HighlightBagButtons(self, bagID)
-    for b in IterateItemButtonsByBag(self, bagID) do
+    for _, b in ipairs(self.itemButtonsByBag[bagID]) do
         b:LockHighlight()
     end
 end
 
 function LiteBagPanel_UnhighlightBagButtons(self, bagID)
-    for b in IterateItemButtonsByBag(self, bagID) do
+    for _, b in ipairs(self.itemButtonsByBag[bagID]) do
         b:UnlockHighlight()
     end
 end
 
 function LiteBagPanel_ClearNewItems(self)
-    for b in IterateItemButtons(self) do
+    for _, b in ipairs(self.itemButtons) do
         LiteBagItemButton_ClearNewItem(b)
     end
 end
@@ -231,37 +200,37 @@ end
 function LiteBagPanel_UpdateItemButtons(self)
     LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
 
-    for b in IterateItemButtons(self) do
+    for _, b in ipairs(self.itemButtons) do
         LiteBagItemButton_Update(b)
     end
 end
 
-function LiteBagPanel_UpdateCooldowns(self)
-    for b in IterateItemButtons(self) do
+function LiteBagPanel_UpdateCooldowns(self, bagID)
+    for _, b in ipairs(self.itemButtonsByBag[bagID] or {})  do
         LiteBagItemButton_UpdateCooldown(b)
     end
 end
 
-function LiteBagPanel_UpdateSearchResults(self)
-    for b in IterateItemButtons(self) do
+function LiteBagPanel_UpdateSearchResults(self, bagID)
+    for b in IterateItemButtons(self, bagID) do
         LiteBagItemButton_UpdateFiltered(b)
     end
 end
 
-function LiteBagPanel_UpdateLocked(self)
-    for b in IterateItemButtons(self) do
+function LiteBagPanel_UpdateLocked(self, bagID)
+    for b in IterateItemButtons(self, bagID) do
         LiteBagItemButton_UpdateLocked(b)
     end
 end
 
-function LiteBagPanel_UpdateQuality(self)
-    for b in IterateItemButtons(self) do
+function LiteBagPanel_UpdateQualityByBag(self, bagID)
+    for _, b in ipairs(self.itemButtonsByBag[bagID] or {}) do
         LiteBagItemButton_UpdateQuality(b)
     end
 end
 
 function LiteBagPanel_UpdateQuestTextures(self)
-    for b in IterateItemButtons(self) do
+    for _, b in ipairs(self.itemButtons) do
         LiteBagItemButton_UpdateQuestTexture(b)
     end
 end
@@ -270,8 +239,8 @@ function LiteBagPanel_OnLoad(self)
     LiteBag_Debug("Panel OnLoad " .. self:GetName())
     self.size = 0
     self.itemButtons = { }
+    self.itemButtonsByBag = { }
     self.bagFrames = { }
-    self.mapBagSlotToButton = setmetatable({ }, { __mode = "v" })
 end
 
 function LiteBagPanel_OnShow(self)
@@ -342,8 +311,8 @@ function LiteBagPanel_OnEvent(self, event, ...)
     end
 
     if event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
-        local bag = ...
-        LiteBagPanel_UpdateQuality(self, bag)
+        -- arg1 == bag
+        LiteBagPanel_UpdateQualityByBag(self, arg1)
         return
     end
 
@@ -358,21 +327,22 @@ function LiteBagPanel_OnEvent(self, event, ...)
     if event == "BAG_UPDATE_DELAYED" then
         self:UnregisterEvent("BAG_UPDATE_DELAYED")
         LiteBagPanel_UpdateBagSizes(self)
-        -- FALLTHROUGH
+        LiteBagPanel_UpdateItemButtons(self)
+        return
     end
 
     if event == "ITEM_LOCK_CHANGED" then
-        local bag, slot = ...
-        local button = LiteBagPanel_GetMapping(self, bag, slot)
-        if button then
-            LiteBagItemButton_UpdateLocked(button)
+        -- bag, slot = arg1, arg2
+        local bagButtons = self.itemButtonsByBag[arg1]
+        if bagButtons and bagBuggons[arg2] then
+            LiteBagItemButton_UpdateLocked(bagButtons[arg2])
         end
         return
     end
 
     if event == "BAG_UPDATE_COOLDOWN" then
-        local bag = ...
-        LiteBagPanel_UpdateCooldowns(self, bag)
+        -- bag = arg1
+        LiteBagPanel_UpdateCooldowns(self, arg1)
         return
     end
 
@@ -387,12 +357,16 @@ function LiteBagPanel_OnEvent(self, event, ...)
     end
 
     if event == "PLAYERBANKSLOTS_CHANGED" then
-        local slot = ...
-        if self.isBank and slot > NUM_BANKGENERIC_SLOTS then
-            LiteBagPanel_UpdateBagSizes(self)
+        -- slot = arg1
+        if self.isBank then
+            if arg1 > NUM_BANKGENERIC_SLOTS then
+                LiteBagPanel_UpdateBagSizes(self)
+            end
+            LiteBagPanel_UpdateItemButtons(self)
         end
+        return
     end
 
-    -- Default action (some above fall through to do this as well).
+    -- Default action (some above may fall through to do this as well).
     LiteBagPanel_UpdateItemButtons(self)
 end
