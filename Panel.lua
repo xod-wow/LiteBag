@@ -10,6 +10,7 @@
 ----------------------------------------------------------------------------]]--
 
 local MIN_COLUMNS = 8
+local DEFAULT_SCALE = 1.0
 
 -- These are the gaps between the buttons
 local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
@@ -84,36 +85,42 @@ function LiteBagPanel_UpdateBagSizes(self)
     self.size = n
 end
 
+local function inDiffBag(a, b)
+    return a:GetParent():GetID() ~= b:GetParent():GetID()
+end
+
 -- Note again, this is overlayed onto a Portrait frame, so there is
 -- padding on the edges to align the buttons into the inset.
 
 function LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBag_Debug("Panel UpdateSize " .. self:GetName())
+
+    local scale = LiteBag_GetPanelOption(self, "scale") or
+                    DEFAULT_SCALE
     local ncols = LiteBag_GetPanelOption(self, "columns") or
                     self.defaultColumns or
                     MIN_COLUMNS
-    local nrows = ceil(self.size / ncols)
-    local w, h = self.itemButtons[1]:GetSize()
+    local layout = LiteBag_GetPanelOption(self, "layout") or false
 
-    local frameW = ncols * w + (ncols-1) * BUTTON_X_GAP + LEFT_OFFSET + RIGHT_OFFSET
-    local frameH = nrows * h + (nrows-1) * BUTTON_Y_GAP + TOP_OFFSET + BOTTOM_OFFSET
+    -- We process all the ItemButtons even if many of them are not shown, so
+    -- that we hide the leftovers
 
-    LiteBag_Debug(format("Panel SetSize %d,%d", frameW, frameH))
-
-    self:SetSize(frameW, frameH)
-
-    LiteBag_Debug("Panel Layout " .. self:GetName())
-    -- We process all the ItemButtons even if many of them are not
-    -- shown, so that we hide the leftovers
+    local startPreviousRow, previousButton
 
     for i, itemButton in ipairs(self.itemButtons) do
         itemButton:ClearAllPoints()
+        itemButton:SetScale(scale)
         if i == 1 then
             itemButton:SetPoint("TOPLEFT", self, LEFT_OFFSET, -TOP_OFFSET)
+            startPreviousRow = itemButton
+        elseif layout == "bag" and inDiffBag(itemButton, previousButton) then
+            itemButton:SetPoint("TOPLEFT", startPreviousRow, "BOTTOMLEFT", 0, -BUTTON_Y_GAP * 2)
+            startPreviousRow = itemButton
         elseif i % ncols == 1 then
-            itemButton:SetPoint("TOPLEFT", self.itemButtons[i-ncols], "BOTTOMLEFT", 0, -BUTTON_Y_GAP)
+            itemButton:SetPoint("TOPLEFT", startPreviousRow, "BOTTOMLEFT", 0, -BUTTON_Y_GAP)
+            startPreviousRow = itemButton
         else
-            itemButton:SetPoint("TOPLEFT", self.itemButtons[i-1], "TOPRIGHT", BUTTON_X_GAP, 0)
+            itemButton:SetPoint("TOPLEFT", previousButton, "TOPRIGHT", BUTTON_X_GAP, 0)
         end
 
         if i <= self.size then
@@ -121,7 +128,31 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
         else
             itemButton:Hide()
         end
+        previousButton = itemButton
     end
+
+    local top = self.itemButtons[1]:GetTop()
+    local left = self.itemButtons[1]:GetLeft()
+    local bottom = self.itemButtons[self.size]:GetBottom()
+    local right = self.itemButtons[ncols]:GetRight()
+
+    --[[
+    local nrows = ceil(self.size / ncols)
+    local w, h = self.itemButtons[1]:GetSize()
+
+    local frameW = scale * ncols * w + (ncols-1) * BUTTON_X_GAP
+                    + LEFT_OFFSET + RIGHT_OFFSET
+    local frameH = scale * nrows * h + (nrows-1) * BUTTON_Y_GAP
+                    + TOP_OFFSET + BOTTOM_OFFSET
+    ]]
+
+    local frameW = (self.right - self.left) + LEFT_OFFSET + RIGHT_OFFSET
+    local frameH = (self.top - self.bottom) + TOP_OFFSET + BOTTOM_OFFSET
+
+    LiteBag_Debug(format("Panel SetSize %d,%d", frameW, frameH))
+
+    self:SetSize(frameW, frameH)
+
 end
 
 function LiteBagPanel_SetWidth(self, width)
