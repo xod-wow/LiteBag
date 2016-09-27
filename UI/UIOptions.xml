@@ -61,7 +61,7 @@
         </Slider>
         <Slider name="$parentBankScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentInventoryColumns" relativePoint="RIGHT" x="16" />
+                <Anchor point="LEFT" relativeTo="$parentBankColumns" relativePoint="RIGHT" x="16" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsBankScale_OnLoad" />

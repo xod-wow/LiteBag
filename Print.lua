@@ -11,7 +11,7 @@
 
 local addonName, addonTable = ...
 
-local debugEnabled = false
+local debugEnabled = true
 
 --[[----------------------------------------------------------------------------
     Printing to active chat frame.
@@ -37,9 +37,9 @@ function LiteBag_SetDebug(onOff)
     end
 end
 
-function LiteBag_Debug(format, ...)
+function LiteBag_Debug(fmt, ...)
     if debugEnabled then
-        ActiveChatFrame():AddMessage(format(format, ...))
+        ActiveChatFrame():AddMessage(format(fmt, ...))
     end
 end
 
