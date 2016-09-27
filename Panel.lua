@@ -103,7 +103,7 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
     local ncols = LiteBag_GetPanelOption(self, "columns") or
                     self.defaultColumns or
                     MIN_COLUMNS
-    local layout = LiteBag_GetPanelOption(self, "layout") or false
+    local layout = LiteBag_GetPanelOption(self, "layout") or "normal"
 
     -- We process all the ItemButtons even if many of them are not shown, so
     -- that we hide the leftovers
@@ -173,19 +173,22 @@ function LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
 end
 
 function LiteBagPanel_HighlightBagButtons(self, bagID)
-    for _, b in ipairs(self.itemButtonsByBag[bagID]) do
+    for i, b in ipairs(self.itemButtonsByBag[bagID]) do
+        if i > self.size then return end
         b:LockHighlight()
     end
 end
 
 function LiteBagPanel_UnhighlightBagButtons(self, bagID)
-    for _, b in ipairs(self.itemButtonsByBag[bagID]) do
+    for i, b in ipairs(self.itemButtonsByBag[bagID]) do
+        if i > self.size then return end
         b:UnlockHighlight()
     end
 end
 
 function LiteBagPanel_ClearNewItems(self)
-    for _, b in ipairs(self.itemButtons) do
+    for i, b in ipairs(self.itemButtons) do
+        if i > self.size then return end
         LiteBagItemButton_ClearNewItem(b)
     end
 end
@@ -193,37 +196,43 @@ end
 function LiteBagPanel_UpdateItemButtons(self)
     LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
 
-    for _, b in ipairs(self.itemButtons) do
+    for i, b in ipairs(self.itemButtons) do
+        if i > self.size then return end
         LiteBagItemButton_Update(b)
     end
 end
 
-function LiteBagPanel_UpdateCooldowns(self, bagID)
-    for _, b in ipairs(self.itemButtonsByBag[bagID] or {})  do
+function LiteBagPanel_UpdateCooldowns(self)
+    for i, b in ipairs(self.itemButtons)  do
+        if i > self.size then return end
         LiteBagItemButton_UpdateCooldown(b)
     end
 end
 
 function LiteBagPanel_UpdateSearchResults(self)
-    for _, b in ipairs(self.itemButtons) do
+    for i, b in ipairs(self.itemButtons) do
+        if i > self.size then return end
         LiteBagItemButton_UpdateFiltered(b)
     end
 end
 
 function LiteBagPanel_UpdateLocked(self)
-    for _, b in ipairs(self.itemButtons) do
+    for i, b in ipairs(self.itemButtons) do
+        if i > self.size then return end
         LiteBagItemButton_UpdateLocked(b)
     end
 end
 
 function LiteBagPanel_UpdateQuality(self)
-    for _, b in ipairs(self.itemButtons) do
+    for i, b in ipairs(self.itemButtons) do
+        if i > self.size then return end
         LiteBagItemButton_UpdateQuality(b)
     end
 end
 
 function LiteBagPanel_UpdateQuestTextures(self)
-    for _, b in ipairs(self.itemButtons) do
+    for i, b in ipairs(self.itemButtons) do
+        if i > self.size then return end
         LiteBagItemButton_UpdateQuestTexture(b)
     end
 end
@@ -333,8 +342,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
     end
 
     if event == "BAG_UPDATE_COOLDOWN" then
-        -- bag = arg1
-        LiteBagPanel_UpdateCooldowns(self, arg1)
+        LiteBagPanel_UpdateCooldowns(self)
         return
     end
 
