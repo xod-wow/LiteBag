@@ -138,7 +138,6 @@ function LiteBagFrame_ShowPanel(self, n)
 
     self.currentPanel = self.panels[n]
     self:SetSize(self.currentPanel:GetSize())
-    self.TitleText:SetText(self.currentPanel.title)
 
     if #self.panels > 1 then
         PanelTemplates_SetTab(self, n)
