@@ -25,8 +25,8 @@ local function ActiveChatFrame()
     return DEFAULT_CHAT_FRAME
 end
 
-function LiteBag_Print(msg)
-    ActiveChatFrame():AddMessage("|cff00ff00LiteBag:|r " .. msg)
+function LiteBag_Print(msg, ...)
+    ActiveChatFrame():AddMessage("|cff00ff00LiteBag:|r " .. format(msg, ...))
 end
 
 function LiteBag_SetDebug(onOff)
@@ -37,9 +37,8 @@ function LiteBag_SetDebug(onOff)
     end
 end
 
-function LiteBag_Debug(fmt, ...)
-    if debugEnabled then
-        ActiveChatFrame():AddMessage(format(fmt, ...))
-    end
+function LiteBag_Debug(...)
+    if not debugEnabled then return end
+    --LiteBag_Print(...)
+    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00LiteBag:|r " .. format(msg, ...))
 end
-
