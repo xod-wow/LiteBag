@@ -22,6 +22,9 @@ function LiteBagBank_OnLoad(self)
     panel.canResize = true
     LiteBagFrame_AddPanel(self, panel, BankFrameTab1:GetText())
 
+    -- Update sizes when buying a new bank slot
+    hooksecurefunc('PurchaseSlot', function () LiteBagPanel_UpdateBagSizes(panel) end)
+
     -- Attach in the other Blizzard bank panels. Note that we are also
     -- responsible for handling their events!
 
@@ -59,6 +62,7 @@ function LiteBagBank_OnLoad(self)
     -- Bank frame specific events
     self:RegisterEvent("BANKFRAME_OPENED")
     self:RegisterEvent("BANKFRAME_CLOSED")
+
 end
 
 function LiteBagBank_OnEvent(self, event, ...)

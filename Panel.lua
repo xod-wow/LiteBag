@@ -20,6 +20,19 @@ local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
 local LEFT_OFFSET, TOP_OFFSET = 14, 70
 local RIGHT_OFFSET, BOTTOM_OFFSET = 15, 35
 
+
+local function LiteBagPanel_ClearMapping(self)
+    wipe(self.mapBagSlotToButton)
+end
+
+local function LiteBagPanel_UpdateMapping(self, bag, slot, button)
+    self.mapBagSlotToButton[format("%d/%d", bag, slot)] = button
+end
+
+local function LiteBagPanel_GetMapping(self, bag, slot)
+    return self.mapBagSlotToButton[format("%d/%d", bag, slot)]
+end
+
 function LiteBagPanel_Initialize(self, bagIDs)
     LiteBag_Debug("Panel Initialize " .. self:GetName())
 
@@ -68,6 +81,8 @@ function LiteBagPanel_UpdateBagSizes(self)
         LiteBagBagButton_Update(b)
     end
 
+    LiteBagPanel_ClearMapping(self)
+
     for _, bag in ipairs(self.bagFrames) do
         local bagID = bag:GetID()
         for slot = 1, GetContainerNumSlots(bagID) do
@@ -79,10 +94,12 @@ function LiteBagPanel_UpdateBagSizes(self)
             end
             self.itemButtons[n]:SetID(slot)
             self.itemButtons[n]:SetParent(bag)
+            LiteBagPanel_UpdateMapping(self, bagId, slot, self.iteButtons[n])
         end
     end
 
     self.size = n
+
 end
 
 local function inDiffBag(a, b)
@@ -170,6 +187,7 @@ function LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
         ArtifactRelicHelpBox:Hide()
     end
 end
+
 local function IterateItemButtons(self)
     local n = 0
     return function ()
@@ -253,6 +271,7 @@ function LiteBagPanel_OnLoad(self)
     self.size = 0
     self.itemButtons = { }
     self.bagFrames = { }
+    self.mapBagSlotToButton = setmetatable({ }, { __mode = "v" })
 end
 
 function LiteBagPanel_OnShow(self)
@@ -268,7 +287,6 @@ function LiteBagPanel_OnShow(self)
     self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
     self:RegisterEvent("QUEST_ACCEPTED")
     self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
-    self:RegisterEvent("PLAYER_MONEY")
     self:RegisterEvent("BAG_NEW_ITEMS_UPDATED")
     self:RegisterEvent("BAG_SLOT_FLAGS_UPDATED")
     self:RegisterEvent("MERCHANT_SHOW")
@@ -296,7 +314,6 @@ function LiteBagPanel_OnHide(self)
     self:UnregisterEvent("INVENTORY_SEARCH_UPDATE")
     self:UnregisterEvent("QUEST_ACCEPTED")
     self:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
-    self:UnregisterEvent("PLAYER_MONEY")
     self:UnregisterEvent("BAG_NEW_ITEMS_UPDATED")
     self:UnregisterEvent("BAG_SLOT_FLAGS_UPDATED")
     self:UnregisterEvent("MERCHANT_SHOW")
@@ -316,7 +333,8 @@ end
 -- bags or changes that they fire for (where possible).  Others are
 -- rare enough it's OK to call LiteBagPanel_UpdateItemButtons to do everything.
 function LiteBagPanel_OnEvent(self, event, ...)
-    LiteBag_Debug(format("Panel OnEvent %s %s", self:GetName(), event))
+    local arg1, arg2 = ...
+    LiteBag_Debug(format("Panel OnEvent %s %s %s %s", self:GetName(), event, tostring(arg1), tostring(arg2)))
 
     if event == "PLAYER_LOGIN" then
         LiteBagPanel_UpdateBagSizes(self)
@@ -343,16 +361,12 @@ function LiteBagPanel_OnEvent(self, event, ...)
         -- FALLTHROUGH
     end
 
-    if event == "PLAYER_MONEY" then
-        -- The only way to notice we bought a bag button is to see that we
-        -- spent money while the bank is open.
-        LiteBagPanel_UpdateBagSizes(self)
-        -- FALLTHROUGH
-    end
-
     if event == "ITEM_LOCK_CHANGED" then
         local bag, slot = ...
-        LiteBagPanel_UpdateLocked(self, bag)
+        local button = LiteBagPanel_GetMapping(self, bag, slot)
+        if button then
+            LiteBagItemButton_UpdateLocked(button)
+        end
         return
     end
 
