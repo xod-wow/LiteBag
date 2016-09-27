@@ -100,14 +100,11 @@ end
 function LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBag_Debug("Panel UpdateSize " .. self:GetName())
 
-    local scale = LiteBag_GetPanelOption(self, "scale") or
-                    DEFAULT_SCALE
     local ncols = LiteBag_GetPanelOption(self, "columns") or
                     self.defaultColumns or
                     MIN_COLUMNS
     local layout = LiteBag_GetPanelOption(self, "layout") or false
 
-    LiteBag_Debug("Panel UpdateSize scale " .. scale)
     -- We process all the ItemButtons even if many of them are not shown, so
     -- that we hide the leftovers
 
@@ -116,7 +113,6 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
 
     for i, itemButton in ipairs(self.itemButtons) do
         itemButton:ClearAllPoints()
-        itemButton:SetScale(scale)
         if i == 1 then
             itemButton:SetPoint("TOPLEFT", self, LEFT_OFFSET, -TOP_OFFSET)
             startPreviousRow = itemButton
@@ -149,9 +145,9 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
 
     local w, h = self.itemButtons[1]:GetSize()
 
-    local frameW = scale * ncols * w + (ncols-1) * BUTTON_X_GAP
+    local frameW = ncols * w + (ncols-1) * BUTTON_X_GAP
                     + LEFT_OFFSET + RIGHT_OFFSET
-    local frameH = scale * nrows * h + ngaps * BUTTON_Y_GAP
+    local frameH = nrows * h + ngaps * BUTTON_Y_GAP
                     + TOP_OFFSET + BOTTOM_OFFSET
 
     LiteBag_Debug(format("Panel SetSize %d,%d", frameW, frameH))
@@ -208,14 +204,14 @@ function LiteBagPanel_UpdateCooldowns(self, bagID)
     end
 end
 
-function LiteBagPanel_UpdateSearchResults(self, bagID)
-    for b in IterateItemButtons(self, bagID) do
+function LiteBagPanel_UpdateSearchResults(self)
+    for _, b in ipairs(self.itemButtons) do
         LiteBagItemButton_UpdateFiltered(b)
     end
 end
 
-function LiteBagPanel_UpdateLocked(self, bagID)
-    for b in IterateItemButtons(self, bagID) do
+function LiteBagPanel_UpdateLocked(self)
+    for _, b in ipairs(self.itemButtons) do
         LiteBagItemButton_UpdateLocked(b)
     end
 end
