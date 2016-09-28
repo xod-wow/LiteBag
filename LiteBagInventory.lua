@@ -40,7 +40,6 @@ end
 function LiteBagInventory_OnLoad(self)
     LiteBagFrame_OnLoad(self)
 
-    self.TitleText:SetText(GetBagName(0))
     self.portrait:SetTexture("Interface\\MERCHANTFRAME\\UI-BuyBack-Icon")
 
     local panel = CreateFrame("Frame", "LiteBagInventoryPanel", self, "LiteBagPanelTemplate")
@@ -73,6 +72,7 @@ function LiteBagInventory_OnEvent(self, event, ...)
 end
 
 function LiteBagInventory_OnShow(self, ...)
+    self.TitleText:SetText(GetBagName(0))
     LiteBagFrame_OnShow(self, ...)
     SetMainMenuBarButtons(true)
     LiteBagFrame_SetPosition(self)
