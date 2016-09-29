@@ -332,6 +332,10 @@ function LiteBagPanel_OnEvent(self, event, ...)
         return
     end
 
+    -- XXX FIXME XXX
+    -- Once had the vendor disappear in the middle of a mass sale and
+    -- the items did not unlock despite actually selling.
+
     if event == "ITEM_LOCK_CHANGED" then
         -- bag, slot = arg1, arg2
         local bagButtons = self.itemButtonsByBag[arg1]
