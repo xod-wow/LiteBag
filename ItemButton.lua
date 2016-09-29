@@ -231,3 +231,21 @@ function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateItemUpgrade(self)
     LiteBagItemButton_UpdateRelicTutorial(self)
 end
+
+function LiteBagItemButton_OnLoad(self)
+    ContainerFrameItemButton_OnLoad(self)
+    self.GetInventorySlot = ButtonInventorySlot
+    self.UpdateTooltip = LiteBagItemButton_OnEnter
+end
+
+function LiteBagItemButton_OnEnter(self)
+    local bag = self:GetParent():GetID()
+    if bag == BANK_CONTAINER then
+        BankFrameItemButton_OnEnter(self)
+    else
+        ContainerFrameItemButton_OnEnter(self)
+    end
+end
+
+-- No OnLeave, both bank and bags use ContainerframeItemButton_OnLeave
+-- which is automatically inherited

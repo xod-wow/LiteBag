@@ -26,6 +26,10 @@
     </Layers>
 
     <!-- Note: Can't inherit OnClick/OnDrag scripts because it's secure. -->
+    <Scripts>
+        <OnLoad function="LiteBagItemButton_OnLoad" />
+        <OnEnter function="LiteBagItemButton_OnEnter" />
+    </Scripts>
 
 </Button>
 
