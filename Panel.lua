@@ -367,6 +367,13 @@ function LiteBagPanel_OnEvent(self, event, ...)
         return
     end
 
+    if event == "PLAYER_SPECIALIZATION_CHANGED" then
+        if arg1 == "player" then
+            LiteBagPanel_UpdateItemButtons(self)
+        end
+        return
+    end
+
     -- Default action (some above may fall through to do this as well).
     LiteBagPanel_UpdateItemButtons(self)
 end
