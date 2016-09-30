@@ -75,7 +75,7 @@ function LiteBagBank_OnEvent(self, event, ...)
     elseif event == "BANKFRAME_CLOSED" then
         HideUIPanel(self)
     elseif event == "INVENTORY_SEARCH_UPDATE" then
-        ContainerFrame_UpdateSearchResults(ReagentbankFrame)
+        ContainerFrame_UpdateSearchResults(ReagentBankFrame)
     elseif event == "ITEM_LOCK_CHANGED" then
         -- bag, slot = arg1, arg2
         if bag == REAGENTBANK_CONTAINER then
@@ -100,6 +100,7 @@ function LiteBagBank_OnShow(self)
 
     self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
+    self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
 end
 
 function LiteBagBank_OnHide(self)
@@ -108,4 +109,5 @@ function LiteBagBank_OnHide(self)
     CloseBankFrame()
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:UnregisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
+    self:UnregisterEvent("INVENTORY_SEARCH_UPDATE")
 end
