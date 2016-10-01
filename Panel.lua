@@ -202,6 +202,13 @@ function LiteBagPanel_UpdateItemButtons(self)
     end
 end
 
+function LiteBagPanel_UpdateItemUpgrades(self)
+    for i, b in ipairs(self.itemButtons)  do
+        if i > self.size then return end
+        LiteBagItemButton_UpdateItemUpgrade(b)
+    end
+end
+
 function LiteBagPanel_UpdateCooldowns(self)
     for i, b in ipairs(self.itemButtons)  do
         if i > self.size then return end
@@ -312,7 +319,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
         return
     end
 
-    if event == "MERCHANT_SHOW" or event == "MERCHANT_HIDE" then
+    if event == "MERCHANT_SHOW" or event == "MERCHANT_CLOSED" then
         LiteBagPanel_UpdateQuality(self)
         return
     end
@@ -338,9 +345,8 @@ function LiteBagPanel_OnEvent(self, event, ...)
 
     if event == "ITEM_LOCK_CHANGED" then
         -- bag, slot = arg1, arg2
-        local bagButtons = self.itemButtonsByBag[arg1]
-        if bagButtons and bagButtons[arg2] then
-            LiteBagItemButton_UpdateLocked(bagButtons[arg2])
+        if arg1 and arg2 and self.itemButtonsByBag[arg1] then
+            LiteBagItemButton_UpdateLocked(self.itemButtonsByBag[arg1][arg2])
         end
         return
     end
@@ -350,7 +356,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
         return
     end
 
-    if event == "QUEST_ACCEPTED" or event == "UNIT_QUEST_LOG_CHANGED" then
+    if event == "QUEST_ACCEPTED" or (event == "UNIT_QUEST_LOG_CHANGED" and arg1 == "player") then
         LiteBagPanel_UpdateQuestTextures(self)
         return
     end
@@ -371,13 +377,14 @@ function LiteBagPanel_OnEvent(self, event, ...)
         return
     end
 
-    if event == "PLAYER_SPECIALIZATION_CHANGED" then
-        if arg1 == "player" then
-            LiteBagPanel_UpdateItemButtons(self)
-        end
+    if event == "UNIT_INVENTORY_CHANGED" or event == "PLAYER_SPECIALIZATION_CHANGED" then
+        LiteBagPanel_UpdateItemUpgrades(self)
         return
     end
 
-    -- Default action (some above may fall through to do this as well).
+    -- Default action for the below plus whatever is added by plugins
+    --
+    -- BAG_NEW_ITEMS_UPDATED BAG_SLOT_FLAGS_UPDATED BAG_UPDATE
+
     LiteBagPanel_UpdateItemButtons(self)
 end
