@@ -76,7 +76,7 @@ end
 function LiteBagOptionsInventoryColumns_OnValueChanged(self)
     local n = self:GetName()
     _G[n.."Text"]:SetText(format("Inventory columns: %d", self:GetValue()))
-    LiteBagOptionsControl_OnChange(self)
+    LiteBagOptionsControl_OnChanged(self)
 end
 
 function LiteBagOptionsInventoryScale_OnLoad(self)
@@ -87,7 +87,7 @@ end
 function LiteBagOptionsInventoryScale_OnValueChanged(self)
     local n = self:GetName()
     _G[n.."Text"]:SetText(format("Inventory scale: %0.2f", self:GetValue()))
-    LiteBagOptionsControl_OnChange(self)
+    LiteBagOptionsControl_OnChanged(self)
 end
 
 function LiteBagOptionsBankColumns_OnLoad(self)
@@ -98,7 +98,7 @@ end
 function LiteBagOptionsBankColumns_OnValueChanged(self)
     local n = self:GetName()
     _G[n.."Text"]:SetText(format("Bank columns: %d", self:GetValue()))
-    LiteBagOptionsControl_OnChange(self)
+    LiteBagOptionsControl_OnChanged(self)
 end
 
 function LiteBagOptionsBankScale_OnLoad(self)
@@ -109,6 +109,6 @@ end
 function LiteBagOptionsBankScale_OnValueChanged(self)
     local n = self:GetName()
     _G[n.."Text"]:SetText(format("Bank scale: %0.2f", self:GetValue()))
-    LiteBagOptionsControl_OnChange(self)
+    LiteBagOptionsControl_OnChanged(self)
 end
 

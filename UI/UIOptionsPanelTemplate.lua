@@ -112,7 +112,7 @@ function LiteBagOptionsControl_SetControl(self, v)
     end
 end
 
-function LiteBagOptionsControl_OnChange(self)
+function LiteBagOptionsControl_OnChanged(self)
     self:SetOption(self:GetControl())
 end
 
@@ -121,14 +121,6 @@ function LiteBagOptionsControl_OnLoad(self, parent)
     self.SetOption = self.SetOption or function (self, v) end
     self.GetControl = self.GetControl or LiteBagOptionsControl_GetControl
     self.SetControl = self.SetControl or LiteBagOptionsControl_SetControl
-
-    if self.SetValue then
-        self:SetScript("OnValueChanged", LiteBagOptionsControl_OnChange)
-    elseif self.SetChecked then
-        self:SetScript("OnClick", LiteBagOptionsControl_OnChange)
-    elseif self.SetText then
-        self:SetScript("OnTextChanged", LiteBagOptionsControl_OnChange)
-    end
 
     -- Note we don't set an OnShow per control, the panel handler takes care
     -- of running the refresh for all the controls in its OnShow
