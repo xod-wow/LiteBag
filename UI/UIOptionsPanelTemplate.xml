@@ -17,6 +17,7 @@
     <Scripts>
         <OnLoad function="LiteBagOptionsPanel_OnLoad" />
         <OnShow function="LiteBagOptionsPanel_OnShow" />
+        <OnHide function="LiteBagOptionsPanel_OnHide" />
     </Scripts>
 </Frame>
 

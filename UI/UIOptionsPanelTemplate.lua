@@ -4,6 +4,13 @@
 
   Copyright 2015-2016 Mike Battersby
 
+  This is a half-baked reimplementation of what Blizzard have done in their
+  OptionsPanelTemplates.lua, except I want the controls to update live and
+  the "Cancel" button to revert them all to the original value.
+
+  I suspect you can probably do that with the Blizzard code as well if you try,
+  but that would take me longer than writing my own.
+
 ----------------------------------------------------------------------------]]--
 
 function LiteBagOptionsPanel_Open()
@@ -18,7 +25,10 @@ end
 
 function LiteBagOptionsPanel_Refresh(self)
     for _,control in ipairs(self.controls or {}) do
-        control:SetControl(control:GetOption())
+        if control.oldValue == nil then
+            control.oldValue = control:GetOption()
+        end
+        control:SetControl(control.oldValue)
     end
 end
 
@@ -31,12 +41,18 @@ function LiteBagOptionsPanel_Default(self)
 end
 
 function LiteBagOptionsPanel_Okay(self)
-    for i,control in ipairs(self.controls or {}) do
-        control:SetOption(control:GetControl())
+    for _,control in ipairs(self.controls or {}) do
+        control.oldValue = nil
     end
 end
 
 function LiteBagOptionsPanel_Cancel(self)
+    for _,control in ipairs(self.controls or {}) do
+        if control.oldValue ~= nil then
+            control:SetOption(control.oldValue)
+            control.oldValue = nil
+        end
+    end
 end
 
 function LiteBagOptionsPanel_RegisterControl(control, parent)
@@ -48,6 +64,10 @@ end
 function LiteBagOptionsPanel_OnShow(self)
     LiteBagOptions.CurrentOptionsPanel = self
     LiteBagOptionsPanel_Refresh(self)
+end
+
+function LiteBagOptionsPanel_OnHide(self)
+    LiteBagOptionsPanel_Okay(self)
 end
 
 function LiteBagOptionsPanel_OnLoad(self)
@@ -92,11 +112,23 @@ function LiteBagOptionsControl_SetControl(self, v)
     end
 end
 
+function LiteBagOptionsControl_OnChange(self)
+    self:SetOption(self:GetControl())
+end
+
 function LiteBagOptionsControl_OnLoad(self, parent)
     self.GetOption = self.GetOption or function (self) end
     self.SetOption = self.SetOption or function (self, v) end
     self.GetControl = self.GetControl or LiteBagOptionsControl_GetControl
     self.SetControl = self.SetControl or LiteBagOptionsControl_SetControl
+
+    if self.SetValue then
+        self:SetScript("OnValueChanged", LiteBagOptionsControl_OnChange)
+    elseif self.SetChecked then
+        self:SetScript("OnClick", LiteBagOptionsControl_OnChange)
+    elseif self.SetText then
+        self:SetScript("OnTextChanged", LiteBagOptionsControl_OnChange)
+    end
 
     -- Note we don't set an OnShow per control, the panel handler takes care
     -- of running the refresh for all the controls in its OnShow
