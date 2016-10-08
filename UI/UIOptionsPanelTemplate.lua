@@ -113,7 +113,10 @@ function LiteBagOptionsControl_SetControl(self, v)
 end
 
 function LiteBagOptionsControl_OnChanged(self)
-    self:SetOption(self:GetControl())
+    if self.GetControl and self:GetControl() ~= self:GetOption() then
+        LiteBag_Debug("OnChanged " .. self:GetName())
+        self:SetOption(self:GetControl())
+    end
 end
 
 function LiteBagOptionsControl_OnLoad(self, parent)

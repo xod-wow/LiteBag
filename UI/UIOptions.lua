@@ -31,8 +31,8 @@ function LiteBagOptionsEquipsetDisplay_OnLoad(self)
                 else
                     LiteBag_SetGlobalOption("HideEquipsetIcon", nil)
                 end
-                LiteBagFrame_Update(LiteBagInventory)
-                LiteBagFrame_Update(LiteBagBank)
+                LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
+                LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
             end
         self.GetOption = function (self)
                 return not LiteBag_GetGlobalOption("HideEquipsetIcon")
@@ -69,7 +69,7 @@ local function SetupScaleControl(self, panel)
 end
 
 function LiteBagOptionsInventoryColumns_OnLoad(self)
-    SetupColumnsControl(self, LiteBagInventory, 8)
+    SetupColumnsControl(self, LiteBagInventoryPanel, 8)
     LiteBagOptionsControl_OnLoad(self)
 end
 
