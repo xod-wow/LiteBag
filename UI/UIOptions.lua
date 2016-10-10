@@ -9,23 +9,27 @@
 
 function LiteBagOptionsConfirmSort_OnLoad(self)
         self.Text:SetText("Confirm before sorting.")
-        self.SetOption = function (self, setting)
+        self.SetOption =
+            function (self, setting)
                 if not setting or setting == "0" then
                     LiteBag_SetGlobalOption("NoConfirmSort", true)
                 else
                     LiteBag_SetGlobalOption("NoConfirmSort", nil)
                 end
             end
-        self.GetOption = function (self)
+        self.GetOption =
+            function (self)
                 return not LiteBag_GetGlobalOption("NoConfirmSort")
             end
-        self.GetOptionDefault = function (self) return true end
+        self.GetOptionDefault =
+            function (self) return true end
         LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsEquipsetDisplay_OnLoad(self)
         self.Text:SetText("Display equipment set membership icons.")
-        self.SetOption = function (self, setting)
+        self.SetOption =
+            function (self, setting)
                 if not setting or setting == "0" then
                     LiteBag_SetGlobalOption("HideEquipsetIcon", true)
                 else
@@ -34,10 +38,31 @@ function LiteBagOptionsEquipsetDisplay_OnLoad(self)
                 LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
                 LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
             end
-        self.GetOption = function (self)
+        self.GetOption =
+            function (self)
                 return not LiteBag_GetGlobalOption("HideEquipsetIcon")
             end
-        self.GetOptionDefault = function (self) return true end
+        self.GetOptionDefault =
+            function (self) return true end
+        LiteBagOptionsControl_OnLoad(self)
+end
+
+function LiteBagOptionsSnapToPsition_OnLoad(self)
+        self.Text:SetText("Snap inventory frame to default backpack position.")
+        self.SetOption =
+            function (self, setting)
+                if not setting or setting == "0" then
+                    LiteBag_SetGlobalOption("NoSnapToPosition", true)
+                else
+                    LiteBag_SetGlobalOption("NoSnapToPosition", nil)
+                end
+            end
+        self.GetOption =
+            function (self)
+                return not LiteBag_GetGlobalOption("HideEquipsetIcon")
+            end
+        self.GetOptionDefault =
+            function (self) return true end
         LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -46,26 +71,32 @@ local function SetupColumnsControl(self, panel, default)
 
     _G[n.."Low"]:SetText("8")
     _G[n.."High"]:SetText("24")
-    self.SetOption = function (self, v)
+    self.SetOption =
+            function (self, v)
             LiteBag_SetPanelOption(panel, "columns", v)
         end
-    self.GetOption = function (self)
+    self.GetOption =
+            function (self)
             return LiteBag_GetPanelOption(panel, "columns") or default
         end
-    self.GetOptionDefault = function (self) return default end
+    self.GetOptionDefault =
+            function (self) return default end
 end
 
 local function SetupScaleControl(self, panel)
     local n = self:GetName()
     _G[n.."Low"]:SetText(0.75)
     _G[n.."High"]:SetText(1.25)
-    self.SetOption = function (self, v)
+    self.SetOption =
+            function (self, v)
             LiteBag_SetPanelOption(panel, "scale", v)
         end
-    self.GetOption = function (self)
+    self.GetOption =
+            function (self)
             return LiteBag_GetPanelOption(panel, "scale") or 1.0
         end
-    self.GetOptionDefault = function (self) return 1.0 end
+    self.GetOptionDefault =
+            function (self) return 1.0 end
 end
 
 function LiteBagOptionsInventoryColumns_OnLoad(self)

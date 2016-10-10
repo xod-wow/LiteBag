@@ -42,6 +42,10 @@ function LiteBagFrame_StopMoving(self)
         return
     end
 
+    if LM_GetPanelOption(LiteBagInventoryPanel, "NoSnapToPosition") then
+        return
+    end
+
     if GetSqDistanceFromBackpackDefault(self) < 64^2 then
         self:SetUserPlaced(false)
         LiteBagFrame_SetPosition(self)

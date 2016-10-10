@@ -59,75 +59,82 @@ end
     Slash command function for setting options.
 ----------------------------------------------------------------------------]]--
 
+local function CheckOnOff(arg)
+    if not arg or arg == "off" or arg == "no" then
+        return false
+    else
+        return true
+    end
+end
+
 function LiteBag_OptionSlashFunc(argstr)
 
-    local args = { strsplit(" ", argstr) }
+    local cmd, arg1, arg2 = strsplit(" ", strlower(argstr))
+    local onOff = CheckOnOff(arg1)
 
-    for i = 1, #args do
-        local arg = strlower(args[i])
-        if arg == "" then
-            InterfaceOptionsFrame:Show()
-            InterfaceOptionsFrame_OpenToCategory(LiteBagOptions)
-            return
-        end
-        if arg == "confirmsort" then
-            if args[i+1] == "on" then
-                LiteBag_SetGlobalOption("NoConfirmSort", nil)
-                LiteBag_Print("Bag sort confirmation popup enabled.")
-            elseif args[i+1] == "off" then
-                LiteBag_SetGlobalOption("NoConfirmSort", true)
-                LiteBag_Print("Bag sort confirmation popup disabled.")
-            end
-            return
-        end
-        if arg == "equipset" then
-            if args[i+1] == "on" then
-                LiteBag_SetGlobalOption("HideEquipsetIcon", nil)
-                LiteBag_Print("Equipment set icon display enabled.")
-            elseif args[i+1] == "off" then
-                LiteBag_SetGlobalOption("HideEquipsetIcon", true)
-                LiteBag_Print("Equipment set icon display disabled.")
-            end
-            LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
-            LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
-            return
-        end
-        if arg == "debug" then
-            if args[i+1] == "on" then
-                LiteBag_SetDebug(true)
-            elseif args[i+1] == "off" then
-                LiteBag_SetDebug(false)
-            end
-            return
-        end
-        if arg == "inventory.columns" then
-            local n = tonumber(args[i+1])
-            if n and n >= 8 then
-                LiteBag_SetPanelOption(LiteBagInventoryPanel, "columns", n)
-                LiteBagPanel_UpdateSizeAndLayout(LiteBagInventoryPanel)
-                LiteBag_Print("Inventory frame width set to "..n.." columns")
-            else
-                LiteBag_Print("Can't set frame width to less than 8")
-            end
-            return
-        end
-        if arg == "bank.columns" then
-            local n = tonumber(args[i+1])
-            if n and n >= 8 then
-                LiteBag_SetPanelOption(LiteBagBankPanel, "columns", n)
-                LiteBagPanel_UpdateSizeAndLayout(LiteBagBankPanel)
-                LiteBag_Print("Bank frame width set to "..n.." columns")
-            else
-                LiteBag_Print("Can't set frame width to less than 8")
-            end
-            return
-        end
-        LiteBag_Print("Usage:")
-        LiteBag_Print("  /litebag bank.columns <n>")
-        LiteBag_Print("  /litebag inventory.columns <n>")
-        LiteBag_Print("  /litebag equipset <on | off>")
-        LiteBag_Print("  /litebag confirmsort <on | off>")
+    if cmd == "" or cmd == "options" then
+        InterfaceOptionsFrame:Show()
+        InterfaceOptionsFrame_OpenToCategory(LiteBagOptions)
+        return
     end
+
+    if arg == "confirmsort" and arg1 ~= nil then
+        LiteBag_SetGlobalOption("NoConfirmSort", onOff)
+        LiteBag_Print("Bag sort confirmation popup: " .. tostring(onOff))
+        return
+    end
+
+    if arg == "equipset" then
+        LiteBag_SetGlobalOption("HideEquipsetIcon", onOff)
+        LiteBag_Print("Equipment set icon display: " .. tostring(onOff))
+        LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
+        LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
+        return
+    end
+
+    if arg == "debug" then
+        LiteBag_SetDebug(onOff)
+        LiteBag_Print("Debugging: " .. tostring(onOff))
+        return
+    end
+
+    if arg == "inventory.snap" then
+        LiteBag_SetPanelOption(LiteBagInventoryPanel, "NoSnapToPosition", onOff)
+        LiteBag_Print("Inventory snap to default position: " .. tostring(onOff))
+        return
+    end
+
+    if arg == "inventory.columns" then
+        arg1 = tonumber(arg1)
+        if arg1 and arg1 >= 8 then
+            LiteBag_SetPanelOption(LiteBagInventoryPanel, "columns", arg1)
+            LiteBagPanel_UpdateSizeAndLayout(LiteBagInventoryPanel)
+            LiteBag_Print("Inventory columns set to "..arg1.." columns")
+        else
+            LiteBag_Print("Can't set number of columns to less than 8")
+        end
+        return
+    end
+
+    if arg == "bank.columns" then
+        arg1 = tonumber(arg1)
+        if arg1 and arg1 >= 8 then
+            LiteBag_SetPanelOption(LiteBagBankPanel, "columns", arg1)
+            LiteBagPanel_UpdateSizeAndLayout(LiteBagBankPanel)
+            LiteBag_Print("Bank columns set to "..arg1.." columns")
+        else
+            LiteBag_Print("Can't set number of columns to less than 8")
+        end
+        return
+    end
+
+    LiteBag_Print("Usage:")
+    LiteBag_Print("  /litebag bank.columns <n>")
+    LiteBag_Print("  /litebag inventory.columns <n>")
+    LiteBag_Print("  /litebag inventory.snap <on | off>")
+    LiteBag_Print("  /litebag confirmsort <on | off>")
+    LiteBag_Print("  /litebag equipset <on | off>")
+    LiteBag_Print("  /litebag debug <on | off>")
 end
 
 --[[----------------------------------------------------------------------------
