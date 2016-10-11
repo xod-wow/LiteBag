@@ -78,7 +78,7 @@ function LiteBagBank_OnEvent(self, event, ...)
         ContainerFrame_UpdateSearchResults(ReagentBankFrame)
     elseif event == "ITEM_LOCK_CHANGED" then
         -- bag, slot = arg1, arg2
-        if bag == REAGENTBANK_CONTAINER then
+        if arg1 == REAGENTBANK_CONTAINER and arg2 ~= nil then
             local button = ReagentBankFrame["Item"..(arg2)]
             if button then
                 BankFrameItemButton_UpdateLocked(button)
@@ -101,6 +101,7 @@ function LiteBagBank_OnShow(self)
     self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
     self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
+    self:RegisterEvent("ITEM_LOCK_CHANGED")
 end
 
 function LiteBagBank_OnHide(self)
@@ -110,4 +111,5 @@ function LiteBagBank_OnHide(self)
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:UnregisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
     self:UnregisterEvent("INVENTORY_SEARCH_UPDATE")
+    self:UnregisterEvent("ITEM_LOCK_CHANGED")
 end
