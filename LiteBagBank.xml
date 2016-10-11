@@ -4,17 +4,30 @@
 
 <Script file="LiteBagBank.lua" />
 
-<Frame name="LiteBagBank" parent="UIParent" inherits="LiteBagFrameTemplate">
+<!--
+  Put the bank frame inside a placer which is always scale 1.0, so that the
+  UIPanel code can place it but we can still scale down.  In the OnLoad handler
+  we HookScript OnSizeChanged to always keep the Placer the same actual size
+  as the Bank, despite the scale difference.
+-->
 
-    <Size x="384" y="512" />
+<Frame name="LiteBagBankPlacer" parent="UIParent">
+    <Frame name="LiteBagBank" inherits="LiteBagFrameTemplate" hidden="false">
 
-    <Scripts>
-        <OnLoad function="LiteBagBank_OnLoad" />
-        <OnShow function="LiteBagBank_OnShow" />
-        <OnHide function="LiteBagBank_OnHide" />
-        <OnEvent function="LiteBagBank_OnEvent" />
-    </Scripts>
+        <Size x="384" y="512" />
 
+        <Anchors>
+            <Anchor point="TOPLEFT" />
+        </Anchors>
+
+        <Scripts>
+            <OnLoad function="LiteBagBank_OnLoad" />
+            <OnShow function="LiteBagBank_OnShow" />
+            <OnHide function="LiteBagBank_OnHide" />
+            <OnEvent function="LiteBagBank_OnEvent" />
+        </Scripts>
+
+    </Frame>
 </Frame>
 
 </Ui>

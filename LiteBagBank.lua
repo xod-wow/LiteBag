@@ -22,9 +22,6 @@ function LiteBagBank_OnLoad(self)
     panel.canResize = true
     LiteBagFrame_AddPanel(self, panel, BankFrameTab1:GetText())
 
-    -- Update sizes when buying a new bank slot
-    hooksecurefunc('PurchaseSlot', function () LiteBagPanel_UpdateBagSizes(panel) end)
-
     -- Attach in the other Blizzard bank panels. Note that we are also
     -- responsible for handling their events!
 
@@ -47,9 +44,20 @@ function LiteBagBank_OnLoad(self)
     --   http://www.wowwiki.com/Creating_standard_left-sliding_frames
     -- but note that UIPanelLayout-enabled isn't a thing at all.
 
-    self:SetAttribute("UIPanelLayout-defined", true)
-    self:SetAttribute("UIPanelLayout-area", "left")
-    self:SetAttribute("UIPanelLayout-pushable", 6)
+    LiteBagBankPlacer:SetAttribute("UIPanelLayout-defined", true)
+    LiteBagBankPlacer:SetAttribute("UIPanelLayout-area", "left")
+    LiteBagBankPlacer:SetAttribute("UIPanelLayout-pushable", 6)
+
+    self:HookScript("OnSizeChanged",
+        function (self, w, h)
+            local s = self:GetScale()
+            LiteBagBankPlacer:SetSize(w/s, h/s)
+            UpdateUIPanelPositions(LiteBagBankPlacer)
+        end
+    )
+
+    -- Update sizes when buying a new bank slot
+    hooksecurefunc('PurchaseSlot', function () LiteBagPanel_UpdateBagSizes(panel) end)
 
     -- Different inset texture for the bank
 
@@ -71,14 +79,14 @@ function LiteBagBank_OnEvent(self, event, ...)
     LiteBag_Debug(format("Bank OnEvent %s %s %s", event, tostring(arg1), tostring(arg2)))
     if event == "BANKFRAME_OPENED" then
         LiteBagFrame_ShowPanel(self, 1)
-        ShowUIPanel(self)
+        ShowUIPanel(LiteBagBankPlacer)
     elseif event == "BANKFRAME_CLOSED" then
-        HideUIPanel(self)
+        HideUIPanel(LiteBagBankPlacer)
     elseif event == "INVENTORY_SEARCH_UPDATE" then
         ContainerFrame_UpdateSearchResults(ReagentBankFrame)
     elseif event == "ITEM_LOCK_CHANGED" then
         -- bag, slot = arg1, arg2
-        if bag == REAGENTBANK_CONTAINER then
+        if arg1 and arg2 and arg1 == REAGENTBANK_CONTAINER then
             local button = ReagentBankFrame["Item"..(arg2)]
             if button then
                 BankFrameItemButton_UpdateLocked(button)
