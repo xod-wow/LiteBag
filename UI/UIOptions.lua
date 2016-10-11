@@ -47,7 +47,7 @@ function LiteBagOptionsEquipsetDisplay_OnLoad(self)
         LiteBagOptionsControl_OnLoad(self)
 end
 
-function LiteBagOptionsSnapToPsition_OnLoad(self)
+function LiteBagOptionsSnapToPosition_OnLoad(self)
         self.Text:SetText("Snap inventory frame to default backpack position.")
         self.SetOption =
             function (self, setting)
