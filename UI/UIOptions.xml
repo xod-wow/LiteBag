@@ -53,7 +53,7 @@
                 <OnValueChanged function="LiteBagOptionsInventoryColumns_OnValueChanged" />
             </Scripts>
         </Slider>
-        <Slider name="$parentInventoryScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
+        <Slider name="$parentInventoryScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate" hidden="true">
             <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="$parentInventoryColumns" relativePoint="BOTTOMLEFT" y="-32" />
             </Anchors>
@@ -72,7 +72,7 @@
                 <OnValueChanged function="LiteBagOptionsBankColumns_OnValueChanged" />
             </Scripts>
         </Slider>
-        <Slider name="$parentBankScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
+        <Slider name="$parentBankScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate" hidden="true">
             <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="$parentBankColumns" relativePoint="BOTTOMLEFT" y="-32" />
             </Anchors>
