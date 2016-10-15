@@ -11,8 +11,9 @@
 
 local addonName, addonTable = ...
 
--- Defaults to debugging enabled if using a non-curse-packaged version
-local debugEnabled = GetAddOnMetadata(addonName,"Version")=="@project-version@"
+local addonVersion = GetAddOnMetadata(addonName,"Version")
+
+local debugEnabled = false
 
 --[[----------------------------------------------------------------------------
     Printing to active chat frame.
