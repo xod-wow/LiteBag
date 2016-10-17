@@ -93,7 +93,7 @@ function LiteBag_OptionSlashFunc(argstr)
     end
 
     if cmd == "debug" then
-        LiteBag_SetDebug(onOff)
+        LiteBag_SetGlobalOption("DebugEnabled", onOff)
         LiteBag_Print("Debugging: " .. tostring(onOff))
         return
     end

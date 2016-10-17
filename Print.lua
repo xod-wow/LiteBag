@@ -11,10 +11,6 @@
 
 local addonName, addonTable = ...
 
-local addonVersion = GetAddOnMetadata(addonName,"Version")
-
-local debugEnabled = false
-
 --[[----------------------------------------------------------------------------
     Printing to active chat frame.
 ----------------------------------------------------------------------------]]--
@@ -31,16 +27,10 @@ function LiteBag_Print(...)
     ActiveChatFrame():AddMessage("|cff00ff00LiteBag:|r " .. format(...))
 end
 
-function LiteBag_SetDebug(onOff)
-    if onOff then
-        debugEnabled = true
-    else
-        debugEnabled = false
-    end
-end
-
 function LiteBag_Debug(...)
-    if not debugEnabled then return end
-    --LiteBag_Print(...)
-    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00LiteBag:|r " .. format(...))
+    if LiteBag_GetGlobalOption("DebugEnabled") then
+        -- Outputs into the first chat tab instead of LiteBag_Print. Even I
+        -- find the spam too much.
+        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00LiteBag:|r " .. format(...))
+    end
 end
