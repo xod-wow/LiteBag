@@ -59,7 +59,6 @@ function LiteBagPanel_Initialize(self, bagIDs)
     -- because the size of the bags isn't known until then the first
     -- time you start the game.
     self:RegisterEvent("PLAYER_LOGIN")
-    LiteBagPanel_UpdateBagSizes(self)
 end
 
 function LiteBagPanel_UpdateBagSizes(self)
@@ -251,7 +250,6 @@ function LiteBagPanel_UpdateQuestTextures(self)
 end
 
 function LiteBagPanel_OnLoad(self)
-    LiteBag_Debug("Panel OnLoad " .. self:GetName())
     self.size = 0
     self.itemButtons = { }
     self.itemButtonsByBag = { }

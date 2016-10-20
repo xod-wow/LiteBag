@@ -39,6 +39,14 @@ end
 
 function LiteBagInventory_OnLoad(self)
     LiteBagFrame_OnLoad(self)
+    self:RegisterEvent("PLAYER_LOGIN")
+end
+
+function LiteBagInventory_Initialize(self)
+    self:RegisterEvent("PLAYER_LOGIN")
+end
+
+function LiteBagInventory_Initialize(self)
 
     self.portrait:SetTexture("Interface\\MERCHANTFRAME\\UI-BuyBack-Icon")
 
@@ -64,7 +72,9 @@ function LiteBagInventory_OnLoad(self)
 end
 
 function LiteBagInventory_OnEvent(self, event, ...)
-    if tContains(OPEN_EVENTS, event) then
+    if event == "PLAYER_LOGIN" then
+        LiteBagInventory_Initialize(self)
+    elseif tContains(OPEN_EVENTS, event) then
         self:Show()
     elseif tContains(CLOSE_EVENTS, event) then
         self:Hide()

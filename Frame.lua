@@ -155,7 +155,6 @@ function LiteBagFrame_ShowPanel(self, n)
 end
 
 function LiteBagFrame_OnLoad(self)
-    LiteBag_Debug("Frame OnLoad " .. self:GetName())
     self.panels = { }
     self.currentPanel = nil
 end

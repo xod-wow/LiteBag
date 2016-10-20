@@ -13,7 +13,10 @@ local BANK_BAG_IDS = { -1, 5, 6, 7, 8, 9, 10, 11 }
 
 function LiteBagBank_OnLoad(self)
     LiteBagFrame_OnLoad(self)
+    self:RegisterEvent("PLAYER_LOGIN")
+end
 
+function LiteBagBank_Initialize(self)
     -- Basic slots panel for the bank slots
 
     local panel = CreateFrame("Frame", "LiteBagBankPanel", self, "LiteBagPanelTemplate")
@@ -69,7 +72,9 @@ function LiteBagBank_OnEvent(self, event, ...)
     local arg1, arg2 = ...
 
     LiteBag_Debug(format("Bank OnEvent %s %s %s", event, tostring(arg1), tostring(arg2)))
-    if event == "BANKFRAME_OPENED" then
+    if event == "PLAYER_LOGIN" then
+        LiteBagBank_Initialize(self)
+    elseif event == "BANKFRAME_OPENED" then
         LiteBagFrame_ShowPanel(self, 1)
         ShowUIPanel(self)
     elseif event == "BANKFRAME_CLOSED" then
