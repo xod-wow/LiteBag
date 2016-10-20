@@ -193,6 +193,12 @@ function LiteBagPanel_ClearNewItems(self)
     end
 end
 
+function LiteBagPanel_UpdateIemButtonsByBag(self, bag)
+    for _,b in ipairs(self.itemButtonsByBag[bag] or {}) do
+        LiteBagItemButton_Update(b)
+    end
+end
+
 function LiteBagPanel_UpdateItemButtons(self)
     LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
 
@@ -382,9 +388,15 @@ function LiteBagPanel_OnEvent(self, event, ...)
         return
     end
 
+    if event == "BAG_UPDATE" or event == "BAG_SLOT_FLAGS_UPDATED" then
+        -- bag = arg1
+        LiteBagPanel_UpdateIemButtonsByBag(self, arg1)
+        return
+    end
+
     -- Default action for the below plus whatever is added by plugins
     --
-    -- BAG_NEW_ITEMS_UPDATED BAG_SLOT_FLAGS_UPDATED BAG_UPDATE
+    -- BAG_NEW_ITEMS_UPDATED 
 
     LiteBagPanel_UpdateItemButtons(self)
 end
