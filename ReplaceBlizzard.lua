@@ -64,7 +64,7 @@ local function ReplaceBlizzardInventory()
     -- This one is called when you click on a loot popup and you have
     -- one of those items in your bag already.
     OpenBag = function (bag)
-                    LiteBagFrame_Show(LiteBagInventory)
+                    LiteBagInventory:Show()
                 end
 
     -- These are the bag buttons in the menu bar at the bottom which are
@@ -145,7 +145,7 @@ local function ReplaceBlizzard()
         local f = _G["ContainerFrame"..i]
         f:SetScript("OnShow", function (self)
                 self:Hide()
-                LiteBagFrame_Show(LiteBagInventory)
+                LiteBagInventory:Show()
                 ReplaceBlizzardInventory()
             end)
         f:SetScript("OnHide", nil)
