@@ -350,6 +350,9 @@ function LiteBagPanel_OnEvent(self, event, ...)
     if event == "ITEM_LOCK_CHANGED" then
         -- bag, slot = arg1, arg2
         if arg1 and arg2 and self.itemButtonsByBag[arg1] then
+            if arg1 == BANK_CONTAINER and arg2 > NUM_BANKGENERIC_SLOTS then
+                return
+            end
             LiteBagItemButton_UpdateLocked(self.itemButtonsByBag[arg1][arg2])
         end
         return
