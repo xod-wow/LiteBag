@@ -99,10 +99,10 @@ end
 function LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBag_Debug("Panel UpdateSize " .. self:GetName())
 
-    local ncols = LiteBag_GetPanelOption(self, "columns") or
+    local ncols = LiteBag_GetFrameOption(self, "columns") or
                     self.defaultColumns or
                     MIN_COLUMNS
-    local layout = LiteBag_GetPanelOption(self, "layout") or "normal"
+    local layout = LiteBag_GetFrameOption(self, "layout") or "normal"
 
     -- We process all the ItemButtons even if many of them are not shown, so
     -- that we hide the leftovers
@@ -161,7 +161,7 @@ function LiteBagPanel_SetWidth(self, width)
     local ncols = floor( (width - LEFT_OFFSET - RIGHT_OFFSET + BUTTON_X_GAP) / (w + BUTTON_X_GAP) )
     ncols = min(ncols, self.size)
     ncols = max(ncols, MIN_COLUMNS)
-    LiteBag_SetPanelOption(self, "columns", ncols)
+    LiteBag_SetFrameOption(self, "columns", ncols)
     LiteBagPanel_UpdateSizeAndLayout(self)
 end
 

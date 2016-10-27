@@ -42,7 +42,7 @@ function LiteBagFrame_StopMoving(self)
         return
     end
 
-    if LiteBag_GetPanelOption(LiteBagInventoryPanel, "NoSnapToPosition") then
+    if LiteBag_GetGlobalOption("NoSnapToPosition") then
         return
     end
 

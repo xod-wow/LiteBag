@@ -17,11 +17,21 @@ local function UpgradeDBVersion()
 
     for _,frameName in ipairs({ "LiteBagInventory", "LiteBagBank" }) do
         oldkey = format("Frame:%s", frameName)
-        newkey = format("Panel:%sPanel", frameName)
+        newkey = format("Frame:%sPanel", frameName)
         if db[oldkey] then
             db[newkey] = db[oldkey]
             db[oldkey] = nil
         end
+    end
+
+    -- I made this Panel: in the betas so I better handle it
+    if db["Panel:LiteBagInventoryPanel"] then
+        db["Frame:LiteBagInventoryPanel"] = db["Panel:LiteBagInventoryPanel"]
+        db["Panel:LiteBagInventoryPanel"] = nil
+    end
+    if db["Panel:LiteBagBankPanel"] then
+        db["Frame:LiteBagBankPanel"] = db["Panel:LiteBagBankPanel"]
+        db["Panel:LiteBagBankPanel"] = nil
     end
 
 end
@@ -34,14 +44,16 @@ function LiteBag_InitializeOptions()
     end
 end
 
-function LiteBag_SetPanelOption(frame, option, value)
-    local n = "Panel:" .. frame:GetName()
+function LiteBag_SetFrameOption(frame, option, value)
+    frame = _G[frame] or frame
+    local n = "Frame:" .. frame:GetName()
     LiteBag_OptionsDB[n] = LiteBag_OptionsDB[n] or { }
     LiteBag_OptionsDB[n][option] = value
 end
 
-function LiteBag_GetPanelOption(frame, option)
-    local n = "Panel:" .. frame:GetName()
+function LiteBag_GetFrameOption(frame, option)
+    frame = _G[frame] or frame
+    local n = "Frame:" .. frame:GetName()
     LiteBag_OptionsDB[n] = LiteBag_OptionsDB[n] or { }
     return LiteBag_OptionsDB[n][option]
 end
@@ -99,7 +111,7 @@ function LiteBag_OptionSlashFunc(argstr)
     end
 
     if cmd == "inventory.snap" then
-        LiteBag_SetPanelOption(LiteBagInventoryPanel, "NoSnapToPosition", onOff)
+        LiteBag_SetFrameOption(LiteBagInventoryPanel, "NoSnapToPosition", onOff)
         LiteBag_Print("Inventory snap to default position: " .. tostring(onOff))
         return
     end
@@ -107,7 +119,7 @@ function LiteBag_OptionSlashFunc(argstr)
     if cmd == "inventory.columns" then
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
-            LiteBag_SetPanelOption(LiteBagInventoryPanel, "columns", arg1)
+            LiteBag_SetFrameOption(LiteBagInventoryPanel, "columns", arg1)
             LiteBagPanel_UpdateSizeAndLayout(LiteBagInventoryPanel)
             LiteBag_Print("Inventory columns set to "..arg1.." columns")
         else
@@ -119,7 +131,7 @@ function LiteBag_OptionSlashFunc(argstr)
     if cmd == "bank.columns" then
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
-            LiteBag_SetPanelOption(LiteBagBankPanel, "columns", arg1)
+            LiteBag_SetFrameOption(LiteBagBankPanel, "columns", arg1)
             LiteBagPanel_UpdateSizeAndLayout(LiteBagBankPanel)
             LiteBag_Print("Bank columns set to "..arg1.." columns")
         else
