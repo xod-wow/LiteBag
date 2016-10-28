@@ -4,6 +4,31 @@
 
 <Script file="LiteBagBank.lua" />
 
+<Frame name="LiteBagBankPlacer" parent="UIParent">
+
+    <Size x="384" y="512" />
+
+    <Attributes>
+        <Attribute name="UIPanelLayout-defined" type="boolean" value="true" />
+        <Attribute name="UIPanelLayout-area" type="string" value="left" />
+        <Attribute name="UIPanelLayout-pushable" type="number" value="6" />
+    </Attributes>
+
+    <Layers>
+        <Layer level="OVERLAY">
+            <Texture name="$parentTexture" setAllPoints="true">
+                <Color r="0.55" g="0.55" b="0.55" a="1"/>
+            </Texture>
+        </Layer>
+    </Layers>
+
+    <Scripts>
+        <OnLoad>
+
+        </OnLoad>
+    </Scripts>
+</Frame>
+
 <Frame name="LiteBagBank" parent="UIParent" inherits="LiteBagFrameTemplate">
 
     <Size x="384" y="512" />

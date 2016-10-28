@@ -79,6 +79,32 @@ local function CheckOnOff(arg)
     end
 end
 
+local function CreateScaleTest()
+    local outer = ScaleTestOuter or CreateFrame("Frame", "ScaleTestOuter", UIParent)
+    outer:SetSize(600, 600)
+    outer.colorTex = outer:CreateTexture("ScaleTestOuterTexture")
+    outer.colorTex:SetAllPoints()
+    outer.colorTex:SetTexture(0, 1, 0, 1)
+
+    local inner = ScaleTestInner or CreateFrame("Frame", "ScaleTestInner", outer)
+    inner:SetSize(600, 600)
+    inner:SetScale(0.666)
+    inner:SetAllPoints()
+    inner.colorTex = inner:CreateTexture("ScaleTestInnerTexture")
+    inner.colorTex:SetAllPoints()
+    inner.colorTex:SetTexture(1, 0, 0, 1)
+
+    inner:Show()
+
+    outer:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+    outer:Show()
+
+    LiteBag_Print(format("outer size = %d,%d", outer:GetSize()))
+    LiteBag_Print(format("outer rect = %d,%d,%d,%d", outer:GetRect()))
+    LiteBag_Print(format("inner size = %d,%d", inner:GetSize()))
+    LiteBag_Print(format("inner rect = %d,%d,%d,%d", inner:GetRect()))
+end
+
 function LiteBag_OptionSlashFunc(argstr)
 
     local cmd, arg1, arg2 = strsplit(" ", strlower(argstr))
@@ -136,6 +162,20 @@ function LiteBag_OptionSlashFunc(argstr)
             LiteBag_Print("Bank columns set to "..arg1.." columns")
         else
             LiteBag_Print("Can't set number of columns to less than 8")
+        end
+        return
+    end
+
+    if cmd == "scale" then
+        CreateScaleTest()
+        return
+    end
+
+    if cmd == "placer" then
+        if arg1 == "show" then
+            ShowUIPanel(LiteBagBankPlacer)
+        elseif arg == "hide" then
+            HideUIPanel(LiteBagBankPlacer)
         end
         return
     end
