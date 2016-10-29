@@ -83,17 +83,17 @@ local function SetupColumnsControl(self, panel, default)
             function (self) return default end
 end
 
-local function SetupScaleControl(self, panel)
+local function SetupScaleControl(self, frame)
     local n = self:GetName()
     _G[n.."Low"]:SetText(0.75)
     _G[n.."High"]:SetText(1.25)
     self.SetOption =
             function (self, v)
-            LiteBag_SetFrameOption(panel, "scale", v)
+            LiteBag_SetFrameOption(frame, "scale", v)
         end
     self.GetOption =
             function (self)
-            return LiteBag_GetFrameOption(panel, "scale") or 1.0
+            return LiteBag_GetFrameOption(frame, "scale") or 1.0
         end
     self.GetOptionDefault =
             function (self) return 1.0 end
@@ -111,7 +111,7 @@ function LiteBagOptionsInventoryColumns_OnValueChanged(self)
 end
 
 function LiteBagOptionsInventoryScale_OnLoad(self)
-    SetupScaleControl(self, "LiteBagInventoryPanel")
+    SetupScaleControl(self, "LiteBagInventory")
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -133,7 +133,7 @@ function LiteBagOptionsBankColumns_OnValueChanged(self)
 end
 
 function LiteBagOptionsBankScale_OnLoad(self)
-    SetupScaleControl(self, "LiteBagBankPanel")
+    SetupScaleControl(self, "LiteBagBank")
     LiteBagOptionsControl_OnLoad(self)
 end
 

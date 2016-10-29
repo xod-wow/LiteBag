@@ -13,7 +13,7 @@ local BANK_BAG_IDS = { -1, 5, 6, 7, 8, 9, 10, 11 }
 
 function LiteBagBank_OnLoad(self)
     LiteBagFrame_OnLoad(self)
-    self:RegisterEvent("PLAYER_LOGIN")
+    self:RegisterEvent("ADDON_LOADED")
 end
 
 function LiteBagBank_Initialize(self)
@@ -50,10 +50,6 @@ function LiteBagBank_Initialize(self)
     --   http://www.wowwiki.com/Creating_standard_left-sliding_frames
     -- but note that UIPanelLayout-enabled isn't a thing at all.
 
-    self:SetAttribute("UIPanelLayout-defined", true)
-    self:SetAttribute("UIPanelLayout-area", "left")
-    self:SetAttribute("UIPanelLayout-pushable", 6)
-
     -- Different inset texture for the bank
 
     self.Inset.Bg:SetTexture("Interface\\FrameGeneral\\UI-Background-Rock", true, true)
@@ -68,17 +64,18 @@ function LiteBagBank_Initialize(self)
 
 end
 
-function LiteBagBank_OnEvent(self, event, ...)
-    local arg1, arg2 = ...
+function LiteBagBank_OnEvent(self, event, arg1, arg2, ...)
 
     LiteBag_Debug(format("Bank OnEvent %s %s %s", event, tostring(arg1), tostring(arg2)))
-    if event == "PLAYER_LOGIN" then
-        LiteBagBank_Initialize(self)
+    if event == "ADDON_LOADED" then
+        if arg1 == "LiteBag" then
+            LiteBagBank_Initialize(self)
+        end
     elseif event == "BANKFRAME_OPENED" then
         LiteBagFrame_ShowPanel(self, 1)
-        ShowUIPanel(self)
+        ShowUIPanel(self:GetParent())
     elseif event == "BANKFRAME_CLOSED" then
-        HideUIPanel(self)
+        HideUIPanel(self:GetParent())
     elseif event == "INVENTORY_SEARCH_UPDATE" then
         ContainerFrame_UpdateSearchResults(ReagentBankFrame)
     elseif event == "ITEM_LOCK_CHANGED" then

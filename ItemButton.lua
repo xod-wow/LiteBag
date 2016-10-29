@@ -215,8 +215,6 @@ end
 -- they didn't just have that trigger a new event.
 
 function LiteBagItemButton_UpdateItemUpgrade(self)
-    -- pre 7.1 check, can take this out after it goes live
-    if not ContainerFrameItemButton_UpdateItemUpgradeIcon then return end
     ContainerFrameItemButton_UpdateItemUpgradeIcon(self)
 end
 

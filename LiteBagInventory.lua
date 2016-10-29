@@ -39,11 +39,7 @@ end
 
 function LiteBagInventory_OnLoad(self)
     LiteBagFrame_OnLoad(self)
-    self:RegisterEvent("PLAYER_LOGIN")
-end
-
-function LiteBagInventory_Initialize(self)
-    self:RegisterEvent("PLAYER_LOGIN")
+    self:RegisterEvent("ADDON_LOADED")
 end
 
 function LiteBagInventory_Initialize(self)
@@ -71,9 +67,11 @@ function LiteBagInventory_Initialize(self)
     for _, event in ipairs(CLOSE_EVENTS) do self:RegisterEvent(event) end
 end
 
-function LiteBagInventory_OnEvent(self, event, ...)
-    if event == "PLAYER_LOGIN" then
-        LiteBagInventory_Initialize(self)
+function LiteBagInventory_OnEvent(self, event, arg1, arg2, ...)
+    if event == "ADDON_LOADED" then
+        if arg1 == "LiteBag" then
+            LiteBagInventory_Initialize(self)
+        end
     elseif tContains(OPEN_EVENTS, event) then
         self:Show()
     elseif tContains(CLOSE_EVENTS, event) then

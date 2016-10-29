@@ -79,32 +79,6 @@ local function CheckOnOff(arg)
     end
 end
 
-local function CreateScaleTest()
-    local outer = ScaleTestOuter or CreateFrame("Frame", "ScaleTestOuter", UIParent)
-    outer:SetSize(600, 600)
-    outer.colorTex = outer:CreateTexture("ScaleTestOuterTexture")
-    outer.colorTex:SetAllPoints()
-    outer.colorTex:SetTexture(0, 1, 0, 1)
-
-    local inner = ScaleTestInner or CreateFrame("Frame", "ScaleTestInner", outer)
-    inner:SetSize(600, 600)
-    inner:SetScale(0.666)
-    inner:SetAllPoints()
-    inner.colorTex = inner:CreateTexture("ScaleTestInnerTexture")
-    inner.colorTex:SetAllPoints()
-    inner.colorTex:SetTexture(1, 0, 0, 1)
-
-    inner:Show()
-
-    outer:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-    outer:Show()
-
-    LiteBag_Print(format("outer size = %d,%d", outer:GetSize()))
-    LiteBag_Print(format("outer rect = %d,%d,%d,%d", outer:GetRect()))
-    LiteBag_Print(format("inner size = %d,%d", inner:GetSize()))
-    LiteBag_Print(format("inner rect = %d,%d,%d,%d", inner:GetRect()))
-end
-
 function LiteBag_OptionSlashFunc(argstr)
 
     local cmd, arg1, arg2 = strsplit(" ", strlower(argstr))
@@ -154,6 +128,16 @@ function LiteBag_OptionSlashFunc(argstr)
         return
     end
 
+    if cmd == "inventory.scale" then
+        arg1 = tonumber(arg1)
+        if arg1 > 0 and arg1 <= 2 then
+            LiteBag_SetFrameOption(LiteBagInventory, "scale", arg1)
+            LiteBag_Print("Inventory scale set to "..arg1)
+        else
+            LiteBag_Print("Scale must be between 0 and 2.")
+        end
+        return
+    end
     if cmd == "bank.columns" then
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
@@ -166,23 +150,22 @@ function LiteBag_OptionSlashFunc(argstr)
         return
     end
 
-    if cmd == "scale" then
-        CreateScaleTest()
-        return
-    end
-
-    if cmd == "placer" then
-        if arg1 == "show" then
-            ShowUIPanel(LiteBagBankPlacer)
-        elseif arg == "hide" then
-            HideUIPanel(LiteBagBankPlacer)
+    if cmd == "bank.scale" then
+        arg1 = tonumber(arg1)
+        if arg1 > 0 and arg1 <= 2 then
+            LiteBag_SetFrameOption(LiteBagBank, "scale", arg1)
+            LiteBag_Print("Bank scale set to "..arg1)
+        else
+            LiteBag_Print("Scale must be between 0 and 2.")
         end
         return
     end
-
+            
     LiteBag_Print("Usage:")
     LiteBag_Print("  /litebag bank.columns <n>")
+    LiteBag_Print("  /litebag bank.scale <s>")
     LiteBag_Print("  /litebag inventory.columns <n>")
+    LiteBag_Print("  /litebag inventory.scale <s>")
     LiteBag_Print("  /litebag inventory.snap <on | off>")
     LiteBag_Print("  /litebag confirmsort <on | off>")
     LiteBag_Print("  /litebag equipset <on | off>")

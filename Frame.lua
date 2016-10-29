@@ -87,6 +87,7 @@ function LiteBagFrame_OnShow(self)
     LiteBag_Debug("Frame OnShow " .. self:GetName())
 
     self:SetSize(self.currentPanel:GetSize())
+    self:SetScale(LiteBag_GetFrameOption(self, "scale") or 1.0)
 
     LiteBagFrame_AttachSearchBox(self)
 
