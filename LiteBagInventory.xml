@@ -7,10 +7,6 @@
 <Frame name="LiteBagInventory" parent="UIParent"
        inherits="LiteBagFrameTemplate">
 
-    <ResizeBounds>
-        <minResize x="360" y="183" />
-    </ResizeBounds>
-
     <Frames>
         <Button name="$parentDragButton">
             <Size x="0" y="20"/>

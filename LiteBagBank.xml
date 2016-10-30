@@ -59,14 +59,16 @@
         <OnSizeChanged>
             LiteBagFrame_OnSizeChanged(self, w, h)
 
-            self:SetPoint("TOPLEFT")
-
             local placer = self:GetParent()
             local s = self:GetScale()
             placer:SetSize(w*s, h*s)
             if placer:IsShown() then
                 UpdateUIPanelPositions(placer)
             end
+
+            self:ClearAllPoints()
+            self:SetPoint("TOPLEFT", placer, "TOPLEFT")
+
         </OnSizeChanged>
     </Scripts>
 
