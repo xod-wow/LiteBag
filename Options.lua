@@ -13,27 +13,6 @@ local addonName, addonTable = ...
 
 local function UpgradeDBVersion()
     local db = LiteBag_OptionsDB
-    local oldkey, newkey
-
-    for _,frameName in ipairs({ "LiteBagInventory", "LiteBagBank" }) do
-        oldkey = format("Frame:%s", frameName)
-        newkey = format("Frame:%sPanel", frameName)
-        if db[oldkey] then
-            db[newkey] = db[oldkey]
-            db[oldkey] = nil
-        end
-    end
-
-    -- I made this Panel: in the betas so I better handle it
-    if db["Panel:LiteBagInventoryPanel"] then
-        db["Frame:LiteBagInventoryPanel"] = db["Panel:LiteBagInventoryPanel"]
-        db["Panel:LiteBagInventoryPanel"] = nil
-    end
-    if db["Panel:LiteBagBankPanel"] then
-        db["Frame:LiteBagBankPanel"] = db["Panel:LiteBagBankPanel"]
-        db["Panel:LiteBagBankPanel"] = nil
-    end
-
 end
 
 function LiteBag_InitializeOptions()
