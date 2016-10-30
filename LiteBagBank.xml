@@ -34,6 +34,7 @@
     </Attributes>
 
     <!-- XXX FIXME XXX DELETE THIS BEFORE GO LIVE, YELLOW UNDERLAY -->
+    <!--
     <Layers>
         <Layer level="OVERLAY">
             <Texture name="$parentTexture" setAllPoints="true">
@@ -41,6 +42,7 @@
             </Texture>
         </Layer>
     </Layers>
+    -->
 </Frame>
 
 <Frame name="LiteBagBank" parent="LiteBagBankPlacer" inherits="LiteBagFrameTemplate" hidden="false">
