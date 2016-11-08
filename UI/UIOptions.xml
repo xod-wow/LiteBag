@@ -44,7 +44,7 @@
             </Scripts>
         </CheckButton>
 
-        <Slider name="$parentInventoryColumns" minValue="8" maxValue="24" valueStep="2" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
+        <Slider name="$parentInventoryColumns" minValue="8" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
             <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="$parentSnapToPosition" relativePoint="BOTTOMLEFT" x="32" y="-64" />
             </Anchors>
@@ -63,7 +63,7 @@
             </Scripts>
         </Slider>
 
-        <Slider name="$parentBankColumns" minValue="8" maxValue="24" valueStep="2" obeyStepOnDrag="true" defaultValue="14" inherits="OptionsSliderTemplate">
+        <Slider name="$parentBankColumns" minValue="8" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="14" inherits="OptionsSliderTemplate">
             <Anchors>
                 <Anchor point="LEFT" relativeTo="$parentInventoryColumns" relativePoint="RIGHT" x="96" />
             </Anchors>
