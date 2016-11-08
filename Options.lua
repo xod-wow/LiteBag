@@ -16,11 +16,8 @@ local function UpgradeDBVersion()
 end
 
 function LiteBag_InitializeOptions()
-    if not LiteBag_OptionsDB then
-        LiteBag_OptionsDB = { }
-    else
-        UpgradeDBVersion()
-    end
+    LiteBag_OptionsDB = LiteBag_OptionsDB or { }
+    UpgradeDBVersion()
 end
 
 function LiteBag_SetFrameOption(frame, option, value)
