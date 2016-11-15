@@ -14,8 +14,8 @@ local addonName, addonTable = ...
 local function GetSqDistanceFromBackpackDefault(self)
     local defaultX = UIParent:GetRight() - CONTAINER_OFFSET_X
     local defaultY = UIParent:GetBottom() + CONTAINER_OFFSET_Y
-    local selfX = self:GetRight()
-    local selfY = self:GetBottom()
+    local selfX = self:GetRight() * self:GetScale()
+    local selfY = self:GetBottom() * self:GetScale()
     return (defaultX-selfX)^2 + (defaultY-selfY)^2
 end
 
