@@ -42,14 +42,12 @@ function LiteBagBank_Initialize(self)
 
     self.OnShowPanel = function (self, n)
             -- Use the title text from the Bank Frame itself
-            BANK_PANELS[self.selectedTab].SetTitle()
+            BANK_PANELS[n].SetTitle()
             self.TitleText:SetText(BankFrameTitleText:GetText())
+            -- The itembuttons use BankFrame.selectedTab to know where
+            -- to put something that's clicked.
+            BankFrame.selectedTab = n
         end
-
-    -- UIPanelLayout stuff so the Blizzard UIParent code will position us
-    -- automatically. See
-    --   http://www.wowwiki.com/Creating_standard_left-sliding_frames
-    -- but note that UIPanelLayout-enabled isn't a thing at all.
 
     -- Different inset texture for the bank
 
@@ -92,7 +90,9 @@ function LiteBagBank_OnEvent(self, event, arg1, arg2, ...)
         BankFrameItemButton_Update(ReagentBankFrame["Item"..(arg1)])
     elseif event == "PLAYER_MONEY" then
         if self.selectedTab == 1 then
-            LiteBagPanel_UpdateBagSizes(LiteBagBankPanel)
+            LiteBagPanel_UpdateBagSlotCounts(LiteBagBankPanel)
+            LiteBagPanel_UpdateSizeAndLayout(LiteBagBankPanel)
+            LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
         end
     end
 end

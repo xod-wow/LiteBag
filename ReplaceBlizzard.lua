@@ -107,10 +107,6 @@ local function ReplaceBlizzardBank()
     BankFrame:SetScript("OnShow", function () end)
     BankFrame:SetScript("OnHide", function () end)
 
-    local OnClick = function (tab) BankFrame.selectedTab = tab:GetID() end
-    for i = 1, #BANK_PANELS do
-        LiteBagBank.Tabs[i]:HookScript("OnClick", OnClick)
-    end
     LiteBagBank:HookScript("OnShow", function () BankFrame:Show() end)
     LiteBagBank:HookScript("OnHide", function () BankFrame:Hide() end)
 
