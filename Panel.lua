@@ -61,8 +61,8 @@ function LiteBagPanel_Initialize(self, bagIDs)
     self:RegisterEvent("PLAYER_LOGIN")
 end
 
-function LiteBagPanel_UpdateBagSizes(self)
-    LiteBag_Debug("Panel UpdateBagSizes " .. self:GetName())
+function LiteBagPanel_UpdateBagSlotCounts(self)
+    LiteBag_Debug("Panel UpdateBagSlotCounts " .. self:GetName())
     local n = 0
 
     for _, b in ipairs(self.bagButtons) do
@@ -86,12 +86,111 @@ function LiteBagPanel_UpdateBagSizes(self)
     end
 
     self.size = n
-
 end
 
 local function inDiffBag(a, b)
     return a:GetParent():GetID() ~= b:GetParent():GetID()
 end
+
+-- We process all the ItemButtons even if many of them are not shown, so
+-- that we hide the leftovers
+
+local LAYOUTS = { }
+
+LAYOUTS.normal =
+    function (self, ncols)
+        local startPreviousRow, previousButton
+
+        for i, itemButton in ipairs(self.itemButtons) do
+            itemButton:ClearAllPoints()
+            itemButton:SetShown(i <= self.size)
+            if i == 1 then
+                itemButton:SetPoint("TOPLEFT", self, LEFT_OFFSET, -TOP_OFFSET)
+                startPreviousRow = itemButton
+            elseif i % ncols == 1 then
+                itemButton:SetPoint("TOPLEFT", startPreviousRow, "BOTTOMLEFT", 0, -BUTTON_Y_GAP)
+                startPreviousRow = itemButton
+            else
+                itemButton:SetPoint("TOPLEFT", previousButton, "TOPRIGHT", BUTTON_X_GAP, 0)
+            end
+
+            previousButton = itemButton
+        end
+
+        local w, h = self.itemButtons[1]:GetSize()
+        local nrows = ceil(self.size / ncols)
+
+        local totalW = ncols * w + (ncols-1) * BUTTON_X_GAP
+        local totalH = nrows * h + (nrows-1) * BUTTON_Y_GAP
+
+        return totalW, totalH
+    end
+
+LAYOUTS.reverse =
+    function (self, ncols)
+        local startPreviousRow, previousButton
+
+        for i, itemButton in ipairs(self.itemButtons) do
+            itemButton:ClearAllPoints()
+            itemButton:SetShown(i <= self.size)
+            if i == 1 then
+                itemButton:SetPoint("BOTTOMRIGHT", self, -RIGHT_OFFSET, BOTTOM_OFFSET)
+                startPreviousRow = itemButton
+            elseif i % ncols == 1 then
+                itemButton:SetPoint("BOTTOMRIGHT", startPreviousRow, "TOPRIGHT", 0, BUTTON_Y_GAP)
+                startPreviousRow = itemButton
+            else
+                itemButton:SetPoint("BOTTOMRIGHT", previousButton, "BOTTOMLEFT", -BUTTON_X_GAP, 0)
+            end
+
+            previousButton = itemButton
+        end
+
+        local w, h = self.itemButtons[1]:GetSize()
+        local nrows = ceil(self.size / ncols)
+
+        local totalW = ncols * w + (ncols-1) * BUTTON_X_GAP
+        local totalH = nrows * h + (nrows-1) * BUTTON_Y_GAP
+
+        return totalW, totalH
+    end
+
+LAYOUTS.bag =
+    function (self, ncols)
+
+        local startPreviousRow, previousButton, currentColumn
+        local nrows = 0
+
+        for i, itemButton in ipairs(self.itemButtons) do
+            itemButton:ClearAllPoints()
+            itemButton:SetShown(i <= self.size)
+            if i > self.size then
+                -- Don't include any extras in the counts
+            elseif i == 1 then
+                itemButton:SetPoint("TOPLEFT", self, LEFT_OFFSET, -TOP_OFFSET)
+                startPreviousRow = itemButton
+                nrows = 1
+                currentColumn = 1
+            elseif inDiffBag(itemButton, previousButton) or currentColumn == ncols then
+                itemButton:SetPoint("TOPLEFT", startPreviousRow, "BOTTOMLEFT", 0, -BUTTON_Y_GAP)
+                startPreviousRow = itemButton
+                currentColumn = 1
+                nrows = nrows + 1
+            else
+                itemButton:SetPoint("TOPLEFT", previousButton, "TOPRIGHT", BUTTON_X_GAP, 0)
+                currentColumn = currentColumn + 1
+            end
+
+            previousButton = itemButton
+        end
+
+        local w, h = self.itemButtons[1]:GetSize()
+
+        local totalW = ncols * w + (ncols-1) * BUTTON_X_GAP
+        local totalH = nrows * h + (nrows-1) * BUTTON_Y_GAP
+
+        return totalW, totalH
+    end
 
 -- Note again, this is overlayed onto a Portrait frame, so there is
 -- padding on the edges to align the buttons into the inset.
@@ -102,52 +201,16 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
     local ncols = LiteBag_GetFrameOption(self, "columns") or
                     self.defaultColumns or
                     MIN_COLUMNS
-    local layout = LiteBag_GetFrameOption(self, "layout") or "normal"
+    local layout = LiteBag_GetFrameOption(self, "layout")
 
-    -- We process all the ItemButtons even if many of them are not shown, so
-    -- that we hide the leftovers
-
-    local startPreviousRow, previousButton, curentColumn
-    local nrows, ngaps = 0, 0
-
-    for i, itemButton in ipairs(self.itemButtons) do
-        itemButton:ClearAllPoints()
-        if i == 1 then
-            itemButton:SetPoint("TOPLEFT", self, LEFT_OFFSET, -TOP_OFFSET)
-            startPreviousRow = itemButton
-            nrows = 1
-            currentColumn = 1
-        elseif layout == "bag" and inDiffBag(itemButton, previousButton) then
-            itemButton:SetPoint("TOPLEFT", startPreviousRow, "BOTTOMLEFT", 0, -BUTTON_Y_GAP * 3)
-            startPreviousRow = itemButton
-            currentColumn = 1
-            ngaps = ngaps + 3
-            nrows = nrows + 1
-        elseif currentColumn == ncols then
-            itemButton:SetPoint("TOPLEFT", startPreviousRow, "BOTTOMLEFT", 0, -BUTTON_Y_GAP)
-            startPreviousRow = itemButton
-            currentColumn = 1
-            ngaps = ngaps + 1
-            nrows = nrows + 1
-        else
-            itemButton:SetPoint("TOPLEFT", previousButton, "TOPRIGHT", BUTTON_X_GAP, 0)
-            currentColumn = currentColumn + 1
-        end
-
-        if i <= self.size then
-            itemButton:Show()
-        else
-            itemButton:Hide()
-        end
-        previousButton = itemButton
+    if not layout or not LAYOUTS[layout] then
+        layout = "normal"
     end
 
-    local w, h = self.itemButtons[1]:GetSize()
+    local w, h = LAYOUTS[layout](self, ncols)
 
-    local frameW = ncols * w + (ncols-1) * BUTTON_X_GAP
-                    + LEFT_OFFSET + RIGHT_OFFSET
-    local frameH = nrows * h + ngaps * BUTTON_Y_GAP
-                    + TOP_OFFSET + BOTTOM_OFFSET
+    local frameW = w + LEFT_OFFSET + RIGHT_OFFSET
+    local frameH = h + TOP_OFFSET + BOTTOM_OFFSET
 
     LiteBag_Debug(format("Panel SetSize %d,%d", frameW, frameH))
 
@@ -192,7 +255,7 @@ function LiteBagPanel_ClearNewItems(self)
     end
 end
 
-function LiteBagPanel_UpdateIemButtonsByBag(self, bag)
+function LiteBagPanel_UpdateItemButtonsByBag(self, bag)
     for _,b in ipairs(self.itemButtonsByBag[bag] or {}) do
         LiteBagItemButton_Update(b)
     end
@@ -258,7 +321,7 @@ end
 
 function LiteBagPanel_OnShow(self)
     LiteBag_Debug("Panel OnShow " .. self:GetName())
-    LiteBagPanel_UpdateBagSizes(self)
+    LiteBagPanel_UpdateBagSlotCounts(self)
     LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBagPanel_UpdateItemButtons(self)
 
@@ -271,6 +334,7 @@ function LiteBagPanel_OnShow(self)
     self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
     self:RegisterEvent("BAG_NEW_ITEMS_UPDATED")
     self:RegisterEvent("BAG_SLOT_FLAGS_UPDATED")
+    self:RegisterEvent("BANK_BAG_SLOT_FLAGS_UPDATED")
     self:RegisterEvent("MERCHANT_SHOW")
     self:RegisterEvent("MERCHANT_CLOSED")
     self:RegisterEvent("UNIT_INVENTORY_CHANGED")
@@ -298,6 +362,7 @@ function LiteBagPanel_OnHide(self)
     self:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
     self:UnregisterEvent("BAG_NEW_ITEMS_UPDATED")
     self:UnregisterEvent("BAG_SLOT_FLAGS_UPDATED")
+    self:UnregisterEvent("BANK_BAG_SLOT_FLAGS_UPDATED")
     self:UnregisterEvent("MERCHANT_SHOW")
     self:UnregisterEvent("MERCHANT_CLOSED")
     self:UnregisterEvent("UNIT_INVENTORY_CHANGED")
@@ -319,7 +384,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
     LiteBag_Debug(format("Panel OnEvent %s %s %s %s", self:GetName(), event, tostring(arg1), tostring(arg2)))
 
     if event == "PLAYER_LOGIN" then
-        LiteBagPanel_UpdateBagSizes(self)
+        LiteBagPanel_UpdateBagSlotCounts(self)
         return
     end
 
@@ -338,7 +403,8 @@ function LiteBagPanel_OnEvent(self, event, ...)
 
     if event == "BAG_UPDATE_DELAYED" then
         self:UnregisterEvent("BAG_UPDATE_DELAYED")
-        LiteBagPanel_UpdateBagSizes(self)
+        LiteBagPanel_UpdateBagSlotCounts(self)
+        LiteBagPanel_UpdateSizeAndLayout(self)
         LiteBagPanel_UpdateItemButtons(self)
         return
     end
@@ -377,7 +443,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
         -- slot = arg1
         if self.isBank then
             if arg1 > NUM_BANKGENERIC_SLOTS then
-                LiteBagPanel_UpdateBagSizes(self)
+                LiteBagPanel_UpdateBagSlotCounts(self)
             end
             LiteBagPanel_UpdateItemButtons(self)
         end
@@ -389,9 +455,21 @@ function LiteBagPanel_OnEvent(self, event, ...)
         return
     end
 
-    if event == "BAG_UPDATE" or event == "BAG_SLOT_FLAGS_UPDATED" then
+    if event == "BAG_UPDATE" then
         -- bag = arg1
-        LiteBagPanel_UpdateIemButtonsByBag(self, arg1)
+        LiteBagPanel_UpdateItemButtonsByBag(self, arg1)
+        return
+    end
+
+    if event == "BAG_SLOT_FLAGS_UPDATED" then
+        -- bag = arg1
+        LiteBagPanel_UpdateItemButtonsByBag(self, arg1)
+        return
+    end
+
+    if event == "BANK_BAG_SLOT_FLAGS_UPDATED" then
+        -- bag = arg1 + NUM_BAG_SLOTS
+        LiteBagPanel_UpdateItemButtonsByBag(self, arg1 + NUM_BAG_SLOTS)
         return
     end
 
