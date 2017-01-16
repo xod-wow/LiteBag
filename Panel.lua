@@ -110,7 +110,10 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
     local startPreviousRow, previousButton, curentColumn
     local nrows, ngaps = 0, 0
 
-    for i, itemButton in ipairs(self.itemButtons) do
+    local itemButton
+
+    for i = 1, self.size do
+        itemButton = self.itemButtons[i]
         itemButton:ClearAllPoints()
         if i == 1 then
             itemButton:SetPoint("TOPLEFT", self, LEFT_OFFSET, -TOP_OFFSET)
@@ -134,13 +137,15 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
             currentColumn = currentColumn + 1
         end
 
-        if i <= self.size then
-            itemButton:Show()
-        else
-            itemButton:Hide()
-        end
+        itemButton:Show()
         previousButton = itemButton
     end
+
+    for i = self.size + 1, #self.itemButtons do
+        self.itemButtons[i]:Hide()
+    end
+
+    LiteBag_Debug(format("Panel ncols,nrows = %d,%d", ncols, nrows))
 
     local w, h = self.itemButtons[1]:GetSize()
 
@@ -339,6 +344,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
     if event == "BAG_UPDATE_DELAYED" then
         self:UnregisterEvent("BAG_UPDATE_DELAYED")
         LiteBagPanel_UpdateBagSizes(self)
+        LiteBagPanel_UpdateSizeAndLayout(self)
         LiteBagPanel_UpdateItemButtons(self)
         return
     end

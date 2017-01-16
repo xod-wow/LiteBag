@@ -43,6 +43,7 @@ function LiteBagBank_Initialize(self)
     self.OnShowPanel = function (self, n)
             -- Use the title text from the Bank Frame itself
             BANK_PANELS[self.selectedTab].SetTitle()
+            BankFrame.selectedTab = self.selectedTab
             self.TitleText:SetText(BankFrameTitleText:GetText())
         end
 
