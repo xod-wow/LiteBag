@@ -29,6 +29,14 @@ function LiteBagFrame_SetPosition(self)
     self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
 end
 
+function LiteBagFrame_SizeToPanel(self)
+    self:SetSize(self.currentPanel:GetSize())
+end
+
+function LiteBagFrame_Scale(self)
+    self:SetScale(LiteBag_GetFrameOption(self, "scale") or 1.0)
+end
+
 function LiteBagFrame_StartMoving(self)
     LiteBag_Debug("Frame StartMoving " .. self:GetName())
     self:StartMoving()
@@ -67,7 +75,7 @@ function LiteBagFrame_StopSizing(self)
     self:StopMovingOrSizing()
     self.sizing = nil
 
-    self:SetSize(self.currentPanel:GetSize())
+    LiteBagFrame_SizeToPanel(self)
 end
 
 function LiteBagFrame_OnSizeChanged(self, w, h)
@@ -86,9 +94,8 @@ end
 function LiteBagFrame_OnShow(self)
     LiteBag_Debug("Frame OnShow " .. self:GetName())
 
-    self:SetSize(self.currentPanel:GetSize())
-    self:SetScale(LiteBag_GetFrameOption(self, "scale") or 1.0)
-
+    LiteBagFrame_SizeToPanel(self)
+    LiteBagFrame_Scale(self)
     LiteBagFrame_AttachSearchBox(self)
 
     PlaySound("igBackPackOpen")
@@ -122,6 +129,14 @@ function LiteBagFrame_AddPanel(self, panel, tabTitle)
 
     tinsert(self.panels, panel)
 
+    hooksecurefunc(panel, "SetSize",
+            function (f)
+                if self:IsShown() and self.currentPanel == f then
+                    LiteBagFrame_SizeToPanel(self)
+                end
+            end
+        )
+
     self.Tabs[#self.panels]:SetText(tabTitle)
 
     if #self.panels < 2 then
@@ -143,7 +158,8 @@ function LiteBagFrame_ShowPanel(self, n)
     end
 
     self.currentPanel = self.panels[n]
-    self:SetSize(self.currentPanel:GetSize())
+
+    LiteBagFrame_SizeToPanel(self)
 
     if #self.panels > 1 then
         PanelTemplates_SetTab(self, n)
