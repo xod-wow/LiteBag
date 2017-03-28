@@ -16,10 +16,12 @@
 
 local function ContainerItemIsPartOfEquipmentSet(bag, slot, i)
     local _,equipSetNames = GetContainerItemEquipmentSetInfo(bag, slot)
-
     if not equipSetNames then return end
 
-    local name = GetEquipmentSetInfo(i)
+    local ids = C_EquipmentSet.GetEquipmentSetIDs()
+    if not ids[i] then return end
+
+    local name = C_EquipmentSet.GetEquipmentSetInfo(ids[i])
     for _,n in ipairs({ strsplit(", " , equipSetNames) }) do
         if n == name then return true end
     end
