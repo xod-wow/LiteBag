@@ -59,10 +59,6 @@ function LiteBagInventory_Initialize(self)
     self.searchBox = BagItemSearchBox
     self.sortButton = BagItemAutoSortButton
 
-    -- Select the right search box 
-    self.searchBox = BagItemSearchBox
-    self.sortButton = BagItemAutoSortButton
-
     -- Frame open/close events for Inventory
     for _, event in ipairs(OPEN_EVENTS) do self:RegisterEvent(event) end
     for _, event in ipairs(CLOSE_EVENTS) do self:RegisterEvent(event) end

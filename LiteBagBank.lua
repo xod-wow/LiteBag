@@ -47,6 +47,9 @@ function LiteBagBank_Initialize(self)
             -- The itembuttons use BankFrame.selectedTab to know where
             -- to put something that's clicked.
             BankFrame.selectedTab = n
+            -- The AutoSortButton uses activeTabIndex to know which tooltip to
+            -- show (and what to sort, but we override that).
+            BankFrame.activeTabIndex = n
         end
 
     -- Different inset texture for the bank
