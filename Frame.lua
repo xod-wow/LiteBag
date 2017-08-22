@@ -80,7 +80,7 @@ end
 
 function LiteBagFrame_OnHide(self)
     LiteBag_Debug("Frame OnHide " .. self:GetName())
-    PlaySound("igBackPackClose")
+    PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
 end
 
 function LiteBagFrame_OnShow(self)
@@ -91,7 +91,7 @@ function LiteBagFrame_OnShow(self)
 
     LiteBagFrame_AttachSearchBox(self)
 
-    PlaySound("igBackPackOpen")
+    PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 end
 
 function LiteBagFrame_AttachSearchBox(self)

@@ -177,15 +177,13 @@ function LiteBagBagButton_OnClick(self)
     end
 
     if self.purchaseCost then
-        PlaySound("igMainMenuOption")
+        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
         BankFrame.nextSlotCost = self.purchaseCost
-        -- XXX FIXME XXX
-        -- Does StaticPopup_Show still cause taint due to blizz bugs?
         StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
         return
     end
 
-    PlaySound("igMainMenuOptionCheckBoxOn")
+    PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
     ToggleDropDownMenu(1, nil, self.FilterDropDown, self, 0, 0)
 end
 
