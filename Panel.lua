@@ -228,12 +228,6 @@ function LiteBagPanel_SetWidth(self, width)
     LiteBagPanel_UpdateSizeAndLayout(self)
 end
 
-function LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
-    if tContains(self.bagFrames, ArtifactRelicHelpBox.owner) then
-        ArtifactRelicHelpBox:Hide()
-    end
-end
-
 function LiteBagPanel_HighlightBagButtons(self, bagID)
     for i, b in ipairs(self.itemButtonsByBag[bagID]) do
         if i > self.size then return end
@@ -262,7 +256,7 @@ function LiteBagPanel_UpdateItemButtonsByBag(self, bag)
 end
 
 function LiteBagPanel_UpdateItemButtons(self)
-    LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
+    ContainerFrame_CloseSpecializedTutorialForItem(self)
 
     for i, b in ipairs(self.itemButtons) do
         if i > self.size then return end
@@ -351,7 +345,8 @@ function LiteBagPanel_OnHide(self)
     -- by the server as "new" in some cases, and you're supposed to clear
     -- the new flag after you see it the first time.
     LiteBagPanel_ClearNewItems(self)
-    LiteBagPanel_HideArtifactHelpBoxIfOwned(self)
+
+    ContainerFrame_CloseSpecializedTutorialForItem(self)
 
     self:UnregisterEvent("BAG_CLOSED")
     self:UnregisterEvent("BAG_UPDATE")

@@ -191,20 +191,25 @@ end
 
 -- Make sure to do this after the search overlay update.
 --
--- Note that the caller must have hidden the ArtifactRelicHelpBox before
--- updating all its buttons if it was parented to one of the bags.
+-- Note that the caller must ContainerFrame_CloseSpecializedTutorialForItem
+-- before updating all its buttons if it was parented to one of the bags.
 
-function LiteBagItemButton_UpdateRelicTutorial(self)
+function LiteBagItemButton_UpdateTutorials(self)
 
     if self.searchOverlay:IsShown() then return end
-    if GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_ARTIFACT_RELIC_MATCH) then return end
+    if BagHelpBox:IsShown() then return end
 
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
-
     local itemID = select(10, GetContainerItemInfo(bag, slot))
-    ContainerFrame_ConsiderItemButtonForRelicTutorial(self, itemID)
 
+    if not GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_AZERITE_ITEM_IN_SLOT) then
+        ContainerFrame_ConsiderItemButtonForAzeriteTutorial(itemButton, itemID)
+    end
+
+    if not GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_ARTIFACT_RELIC_MATCH) then
+        ContainerFrame_ConsiderItemButtonForRelicTutorial(self, itemID)
+    end
 end
 
 -- This is a little weird inside, because apparently "is this an upgrade"
@@ -227,7 +232,7 @@ function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateCooldown(self)
     LiteBagItemButton_UpdateFiltered(self)
     LiteBagItemButton_UpdateItemUpgrade(self)
-    LiteBagItemButton_UpdateRelicTutorial(self)
+    LiteBagItemButton_UpdateTutorials(self)
 end
 
 function LiteBagItemButton_OnLoad(self)

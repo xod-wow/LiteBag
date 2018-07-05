@@ -33,6 +33,8 @@ end
 -- Added to the bag sort tooltip.  Would be nice if it were localized.
 local TOOLTIP_NOCONFIRM_TEXT = format("%s: No confirmation", SHIFT_KEY)
 
+local hiddenBagParent = CreateFrame("Frame")
+
 local function ReplaceBlizzardInventory()
     local hideFunc = function () LiteBagInventory:Hide() end
     local showFunc = function () LiteBagInventory:Show() end
@@ -44,9 +46,12 @@ local function ReplaceBlizzardInventory()
             end
         end
 
+    hiddenBagParent:Hide()
+
     -- Turn the Blizzard frames off
     for i=1, NUM_CONTAINER_FRAMES do
         local f = _G["ContainerFrame"..i]
+        f:SetParent(hiddenBankParent)
         f:UnregisterAllEvents()
     end
                 
@@ -63,9 +68,7 @@ local function ReplaceBlizzardInventory()
 
     -- This one is called when you click on a loot popup and you have
     -- one of those items in your bag already.
-    OpenBag = function (bag)
-                    LiteBagInventory:Show()
-                end
+    OpenBag = showFunc
 
     -- These are the bag buttons in the menu bar at the bottom which are
     -- highlighted when their particular bag is opened.
