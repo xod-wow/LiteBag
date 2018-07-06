@@ -256,7 +256,9 @@ function LiteBagPanel_UpdateItemButtonsByBag(self, bag)
 end
 
 function LiteBagPanel_UpdateItemButtons(self)
-    ContainerFrame_CloseSpecializedTutorialForItem(self)
+    if LE_EXPANSION_BATTLE_FOR_AZEROTH then
+        ContainerFrame_CloseSpecializedTutorialForItem(self)
+    end
 
     for i, b in ipairs(self.itemButtons) do
         if i > self.size then return end
@@ -346,7 +348,9 @@ function LiteBagPanel_OnHide(self)
     -- the new flag after you see it the first time.
     LiteBagPanel_ClearNewItems(self)
 
-    ContainerFrame_CloseSpecializedTutorialForItem(self)
+    if LE_EXPANSION_BATTLE_FOR_AZEROTH then
+        ContainerFrame_CloseSpecializedTutorialForItem(self)
+    end
 
     self:UnregisterEvent("BAG_CLOSED")
     self:UnregisterEvent("BAG_UPDATE")
