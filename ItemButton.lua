@@ -235,6 +235,10 @@ function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateFiltered(self)
     LiteBagItemButton_UpdateItemUpgrade(self)
     LiteBagItemButton_UpdateTutorials(self)
+
+    -- For debugging layouts
+    -- _G[self:GetName().."Count"]:SetText(format("%d,%d", self:GetParent():GetID(), self:GetID()))
+    -- _G[self:GetName().."Count"]:Show()
 end
 
 function LiteBagItemButton_OnLoad(self)

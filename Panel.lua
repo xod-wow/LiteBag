@@ -92,105 +92,128 @@ local function inDiffBag(a, b)
     return a:GetParent():GetID() ~= b:GetParent():GetID()
 end
 
--- We process all the ItemButtons even if many of them are not shown, so
--- that we hide the leftovers
-
 local LAYOUTS = { }
 
 LAYOUTS.normal =
     function (self, ncols)
-        local startPreviousRow, previousButton
+        local grid = { }
+        local row
 
-        for i, itemButton in ipairs(self.itemButtons) do
-            itemButton:ClearAllPoints()
-            itemButton:SetShown(i <= self.size)
-            if i == 1 then
-                itemButton:SetPoint("TOPLEFT", self, LEFT_OFFSET, -TOP_OFFSET)
-                startPreviousRow = itemButton
-            elseif i % ncols == 1 then
-                itemButton:SetPoint("TOPLEFT", startPreviousRow, "BOTTOMLEFT", 0, -BUTTON_Y_GAP)
-                startPreviousRow = itemButton
-            else
-                itemButton:SetPoint("TOPLEFT", previousButton, "TOPRIGHT", BUTTON_X_GAP, 0)
+        for i = 1, self.size do
+            if i % ncols == 1 then
+                row = { }
+                tinsert(grid, row)
             end
-
-            previousButton = itemButton
+            tinsert(row, self.itemButtons[i])
         end
 
-        local w, h = self.itemButtons[1]:GetSize()
-        local nrows = ceil(self.size / ncols)
-
-        local totalW = ncols * w + (ncols-1) * BUTTON_X_GAP
-        local totalH = nrows * h + (nrows-1) * BUTTON_Y_GAP
-
-        return totalW, totalH
+        return false, grid
     end
 
 LAYOUTS.reverse =
     function (self, ncols)
-        local startPreviousRow, previousButton
+        local grid = { }
+        local row
 
-        for i, itemButton in ipairs(self.itemButtons) do
-            itemButton:ClearAllPoints()
-            itemButton:SetShown(i <= self.size)
-            if i == 1 then
-                itemButton:SetPoint("BOTTOMRIGHT", self, -RIGHT_OFFSET, BOTTOM_OFFSET)
-                startPreviousRow = itemButton
-            elseif i % ncols == 1 then
-                itemButton:SetPoint("BOTTOMRIGHT", startPreviousRow, "TOPRIGHT", 0, BUTTON_Y_GAP)
-                startPreviousRow = itemButton
-            else
-                itemButton:SetPoint("BOTTOMRIGHT", previousButton, "BOTTOMLEFT", -BUTTON_X_GAP, 0)
+        for i = 1, self.size do
+            if i % ncols == 1 then
+                row = { }
+                tinsert(grid, 1, row)
             end
-
-            previousButton = itemButton
+            tinsert(row, self.itemButtons[i])
         end
 
-        local w, h = self.itemButtons[1]:GetSize()
-        local nrows = ceil(self.size / ncols)
-
-        local totalW = ncols * w + (ncols-1) * BUTTON_X_GAP
-        local totalH = nrows * h + (nrows-1) * BUTTON_Y_GAP
-
-        return totalW, totalH
+        return true, grid
     end
 
 LAYOUTS.bag =
     function (self, ncols)
+        local grid = { }
+        local row
 
-        local startPreviousRow, previousButton, currentColumn
-        local nrows = 0
-
-        for i, itemButton in ipairs(self.itemButtons) do
-            itemButton:ClearAllPoints()
-            itemButton:SetShown(i <= self.size)
-            if i > self.size then
-                -- Don't include any extras in the counts
-            elseif i == 1 then
-                itemButton:SetPoint("TOPLEFT", self, LEFT_OFFSET, -TOP_OFFSET)
-                startPreviousRow = itemButton
-                nrows = 1
-                currentColumn = 1
-            elseif inDiffBag(itemButton, previousButton) or currentColumn == ncols then
-                itemButton:SetPoint("TOPLEFT", startPreviousRow, "BOTTOMLEFT", 0, -BUTTON_Y_GAP)
-                startPreviousRow = itemButton
-                currentColumn = 1
-                nrows = nrows + 1
-            else
-                itemButton:SetPoint("TOPLEFT", previousButton, "TOPRIGHT", BUTTON_X_GAP, 0)
-                currentColumn = currentColumn + 1
+        for i = 1, self.size do
+            if i == 1 or #row % ncols == 0 or inDiffBag(self.itemButtons[i-1], self.itemButtons[i]) then
+                row = { }
+                tinsert(grid, row)
             end
-
-            previousButton = itemButton
+            tinsert(row, self.itemButtons[i])
         end
 
-        local w, h = self.itemButtons[1]:GetSize()
-
-        local totalW = ncols * w + (ncols-1) * BUTTON_X_GAP
-        local totalH = nrows * h + (nrows-1) * BUTTON_Y_GAP
-
-        return totalW, totalH
+        return false, grid
     end
+
+LAYOUTS.blizzard =
+    function (self, ncols)
+        local grid = { }
+        local row
+
+        local n = 1
+
+        for b = #self.bagFrames, 1, -1 do
+            local bagID = self.bagFrames[b]:GetID()
+            for j = 1, #self.itemButtonsByBag[bagID] do
+                if n % ncols == 1 then
+                    row = { }
+                    tinsert(grid, row)
+                end
+                tinsert(row, self.itemButtonsByBag[bagID][j])
+                n = n + 1
+            end
+        end
+
+        return false, grid
+    end
+
+function LiteBagPanel_LayoutButtons(self, rightToLeft, buttonGrid)
+    local destAnchor, srcRowAnchor, srcColAnchor, xOff, yOff, xGap, yGap
+
+    if rightToLeft then
+        destAnchor, srcRowAnchor, srcColAnchor = "TOPRIGHT", "TOPLEFT", "BOTTOMRIGHT"
+        xOff, xGap = -RIGHT_OFFSET, -BUTTON_X_GAP
+    else
+        destAnchor, srcRowAnchor, srcColAnchor = "TOPLEFT", "TOPRIGHT", "BOTTOMLEFT"
+        xOff, xGap = LEFT_OFFSET, BUTTON_X_GAP
+    end
+
+    local anchorTo = self
+
+    local ncols = 0
+    local n = 1
+
+    for i = 1, #buttonGrid do
+        for j = 1, #buttonGrid[i] do
+            local itemButton = buttonGrid[i][j]
+            itemButton:ClearAllPoints()
+            itemButton:SetShown(true)
+            if i == 1 and j == 1 then
+                itemButton:SetPoint(destAnchor, self, xOff, -TOP_OFFSET)
+            elseif j == 1 then
+                itemButton:SetPoint(destAnchor, anchorTo, srcColAnchor, 0, -BUTTON_Y_GAP)
+            else
+                itemButton:SetPoint(destAnchor, anchorTo, srcRowAnchor, xGap, 0)
+            end
+            anchorTo = itemButton
+            n = n + 1
+            ncols = max(ncols, j)
+        end
+        anchorTo = buttonGrid[i][1]
+    end
+
+    -- Hide the leftovers
+
+    while n <= #self.itemButtons do
+        self.itemButtons[n]:Hide()
+        n = n + 1
+    end
+
+    local w, h = buttonGrid[1][1]:GetSize()
+    local nrows = #buttonGrid
+
+    local totalW = ncols * w + (ncols-1) * BUTTON_X_GAP
+    local totalH = nrows * h + (nrows-1) * BUTTON_Y_GAP
+
+    return totalW, totalH
+end
 
 -- Note again, this is overlayed onto a Portrait frame, so there is
 -- padding on the edges to align the buttons into the inset.
@@ -207,7 +230,9 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
         layout = "normal"
     end
 
-    local w, h = LAYOUTS[layout](self, ncols)
+    local rightToLeft, buttonGrid = LAYOUTS[layout](self, ncols)
+
+    local w, h = LiteBagPanel_LayoutButtons(self, rightToLeft, buttonGrid)
 
     local frameW = w + LEFT_OFFSET + RIGHT_OFFSET
     local frameH = h + TOP_OFFSET + BOTTOM_OFFSET
