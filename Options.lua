@@ -92,6 +92,12 @@ function LiteBag_OptionSlashFunc(argstr)
         return
     end
 
+    if cmd == "inventory.layout" then
+        LiteBag_SetFrameOption(LiteBagInventoryPanel, "layout", arg1)
+        LiteBag_Print("Inventory button layout set to: " .. tostring(arg1))
+        return
+    end
+
     if cmd == "inventory.columns" then
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
@@ -114,6 +120,13 @@ function LiteBag_OptionSlashFunc(argstr)
         end
         return
     end
+
+    if cmd == "bank.layout" then
+        LiteBag_SetFrameOption(LiteBagBankPanel, "layout", arg1)
+        LiteBag_Print("Bank button layout set to: " .. tostring(arg1))
+        return
+    end
+
     if cmd == "bank.columns" then
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
