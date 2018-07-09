@@ -207,7 +207,7 @@ function LiteBagItemButton_UpdateTutorials(self)
 
     if not GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_AZERITE_ITEM_IN_SLOT) then
         -- Sets the .owner of the tutorial to bag:GetParent()
-        ContainerFrame_ConsiderItemButtonForAzeriteTutorial(itemButton, itemID)
+        ContainerFrame_ConsiderItemButtonForAzeriteTutorial(self, itemID)
     end
 
     if not GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_ARTIFACT_RELIC_MATCH) then
