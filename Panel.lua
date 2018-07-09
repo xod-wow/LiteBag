@@ -284,7 +284,7 @@ function LiteBagPanel_UpdateItemButtons(self)
     if LE_EXPANSION_BATTLE_FOR_AZEROTH then
         -- The owner is set to the itemButton parent so we have to call
         -- this once per bag.
-        for _, b in ipairs(self.bagButtons) do
+        for _, b in ipairs(self.bagFrames) do
             ContainerFrame_CloseSpecializedTutorialForItem(b)
         end
     end
@@ -378,10 +378,10 @@ function LiteBagPanel_OnHide(self)
     LiteBagPanel_ClearNewItems(self)
 
     if LE_EXPANSION_BATTLE_FOR_AZEROTH then
-        for _, b in ipairs(self.bagButtons) do
+        for _, b in ipairs(self.bagFrames) do
             -- The owner is set to the itemButton parent so we have to call
             -- this once per bag.
-            ContainerFrame_CloseSpecializedTutorialForItem(self)
+            ContainerFrame_CloseSpecializedTutorialForItem(b)
         end
     end
 
