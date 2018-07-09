@@ -93,6 +93,7 @@ function LiteBag_OptionSlashFunc(argstr)
     end
 
     if cmd == "inventory.layout" then
+        if arg1 == "default" then arg1 = nil end
         LiteBag_SetFrameOption(LiteBagInventoryPanel, "layout", arg1)
         LiteBag_Print("Inventory button layout set to: " .. tostring(arg1))
         return
@@ -122,6 +123,7 @@ function LiteBag_OptionSlashFunc(argstr)
     end
 
     if cmd == "bank.layout" then
+        if arg1 == "default" or arg1 == DEFAULT then arg1 = nil end
         LiteBag_SetFrameOption(LiteBagBankPanel, "layout", arg1)
         LiteBag_Print("Bank button layout set to: " .. tostring(arg1))
         return

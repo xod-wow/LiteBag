@@ -94,7 +94,7 @@ end
 
 local LAYOUTS = { }
 
-LAYOUTS.normal =
+LAYOUTS.default =
     function (self, ncols)
         local grid = { }
         local row
@@ -227,7 +227,7 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
     local layout = LiteBag_GetFrameOption(self, "layout")
 
     if not layout or not LAYOUTS[layout] then
-        layout = "normal"
+        layout = "default"
     end
 
     local rightToLeft, buttonGrid = LAYOUTS[layout](self, ncols)
