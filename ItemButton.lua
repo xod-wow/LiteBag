@@ -196,7 +196,7 @@ end
 
 function LiteBagItemButton_UpdateTutorials(self)
 
-    if not LE_EXPANSION_BATTLE_FOR_AZEROTH then return end
+    if not ContainerFrame_ConsiderItemButtonForAzeriteTutorial then return end
 
     if self.searchOverlay:IsShown() then return end
     if BagHelpBox:IsShown() then return end
