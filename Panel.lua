@@ -275,9 +275,11 @@ function LiteBagPanel_ClearNewItems(self)
 end
 
 function LiteBagPanel_UpdateItemButtonsByBag(self, bag)
-    for _,b in ipairs(self.bagFrames) do
-        if b:GetID() == bag then
-            ContainerFrame_CloseSpecializedTutorialForItem(b)
+    if ContainerFrame_CloseSpecializedTutorialForItem then
+        for _,b in ipairs(self.bagFrames) do
+            if b:GetID() == bag then
+                ContainerFrame_CloseSpecializedTutorialForItem(b)
+            end
         end
     end
     for _,b in ipairs(self.itemButtonsByBag[bag] or {}) do
