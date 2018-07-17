@@ -275,11 +275,9 @@ function LiteBagPanel_ClearNewItems(self)
 end
 
 function LiteBagPanel_UpdateItemButtonsByBag(self, bag)
-    if ContainerFrame_CloseSpecializedTutorialForItem then
-        for _,b in ipairs(self.bagFrames) do
-            if b:GetID() == bag then
-                ContainerFrame_CloseSpecializedTutorialForItem(b)
-            end
+    for _,b in ipairs(self.bagFrames) do
+        if b:GetID() == bag then
+            ContainerFrame_CloseSpecializedTutorialForItem(b)
         end
     end
     for _,b in ipairs(self.itemButtonsByBag[bag] or {}) do
@@ -288,12 +286,10 @@ function LiteBagPanel_UpdateItemButtonsByBag(self, bag)
 end
 
 function LiteBagPanel_UpdateItemButtons(self)
-    if ContainerFrame_CloseSpecializedTutorialForItem then
-        -- The owner is set to the itemButton parent so we have to call
-        -- this once per bag.
-        for _, b in ipairs(self.bagFrames) do
-            ContainerFrame_CloseSpecializedTutorialForItem(b)
-        end
+    -- The owner is set to the itemButton parent so we have to call
+    -- this once per bag.
+    for _, b in ipairs(self.bagFrames) do
+        ContainerFrame_CloseSpecializedTutorialForItem(b)
     end
 
     for i, b in ipairs(self.itemButtons) do
@@ -384,12 +380,10 @@ function LiteBagPanel_OnHide(self)
     -- the new flag after you see it the first time.
     LiteBagPanel_ClearNewItems(self)
 
-    if ContainerFrame_CloseSpecializedTutorialForItem then
-        for _, b in ipairs(self.bagFrames) do
-            -- The owner is set to the itemButton parent so we have to call
-            -- this once per bag.
-            ContainerFrame_CloseSpecializedTutorialForItem(b)
-        end
+    for _, b in ipairs(self.bagFrames) do
+        -- The owner is set to the itemButton parent so we have to call
+        -- this once per bag.
+        ContainerFrame_CloseSpecializedTutorialForItem(b)
     end
 
     self:UnregisterEvent("BAG_CLOSED")
