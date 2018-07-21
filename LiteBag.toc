@@ -18,6 +18,7 @@ LiteBagInventory.xml
 ReplaceBlizzard.lua
 
 Plugin_EquipSets\EquipSets.xml
+Plugin_BindsOn\BindsOn.xml
 
 UI\UIOptionsPanelTemplate.xml
 UI\UIOptions.xml

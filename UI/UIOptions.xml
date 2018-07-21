@@ -34,9 +34,18 @@
                 <OnClick function="LiteBagOptionsControl_OnChanged" />
             </Scripts>
         </CheckButton>
-        <CheckButton name="$parentSnapToPosition" inherits="InterfaceOptionsCheckButtonTemplate">
+        <CheckButton name="$parentBindsOnDisplay" inherits="InterfaceOptionsCheckButtonTemplate">
             <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="$parentEquipsetDisplay" relativePoint="BOTTOMLEFT" x="0" y="-16" />
+            </Anchors>
+            <Scripts>
+                <OnLoad function="LiteBagOptionsBindsOnDisplay_OnLoad" />
+                <OnClick function="LiteBagOptionsControl_OnChanged" />
+            </Scripts>
+        </CheckButton>
+        <CheckButton name="$parentSnapToPosition" inherits="InterfaceOptionsCheckButtonTemplate">
+            <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="$parentBindsOnDisplay" relativePoint="BOTTOMLEFT" x="0" y="-16" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsSnapToPosition_OnLoad" />

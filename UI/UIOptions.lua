@@ -47,6 +47,27 @@ function LiteBagOptionsEquipsetDisplay_OnLoad(self)
     LiteBagOptionsControl_OnLoad(self)
 end
 
+function LiteBagOptionsBindsOnDisplay_OnLoad(self)
+    self.Text:SetText("Display text for item binding.")
+    self.SetOption =
+        function (self, setting)
+            if not setting or setting == "0" then
+                LiteBag_SetGlobalOption("ShowBindsOnText", nil)
+            else
+                LiteBag_SetGlobalOption("ShowBindsOnText", true)
+            end
+            LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
+            LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
+        end
+    self.GetOption =
+        function (self)
+            return LiteBag_GetGlobalOption("ShowBindsOnText")
+        end
+    self.GetOptionDefault =
+        function (self) return false end
+    LiteBagOptionsControl_OnLoad(self)
+end
+
 function LiteBagOptionsSnapToPosition_OnLoad(self)
     self.Text:SetText("Snap inventory frame to default backpack position.")
     self.SetOption =
