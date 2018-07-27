@@ -116,7 +116,7 @@ function LiteBagItemButton_UpdateQuality(self)
     local _, _, _, quality, _, _, _, isFiltered, noValue, itemID = GetContainerItemInfo(bag, slot)
 
     SetItemButtonQuality(self, quality, itemID)
-    if self.IconBorder:GetTexture() == [[Interface\Common\WhiteIconFrame]] then
+    if quality and LiteBag_GetGlobalOption("ThickerIconBorder") and self.IconBorder:GetTexture() == [[Interface\Common\WhiteIconFrame]] then
         self.IconBorder:SetTexture([[Interface\Addons\LiteBag\Artwork\IconBorder]])
     end
 

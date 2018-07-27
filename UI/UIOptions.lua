@@ -87,6 +87,25 @@ function LiteBagOptionsSnapToPosition_OnLoad(self)
     LiteBagOptionsControl_OnLoad(self)
 end
 
+function LiteBagOptionsThickerIconBorder_OnLoad(self)
+    self.Text:SetText("Show thicker quality border around buttons.")
+    self.SetOption =
+        function (self, setting)
+            if not setting or setting == "0" then
+                LiteBag_SetGlobalOption("ThickerIconBorder", false)
+            else
+                LiteBag_SetGlobalOption("ThickerIconBorder", true)
+            end
+        end
+    self.GetOption =
+        function (self)
+            return LiteBag_GetGlobalOption("ThickerIconBorder")
+        end
+    self.GetOptionDefault =
+        function (self) return false end
+    LiteBagOptionsControl_OnLoad(self)
+end
+
 local function SetupColumnsControl(self, panel, default)
     local n = self:GetName()
 
