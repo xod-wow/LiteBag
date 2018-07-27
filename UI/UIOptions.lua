@@ -48,7 +48,7 @@ function LiteBagOptionsEquipsetDisplay_OnLoad(self)
 end
 
 function LiteBagOptionsBindsOnDisplay_OnLoad(self)
-    self.Text:SetText("Display text for item binding.")
+    self.Text:SetText("Display text for BoA and BoE items.")
     self.SetOption =
         function (self, setting)
             if not setting or setting == "0" then
