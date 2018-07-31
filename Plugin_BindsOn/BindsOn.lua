@@ -1,6 +1,6 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/Plugin_Equipsets/EquipSets.lua
+  LiteBag/Plugin_BindsOn/BindsOn.lua
 
   Copyright 2013-2018 Mike Battersby
 
@@ -12,15 +12,20 @@
 -- Map tooltip text to display text, from BindsWhen by phanx
 --
 
+local BoAText = BATTLENET_FONT_COLOR_CODE .. "BoA" .. FONT_COLOR_CODE_CLOSE
+local BoEText = ORANGE_FONT_COLOR_CODE .. "BoE" .. FONT_COLOR_CODE_CLOSE
+local BoPText = false
+local NoBindText = false
+
 local TextForBind = {
-        [ITEM_ACCOUNTBOUND]        = "BoA",
-        [ITEM_BNETACCOUNTBOUND]    = "BoA",
-        [ITEM_BIND_TO_ACCOUNT]     = "BoA",
-        [ITEM_BIND_TO_BNETACCOUNT] = "BoA",
-        [ITEM_BIND_ON_EQUIP]       = "BoE",
-        [ITEM_BIND_ON_USE]         = "BoE",
-        [ITEM_SOULBOUND]           = false,
-        [ITEM_BIND_ON_PICKUP]      = false,
+    [ITEM_ACCOUNTBOUND]        = BoAText,
+    [ITEM_BNETACCOUNTBOUND]    = BoAText,
+    [ITEM_BIND_TO_ACCOUNT]     = BoAText,
+    [ITEM_BIND_TO_BNETACCOUNT] = BoAText,
+    [ITEM_BIND_ON_EQUIP]       = BoEText,
+    [ITEM_BIND_ON_USE]         = BoEText,
+    [ITEM_SOULBOUND]           = false,
+    [ITEM_BIND_ON_PICKUP]      = false,
 }
 
 local scanTip = CreateFrame("GameTooltip", "LiteBagBindOnScanTooltip")
@@ -46,6 +51,7 @@ local function GetBindText(bag, slot)
             then return TextForBind[text]
         end
     end
+    return NoBindText
 end
 
 local function Update(button)
@@ -69,18 +75,6 @@ local function Update(button)
     end
 
     button.bindsOnText:SetText(text)
-
-    local quality = select(4, GetContainerItemInfo(bag, slot))
-    if quality > LE_ITEM_QUALITY_COMMON then
-        button.bindsOnText:SetVertexColor(
-                BAG_ITEM_QUALITY_COLORS[quality].r,
-                BAG_ITEM_QUALITY_COLORS[quality].g,
-                BAG_ITEM_QUALITY_COLORS[quality].b,
-                1.0
-            )
-    else
-        button.bindsOnText:SetVertexColor(1.0, 1.0, 1.0, 1.0)
-    end
     button.bindsOnText:Show()
 end
 
