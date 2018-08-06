@@ -13,7 +13,7 @@
 --
 
 local BoAText = BATTLENET_FONT_COLOR_CODE .. "BoA" .. FONT_COLOR_CODE_CLOSE
-local BoEText = ORANGE_FONT_COLOR_CODE .. "BoE" .. FONT_COLOR_CODE_CLOSE
+local BoEText = GREEN_FONT_COLOR_CODE .. "BoE" .. FONT_COLOR_CODE_CLOSE
 local BoPText = false
 local NoBindText = false
 
@@ -57,7 +57,7 @@ end
 local function Update(button)
     if not button.bindsOnText then
         button.bindsOnText = button:CreateFontString(nil, "ARTWORK", "GameFontNormalOutline")
-        button.bindsOnText:SetPoint("TOPLEFT", button, "TOPLEFT", 1, -1)
+        button.bindsOnText:SetPoint("TOP", button, "TOP", 0, -2)
     end
 
     if not LiteBag_GetGlobalOption("ShowBindsOnText") or not button.hasItem then
