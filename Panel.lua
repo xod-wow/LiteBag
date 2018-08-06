@@ -18,7 +18,7 @@ local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
 -- Because this Panel should overlay a PortraitFrame, this will position the
 -- buttons into the Inset part of the PortraitFrame.
 local LEFT_OFFSET, TOP_OFFSET = 14, 70
-local RIGHT_OFFSET, BOTTOM_OFFSET = 15, 35
+local RIGHT_OFFSET, BOTTOM_OFFSET = 14, 35
 
 
 function LiteBagPanel_Initialize(self, bagIDs)
@@ -165,38 +165,29 @@ LAYOUTS.blizzard =
     end
 
 function LiteBagPanel_LayoutButtons(self, rightToLeft, buttonGrid)
-    local destAnchor, srcRowAnchor, srcColAnchor, xOff, yOff, xGap, yGap
+    local anchor, m, xOff
 
     if rightToLeft then
-        destAnchor, srcRowAnchor, srcColAnchor = "TOPRIGHT", "TOPLEFT", "BOTTOMRIGHT"
-        xOff, xGap = -RIGHT_OFFSET, -BUTTON_X_GAP
+        anchor, m, xOff = "TOPRIGHT", -1, RIGHT_OFFSET
     else
-        destAnchor, srcRowAnchor, srcColAnchor = "TOPLEFT", "TOPRIGHT", "BOTTOMLEFT"
-        xOff, xGap = LEFT_OFFSET, BUTTON_X_GAP
+        anchor, m, xOff = "TOPLEFT", 1, LEFT_OFFSET
     end
 
-    local anchorTo = self
+    local w, h = buttonGrid[1][1]:GetSize()
 
-    local ncols = 0
-    local n = 1
+    local ncols, nrows, n = 0, 0, 1
 
     for i = 1, #buttonGrid do
         for j = 1, #buttonGrid[i] do
+            local x, y = xOff + (j-1)*(w+BUTTON_X_GAP), -TOP_OFFSET - (i-1)*(h+BUTTON_Y_GAP)
             local itemButton = buttonGrid[i][j]
             itemButton:ClearAllPoints()
+            itemButton:SetPoint(anchor, self, m*x, y)
             itemButton:SetShown(true)
-            if i == 1 and j == 1 then
-                itemButton:SetPoint(destAnchor, self, xOff, -TOP_OFFSET)
-            elseif j == 1 then
-                itemButton:SetPoint(destAnchor, anchorTo, srcColAnchor, 0, -BUTTON_Y_GAP)
-            else
-                itemButton:SetPoint(destAnchor, anchorTo, srcRowAnchor, xGap, 0)
-            end
-            anchorTo = itemButton
-            n = n + 1
             ncols = max(ncols, j)
+            n = n + 1
         end
-        anchorTo = buttonGrid[i][1]
+        nrows = max(nrows, i)
     end
 
     -- Hide the leftovers
@@ -205,9 +196,6 @@ function LiteBagPanel_LayoutButtons(self, rightToLeft, buttonGrid)
         self.itemButtons[n]:Hide()
         n = n + 1
     end
-
-    local w, h = buttonGrid[1][1]:GetSize()
-    local nrows = #buttonGrid
 
     local totalW = ncols * w + (ncols-1) * BUTTON_X_GAP
     local totalH = nrows * h + (nrows-1) * BUTTON_Y_GAP
