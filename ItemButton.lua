@@ -116,8 +116,13 @@ function LiteBagItemButton_UpdateQuality(self)
     local _, _, _, quality, _, _, _, isFiltered, noValue, itemID = GetContainerItemInfo(bag, slot)
 
     SetItemButtonQuality(self, quality, itemID)
-    if quality and LiteBag_GetGlobalOption("ThickerIconBorder") and self.IconBorder:GetTexture() == [[Interface\Common\WhiteIconFrame]] then
-        self.IconBorder:SetTexture([[Interface\Addons\LiteBag\Artwork\IconBorder]])
+
+    local minQuality = LiteBag_GetGlobalOption("ThickerIconBorder")
+    if quality and minQuality then
+        minQuality = tonumber(minQuality) or 0
+        if quality >= minQuality and self.IconBorder:GetTexture() == [[Interface\Common\WhiteIconFrame]] then
+            self.IconBorder:SetTexture([[Interface\Addons\LiteBag\Artwork\IconBorder]])
+        end
     end
 
     self.JunkIcon:SetShown(quality == LE_ITEM_QUALITY_POOR and not noValue and MerchantFrame:IsShown())

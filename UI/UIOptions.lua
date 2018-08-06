@@ -87,22 +87,65 @@ function LiteBagOptionsSnapToPosition_OnLoad(self)
     LiteBagOptionsControl_OnLoad(self)
 end
 
+local function GetQualityText(i)
+    if ITEM_QUALITY_COLORS[i] then
+        local desc = _G["ITEM_QUALITY"..i.."_DESC"]
+        return ITEM_QUALITY_COLORS[i].hex..desc ..FONT_COLOR_CODE_CLOSE
+    else
+        return NEVER
+    end
+end
+
+local function ThickerIconBorder_Initialize(self, level)
+    if level == 1 then
+        local info = UIDropDownMenu_CreateInfo()
+        local current = LiteBag_GetGlobalOption("ThickerIconBorder")
+
+        info.func =
+             function (button, arg1, arg2, checked)
+                 self.value = arg1
+                 self:SetOption(arg1)
+                 UIDropDownMenu_SetText(self, GetQualityText(arg1))
+             end
+
+        info.text = GetQualityText(nil)
+        info.checked = ( current == nil )
+        info.arg1 = nil
+        UIDropDownMenu_AddButton(info)
+
+        UIDropDownMenu_AddSeparator()
+
+        for i = NUM_LE_ITEM_QUALITYS-1, 0, -1 do
+            info.text = GetQualityText(i)
+            info.checked = ( current == i )
+            info.arg1 = i
+            UIDropDownMenu_AddButton(info)
+        end
+    end
+end
 function LiteBagOptionsThickerIconBorder_OnLoad(self)
-    self.Text:SetText("Show thicker quality border around buttons.")
     self.SetOption =
         function (self, setting)
-            if not setting or setting == "0" then
-                LiteBag_SetGlobalOption("ThickerIconBorder", false)
-            else
-                LiteBag_SetGlobalOption("ThickerIconBorder", true)
-            end
+            LiteBag_SetGlobalOption("ThickerIconBorder", setting)
         end
     self.GetOption =
         function (self)
             return LiteBag_GetGlobalOption("ThickerIconBorder")
         end
     self.GetOptionDefault =
-        function (self) return false end
+        function (self)
+            return nil
+        end
+    self.GetControl =
+        function (self)
+            return self.value
+        end
+    self.SetControl =
+        function (self, v)
+            self.value = v
+            UIDropDownMenu_SetText(self, GetQualityText(v))
+        end
+    UIDropDownMenu_Initialize(self, ThickerIconBorder_Initialize)
     LiteBagOptionsControl_OnLoad(self)
 end
 
