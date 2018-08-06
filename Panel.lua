@@ -17,7 +17,7 @@ local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
 
 -- Because this Panel should overlay a PortraitFrame, this will position the
 -- buttons into the Inset part of the PortraitFrame.
-local LEFT_OFFSET, TOP_OFFSET = 14, 70
+local LEFT_OFFSET, TOP_OFFSET = 15, 70
 local RIGHT_OFFSET, BOTTOM_OFFSET = 14, 35
 
 
@@ -96,75 +96,76 @@ local LAYOUTS = { }
 
 LAYOUTS.default =
     function (self, ncols)
-        local grid = { }
-        local row
+        local stream = { }
 
         for i = 1, self.size do
-            if i % ncols == 1 then
-                row = { }
-                tinsert(grid, row)
+            if i > 1 and i % ncols == 1 then
+                tinsert(stream, "NEWLINE")
             end
-            tinsert(row, self.itemButtons[i])
+            tinsert(stream, self.itemButtons[i])
         end
 
-        return false, grid
+        return false, stream
     end
 
 LAYOUTS.reverse =
     function (self, ncols)
-        local grid = { }
-        local row
+        local stream = { }
 
         for i = 1, self.size do
-            if i % ncols == 1 then
-                row = { }
-                tinsert(grid, 1, row)
+            if i > 1 and i % ncols == 1 then
+                tinsert(stream, 1, "NEWLINE")
             end
-            tinsert(row, self.itemButtons[i])
+            tinsert(stream, 1, self.itemButtons[i])
         end
 
-        return true, grid
+        return false, stream
     end
 
 LAYOUTS.bag =
     function (self, ncols)
-        local grid = { }
-        local row
+        local stream = { }
+        local rowStart = 1
 
         for i = 1, self.size do
-            if i == 1 or #row % ncols == 0 or inDiffBag(self.itemButtons[i-1], self.itemButtons[i]) then
-                row = { }
-                tinsert(grid, row)
+            if i > 1 then
+                local newBag = inDiffBag(self.itemButtons[i-1], self.itemButtons[i])
+                if newBag then
+                    tinsert(stream, "NEWLINE")
+                    tinsert(stream, "VGAP")
+                    rowStart = i
+                elseif i - rowStart == ncols then
+                    tinsert(stream, "NEWLINE")
+                    rowStart = i
+                end
             end
-            tinsert(row, self.itemButtons[i])
+            tinsert(stream, self.itemButtons[i])
         end
 
-        return false, grid
+        return false, stream
     end
 
 LAYOUTS.blizzard =
     function (self, ncols)
-        local grid = { }
-        local row
+        local stream = { }
 
         local n = 1
 
         for b = #self.bagFrames, 1, -1 do
             local bagID = self.bagFrames[b]:GetID()
             for j = 1, #self.itemButtonsByBag[bagID] do
-                if n % ncols == 1 then
-                    row = { }
-                    tinsert(grid, row)
+                if n > 1 and n % ncols == 1 then
+                    tinsert(stream, "NEWLINE")
                 end
-                tinsert(row, self.itemButtonsByBag[bagID][j])
+                tinsert(stream, self.itemButtonsByBag[bagID][j])
                 n = n + 1
             end
         end
 
-        return false, grid
+        return false, stream
     end
 
-function LiteBagPanel_LayoutButtons(self, rightToLeft, buttonGrid)
+function LiteBagPanel_LayoutButtons(self, rightToLeft, buttonStream)
     local anchor, m, xOff
 
     if rightToLeft then
@@ -173,21 +174,31 @@ function LiteBagPanel_LayoutButtons(self, rightToLeft, buttonGrid)
         anchor, m, xOff = "TOPLEFT", 1, LEFT_OFFSET
     end
 
-    local w, h = buttonGrid[1][1]:GetSize()
+    local w, h = buttonStream[1]:GetSize()
 
-    local ncols, nrows, n = 0, 0, 1
+    local ncols, nrows = 0, 0
+    local col, row, n = 0, 0, 1
 
-    for i = 1, #buttonGrid do
-        for j = 1, #buttonGrid[i] do
-            local x, y = xOff + (j-1)*(w+BUTTON_X_GAP), -TOP_OFFSET - (i-1)*(h+BUTTON_Y_GAP)
-            local itemButton = buttonGrid[i][j]
+    for _, itemButton in ipairs(buttonStream) do
+        if itemButton == "NEWLINE" then
+            col, row = 0, row+1
+        elseif itemButton == "HGAP" then
+            col = col + 0.5
+        elseif itemButton == "VGAP" then
+            row = row + 0.5
+        elseif itemButton == "SPACE" then
+            col = col + 1
+            n = n + 1
+        else
+            local x, y = xOff + col*(w+BUTTON_X_GAP), -TOP_OFFSET - row*(h+BUTTON_Y_GAP)
             itemButton:ClearAllPoints()
             itemButton:SetPoint(anchor, self, m*x, y)
             itemButton:SetShown(true)
-            ncols = max(ncols, j)
+            ncols = max(ncols, col)
+            nrows = max(nrows, row)
+            col = col + 1
             n = n + 1
         end
-        nrows = max(nrows, i)
     end
 
     -- Hide the leftovers
@@ -197,8 +208,8 @@ function LiteBagPanel_LayoutButtons(self, rightToLeft, buttonGrid)
         n = n + 1
     end
 
-    local totalW = ncols * w + (ncols-1) * BUTTON_X_GAP
-    local totalH = nrows * h + (nrows-1) * BUTTON_Y_GAP
+    local totalW = (ncols+1) * w + ncols * BUTTON_X_GAP
+    local totalH = (nrows+1) * h + nrows * BUTTON_Y_GAP
 
     return totalW, totalH
 end
@@ -218,9 +229,9 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
         layout = "default"
     end
 
-    local rightToLeft, buttonGrid = LAYOUTS[layout](self, ncols)
+    local rightToLeft, buttonStream = LAYOUTS[layout](self, ncols)
 
-    local w, h = LiteBagPanel_LayoutButtons(self, rightToLeft, buttonGrid)
+    local w, h = LiteBagPanel_LayoutButtons(self, rightToLeft, buttonStream)
 
     local frameW = w + LEFT_OFFSET + RIGHT_OFFSET
     local frameH = h + TOP_OFFSET + BOTTOM_OFFSET
