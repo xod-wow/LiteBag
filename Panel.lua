@@ -110,16 +110,8 @@ LAYOUTS.default =
 
 LAYOUTS.reverse =
     function (self, ncols)
-        local stream = { }
-
-        for i = 1, self.size do
-            if i > 1 and i % ncols == 1 then
-                tinsert(stream, 1, "NEWLINE")
-            end
-            tinsert(stream, 1, self.itemButtons[i])
-        end
-
-        return false, stream
+        local _, stream = LAYOUTS.default(self, ncols)
+        return true, stream
     end
 
 LAYOUTS.bag =
@@ -165,13 +157,13 @@ LAYOUTS.blizzard =
         return false, stream
     end
 
-function LiteBagPanel_LayoutButtons(self, rightToLeft, buttonStream)
-    local anchor, m, xOff
+function LiteBagPanel_LayoutButtons(self, reverseDirection, buttonStream)
+    local anchor, m, xOff, yOff
 
-    if rightToLeft then
-        anchor, m, xOff = "TOPRIGHT", -1, RIGHT_OFFSET
+    if reverseDirection then
+        anchor, m, xOff, yOff = "BOTTOMRIGHT", -1, RIGHT_OFFSET, BOTTOM_OFFSET
     else
-        anchor, m, xOff = "TOPLEFT", 1, LEFT_OFFSET
+        anchor, m, xOff, yOff = "TOPLEFT", 1, LEFT_OFFSET, TOP_OFFSET
     end
 
     local w, h = buttonStream[1]:GetSize()
@@ -190,9 +182,9 @@ function LiteBagPanel_LayoutButtons(self, rightToLeft, buttonStream)
             col = col + 1
             n = n + 1
         else
-            local x, y = xOff + col*(w+BUTTON_X_GAP), -TOP_OFFSET - row*(h+BUTTON_Y_GAP)
+            local x, y = xOff + col*(w+BUTTON_X_GAP), -yOff - row*(h+BUTTON_Y_GAP)
             itemButton:ClearAllPoints()
-            itemButton:SetPoint(anchor, self, m*x, y)
+            itemButton:SetPoint(anchor, self, m*x, m*y)
             itemButton:SetShown(true)
             ncols = max(ncols, col)
             nrows = max(nrows, row)
@@ -229,9 +221,9 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
         layout = "default"
     end
 
-    local rightToLeft, buttonStream = LAYOUTS[layout](self, ncols)
+    local reverseDirection, buttonStream = LAYOUTS[layout](self, ncols)
 
-    local w, h = LiteBagPanel_LayoutButtons(self, rightToLeft, buttonStream)
+    local w, h = LiteBagPanel_LayoutButtons(self, reverseDirection, buttonStream)
 
     local frameW = w + LEFT_OFFSET + RIGHT_OFFSET
     local frameH = h + TOP_OFFSET + BOTTOM_OFFSET
