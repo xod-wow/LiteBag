@@ -99,7 +99,7 @@ LAYOUTS.default =
         local stream = { }
 
         for i = 1, self.size do
-            if i > 1 and i % ncols == 1 then
+            if i > 1 and (i-1) % ncols == 0 then
                 tinsert(stream, "NEWLINE")
             end
             tinsert(stream, self.itemButtons[i])
@@ -146,7 +146,7 @@ LAYOUTS.blizzard =
         for b = #self.bagFrames, 1, -1 do
             local bagID = self.bagFrames[b]:GetID()
             for j = 1, #self.itemButtonsByBag[bagID] do
-                if n > 1 and n % ncols == 1 then
+                if n > 1 and (n-1) % ncols == 0 then
                     tinsert(stream, "NEWLINE")
                 end
                 tinsert(stream, self.itemButtonsByBag[bagID][j])
@@ -175,14 +175,16 @@ function LiteBagPanel_LayoutButtons(self, reverseDirection, buttonStream)
         if itemButton == "NEWLINE" then
             col, row = 0, row+1
         elseif itemButton == "HGAP" then
-            col = col + 0.5
+            -- XXX FIXME XXX HGAP is broken for resizing
+            col = col + 0.333
         elseif itemButton == "VGAP" then
-            row = row + 0.5
+            row = row + 0.333
         elseif itemButton == "SPACE" then
             col = col + 1
             n = n + 1
         else
-            local x, y = xOff + col*(w+BUTTON_X_GAP), -yOff - row*(h+BUTTON_Y_GAP)
+            local x = xOff + col*(w+BUTTON_X_GAP)
+            local y = -yOff - row*(h+BUTTON_Y_GAP)
             itemButton:ClearAllPoints()
             itemButton:SetPoint(anchor, self, m*x, m*y)
             itemButton:SetShown(true)
@@ -234,10 +236,13 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
 
 end
 
-function LiteBagPanel_SetWidth(self, width)
-    LiteBag_Debug(format("Panel SetWidth %s %d", self:GetName(), width))
+function LiteBagPanel_ResizeToWidth(self, width)
+    LiteBag_Debug(format("Panel ResizeToWidth %s %d", self:GetName(), width))
     local w = self.itemButtons[1]:GetWidth()
+
+    -- XXX FIXME XXX ncols calc doesn't support HGAP.
     local ncols = floor( (width - LEFT_OFFSET - RIGHT_OFFSET + BUTTON_X_GAP) / (w + BUTTON_X_GAP) )
+
     ncols = min(ncols, self.size)
     ncols = max(ncols, MIN_COLUMNS)
     LiteBag_SetFrameOption(self, "columns", ncols)
