@@ -124,7 +124,7 @@ LAYOUTS.bag =
                 local newBag = inDiffBag(self.itemButtons[i-1], self.itemButtons[i])
                 if newBag then
                     tinsert(stream, "NEWLINE")
-                    tinsert(stream, "VGAP")
+                    -- tinsert(stream, "VGAP")
                     rowStart = i
                 elseif i - rowStart == ncols then
                     tinsert(stream, "NEWLINE")
