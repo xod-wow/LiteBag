@@ -202,8 +202,8 @@ function LiteBagPanel_LayoutButtons(self, reverseDirection, buttonStream)
         n = n + 1
     end
 
-    local totalW = (ncols+1) * w + ncols * BUTTON_X_GAP
-    local totalH = (nrows+1) * h + nrows * BUTTON_Y_GAP
+    local totalW = (ncols+1)*w + ncols*BUTTON_X_GAP + LEFT_OFFSET + RIGHT_OFFSET
+    local totalH = (nrows+1)*h + nrows*BUTTON_Y_GAP + TOP_OFFSET + BOTTOM_OFFSET
 
     return totalW, totalH
 end
@@ -212,7 +212,7 @@ end
 -- padding on the edges to align the buttons into the inset.
 
 function LiteBagPanel_UpdateSizeAndLayout(self)
-    LiteBag_Debug("Panel UpdateSize " .. self:GetName())
+    LiteBag_Debug("Panel UpdateSizeAndLayout " .. self:GetName())
 
     local ncols = LiteBag_GetFrameOption(self, "columns") or
                     self.defaultColumns or
@@ -225,12 +225,9 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
 
     local reverseDirection, buttonStream = LAYOUTS[layout](self, ncols)
 
-    local w, h = LiteBagPanel_LayoutButtons(self, reverseDirection, buttonStream)
+    local frameW, frameH = LiteBagPanel_LayoutButtons(self, reverseDirection, buttonStream)
 
-    local frameW = w + LEFT_OFFSET + RIGHT_OFFSET
-    local frameH = h + TOP_OFFSET + BOTTOM_OFFSET
-
-    LiteBag_Debug(format("Panel SetSize %d,%d", frameW, frameH))
+    LiteBag_Debug(format("Panel SetSize %s %d,%d", self:GetName(), frameW, frameH))
 
     self:SetSize(frameW, frameH)
 
