@@ -14,18 +14,24 @@
 
 ----------------------------------------------------------------------------]]--
 
-local function ContainerItemIsPartOfEquipmentSet(bag, slot, i)
-    local _,equipSetNames = GetContainerItemEquipmentSetInfo(bag, slot)
-    if not equipSetNames then return end
+local LOCATION_BAGSLOT_MASK = 0xf00f3f
 
-    local ids = C_EquipmentSet.GetEquipmentSetIDs()
-    if not ids[i] then return end
+-- This is a guess at something I don't really understand, ItemLocations.
+-- On one hand this seems pretty inefficient. On the other hand, the Blizzard
+-- equivalent makes you use strsplit, so frankly this has to be faster.
 
-    local name = C_EquipmentSet.GetEquipmentSetInfo(ids[i])
-    for _,n in ipairs({ strsplit(", " , equipSetNames) }) do
-        if n == name then return true end
+function GetEquipmentSetMemberships(bag, slot)
+    local ids = { }
+    local location = 0x300000 + bit.lshift(bag, 8) + slot
+    for i = 0, C_EquipmentSet.GetNumEquipmentSets() - 1 do
+        local locations = C_EquipmentSet.GetItemLocations(i)
+        for _, l in pairs(locations) do
+            if bit.band(l, LOCATION_BAGSLOT_MASK) == location then
+                ids[i] = true
+            end
+        end
     end
-    return false
+    return ids
 end
 
 local texData = {
@@ -88,10 +94,12 @@ local function Update(button)
         AddTextures(button)
     end
 
+    local memberships = GetEquipmentSetMemberships(bag, slot)
+
     for i = 1,4 do
         local tex = _G[button:GetName() .. "eqTexture" .. i]
         if LiteBag_GetGlobalOption("HideEquipsetIcon") == nil and
-           ContainerItemIsPartOfEquipmentSet(bag, slot, i) then
+           memberships[i-1] == true then
             tex:Show()
         else
             tex:Hide()
