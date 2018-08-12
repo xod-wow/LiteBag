@@ -233,8 +233,8 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
 
 end
 
-function LiteBagPanel_ResizeToWidth(self, width)
-    LiteBag_Debug(format("Panel ResizeToWidth %s %d", self:GetName(), width))
+function LiteBagPanel_ResizeToFrame(self, width, height)
+    LiteBag_Debug(format("Panel ResizeToFrame %s %d,%d", self:GetName(), width, height))
     local w = self.itemButtons[1]:GetWidth()
 
     -- XXX FIXME XXX ncols calc doesn't support HGAP.

@@ -74,8 +74,12 @@ function LiteBagFrame_OnSizeChanged(self, w, h)
     LiteBag_Debug(format("Frame OnSizeChanged %s %d,%d",self:GetName(), w, h))
     if not self.sizing then return end
 
-    LiteBagPanel_ResizeToWidth(self.currentPanel, w)
-    self:SetHeight(self.currentPanel:GetHeight())
+    LiteBagPanel_ResizeToFrame(self.currentPanel, w, h)
+    if w < self.currentPanel:GetWidth() then
+        self:SetSize(self.currentPanel:GetSize())
+    else
+        self:SetHeight(self.currentPanel:GetHeight())
+    end
 end
 
 function LiteBagFrame_OnHide(self)
