@@ -15,6 +15,7 @@
 local BoAText = BATTLENET_FONT_COLOR_CODE .. "BoA" .. FONT_COLOR_CODE_CLOSE
 local BoEText = GREEN_FONT_COLOR_CODE .. "BoE" .. FONT_COLOR_CODE_CLOSE
 local BoPText = false
+local PetText = HIGHLIGHT_FONT_COLOR_CODE .. PET .. FONT_COLOR_CODE_CLOSE
 local NoBindText = false
 
 local TextForBind = {
@@ -26,6 +27,7 @@ local TextForBind = {
     [ITEM_BIND_ON_USE]         = BoEText,
     [ITEM_SOULBOUND]           = false,
     [ITEM_BIND_ON_PICKUP]      = false,
+    [TOOLTIP_BATTLE_PET]       = PetText,
 }
 
 local scanTip = CreateFrame("GameTooltip", "LiteBagBindOnScanTooltip")
@@ -42,7 +44,11 @@ for i = 1, 5 do
 end
 
 local function GetBindText(bag, slot)
-    scanTip:SetBagItem(bag, slot)
+    scanTip:ClearLines()
+    local _, _, speciesID = scanTip:SetBagItem(bag, slot)
+
+    if speciesID or 0 > 0 then return TextForBind[TOOLTIP_BATTLE_PET] end
+
     for i = 1, 5 do
         local text = scanTip.leftTexts[i]:GetText()
         if not text then break end
