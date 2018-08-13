@@ -14,12 +14,10 @@ local function Update(self)
         return
     end
 
-    local minQuality = LiteBag_GetGlobalOption("ThickerIconBorder")
+    local minQuality = tonumber(LiteBag_GetGlobalOption("ThickerIconBorder"))
     if not minQuality then
         return
     end
-
-    minQuality = tonumber(minQuality)
 
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
