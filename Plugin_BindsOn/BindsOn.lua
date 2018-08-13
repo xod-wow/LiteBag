@@ -45,7 +45,17 @@ end
 
 local function GetBindText(bag, slot)
     scanTip:ClearLines()
-    local _, _, speciesID = scanTip:SetBagItem(bag, slot)
+    local _, _, speciesID
+
+    if bag == BANK_CONTAINER then
+        local id = BankButtonIDToInvSlotID(slot)
+        _,_,speciesID = scanTip:SetInventoryItem("player", id)
+    elseif bag == REAGENTBANK_CONTAINER then
+        local id = ReagentBankButtonIDToInvSlotID(slot)
+        _,_,speciesID = scanTip:SetInventoryItem("player", id)
+    else
+        _,_,speciesID = scanTip:SetBagItem(bag, slot)
+    end
 
     if speciesID or 0 > 0 then return TextForBind[TOOLTIP_BATTLE_PET] end
 
