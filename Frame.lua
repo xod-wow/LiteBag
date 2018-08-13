@@ -75,11 +75,10 @@ function LiteBagFrame_OnSizeChanged(self, w, h)
     if not self.sizing then return end
 
     LiteBagPanel_ResizeToFrame(self.currentPanel, w, h)
-    if w < self.currentPanel:GetWidth() then
-        self:SetSize(self.currentPanel:GetSize())
-    else
-        self:SetHeight(self.currentPanel:GetHeight())
-    end
+
+    local clampedWidth = max(w, self.currentPanel:GetWidth())
+
+    self:SetSize(clampedWidth, self.currentPanel:GetHeight())
 end
 
 function LiteBagFrame_OnHide(self)

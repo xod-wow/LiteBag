@@ -96,116 +96,156 @@ local LAYOUTS = { }
 
 LAYOUTS.default =
     function (self, ncols)
-        local stream = { }
+        local grid = { }
+
+        local w, h = self.itemButtons[1]:GetSize()
+
+        local xBreak = LiteBag_GetFrameOption(self, "xbreak")
+        local yBreak = LiteBag_GetFrameOption(self, "ybreak")
+
+        local row, col, maxCol, maxXGap = 0, 0, 0, 0
+
+        local xGap, yGap = 0, 0
 
         for i = 1, self.size do
-            if i > 1 and (i-1) % ncols == 0 then
-                tinsert(stream, "NEWLINE")
-            end
-            tinsert(stream, self.itemButtons[i])
-        end
-
-        return false, stream
-    end
-
-LAYOUTS.reverse =
-    function (self, ncols)
-        local _, stream = LAYOUTS.default(self, ncols)
-        return true, stream
-    end
-
-LAYOUTS.bag =
-    function (self, ncols)
-        local stream = { }
-        local rowStart = 1
-
-        for i = 1, self.size do
-            if i > 1 then
-                local newBag = inDiffBag(self.itemButtons[i-1], self.itemButtons[i])
-                if newBag then
-                    tinsert(stream, "NEWLINE")
-                    -- tinsert(stream, "VGAP")
-                    rowStart = i
-                elseif i - rowStart == ncols then
-                    tinsert(stream, "NEWLINE")
-                    rowStart = i
+            if col > 0 and col % ncols == 0 then
+                xGap, col, row = 0, 0, row + 1
+                if yBreak and row % yBreak == 0 then
+                    yGap = yGap + h/2
                 end
+            elseif xBreak and col > 0 and col % xBreak == 0 then
+                xGap = xGap + w/2
+                maxXGap = max(maxXGap, xGap)
             end
-            tinsert(stream, self.itemButtons[i])
+
+            local x = col*(w+BUTTON_X_GAP)+xGap
+            local y = row*(h+BUTTON_Y_GAP)+yGap
+            tinsert(grid, { x=x, y=y, b=self.itemButtons[i] })
+
+            maxCol = max(col, maxCol)
+            col = col + 1
         end
 
-        return false, stream
+        grid.ncols = maxCol+1
+        grid.totalWidth  = (maxCol+1)*w + maxCol*BUTTON_X_GAP + maxXGap
+        grid.totalHeight = (row+1)*h + row*BUTTON_Y_GAP + yGap
+
+        return grid
     end
 
 LAYOUTS.blizzard =
     function (self, ncols)
-        local stream = { }
+        local grid = { }
 
-        local n = 1
+        local xBreak = LiteBag_GetFrameOption(self, "xbreak")
+        local yBreak = LiteBag_GetFrameOption(self, "ybreak")
+
+        local w, h = self.itemButtons[1]:GetSize()
+
+        local row, col, maxCol, maxXGap = 0, 0, 0, 0
+
+        local xGap, yGap = 0, 0
 
         for b = #self.bagFrames, 1, -1 do
             local bagID = self.bagFrames[b]:GetID()
-            for j = 1, #self.itemButtonsByBag[bagID] do
-                if n > 1 and (n-1) % ncols == 0 then
-                    tinsert(stream, "NEWLINE")
+            for _, b in ipairs(self.itemButtonsByBag[bagID]) do
+                if col > 0 and col % ncols == 0 then
+                    xGap, col, row = 0, 0, row + 1
+                    if yBreak and row % yBreak == 0 then
+                        yGap = yGap + h/2
+                    end
+                elseif xBreak and col > 0 and col % xBreak == 0 then
+                    xGap = xGap + w/2
+                    maxXGap = max(maxXGap, xGap)
                 end
-                tinsert(stream, self.itemButtonsByBag[bagID][j])
-                n = n + 1
+
+                local x = col*(w+BUTTON_X_GAP)+xGap
+                local y = row*(h+BUTTON_Y_GAP)+yGap
+                tinsert(grid, { x=x, y=y, b=b })
+
+                maxCol = max(col, maxCol)
+                col = col + 1
             end
         end
 
-        return false, stream
+        grid.ncols = maxCol+1
+        grid.totalWidth  = (maxCol+1)*w + maxCol*BUTTON_X_GAP + maxXGap
+        grid.totalHeight = (row+1)*h + row*BUTTON_Y_GAP + yGap
+
+        return grid
     end
 
-function LiteBagPanel_LayoutButtons(self, reverseDirection, buttonStream)
+LAYOUTS.reverse =
+    function (self, ncols)
+        local grid = LAYOUTS.default(self, ncols)
+        grid.reverseDirection = true
+        return grid
+    end
+
+LAYOUTS.bag =
+    function (self, ncols)
+        local grid = { }
+
+        local w, h = self.itemButtons[1]:GetSize()
+
+        local row, col, maxCol = 0, 0, 0
+
+        for i = 1, self.size do
+            local newBag = i > 1 and inDiffBag(self.itemButtons[i-1], self.itemButtons[i])
+            if col > 1 then
+                if newBag then
+                    col = 0
+                    row = row + (4/3)
+                elseif col % ncols == 0 then
+                    col = 0
+                    row = row + 1
+                end
+            end
+            local x = col * (w+BUTTON_X_GAP)
+            local y = row * (h+BUTTON_Y_GAP)
+            tinsert(grid, { x=x, y=y, b=self.itemButtons[i] })
+            maxCol = max(col, maxCol)
+            col = col + 1
+        end
+
+        grid.ncols = maxCol+1
+        grid.totalWidth  = (maxCol+1) * w + maxCol * BUTTON_X_GAP
+        grid.totalHeight = (row+1) * h + row * BUTTON_Y_GAP
+
+        return grid
+    end
+
+function LiteBagPanel_ApplyLayout(self, layoutGrid)
     local anchor, m, xOff, yOff
 
-    if reverseDirection then
-        anchor, m, xOff, yOff = "BOTTOMRIGHT", -1, RIGHT_OFFSET, BOTTOM_OFFSET
+    local maxX, maxY = 0, 0
+
+    if layoutGrid.reverseDirection then
+        anchor, m, xOff, yOff = "BOTTOMRIGHT", -1, -RIGHT_OFFSET, -BOTTOM_OFFSET
     else
         anchor, m, xOff, yOff = "TOPLEFT", 1, LEFT_OFFSET, TOP_OFFSET
     end
 
-    local w, h = buttonStream[1]:GetSize()
+    local n = 1
 
-    local ncols, nrows = 0, 0
-    local col, row, n = 0, 0, 1
-
-    for _, itemButton in ipairs(buttonStream) do
-        if itemButton == "NEWLINE" then
-            col, row = 0, row+1
-        elseif itemButton == "HGAP" then
-            -- XXX FIXME XXX HGAP is broken for resizing
-            col = col + 0.333
-        elseif itemButton == "VGAP" then
-            row = row + 0.333
-        elseif itemButton == "SPACE" then
-            col = col + 1
-            n = n + 1
-        else
-            local x = xOff + col*(w+BUTTON_X_GAP)
-            local y = -yOff - row*(h+BUTTON_Y_GAP)
-            itemButton:ClearAllPoints()
-            itemButton:SetPoint(anchor, self, m*x, m*y)
-            itemButton:SetShown(true)
-            ncols = max(ncols, col)
-            nrows = max(nrows, row)
-            col = col + 1
-            n = n + 1
-        end
+    for _, pos in ipairs(layoutGrid) do
+        local x = xOff + m * pos.x
+        local y = -yOff - m * pos.y
+        pos.b:ClearAllPoints()
+        pos.b:SetPoint(anchor, self, x, y)
+        pos.b:SetShown(true)
+        n = n + 1
     end
 
     -- Hide the leftovers
-
     while n <= #self.itemButtons do
         self.itemButtons[n]:Hide()
         n = n + 1
     end
 
-    local totalW = (ncols+1)*w + ncols*BUTTON_X_GAP + LEFT_OFFSET + RIGHT_OFFSET
-    local totalH = (nrows+1)*h + nrows*BUTTON_Y_GAP + TOP_OFFSET + BOTTOM_OFFSET
-
-    return totalW, totalH
+    -- Return the total panel width and height
+    return layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET,
+           layoutGrid.totalHeight + TOP_OFFSET + BOTTOM_OFFSET
 end
 
 -- Note again, this is overlayed onto a Portrait frame, so there is
@@ -219,13 +259,11 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
                     MIN_COLUMNS
     local layout = LiteBag_GetFrameOption(self, "layout")
 
-    if not layout or not LAYOUTS[layout] then
-        layout = "default"
-    end
+    if not layout or not LAYOUTS[layout] then layout = "default" end
 
-    local reverseDirection, buttonStream = LAYOUTS[layout](self, ncols)
+    local layoutGrid = LAYOUTS[layout](self, ncols)
 
-    local frameW, frameH = LiteBagPanel_LayoutButtons(self, reverseDirection, buttonStream)
+    local frameW, frameH = LiteBagPanel_ApplyLayout(self, layoutGrid)
 
     LiteBag_Debug(format("Panel SetSize %s %d,%d", self:GetName(), frameW, frameH))
 
@@ -235,13 +273,23 @@ end
 
 function LiteBagPanel_ResizeToFrame(self, width, height)
     LiteBag_Debug(format("Panel ResizeToFrame %s %d,%d", self:GetName(), width, height))
-    local w = self.itemButtons[1]:GetWidth()
 
-    -- XXX FIXME XXX ncols calc doesn't support HGAP.
-    local ncols = floor( (width - LEFT_OFFSET - RIGHT_OFFSET + BUTTON_X_GAP) / (w + BUTTON_X_GAP) )
+    local layout = LiteBag_GetFrameOption(self, "layout")
+    if not layout or not LAYOUTS[layout] then layout = "default" end
 
-    ncols = min(ncols, self.size)
-    ncols = max(ncols, MIN_COLUMNS)
+    local ncols = MIN_COLUMNS
+
+    -- We could do a better job of searching from where we are, but this doesn't
+    -- seem to be causing a performance problem (yet).
+
+    for i = MIN_COLUMNS+1, self.size do
+        layoutGrid = LAYOUTS[layout](self, i)
+        if layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET > width then
+            ncols = i-1
+            break
+        end
+    end
+
     LiteBag_SetFrameOption(self, "columns", ncols)
     LiteBagPanel_UpdateSizeAndLayout(self)
 end
