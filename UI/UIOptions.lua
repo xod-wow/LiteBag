@@ -96,7 +96,7 @@ local function GetQualityText(i)
     end
 end
 
-local function ThickerIconBorder_Initialize(self, level)
+local function IconBorder_Initialize(self, level)
     if level == 1 then
         local info = UIDropDownMenu_CreateInfo()
         local current = LiteBag_GetGlobalOption("ThickerIconBorder")
@@ -123,7 +123,7 @@ local function ThickerIconBorder_Initialize(self, level)
         end
     end
 end
-function LiteBagOptionsThickerIconBorder_OnLoad(self)
+function LiteBagOptionsIconBorder_OnLoad(self)
     self.SetOption =
         function (self, setting)
             LiteBag_SetGlobalOption("ThickerIconBorder", setting)
@@ -145,7 +145,7 @@ function LiteBagOptionsThickerIconBorder_OnLoad(self)
             self.value = v
             UIDropDownMenu_SetText(self, GetQualityText(v))
         end
-    UIDropDownMenu_Initialize(self, ThickerIconBorder_Initialize)
+    UIDropDownMenu_Initialize(self, IconBorder_Initialize)
     LiteBagOptionsControl_OnLoad(self)
 end
 
