@@ -32,11 +32,17 @@
         LiteBagBagButtonTemplate is a button to hold the actual bag iself,
         where you drag a new bag on when you buy one.
 
-        LiteBagFrameTemplate is a template for our one-bag frames.  It is
-        assigned some bag IDs and a size, and automatically knows how to do
-        things a bit differently if one of its bag IDs is the bank.
+        LiteBagPanelTemplate is a panel of item buttons and the code for
+        arranging them according to various settings.  It's assigned soma
+        bag IDs.
 
-        In LiteBag.xml we define two one-bag frames, inventory and bank.
+        LiteBagFrameTemplate is a portraitframe set up to hold the panel
+        and the bag buttons. It's able to be resized by dragging. It listens
+        to the relevant events to open and close itself. It also supports
+        tabbing to do the reagent bank.
+
+        LiteBagBank and LiteBagInventory define the bank and inventory
+        frames respectively.
 
         In ReplaceBlizzard.lua are the various functions to replace the
         Blizzard standard bag and bank UI with ours.
