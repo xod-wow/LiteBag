@@ -58,7 +58,7 @@ local function GetBindText(bag, slot)
     end
 
     -- Battle pets don't use GameTooltip, they have a separate tooltip. Gah.
-    if speciesID or 0 > 0 then
+    if (speciesID or 0) > 0 then
         return TextForBind[TOOLTIP_BATTLE_PET]
     end
 
