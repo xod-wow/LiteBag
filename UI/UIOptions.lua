@@ -179,14 +179,14 @@ local function PanelOrder_Initialize(self, level)
     end
 end
 
-local function PanelOrder_OnLoad(self)
+local function PanelOrder_OnLoad(self, panel)
     self.SetOption =
         function (self, setting)
-            LiteBag_SetFrameOption(self.panel, "order", setting)
+            LiteBag_SetFrameOption(panel, "order", setting)
         end
     self.GetOption =
         function (self)
-            return LiteBag_GetFrameOption(self.panel, setting)
+            return LiteBag_GetFrameOption(panel, setting)
         end
     self.GetOptionDefault =
         function (self)
@@ -355,22 +355,18 @@ function LiteBagOptionsBankYBreak_OnValueChanged(self)
 end
 
 function LiteBagOptionsBankOrder_OnLoad(self)
-    self.panel = LiteBagBankPanel
-    PanelOrder_OnLoad(self)
+    PanelOrder_OnLoad(self, LiteBagBankPanel)
 end
 
 function LiteBagOptionsBankLayout_OnLoad(self)
-    self.panel = LiteBagBankPanel
-    PanelLayout_OnLoad(self)
+    PanelLayout_OnLoad(self, LiteBagBankPanel)
 end
 
 function LiteBagOptionsInventoryOrder_OnLoad(self)
-    self.panel = LiteBagInventoryPanel
-    PanelOrder_OnLoad(self)
+    PanelOrder_OnLoad(self, LiteBagInventoryPanel)
 end
 
 function LiteBagOptionsInventoryLayout_OnLoad(self)
-    self.panel = LiteBagInventoryPanel
-    PanelLayout_OnLoad(self)
+    PanelLayout_OnLoad(self, LiteBagInventoryPanel)
 end
 
