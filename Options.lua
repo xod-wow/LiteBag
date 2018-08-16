@@ -55,6 +55,17 @@ local function CheckOnOff(arg)
     end
 end
 
+local function RefreshUI()
+    if LiteBagInventory:IsShown() then
+        LiteBagPanel_OnShow(LiteBagInventory.currentPanel)
+        LiteBagFrame_OnShow(LiteBagInventory)
+    end
+    if LiteBagBank:IsShown() then
+        LiteBagPanel_OnShow(LiteBagBank.currentPanel)
+        LiteBagFrame_OnShow(LiteBagBank)
+    end
+end
+
 function LiteBag_OptionSlashFunc(argstr)
 
     local cmd, arg1, arg2 = strsplit(" ", strlower(argstr))
@@ -75,8 +86,7 @@ function LiteBag_OptionSlashFunc(argstr)
     if cmd == "equipset" then
         LiteBag_SetGlobalOption("HideEquipsetIcon", onOff)
         LiteBag_Print("Equipment set icon display: " .. tostring(onOff))
-        LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
-        LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
+        RefreshUI()
         return
     end
 
@@ -96,6 +106,15 @@ function LiteBag_OptionSlashFunc(argstr)
         if arg1 == "default" then arg1 = nil end
         LiteBag_SetFrameOption(LiteBagInventoryPanel, "layout", arg1)
         LiteBag_Print("Inventory button layout set to: " .. tostring(arg1))
+        RefreshUI()
+        return
+    end
+
+    if cmd == "inventory.order" then
+        if arg1 == "default" then arg1 = nil end
+        LiteBag_SetFrameOption(LiteBagInventoryPanel, "order", arg1)
+        LiteBag_Print("Inventory button order set to: " .. tostring(arg1))
+        RefreshUI()
         return
     end
 
@@ -103,11 +122,23 @@ function LiteBag_OptionSlashFunc(argstr)
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
             LiteBag_SetFrameOption(LiteBagInventoryPanel, "columns", arg1)
-            LiteBagPanel_UpdateSizeAndLayout(LiteBagInventoryPanel)
             LiteBag_Print("Inventory columns set to "..arg1.." columns")
+            RefreshUI()
         else
             LiteBag_Print("Can't set number of columns to less than 8")
         end
+        return
+    end
+
+    if cmd == "inventory.gaps" then
+        x = tonumber(arg1)
+        y = tonumber(arg2)
+        if x == 0 then x = nil end
+        if y == 0 then y = nil end
+        LiteBag_SetFrameOption(LiteBagInventoryPanel, "xbreak", x)
+        LiteBag_SetFrameOption(LiteBagInventoryPanel, "ybreak", y)
+        RefreshUI()
+        LiteBag_Print("Inventory gaps set to "..tostring(x).." "..tostring(y))
         return
     end
 
@@ -116,6 +147,7 @@ function LiteBag_OptionSlashFunc(argstr)
         if arg1 > 0 and arg1 <= 2 then
             LiteBag_SetFrameOption(LiteBagInventory, "scale", arg1)
             LiteBag_Print("Inventory scale set to "..arg1)
+            RefreshUI()
         else
             LiteBag_Print("Scale must be between 0 and 2.")
         end
@@ -126,6 +158,15 @@ function LiteBag_OptionSlashFunc(argstr)
         if arg1 == "default" or arg1 == DEFAULT then arg1 = nil end
         LiteBag_SetFrameOption(LiteBagBankPanel, "layout", arg1)
         LiteBag_Print("Bank button layout set to: " .. tostring(arg1))
+        RefreshUI()
+        return
+    end
+
+    if cmd == "bank.order" then
+        if arg1 == "default" then arg1 = nil end
+        LiteBag_SetFrameOption(LiteBagBankPanel, "order", arg1)
+        LiteBag_Print("Bank button order set to: " .. tostring(arg1))
+        RefreshUI()
         return
     end
 
@@ -133,8 +174,8 @@ function LiteBag_OptionSlashFunc(argstr)
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
             LiteBag_SetFrameOption(LiteBagBankPanel, "columns", arg1)
-            LiteBagPanel_UpdateSizeAndLayout(LiteBagBankPanel)
             LiteBag_Print("Bank columns set to "..arg1.." columns")
+            RefreshUI()
         else
             LiteBag_Print("Can't set number of columns to less than 8")
         end
@@ -146,6 +187,7 @@ function LiteBag_OptionSlashFunc(argstr)
         if arg1 > 0 and arg1 <= 2 then
             LiteBag_SetFrameOption(LiteBagBank, "scale", arg1)
             LiteBag_Print("Bank scale set to "..arg1)
+            RefreshUI()
         else
             LiteBag_Print("Scale must be between 0 and 2.")
         end
@@ -154,12 +196,19 @@ function LiteBag_OptionSlashFunc(argstr)
             
     LiteBag_Print("Usage:")
     LiteBag_Print("  /litebag bank.columns <n>")
+    LiteBag_Print("  /litebag bank.gaps <x> <y>")
+    LiteBag_Print("  /litebag bank.layout <default | bag | reverse>")
+    LiteBag_Print("  /litebag bank.order <default | blizzard | reverse>")
     LiteBag_Print("  /litebag bank.scale <s>")
     LiteBag_Print("  /litebag inventory.columns <n>")
+    LiteBag_Print("  /litebag inventory.gaps <x> <y>")
+    LiteBag_Print("  /litebag inventory.layout <default | bag | reverse>")
+    LiteBag_Print("  /litebag inventory.order <default | blizzard | reverse>")
     LiteBag_Print("  /litebag inventory.scale <s>")
     LiteBag_Print("  /litebag inventory.snap <on | off>")
     LiteBag_Print("  /litebag confirmsort <on | off>")
     LiteBag_Print("  /litebag equipset <on | off>")
+    LiteBag_Print("  /litebag iconborder <minquality>")
     LiteBag_Print("  /litebag debug <on | off>")
 end
 

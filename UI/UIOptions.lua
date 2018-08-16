@@ -123,6 +123,7 @@ local function IconBorder_Initialize(self, level)
         end
     end
 end
+
 function LiteBagOptionsIconBorder_OnLoad(self)
     self.SetOption =
         function (self, setting)
@@ -146,6 +147,61 @@ function LiteBagOptionsIconBorder_OnLoad(self)
             UIDropDownMenu_SetText(self, GetQualityText(v))
         end
     UIDropDownMenu_Initialize(self, IconBorder_Initialize)
+    LiteBagOptionsControl_OnLoad(self)
+end
+
+local function PanelOrder_Initialize(self, level)
+    if level == 1 then
+        local info = UIDropDownMenu_CreateInfo()
+        local current = LiteBag_GetFrameOption(self.panel, "order")
+
+        info.func =
+             function (button, arg1, arg2, checked)
+                 self.value = arg1
+                 self:SetOption(arg1)
+                 UIDropDownMenu_SetText(self, arg1 or DEFAULT)
+             end
+
+        info.text = DEFAULT
+        info.checked = ( current == nil )
+        info.arg1 = nil
+        UIDropDownMenu_AddButton(info)
+
+        info.text = "Bags"
+        info.checked = ( current == "bag" )
+        info.arg1 = "bag"
+        UIDropDownMenu_AddButton(info)
+        
+        info.text = "Reverse"
+        info.checked = ( current == "reverse" )
+        info.arg1 = "reverse"
+        UIDropDownMenu_AddButton(info)
+    end
+end
+
+local function PanelOrder_OnLoad(self)
+    self.SetOption =
+        function (self, setting)
+            LiteBag_SetFrameOption(self.panel, "order", setting)
+        end
+    self.GetOption =
+        function (self)
+            return LiteBag_GetFrameOption(self.panel, setting)
+        end
+    self.GetOptionDefault =
+        function (self)
+            return nil
+        end
+    self.GetControl =
+        function (self)
+            return self.value
+        end
+    self.SetControl =
+        function (self, v)
+            self.value = v
+            UIDropDownMenu_SetText(self, v or DEFAULT)
+        end
+    UIDropDownMenu_Initialize(self, PanelOrder_Initialize)
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -260,7 +316,7 @@ function LiteBagOptionsInventoryXBreak_OnValueChanged(self)
     local n = self:GetName()
     local v = self:GetValue()
     if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Gap after columns: " .. v))
+    _G[n.."Text"]:SetText(format("Col gap: " .. v))
     LiteBagOptionsControl_OnChanged(self)
 end
 
@@ -268,7 +324,7 @@ function LiteBagOptionsInventoryYBreak_OnValueChanged(self)
     local n = self:GetName()
     local v = self:GetValue()
     if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Gap after rows: " .. v))
+    _G[n.."Text"]:SetText(format("Row gap: " .. v))
     LiteBagOptionsControl_OnChanged(self)
 end
 
@@ -286,7 +342,7 @@ function LiteBagOptionsBankXBreak_OnValueChanged(self)
     local n = self:GetName()
     local v = self:GetValue()
     if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Gap after columns: " .. v))
+    _G[n.."Text"]:SetText(format("Col gap: " .. v))
     LiteBagOptionsControl_OnChanged(self)
 end
 
@@ -294,6 +350,27 @@ function LiteBagOptionsBankYBreak_OnValueChanged(self)
     local n = self:GetName()
     local v = self:GetValue()
     if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Gap after rows: " .. v))
+    _G[n.."Text"]:SetText(format("Row gap:" .. v))
     LiteBagOptionsControl_OnChanged(self)
 end
+
+function LiteBagOptionsBankOrder_OnLoad(self)
+    self.panel = LiteBagBankPanel
+    PanelOrder_OnLoad(self)
+end
+
+function LiteBagOptionsBankLayout_OnLoad(self)
+    self.panel = LiteBagBankPanel
+    PanelLayout_OnLoad(self)
+end
+
+function LiteBagOptionsInventoryOrder_OnLoad(self)
+    self.panel = LiteBagInventoryPanel
+    PanelOrder_OnLoad(self)
+end
+
+function LiteBagOptionsInventoryLayout_OnLoad(self)
+    self.panel = LiteBagInventoryPanel
+    PanelLayout_OnLoad(self)
+end
+

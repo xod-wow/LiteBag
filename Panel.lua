@@ -92,13 +92,41 @@ local function inDiffBag(a, b)
     return a:GetParent():GetID() ~= b:GetParent():GetID()
 end
 
+local BUTTONORDERS = { }
+
+BUTTONORDERS.default =
+    function (self)
+        return self.itemButtons
+    end
+
+BUTTONORDERS.blizzard =
+    function (self)
+        local itemButtons = { }
+        for b = #self.bagFrames, 1, -1 do
+            local bagID = self.bagFrames[b]:GetID()
+            for _, b in ipairs(self.itemButtonsByBag[bagID]) do
+                tinsert(itemButtons, b)
+            end
+        end
+        return itemButtons
+    end
+
+BUTTONORDERS.reverse =
+    function (self)
+        local itemButtons = { }
+        for i = #self.itemButtons, 1, -1 do
+            tinsert(itemButtons, self.itemButtons[i])
+        end
+        return itemButtons
+    end
+
 local LAYOUTS = { }
 
 LAYOUTS.default =
-    function (self, ncols)
+    function (self, itemButtons, ncols)
         local grid = { }
 
-        local w, h = self.itemButtons[1]:GetSize()
+        local w, h = itemButtons[1]:GetSize()
 
         local xBreak = LiteBag_GetFrameOption(self, "xbreak")
         local yBreak = LiteBag_GetFrameOption(self, "ybreak")
@@ -120,7 +148,7 @@ LAYOUTS.default =
 
             local x = col*(w+BUTTON_X_GAP)+xGap
             local y = row*(h+BUTTON_Y_GAP)+yGap
-            tinsert(grid, { x=x, y=y, b=self.itemButtons[i] })
+            tinsert(grid, { x=x, y=y, b=itemButtons[i] })
 
             maxCol = max(col, maxCol)
             col = col + 1
@@ -133,65 +161,23 @@ LAYOUTS.default =
         return grid
     end
 
-LAYOUTS.blizzard =
-    function (self, ncols)
-        local grid = { }
-
-        local xBreak = LiteBag_GetFrameOption(self, "xbreak")
-        local yBreak = LiteBag_GetFrameOption(self, "ybreak")
-
-        local w, h = self.itemButtons[1]:GetSize()
-
-        local row, col, maxCol, maxXGap = 0, 0, 0, 0
-
-        local xGap, yGap = 0, 0
-
-        for b = #self.bagFrames, 1, -1 do
-            local bagID = self.bagFrames[b]:GetID()
-            for _, b in ipairs(self.itemButtonsByBag[bagID]) do
-                if col > 0 and col % ncols == 0 then
-                    xGap, col, row = 0, 0, row + 1
-                    if yBreak and row % yBreak == 0 then
-                        yGap = yGap + h/2
-                    end
-                elseif xBreak and col > 0 and col % xBreak == 0 then
-                    xGap = xGap + w/2
-                    maxXGap = max(maxXGap, xGap)
-                end
-
-                local x = col*(w+BUTTON_X_GAP)+xGap
-                local y = row*(h+BUTTON_Y_GAP)+yGap
-                tinsert(grid, { x=x, y=y, b=b })
-
-                maxCol = max(col, maxCol)
-                col = col + 1
-            end
-        end
-
-        grid.ncols = maxCol+1
-        grid.totalWidth  = (maxCol+1)*w + maxCol*BUTTON_X_GAP + maxXGap
-        grid.totalHeight = (row+1)*h + row*BUTTON_Y_GAP + yGap
-
-        return grid
-    end
-
 LAYOUTS.reverse =
-    function (self, ncols)
-        local grid = LAYOUTS.default(self, ncols)
+    function (self, itemButtons, ncols)
+        local grid = LAYOUTS.default(self, itemButtons, ncols)
         grid.reverseDirection = true
         return grid
     end
 
 LAYOUTS.bag =
-    function (self, ncols)
+    function (self, itemButtons, ncols)
         local grid = { }
 
-        local w, h = self.itemButtons[1]:GetSize()
+        local w, h = itemButtons[1]:GetSize()
 
         local row, col, maxCol = 0, 0, 0
 
         for i = 1, self.size do
-            local newBag = i > 1 and inDiffBag(self.itemButtons[i-1], self.itemButtons[i])
+            local newBag = i > 1 and inDiffBag(itemButtons[i-1], itemButtons[i])
             if col > 1 then
                 if newBag then
                     col = 0
@@ -203,7 +189,7 @@ LAYOUTS.bag =
             end
             local x = col * (w+BUTTON_X_GAP)
             local y = row * (h+BUTTON_Y_GAP)
-            tinsert(grid, { x=x, y=y, b=self.itemButtons[i] })
+            tinsert(grid, { x=x, y=y, b=itemButtons[i] })
             maxCol = max(col, maxCol)
             col = col + 1
         end
@@ -258,17 +244,17 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
                     self.defaultColumns or
                     MIN_COLUMNS
     local layout = LiteBag_GetFrameOption(self, "layout")
+    local order = LiteBag_GetFrameOption(self, "order")
 
     if not layout or not LAYOUTS[layout] then layout = "default" end
+    if not order or not BUTTONORDERS[order] then order = "default" end
 
-    local layoutGrid = LAYOUTS[layout](self, ncols)
-
+    local itemButtons = BUTTONORDERS[order](self)
+    local layoutGrid = LAYOUTS[layout](self, itemButtons, ncols)
     local frameW, frameH = LiteBagPanel_ApplyLayout(self, layoutGrid)
 
     LiteBag_Debug(format("Panel SetSize %s %d,%d", self:GetName(), frameW, frameH))
-
     self:SetSize(frameW, frameH)
-
 end
 
 function LiteBagPanel_ResizeToFrame(self, width, height)
@@ -281,9 +267,10 @@ function LiteBagPanel_ResizeToFrame(self, width, height)
 
     -- We could do a better job of searching from where we are, but this doesn't
     -- seem to be causing a performance problem (yet).
+    -- The BUTTONORDER doesn't matter for sizing so don't bother calling it.
 
     for i = MIN_COLUMNS+1, self.size do
-        layoutGrid = LAYOUTS[layout](self, i)
+        layoutGrid = LAYOUTS[layout](self, self.itemButtons, i)
         if layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET > width then
             ncols = i-1
             break
