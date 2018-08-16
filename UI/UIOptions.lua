@@ -159,22 +159,25 @@ local function PanelOrder_Initialize(self, level)
              function (button, arg1, arg2, checked)
                  self.value = arg1
                  self:SetOption(arg1)
-                 UIDropDownMenu_SetText(self, arg1 or DEFAULT)
+                 UIDropDownMenu_SetText(self, arg2 or DEFAULT)
              end
 
         info.text = DEFAULT
         info.checked = ( current == nil )
         info.arg1 = nil
+        info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
 
-        info.text = "Bags"
-        info.checked = ( current == "bag" )
-        info.arg1 = "bag"
+        info.text = "Blizzard"
+        info.checked = ( current == "blizzard" )
+        info.arg1 = "blizzard"
+        info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
-        
+
         info.text = "Reverse"
         info.checked = ( current == "reverse" )
         info.arg1 = "reverse"
+        info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
     end
 end
@@ -186,7 +189,7 @@ local function PanelOrder_OnLoad(self, panel)
         end
     self.GetOption =
         function (self)
-            return LiteBag_GetFrameOption(panel, setting)
+            return LiteBag_GetFrameOption(panel, "layout")
         end
     self.GetOptionDefault =
         function (self)
@@ -201,7 +204,67 @@ local function PanelOrder_OnLoad(self, panel)
             self.value = v
             UIDropDownMenu_SetText(self, v or DEFAULT)
         end
+    self.panel = panel
     UIDropDownMenu_Initialize(self, PanelOrder_Initialize)
+    LiteBagOptionsControl_OnLoad(self)
+end
+
+local function PanelLayout_Initialize(self, level)
+    if level == 1 then
+        local info = UIDropDownMenu_CreateInfo()
+        local current = LiteBag_GetFrameOption(self.panel, "layout")
+
+        info.func =
+             function (button, arg1, arg2, checked)
+                 self.value = arg1
+                 self:SetOption(arg1)
+                 UIDropDownMenu_SetText(self, arg2 or DEFAULT)
+             end
+
+        info.text = DEFAULT
+        info.checked = ( current == nil )
+        info.arg1 = nil
+        info.arg2 = info.text
+        UIDropDownMenu_AddButton(info)
+
+        info.text = "Bags"
+        info.checked = ( current == "bag" )
+        info.arg1 = "bag"
+        info.arg2 = info.text
+        UIDropDownMenu_AddButton(info)
+
+        info.text = "Reverse"
+        info.checked = ( current == "reverse" )
+        info.arg1 = "reverse"
+        info.arg2 = info.text
+        UIDropDownMenu_AddButton(info)
+    end
+end
+
+local function PanelLayout_OnLoad(self, panel)
+    self.SetOption =
+        function (self, setting)
+            LiteBag_SetFrameOption(panel, "layout", setting)
+        end
+    self.GetOption =
+        function (self)
+            return LiteBag_GetFrameOption(panel, "layout")
+        end
+    self.GetOptionDefault =
+        function (self)
+            return nil
+        end
+    self.GetControl =
+        function (self)
+            return self.value
+        end
+    self.SetControl =
+        function (self, v)
+            self.value = v
+            UIDropDownMenu_SetText(self, v or DEFAULT)
+        end
+    self.panel = panel
+    UIDropDownMenu_Initialize(self, PanelLayout_Initialize)
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -355,18 +418,18 @@ function LiteBagOptionsBankYBreak_OnValueChanged(self)
 end
 
 function LiteBagOptionsBankOrder_OnLoad(self)
-    PanelOrder_OnLoad(self, LiteBagBankPanel)
+    PanelOrder_OnLoad(self, "LiteBagBankPanel")
 end
 
 function LiteBagOptionsBankLayout_OnLoad(self)
-    PanelLayout_OnLoad(self, LiteBagBankPanel)
+    PanelLayout_OnLoad(self, "LiteBagBankPanel")
 end
 
 function LiteBagOptionsInventoryOrder_OnLoad(self)
-    PanelOrder_OnLoad(self, LiteBagInventoryPanel)
+    PanelOrder_OnLoad(self, "LiteBagInventoryPanel")
 end
 
 function LiteBagOptionsInventoryLayout_OnLoad(self)
-    PanelLayout_OnLoad(self, LiteBagInventoryPanel)
+    PanelLayout_OnLoad(self, "LiteBagInventoryPanel")
 end
 

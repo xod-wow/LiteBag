@@ -156,7 +156,7 @@
         </Slider>
         <Slider name="$parentInventoryXBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryColumns" relativePoint="BOTTOMLEFT" y="-24" />
+                <Anchor point="TOPLEFT" relativeTo="$parentInventoryColumns" relativePoint="BOTTOMLEFT" y="-36" />
                 <Anchor point="RIGHT" relativeTo="$parentInventoryColumns" />
             </Anchors>
             <Scripts>
@@ -166,7 +166,7 @@
         </Slider>
         <Slider name="$parentInventoryYBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryScale" relativePoint="BOTTOMLEFT" y="-24" />
+                <Anchor point="TOPLEFT" relativeTo="$parentInventoryScale" relativePoint="BOTTOMLEFT" y="-36" />
                 <Anchor point="RIGHT" relativeTo="$parentInventoryScale" />
             </Anchors>
             <Scripts>
@@ -175,9 +175,8 @@
             </Scripts>
         </Slider>
         <Frame name="$parentInventoryOrder" inherits="UIDropDownMenuTemplate">
-            <Size x="93" y="22" />
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryXBreak" relativePoint="BOTTOMLEFT" x="28" y="-20" />
+                <Anchor point="TOPLEFT" relativeTo="$parentInventoryXBreak" relativePoint="BOTTOMLEFT" x="0" y="-40" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsInventoryOrder_OnLoad" />
@@ -185,6 +184,23 @@
             <Layers>
                 <Layer level="BACKGROUND">
                     <FontString inherits="GameFontHighlight" text="Button order.">
+                        <Anchors>
+                            <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="4" />
+                        </Anchors>
+                    </FontString>
+                </Layer>
+            </Layers>
+        </Frame>
+        <Frame name="$parentInventoryLayout" inherits="UIDropDownMenuTemplate">
+            <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="$parentInventoryOrder" relativePoint="BOTTOMLEFT" x="0" y="-20" />
+            </Anchors>
+            <Scripts>
+                <OnLoad function="LiteBagOptionsInventoryLayout_OnLoad" />
+            </Scripts>
+            <Layers>
+                <Layer level="BACKGROUND">
+                    <FontString inherits="GameFontHighlight" text="Button layout.">
                         <Anchors>
                             <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="4" />
                         </Anchors>
