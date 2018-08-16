@@ -182,6 +182,26 @@ local function SetupScaleControl(self, frame)
             function (self) return 1.0 end
 end
 
+local function SetupBreakControl(self, frame, varname)
+    local n = self:GetName()
+    _G[n.."Low"]:SetText(0)
+    _G[n.."High"]:SetText(24)
+    self.SetOption =
+            function (self, v)
+            if v == 0 then
+                LiteBag_SetFrameOption(frame, varname, nil)
+            else
+                LiteBag_SetFrameOption(frame, varname, v)
+            end
+        end
+    self.GetOption =
+            function (self)
+            return LiteBag_GetFrameOption(frame, varname) or 0
+        end
+    self.GetOptionDefault =
+            function (self) return 0 end
+end
+
 function LiteBagOptionsInventoryColumns_OnLoad(self)
     SetupColumnsControl(self, "LiteBagInventoryPanel", 8)
     LiteBagOptionsControl_OnLoad(self)
@@ -189,7 +209,7 @@ end
 
 function LiteBagOptionsInventoryColumns_OnValueChanged(self)
     local n = self:GetName()
-    _G[n.."Text"]:SetText(format("Inventory columns: %d", self:GetValue()))
+    _G[n.."Text"]:SetText(format("Columns: %d", self:GetValue()))
     LiteBagOptionsControl_OnChanged(self)
 end
 
@@ -200,7 +220,7 @@ end
 
 function LiteBagOptionsInventoryScale_OnValueChanged(self)
     local n = self:GetName()
-    _G[n.."Text"]:SetText(format("Inventory scale: %0.2f", self:GetValue()))
+    _G[n.."Text"]:SetText(format("Scale: %0.2f", self:GetValue()))
     LiteBagOptionsControl_OnChanged(self)
 end
 
@@ -211,7 +231,7 @@ end
 
 function LiteBagOptionsBankColumns_OnValueChanged(self)
     local n = self:GetName()
-    _G[n.."Text"]:SetText(format("Bank columns: %d", self:GetValue()))
+    _G[n.."Text"]:SetText(format("Columns: %d", self:GetValue()))
     LiteBagOptionsControl_OnChanged(self)
 end
 
@@ -222,7 +242,58 @@ end
 
 function LiteBagOptionsBankScale_OnValueChanged(self)
     local n = self:GetName()
-    _G[n.."Text"]:SetText(format("Bank scale: %0.2f", self:GetValue()))
+    _G[n.."Text"]:SetText(format("Scale: %0.2f", self:GetValue()))
     LiteBagOptionsControl_OnChanged(self)
 end
 
+function LiteBagOptionsInventoryXBreak_OnLoad(self)
+    SetupBreakControl(self, "LiteBagInventoryPanel", "xbreak")
+    LiteBagOptionsControl_OnLoad(self)
+end
+
+function LiteBagOptionsInventoryYBreak_OnLoad(self)
+    SetupBreakControl(self, "LiteBagInventoryPanel", "ybreak")
+    LiteBagOptionsControl_OnLoad(self)
+end
+
+function LiteBagOptionsInventoryXBreak_OnValueChanged(self)
+    local n = self:GetName()
+    local v = self:GetValue()
+    if v == 0 then v = NONE end
+    _G[n.."Text"]:SetText(format("Gap after columns: " .. v))
+    LiteBagOptionsControl_OnChanged(self)
+end
+
+function LiteBagOptionsInventoryYBreak_OnValueChanged(self)
+    local n = self:GetName()
+    local v = self:GetValue()
+    if v == 0 then v = NONE end
+    _G[n.."Text"]:SetText(format("Gap after rows: " .. v))
+    LiteBagOptionsControl_OnChanged(self)
+end
+
+function LiteBagOptionsBankXBreak_OnLoad(self)
+    SetupBreakControl(self, "LiteBagBankPanel", "xbreak")
+    LiteBagOptionsControl_OnLoad(self)
+end
+
+function LiteBagOptionsBankYBreak_OnLoad(self)
+    SetupBreakControl(self, "LiteBagBankPanel", "ybreak")
+    LiteBagOptionsControl_OnLoad(self)
+end
+
+function LiteBagOptionsBankXBreak_OnValueChanged(self)
+    local n = self:GetName()
+    local v = self:GetValue()
+    if v == 0 then v = NONE end
+    _G[n.."Text"]:SetText(format("Gap after columns: " .. v))
+    LiteBagOptionsControl_OnChanged(self)
+end
+
+function LiteBagOptionsBankYBreak_OnValueChanged(self)
+    local n = self:GetName()
+    local v = self:GetValue()
+    if v == 0 then v = NONE end
+    _G[n.."Text"]:SetText(format("Gap after rows: " .. v))
+    LiteBagOptionsControl_OnChanged(self)
+end
