@@ -139,10 +139,10 @@ LAYOUTS.default =
             if col > 0 and col % ncols == 0 then
                 xGap, col, row = 0, 0, row + 1
                 if yBreak and row % yBreak == 0 then
-                    yGap = yGap + h/2
+                    yGap = yGap + h/3
                 end
             elseif xBreak and col > 0 and col % xBreak == 0 then
-                xGap = xGap + w/2
+                xGap = xGap + w/3
                 maxXGap = max(maxXGap, xGap)
             end
 
@@ -174,21 +174,23 @@ LAYOUTS.bag =
 
         local w, h = itemButtons[1]:GetSize()
 
-        local row, col, maxCol = 0, 0, 0
+        local row, col, yGap, maxCol = 0, 0, 0, 0
+
 
         for i = 1, self.size do
             local newBag = i > 1 and inDiffBag(itemButtons[i-1], itemButtons[i])
             if col > 1 then
                 if newBag then
                     col = 0
-                    row = row + (4/3)
+                    row = row + 1
+                    yGap = yGap + w/3
                 elseif col % ncols == 0 then
                     col = 0
                     row = row + 1
                 end
             end
             local x = col * (w+BUTTON_X_GAP)
-            local y = row * (h+BUTTON_Y_GAP)
+            local y = row * (h+BUTTON_Y_GAP) + yGap
             tinsert(grid, { x=x, y=y, b=itemButtons[i] })
             maxCol = max(col, maxCol)
             col = col + 1
@@ -196,7 +198,7 @@ LAYOUTS.bag =
 
         grid.ncols = maxCol+1
         grid.totalWidth  = (maxCol+1) * w + maxCol * BUTTON_X_GAP
-        grid.totalHeight = (row+1) * h + row * BUTTON_Y_GAP
+        grid.totalHeight = (row+1) * h + row * BUTTON_Y_GAP + yGap
 
         return grid
     end
