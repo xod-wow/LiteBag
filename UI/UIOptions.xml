@@ -184,7 +184,7 @@
             </Scripts>
             <Layers>
                 <Layer level="BACKGROUND">
-                    <FontString inherits="GameFontHighlight" text="Button order:">
+                    <FontString inherits="GameFontHighlight" text="Icon order:">
                         <Anchors>
                             <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />
                         </Anchors>
@@ -201,7 +201,7 @@
             </Scripts>
             <Layers>
                 <Layer level="BACKGROUND">
-                    <FontString inherits="GameFontHighlight" text="Button layout:">
+                    <FontString inherits="GameFontHighlight" text="Icon layout:">
                         <Anchors>
                             <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />
                         </Anchors>
@@ -262,7 +262,7 @@
             </Scripts>
             <Layers>
                 <Layer level="BACKGROUND">
-                    <FontString inherits="GameFontHighlight" text="Button order:">
+                    <FontString inherits="GameFontHighlight" text="Icon order:">
                         <Anchors>
                             <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />
                         </Anchors>
@@ -279,7 +279,7 @@
             </Scripts>
             <Layers>
                 <Layer level="BACKGROUND">
-                    <FontString inherits="GameFontHighlight" text="Button layout:">
+                    <FontString inherits="GameFontHighlight" text="Icon layout:">
                         <Anchors>
                             <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />
                         </Anchors>
