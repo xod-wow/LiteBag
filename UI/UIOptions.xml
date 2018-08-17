@@ -16,7 +16,7 @@
     </Layers>
 
     <Frames>
-        <Frame parentKey="GlobalBox" enableMouse="false" alpha="0.5">
+        <Frame name="$parentGlobalBox" enableMouse="false" alpha="0.5">
             <Anchors>
                 <Anchor point="TOPLEFT" x="12" y="-48" />
                 <Anchor point="RIGHT" x="-12" />
@@ -31,7 +31,7 @@
                 </BackgroundInsets>
             </Backdrop>
         </Frame>
-        <Frame parentKey="InventoryBox" enableMouse="false" alpha="0.5">
+        <Frame name="$parentBankBox" enableMouse="false" alpha="0.5">
             <Anchors>
                 <Anchor point="BOTTOMLEFT" x="12" y="12" />
                 <Anchor point="TOPRIGHT" relativePoint="CENTER" x="-6" y="-6" />
@@ -45,7 +45,7 @@
                 </BackgroundInsets>
             </Backdrop>
         </Frame>
-        <Frame parentKey="BankBox" enableMouse="false" alpha="0.5">
+        <Frame name="$parentInventoryBox" enableMouse="false" alpha="0.5">
             <Anchors>
                 <Anchor point="BOTTOMRIGHT" x="-12" y="12" />
                 <Anchor point="TOPLEFT" relativePoint="CENTER" x="6" y="-6" />
@@ -63,14 +63,14 @@
 
     <Layers>
         <Layer level="ARTWORK">
-            <FontString inherits="GameFontNormalMed2" text="INVENTORY_TOOLTIP">
-                <Anchors>
-                    <Anchor point="TOP" relativeKey="$parent.InventoryBox" y="-8" />
-                </Anchors>
-            </FontString>
             <FontString inherits="GameFontNormalMed2" text="BANK">
                 <Anchors>
-                    <Anchor point="TOP" relativeKey="$parent.BankBox" y="-8" />
+                    <Anchor point="TOP" relativeTo="$parentBankBox" y="-8" />
+                </Anchors>
+            </FontString>
+            <FontString inherits="GameFontNormalMed2" text="INVENTORY_TOOLTIP">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parentInventoryBox" y="-8" />
                 </Anchors>
             </FontString>
         </Layer>
@@ -79,7 +79,7 @@
     <Frames>
         <CheckButton name="$parentConfirmSort" inherits="InterfaceOptionsCheckButtonTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeKey="$parent.GlobalBox" relativePoint="TOPLEFT" x="16" y="-16" />
+                <Anchor point="TOPLEFT" relativeTo="$parentGlobalBox" relativePoint="TOPLEFT" x="16" y="-16" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsConfirmSort_OnLoad" />
@@ -136,8 +136,8 @@
     <Frames>
         <Slider name="$parentInventoryColumns" minValue="8" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeKey="$parent.InventoryBox" x="20" y="-48" />
-                <Anchor point="RIGHT" relativeKey="$parent.InventoryBox" relativePoint="CENTER" x="-8" />
+                <Anchor point="TOPLEFT" relativeTo="$parentInventoryBox" x="20" y="-48" />
+                <Anchor point="RIGHT" relativeTo="$parentInventoryBox" relativePoint="CENTER" x="-8" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsInventoryColumns_OnLoad" />
@@ -146,8 +146,8 @@
         </Slider>
         <Slider name="$parentInventoryScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPRIGHT" relativeKey="$parent.InventoryBox" x="-20" y="-48" />
-                <Anchor point="LEFT" relativeKey="$parent.InventoryBox" relativePoint="CENTER" x="8" />
+                <Anchor point="TOPRIGHT" relativeTo="$parentInventoryBox" x="-20" y="-48" />
+                <Anchor point="LEFT" relativeTo="$parentInventoryBox" relativePoint="CENTER" x="8" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsInventoryScale_OnLoad" />
@@ -156,7 +156,7 @@
         </Slider>
         <Slider name="$parentInventoryXBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryColumns" relativePoint="BOTTOMLEFT" y="-36" />
+                <Anchor point="TOPLEFT" relativeTo="$parentInventoryColumns" relativePoint="BOTTOMLEFT" y="-48" />
                 <Anchor point="RIGHT" relativeTo="$parentInventoryColumns" />
             </Anchors>
             <Scripts>
@@ -166,7 +166,7 @@
         </Slider>
         <Slider name="$parentInventoryYBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryScale" relativePoint="BOTTOMLEFT" y="-36" />
+                <Anchor point="TOPLEFT" relativeTo="$parentInventoryScale" relativePoint="BOTTOMLEFT" y="-48" />
                 <Anchor point="RIGHT" relativeTo="$parentInventoryScale" />
             </Anchors>
             <Scripts>
@@ -176,16 +176,17 @@
         </Slider>
         <Frame name="$parentInventoryOrder" inherits="UIDropDownMenuTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryXBreak" relativePoint="BOTTOMLEFT" x="0" y="-40" />
+                <Anchor point="TOP" relativeTo="$parentInventoryXBreak" relativePoint="BOTTOM" x="0" y="-36" />
+                <Anchor point="RIGHT" relativeTo="$parentInventoryBox" x="-144" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsInventoryOrder_OnLoad" />
             </Scripts>
             <Layers>
                 <Layer level="BACKGROUND">
-                    <FontString inherits="GameFontHighlight" text="Button order.">
+                    <FontString inherits="GameFontHighlight" text="Button order:">
                         <Anchors>
-                            <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="4" />
+                            <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />
                         </Anchors>
                     </FontString>
                 </Layer>
@@ -193,16 +194,16 @@
         </Frame>
         <Frame name="$parentInventoryLayout" inherits="UIDropDownMenuTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryOrder" relativePoint="BOTTOMLEFT" x="0" y="-20" />
+                <Anchor point="TOPLEFT" relativeTo="$parentInventoryOrder" relativePoint="BOTTOMLEFT" y="-8" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsInventoryLayout_OnLoad" />
             </Scripts>
             <Layers>
                 <Layer level="BACKGROUND">
-                    <FontString inherits="GameFontHighlight" text="Button layout.">
+                    <FontString inherits="GameFontHighlight" text="Button layout:">
                         <Anchors>
-                            <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="4" />
+                            <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />
                         </Anchors>
                     </FontString>
                 </Layer>
@@ -211,19 +212,29 @@
     </Frames>
 
     <Frames>
-        <Slider name="$parentBankColumns" minValue="8" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="14" inherits="OptionsSliderTemplate">
+        <Slider name="$parentBankColumns" minValue="8" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeKey="$parent.BankBox" x="32" y="-48" />
-                <Anchor point="RIGHT" relativeKey="$parent.BankBox" x="-32" />
+                <Anchor point="TOPLEFT" relativeTo="$parentBankBox" x="20" y="-48" />
+                <Anchor point="RIGHT" relativeTo="$parentBankBox" relativePoint="CENTER" x="-8" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsBankColumns_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsBankColumns_OnValueChanged" />
             </Scripts>
         </Slider>
+        <Slider name="$parentBankScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
+            <Anchors>
+                <Anchor point="TOPRIGHT" relativeTo="$parentBankBox" x="-20" y="-48" />
+                <Anchor point="LEFT" relativeTo="$parentBankBox" relativePoint="CENTER" x="8" />
+            </Anchors>
+            <Scripts>
+                <OnLoad function="LiteBagOptionsBankScale_OnLoad" />
+                <OnValueChanged function="LiteBagOptionsBankScale_OnValueChanged" />
+            </Scripts>
+        </Slider>
         <Slider name="$parentBankXBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentBankColumns" relativePoint="BOTTOMLEFT" y="-32" />
+                <Anchor point="TOPLEFT" relativeTo="$parentBankColumns" relativePoint="BOTTOMLEFT" y="-48" />
                 <Anchor point="RIGHT" relativeTo="$parentBankColumns" />
             </Anchors>
             <Scripts>
@@ -233,25 +244,51 @@
         </Slider>
         <Slider name="$parentBankYBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentBankXBreak" relativePoint="BOTTOMLEFT" y="-32" />
-                <Anchor point="RIGHT" relativeTo="$parentBankXBreak" />
+                <Anchor point="TOPLEFT" relativeTo="$parentBankScale" relativePoint="BOTTOMLEFT" y="-48" />
+                <Anchor point="RIGHT" relativeTo="$parentBankScale" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsBankYBreak_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsBankYBreak_OnValueChanged" />
             </Scripts>
         </Slider>
-        <Slider name="$parentBankScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
+        <Frame name="$parentBankOrder" inherits="UIDropDownMenuTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentBankYBreak" relativePoint="BOTTOMLEFT" y="-32" />
-                <Anchor point="RIGHT" relativeTo="$parentBankYBreak" />
+                <Anchor point="TOP" relativeTo="$parentBankXBreak" relativePoint="BOTTOM" y="-36" />
+                <Anchor point="RIGHT" relativeTo="$parentBankBox" x="-144" />
             </Anchors>
             <Scripts>
-                <OnLoad function="LiteBagOptionsBankScale_OnLoad" />
-                <OnValueChanged function="LiteBagOptionsBankScale_OnValueChanged" />
+                <OnLoad function="LiteBagOptionsBankOrder_OnLoad" />
             </Scripts>
-        </Slider>
+            <Layers>
+                <Layer level="BACKGROUND">
+                    <FontString inherits="GameFontHighlight" text="Button order:">
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />
+                        </Anchors>
+                    </FontString>
+                </Layer>
+            </Layers>
+        </Frame>
+        <Frame name="$parentBankLayout" inherits="UIDropDownMenuTemplate">
+            <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="$parentBankOrder" relativePoint="BOTTOMLEFT" y="-8" />
+            </Anchors>
+            <Scripts>
+                <OnLoad function="LiteBagOptionsBankLayout_OnLoad" />
+            </Scripts>
+            <Layers>
+                <Layer level="BACKGROUND">
+                    <FontString inherits="GameFontHighlight" text="Button layout:">
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />
+                        </Anchors>
+                    </FontString>
+                </Layer>
+            </Layers>
+        </Frame>
     </Frames>
+
 </Frame>
 
 </Ui>
