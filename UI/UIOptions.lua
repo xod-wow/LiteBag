@@ -379,7 +379,7 @@ function LiteBagOptionsInventoryXBreak_OnValueChanged(self)
     local n = self:GetName()
     local v = self:GetValue()
     if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Col gap: " .. v))
+    _G[n.."Text"]:SetText(format("Column gaps: " .. v))
     LiteBagOptionsControl_OnChanged(self)
 end
 
@@ -387,7 +387,7 @@ function LiteBagOptionsInventoryYBreak_OnValueChanged(self)
     local n = self:GetName()
     local v = self:GetValue()
     if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Row gap: " .. v))
+    _G[n.."Text"]:SetText(format("Row gaps: " .. v))
     LiteBagOptionsControl_OnChanged(self)
 end
 
@@ -405,7 +405,7 @@ function LiteBagOptionsBankXBreak_OnValueChanged(self)
     local n = self:GetName()
     local v = self:GetValue()
     if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Col gap: " .. v))
+    _G[n.."Text"]:SetText(format("Column gaps: " .. v))
     LiteBagOptionsControl_OnChanged(self)
 end
 
@@ -413,7 +413,7 @@ function LiteBagOptionsBankYBreak_OnValueChanged(self)
     local n = self:GetName()
     local v = self:GetValue()
     if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Row gap:" .. v))
+    _G[n.."Text"]:SetText(format("Row gaps: " .. v))
     LiteBagOptionsControl_OnChanged(self)
 end
 
