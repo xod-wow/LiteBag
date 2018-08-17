@@ -266,16 +266,26 @@ function LiteBagPanel_ResizeToFrame(self, width, height)
     if not layout or not LAYOUTS[layout] then layout = "default" end
 
     local ncols = MIN_COLUMNS
+    local currentCols = LiteBag_GetFrameOption(self, "columns")
 
-    -- We could do a better job of searching from where we are, but this doesn't
-    -- seem to be causing a performance problem (yet).
     -- The BUTTONORDER doesn't matter for sizing so don't bother calling it.
+    -- Search up or down from our current column size, for speec
 
-    for i = MIN_COLUMNS+1, self.size do
-        layoutGrid = LAYOUTS[layout](self, self.itemButtons, i)
-        if layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET > width then
-            ncols = i-1
-            break
+    if width < self:GetWidth() then
+        for i = currentCols, MIN_COLUMNS, -1 do
+            local layoutGrid = LAYOUTS[layout](self, self.itemButtons, i)
+            if layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET <= width then
+                ncols = i
+                break
+            end
+        end
+    else
+        for i = currentCols+1, self.size, 1 do
+            local layoutGrid = LAYOUTS[layout](self, self.itemButtons, i)
+            if layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET > width then
+                ncols = i-1
+                break
+            end
         end
     end
 
