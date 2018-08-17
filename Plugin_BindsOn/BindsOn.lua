@@ -49,12 +49,12 @@ local function GetBindText(bag, slot)
 
     if bag == BANK_CONTAINER then
         local id = BankButtonIDToInvSlotID(slot)
-        _, _, speciesID = scanTip:SetInventoryItem("player", id)
+        _, _, _, speciesID = scanTip:SetInventoryItem("player", id)
     elseif bag == REAGENTBANK_CONTAINER then
         local id = ReagentBankButtonIDToInvSlotID(slot)
-        _, _, speciesID = scanTip:SetInventoryItem("player", id)
+        _, _, _, speciesID = scanTip:SetInventoryItem("player", id)
     else
-        _, _, speciesID = scanTip:SetBagItem(bag, slot)
+        _, _, _, speciesID = scanTip:SetBagItem(bag, slot)
     end
 
     -- Battle pets don't use GameTooltip, they have a separate tooltip. Gah.
