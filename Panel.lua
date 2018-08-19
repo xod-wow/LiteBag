@@ -269,7 +269,7 @@ function LiteBagPanel_ResizeToFrame(self, width, height)
     local currentCols = LiteBag_GetFrameOption(self, "columns")
 
     -- The BUTTONORDER doesn't matter for sizing so don't bother calling it.
-    -- Search up or down from our current column size, for speec
+    -- Search up or down from our current column size, for speed.
 
     if width < self:GetWidth() then
         for i = currentCols, MIN_COLUMNS, -1 do
