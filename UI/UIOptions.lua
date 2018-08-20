@@ -365,6 +365,28 @@ function LiteBagOptionsBankScale_OnValueChanged(self)
     LiteBagOptionsControl_OnChanged(self)
 end
 
+function LiteBagOptionsXBreak_OnValueChanged(self)
+    local n = self:GetName()
+    local v = self:GetValue()
+    if v == 0 then
+        _G[n.."Text"]:SetText("No column gaps")
+    else
+        _G[n.."Text"]:SetText(format("Gap: %d columns", v))
+    end
+    LiteBagOptionsControl_OnChanged(self)
+end
+
+function LiteBagOptionsYBreak_OnValueChanged(self)
+    local n = self:GetName()
+    local v = self:GetValue()
+    if v == 0 then
+        _G[n.."Text"]:SetText("No row gaps")
+    else
+        _G[n.."Text"]:SetText(format("Gap: %d rows", v))
+    end
+    LiteBagOptionsControl_OnChanged(self)
+end
+
 function LiteBagOptionsInventoryXBreak_OnLoad(self)
     SetupBreakControl(self, "LiteBagInventoryPanel", "xbreak")
     LiteBagOptionsControl_OnLoad(self)
@@ -373,22 +395,6 @@ end
 function LiteBagOptionsInventoryYBreak_OnLoad(self)
     SetupBreakControl(self, "LiteBagInventoryPanel", "ybreak")
     LiteBagOptionsControl_OnLoad(self)
-end
-
-function LiteBagOptionsInventoryXBreak_OnValueChanged(self)
-    local n = self:GetName()
-    local v = self:GetValue()
-    if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Column gaps: " .. v))
-    LiteBagOptionsControl_OnChanged(self)
-end
-
-function LiteBagOptionsInventoryYBreak_OnValueChanged(self)
-    local n = self:GetName()
-    local v = self:GetValue()
-    if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Row gaps: " .. v))
-    LiteBagOptionsControl_OnChanged(self)
 end
 
 function LiteBagOptionsBankXBreak_OnLoad(self)
@@ -401,21 +407,6 @@ function LiteBagOptionsBankYBreak_OnLoad(self)
     LiteBagOptionsControl_OnLoad(self)
 end
 
-function LiteBagOptionsBankXBreak_OnValueChanged(self)
-    local n = self:GetName()
-    local v = self:GetValue()
-    if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Column gaps: " .. v))
-    LiteBagOptionsControl_OnChanged(self)
-end
-
-function LiteBagOptionsBankYBreak_OnValueChanged(self)
-    local n = self:GetName()
-    local v = self:GetValue()
-    if v == 0 then v = NONE end
-    _G[n.."Text"]:SetText(format("Row gaps: " .. v))
-    LiteBagOptionsControl_OnChanged(self)
-end
 
 function LiteBagOptionsBankOrder_OnLoad(self)
     PanelOrder_OnLoad(self, "LiteBagBankPanel")

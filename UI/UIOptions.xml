@@ -161,7 +161,7 @@
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsInventoryXBreak_OnLoad" />
-                <OnValueChanged function="LiteBagOptionsInventoryXBreak_OnValueChanged" />
+                <OnValueChanged function="LiteBagOptionsXBreak_OnValueChanged" />
             </Scripts>
         </Slider>
         <Slider name="$parentInventoryYBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
@@ -171,7 +171,7 @@
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsInventoryYBreak_OnLoad" />
-                <OnValueChanged function="LiteBagOptionsInventoryYBreak_OnValueChanged" />
+                <OnValueChanged function="LiteBagOptionsYBreak_OnValueChanged" />
             </Scripts>
         </Slider>
         <Frame name="$parentInventoryOrder" inherits="UIDropDownMenuTemplate">
@@ -239,7 +239,7 @@
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsBankXBreak_OnLoad" />
-                <OnValueChanged function="LiteBagOptionsBankXBreak_OnValueChanged" />
+                <OnValueChanged function="LiteBagOptionsXBreak_OnValueChanged" />
             </Scripts>
         </Slider>
         <Slider name="$parentBankYBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
@@ -249,7 +249,7 @@
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsBankYBreak_OnLoad" />
-                <OnValueChanged function="LiteBagOptionsBankYBreak_OnValueChanged" />
+                <OnValueChanged function="LiteBagOptionsYBreak_OnValueChanged" />
             </Scripts>
         </Slider>
         <Frame name="$parentBankOrder" inherits="UIDropDownMenuTemplate">
