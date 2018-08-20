@@ -82,7 +82,7 @@ function LiteBagBank_OnEvent(self, event, arg1, arg2, ...)
         ContainerFrame_UpdateSearchResults(ReagentBankFrame)
     elseif event == "ITEM_LOCK_CHANGED" then
         -- bag, slot = arg1, arg2
-        if arg1 == REAGENTBANK_CONTAINER and arg2 ~= nil then
+        if arg1 == REAGENTBANK_CONTAINER then
             local button = ReagentBankFrame["Item"..(arg2)]
             if button then
                 BankFrameItemButton_UpdateLocked(button)
@@ -90,7 +90,10 @@ function LiteBagBank_OnEvent(self, event, arg1, arg2, ...)
         end
     elseif event == "PLAYERREAGENTBANKSLOTS_CHANGED" then
         -- slot = arg1
-        BankFrameItemButton_Update(ReagentBankFrame["Item"..(arg1)])
+        local button = ReagentBankFrame["Item"..(arg1)]
+        if button then
+            BankFrameItemButton_Update(button)
+        end
     elseif event == "PLAYER_MONEY" then
         if self.selectedTab == 1 then
             LiteBagPanel_UpdateBagSlotCounts(LiteBagBankPanel)
