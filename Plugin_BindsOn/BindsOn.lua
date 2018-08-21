@@ -74,13 +74,13 @@ local function GetBindText(bag, slot)
 end
 
 local function Update(button)
-    if not button.bindsOnText then
-        button.bindsOnText = button:CreateFontString(nil, "ARTWORK", "GameFontNormalOutline")
-        button.bindsOnText:SetPoint("TOP", button, "TOP", 0, -2)
+    if not button.LiteBagBindsOnText then
+        button.LiteBagBindsOnText = button:CreateFontString(nil, "ARTWORK", "GameFontNormalOutline")
+        button.LiteBagBindsOnText:SetPoint("TOP", button, "TOP", 0, -2)
     end
 
     if not LiteBag_GetGlobalOption("ShowBindsOnText") or not button.hasItem then
-        button.bindsOnText:Hide()
+        button.LiteBagBindsOnText:Hide()
         return
     end
 
@@ -89,12 +89,12 @@ local function Update(button)
 
     local text = GetBindText(bag, slot)
     if not text then
-        button.bindsOnText:Hide()
+        button.LiteBagBindsOnText:Hide()
         return
     end
 
-    button.bindsOnText:SetText(text)
-    button.bindsOnText:Show()
+    button.LiteBagBindsOnText:SetText(text)
+    button.LiteBagBindsOnText:Show()
 end
 
 hooksecurefunc("LiteBagItemButton_Update", function (b) Update(b) end)

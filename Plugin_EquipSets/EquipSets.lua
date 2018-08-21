@@ -8,7 +8,7 @@
   See the file LICENSE.txt.
 
   Adds:
-    self.eqTexture1/2/3/4 (Texture level=ARTWORK/1)
+    self.LiteBagEQTexture1/2/3/4 (Texture level=ARTWORK/1)
         Textures shown when the item is part of one of the first
         four EquipmentSets.
 
@@ -19,12 +19,12 @@ local LOCATION_BAGSLOT_MASK = 0xf00f3f
 -- This is a guess at something I don't really understand, ItemLocations.
 -- On one hand this seems pretty inefficient. On the other hand, the Blizzard
 -- equivalent makes you use strsplit, so frankly this has to be faster.
-
+-- Note that the GetItemLocations call starts at 0, hence the i-1
 function GetEquipmentSetMemberships(bag, slot)
     local ids = { }
     local location = 0x300000 + bit.lshift(bag, 8) + slot
-    for i = 0, C_EquipmentSet.GetNumEquipmentSets() - 1 do
-        local locations = C_EquipmentSet.GetItemLocations(i)
+    for i = 1, C_EquipmentSet.GetNumEquipmentSets() do
+        local locations = C_EquipmentSet.GetItemLocations(i-1)
         for _, l in pairs(locations) do
             if bit.band(l, LOCATION_BAGSLOT_MASK) == location then
                 ids[i] = true
@@ -36,7 +36,7 @@ end
 
 local texData = {
     [1] = {
-        parentKey = "eqTexture1",
+        parentKey = "LiteBagEQTexture1",
         point = "BOTTOMRIGHT",
         level = "ARTWORK",
         subLevel = 1,
@@ -44,21 +44,21 @@ local texData = {
     },
     [2] = {
         parent = "LiteBagEquipSetsTexture",
-        parentKey = "eqTexture2",
+        parentKey = "LiteBagEQTexture2",
         point = "BOTTOMLEFT",
         level = "ARTWORK",
         subLevel = 1,
         coords = { 0.5, 1.0, 0.0, 0.5 },
     },
     [3] = {
-        parentKey = "eqTexture3",
+        parentKey = "LiteBagEQTexture3",
         point = "TOPLEFT",
         level = "ARTWORK",
         subLevel = 1,
         coords = { 0.5, 1.0, 0.5, 1.0 },
     },
     [4] = {
-        parentKey = "eqTexture4",
+        parentKey = "LiteBagEQTexture4",
         point = "TOPRIGHT",
         level = "ARTWORK",
         subLevel = 1,
@@ -90,16 +90,16 @@ local function Update(button)
     local bag = button:GetParent():GetID()
     local slot = button:GetID()
 
-    if not button.eqTexture1 then
+    if not button.LiteBagEQTexture1 then
         AddTextures(button)
     end
 
     local memberships = GetEquipmentSetMemberships(bag, slot)
 
-    for i = 1,4 do
-        local tex = _G[button:GetName() .. "eqTexture" .. i]
+    for i,td in ipairs(texData) do
+        local tex = button[td.parentKey]
         if LiteBag_GetGlobalOption("HideEquipsetIcon") == nil and
-           memberships[i-1] == true then
+           memberships[i] == true then
             tex:Show()
         else
             tex:Hide()
