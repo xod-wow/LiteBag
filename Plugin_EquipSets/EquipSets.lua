@@ -19,12 +19,11 @@ local LOCATION_BAGSLOT_MASK = 0xf00f3f
 -- This is a guess at something I don't really understand, ItemLocations.
 -- On one hand this seems pretty inefficient. On the other hand, the Blizzard
 -- equivalent makes you use strsplit, so frankly this has to be faster.
--- Note that the GetItemLocations call starts at 0, hence the i-1
-function GetEquipmentSetMemberships(bag, slot)
+local function GetEquipmentSetMemberships(bag, slot)
     local ids = { }
     local location = 0x300000 + bit.lshift(bag, 8) + slot
-    for i = 1, C_EquipmentSet.GetNumEquipmentSets() do
-        local locations = C_EquipmentSet.GetItemLocations(i-1)
+    for i,id in ipairs(C_EquipmentSet.GetEquipmentSetIDs()) do
+        local locations = C_EquipmentSet.GetItemLocations(id)
         for _, l in pairs(locations) do
             if bit.band(l, LOCATION_BAGSLOT_MASK) == location then
                 ids[i] = true
