@@ -103,9 +103,11 @@ local function IconBorder_Initialize(self, level)
 
         info.func =
              function (button, arg1, arg2, checked)
-                 self.value = arg1
-                 self:SetOption(arg1)
-                 UIDropDownMenu_SetText(self, GetQualityText(arg1))
+                self.value = arg1
+                self:SetOption(arg1)
+                UIDropDownMenu_SetText(self, GetQualityText(arg1))
+                LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
+                LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
              end
 
         info.text = GetQualityText(nil)
@@ -215,11 +217,11 @@ local function PanelLayout_Initialize(self, level)
         local current = LiteBag_GetFrameOption(self.panel, "layout")
 
         info.func =
-             function (button, arg1, arg2, checked)
-                 self.value = arg1
-                 self:SetOption(arg1)
-                 UIDropDownMenu_SetText(self, arg2 or DEFAULT)
-             end
+            function (button, arg1, arg2, checked)
+                self.value = arg1
+                self:SetOption(arg1)
+                UIDropDownMenu_SetText(self, arg2 or DEFAULT)
+            end
 
         info.text = DEFAULT
         info.checked = ( current == nil )
