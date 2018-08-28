@@ -52,6 +52,24 @@
 
 ----------------------------------------------------------------------------]]--
 
+-- hooksecurefunc is just too slow
+local hooks = { }
+
+function LiteBagItemButton_RegisterHook(func, hook)
+    hooks[func] = hooks[func] or { }
+    hooks[func][hook] = true
+end
+
+function LiteBagItemButton_UnregisterHook(func, hook)
+    hooks[func][hook] = nil
+end
+
+local function LiteBagItemButton_CallHooks(func, self)
+    for f in pairs(hooks[func] or {}) do
+         f(self)
+    end
+end
+
 function LiteBagItemButton_UpdateItem(self)
 
     local bag = self:GetParent():GetID()
@@ -80,6 +98,7 @@ function LiteBagItemButton_UpdateItem(self)
         end
     end
 
+    LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateItem', self)
 end
 
 function LiteBagItemButton_UpdateLocked(self)
@@ -88,6 +107,8 @@ function LiteBagItemButton_UpdateLocked(self)
 
     local locked = select(3, GetContainerItemInfo(bag, slot))
     SetItemButtonDesaturated(self, locked)
+
+    LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateLocked', self)
 end
 
 function LiteBagItemButton_UpdateQuestTexture(self)
@@ -107,6 +128,7 @@ function LiteBagItemButton_UpdateQuestTexture(self)
         questTexture:Hide()
     end
 
+    LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateQuestTexture', self)
 end
 
 function LiteBagItemButton_UpdateQuality(self)
@@ -119,6 +141,7 @@ function LiteBagItemButton_UpdateQuality(self)
 
     self.JunkIcon:SetShown(quality == LE_ITEM_QUALITY_POOR and not noValue and MerchantFrame:IsShown())
 
+    LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateQuality', self)
 end
 
 function LiteBagItemButton_ClearNewItem(self)
@@ -164,6 +187,7 @@ function LiteBagItemButton_UpdateNewItemTexture(self)
         end
     end
 
+    LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateNewItemTexture', self)
 end
 
 function LiteBagItemButton_UpdateCooldown(self)
@@ -174,6 +198,8 @@ function LiteBagItemButton_UpdateCooldown(self)
     else
         _G[self:GetName() .. "Cooldown"]:Hide()
     end
+
+    LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateCooldown', self)
 end
 
 function LiteBagItemButton_UpdateFiltered(self)
@@ -187,6 +213,8 @@ function LiteBagItemButton_UpdateFiltered(self)
     else
         self.searchOverlay:Hide()
     end
+
+    LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateFiltered', self)
 end
 
 -- Make sure to do this after the search overlay update.
@@ -212,6 +240,8 @@ function LiteBagItemButton_UpdateTutorials(self)
         -- Sets the .owner of the tutorial to bag:GetParent()
         ContainerFrame_ConsiderItemButtonForRelicTutorial(self, itemID)
     end
+
+    LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateTutorials', self)
 end
 
 -- This is a little weird inside, because apparently "is this an upgrade"
@@ -235,6 +265,8 @@ function LiteBagItemButton_Update(self)
     LiteBagItemButton_UpdateFiltered(self)
     LiteBagItemButton_UpdateItemUpgrade(self)
     LiteBagItemButton_UpdateTutorials(self)
+
+    LiteBagItemButton_CallHooks('LiteBagItemButton_Update', self)
 
     -- For debugging layouts
     -- _G[self:GetName().."Count"]:SetText(format("%d,%d", self:GetParent():GetID(), self:GetID()))

@@ -97,4 +97,4 @@ local function Update(button)
     button.LiteBagBindsOnText:Show()
 end
 
-hooksecurefunc("LiteBagItemButton_Update", function (b) Update(b) end)
+LiteBagItemButton_RegisterHook('LiteBagItemButton_Update', Update)

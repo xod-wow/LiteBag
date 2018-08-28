@@ -19,6 +19,7 @@ local LOCATION_BAGSLOT_MASK = 0xf00f3f
 -- This is a guess at something I don't really understand, ItemLocations.
 -- On one hand this seems pretty inefficient. On the other hand, the Blizzard
 -- equivalent makes you use strsplit, so frankly this has to be faster.
+
 local function GetEquipmentSetMemberships(bag, slot)
     local ids = { }
     local location = 0x300000 + bit.lshift(bag, 8) + slot
@@ -106,19 +107,5 @@ local function Update(button)
     end
 end
 
-hooksecurefunc(
-    "LiteBagItemButton_Update",
-    function (b)
-        Update(b)
-    end
-)
-
-hooksecurefunc(
-    "LiteBagPanel_OnShow",
-    function (f) f:RegisterEvent("EQUIPMENT_SETS_CHANGED") end
-)
-
-hooksecurefunc(
-    "LiteBagPanel_OnHide",
-    function(f) f:UnregisterEvent("EQUIPMENT_SETS_CHANGED") end
-)
+LiteBagItemButton_RegisterHook('LiteBagItemButton_Update', Update)
+LiteBagPanel_AddUpdateEvent("EQUIPMENT_SETS_CHANGED")

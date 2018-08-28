@@ -34,4 +34,4 @@ local function Update(self)
 
 end
 
-hooksecurefunc("LiteBagItemButton_UpdateQuality", Update)
+LiteBagItemButton_RegisterHook('LiteBagItemButton_UpdateQuality', Update)

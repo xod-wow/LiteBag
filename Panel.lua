@@ -20,6 +20,7 @@ local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
 local LEFT_OFFSET, TOP_OFFSET = 15, 70
 local RIGHT_OFFSET, BOTTOM_OFFSET = 14, 35
 
+local PluginUpdateEvents = { }
 
 function LiteBagPanel_Initialize(self, bagIDs)
     LiteBag_Debug("Panel Initialize " .. self:GetName())
@@ -387,6 +388,11 @@ function LiteBagPanel_OnLoad(self)
     self.bagFrames = { }
 end
 
+function LiteBagPanel_AddUpdateEvent(e)
+    if e == 'PLAYER_LOGIN' then return end
+    PluginUpdateEvents[e] = true
+end
+
 function LiteBagPanel_OnShow(self)
     LiteBag_Debug("Panel OnShow " .. self:GetName())
     LiteBagPanel_UpdateBagSlotCounts(self)
@@ -411,6 +417,8 @@ function LiteBagPanel_OnShow(self)
     if self.isBank then
         self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     end
+
+    for e in pairs(PluginUpdateEvents) do self:RegisterEvent(e) end
 end
 
 function LiteBagPanel_OnHide(self)
@@ -444,6 +452,8 @@ function LiteBagPanel_OnHide(self)
     if self.isBank then
         self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
     end
+
+    for e in pairs(PluginUpdateEvents) do self:UnregisterEvent(e) end
 end
 
 -- These events are only registered while the panel is shown, so we can call
