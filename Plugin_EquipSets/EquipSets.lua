@@ -24,7 +24,7 @@ local function GetEquipmentSetMemberships(bag, slot)
     local ids = { }
     local location = 0x300000 + bit.lshift(bag, 8) + slot
     for i,id in ipairs(C_EquipmentSet.GetEquipmentSetIDs()) do
-        local locations = C_EquipmentSet.GetItemLocations(id)
+        local locations = C_EquipmentSet.GetItemLocations(id) or {}
         for _, l in pairs(locations) do
             if bit.band(l, LOCATION_BAGSLOT_MASK) == location then
                 ids[i] = true
