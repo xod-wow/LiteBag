@@ -139,9 +139,24 @@ function LiteBagItemButton_UpdateQuality(self)
 
     SetItemButtonQuality(self, quality, itemID)
 
-    self.JunkIcon:SetShown(quality == LE_ITEM_QUALITY_POOR and not noValue and MerchantFrame:IsShown())
+    local itemLocation = ItemLocation:CreateFromBagAndSlot(bag, slot)
+    self.JunkIcon:Hide()
+    if C_Item.DoesItemExist(itemLocation) then
+        local isJunk = (quality == LE_ITEM_QUALITY_POOR and not noValue and MerchantFrame:IsShown())
+        self.JunkIcon:SetShown(isJunk)
+    end
 
     LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateQuality', self)
+end
+
+function LiteBagItemButton_UpdateContext(self)
+    local bag = self:GetParent():GetID()
+    local slot = self:GetID()
+    local itemLocation = ItemLocation:CreateFromBagAndSlot(bag, slot)
+
+    self:UpdateItemContextMatching()
+
+    LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateContext', self)
 end
 
 function LiteBagItemButton_ClearNewItem(self)
@@ -208,11 +223,7 @@ function LiteBagItemButton_UpdateFiltered(self)
 
     local isFiltered = select(8, GetContainerItemInfo(bag, slot))
 
-    if isFiltered then
-        self.searchOverlay:Show()
-    else
-        self.searchOverlay:Hide()
-    end
+    self:SetMatchesSearch(not isFiltered)
 
     LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateFiltered', self)
 end
