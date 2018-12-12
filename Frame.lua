@@ -158,6 +158,15 @@ function LiteBagFrame_ShowPanel(self, n)
     end
 end
 
+function LiteBagFrame_Update(self)
+    LiteBag_Debug(format("Frame Update %s", self:GetName()))
+
+    -- Contexts need to be able to force a redraw
+    if self.currentPanel then
+        LiteBagPanel_UpdateItemButtons(self.currentPanel)
+    end
+end
+
 function LiteBagFrame_OnLoad(self)
     self.panels = { }
     self.currentPanel = nil

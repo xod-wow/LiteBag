@@ -36,14 +36,22 @@ local TOOLTIP_NOCONFIRM_TEXT = format("%s: No confirmation", SHIFT_KEY)
 local hiddenBagParent = CreateFrame("Frame")
 
 local function ReplaceBlizzardInventory()
-    local hideFunc = function () LiteBagInventory:Hide() end
-    local showFunc = function () LiteBagInventory:Show() end
-    local toggleFunc = function () 
+    local hideFunc =
+        function (caller, forceUpdate)
+            LiteBagInventory:Hide()
+            if forceUpdate then LiteBagFrame_Update(LiteBagInventory) end
+        end
+    local showFunc = function (caller, forceUpdate)
+            LiteBagInventory:Show()
+            if forceUpdate then LiteBagFrame_Update(LiteBagInventory) end
+        end
+    local toggleFunc = function (caller, forceUpdate) 
             if LiteBagInventory:IsShown() then
                 LiteBagInventory:Hide()
             else
                 LiteBagInventory:Show()
             end
+            if forceUpdate then LiteBagFrame_Update(LiteBagInventory) end
         end
 
     hiddenBagParent:Hide()
