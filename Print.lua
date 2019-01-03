@@ -17,20 +17,20 @@ local addonName, addonTable = ...
 
 local function ActiveChatFrame()
     for i = 1, NUM_CHAT_WINDOWS do
-        local f = _G["ChatFrame"..i]
+        local f = _G['ChatFrame'..i]
         if f and f:IsShown() then return f end
     end
     return DEFAULT_CHAT_FRAME
 end
 
 function LiteBag_Print(...)
-    ActiveChatFrame():AddMessage("|cff00ff00LiteBag:|r " .. format(...))
+    ActiveChatFrame():AddMessage('|cff00ff00LiteBag:|r ' .. format(...))
 end
 
 function LiteBag_Debug(...)
-    if LiteBag_GetGlobalOption("DebugEnabled") then
+    if LiteBag_GetGlobalOption('DebugEnabled') then
         -- Outputs into the first chat tab instead of LiteBag_Print. Even I
         -- find the spam too much.
-        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00LiteBag:|r " .. format(...))
+        DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00LiteBag:|r ' .. format(...))
     end
 end

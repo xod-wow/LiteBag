@@ -29,8 +29,8 @@ function LiteBagPanel_Initialize(self, bagIDs)
     -- by one allowing us to use all the Blizzard container frame code
 
     for i, id in ipairs(bagIDs) do
-        local name = format("%sContainerFrame%d", self:GetName(), i)
-        local bagFrame = CreateFrame("Frame", name, self)
+        local name = format('%sContainerFrame%d', self:GetName(), i)
+        local bagFrame = CreateFrame('Frame', name, self)
         bagFrame:SetID(id)
         tinsert(self.bagFrames, bagFrame)
     end
@@ -59,7 +59,7 @@ function LiteBagPanel_Initialize(self, bagIDs)
     -- And update ourself for the bag sizes. Need to watch PLAYER_LOGIN
     -- because the size of the bags isn't known until then the first
     -- time you start the game.
-    self:RegisterEvent("PLAYER_LOGIN")
+    self:RegisterEvent('PLAYER_LOGIN')
 end
 
 function LiteBagPanel_UpdateBagSlotCounts(self)
@@ -76,8 +76,8 @@ function LiteBagPanel_UpdateBagSlotCounts(self)
         for slot = 1, GetContainerNumSlots(bagID) do
             n = n + 1
             if not self.itemButtons[n] then
-                local name = format("%sItemButton%d", self:GetName(), n)
-                self.itemButtons[n] = CreateFrame("Button", name, nil, "LiteBagItemButtonTemplate")
+                local name = format('%sItemButton%d', self:GetName(), n)
+                self.itemButtons[n] = CreateFrame('Button', name, nil, 'LiteBagItemButtonTemplate')
                 self.itemButtons[n]:SetSize(37, 37)
             end
             self.itemButtons[n]:SetID(slot)
@@ -129,8 +129,8 @@ LAYOUTS.default =
 
         local w, h = itemButtons[1]:GetSize()
 
-        local xBreak = LiteBag_GetFrameOption(self, "xbreak")
-        local yBreak = LiteBag_GetFrameOption(self, "ybreak")
+        local xBreak = LiteBag_GetFrameOption(self, 'xbreak')
+        local yBreak = LiteBag_GetFrameOption(self, 'ybreak')
 
         local row, col, maxCol, maxXGap = 0, 0, 0, 0
 
@@ -210,9 +210,9 @@ function LiteBagPanel_ApplyLayout(self, layoutGrid)
     local maxX, maxY = 0, 0
 
     if layoutGrid.reverseDirection then
-        anchor, m, xOff, yOff = "BOTTOMRIGHT", -1, -RIGHT_OFFSET, -BOTTOM_OFFSET
+        anchor, m, xOff, yOff = 'BOTTOMRIGHT', -1, -RIGHT_OFFSET, -BOTTOM_OFFSET
     else
-        anchor, m, xOff, yOff = "TOPLEFT", 1, LEFT_OFFSET, TOP_OFFSET
+        anchor, m, xOff, yOff = 'TOPLEFT', 1, LEFT_OFFSET, TOP_OFFSET
     end
 
     local n = 1
@@ -243,14 +243,14 @@ end
 function LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBag_Debug("Panel UpdateSizeAndLayout " .. self:GetName())
 
-    local ncols = LiteBag_GetFrameOption(self, "columns") or
+    local ncols = LiteBag_GetFrameOption(self, 'columns') or
                     self.defaultColumns or
                     MIN_COLUMNS
-    local layout = LiteBag_GetFrameOption(self, "layout")
-    local order = LiteBag_GetFrameOption(self, "order")
+    local layout = LiteBag_GetFrameOption(self, 'layout')
+    local order = LiteBag_GetFrameOption(self, 'order')
 
-    if not layout or not LAYOUTS[layout] then layout = "default" end
-    if not order or not BUTTONORDERS[order] then order = "default" end
+    if not layout or not LAYOUTS[layout] then layout = 'default' end
+    if not order or not BUTTONORDERS[order] then order = 'default' end
 
     local itemButtons = BUTTONORDERS[order](self)
     local layoutGrid = LAYOUTS[layout](self, itemButtons, ncols)
@@ -263,11 +263,11 @@ end
 function LiteBagPanel_ResizeToFrame(self, width, height)
     LiteBag_Debug(format("Panel ResizeToFrame %s %d,%d", self:GetName(), width, height))
 
-    local layout = LiteBag_GetFrameOption(self, "layout")
-    if not layout or not LAYOUTS[layout] then layout = "default" end
+    local layout = LiteBag_GetFrameOption(self, 'layout')
+    if not layout or not LAYOUTS[layout] then layout = 'default' end
 
     local ncols = MIN_COLUMNS
-    local currentCols = LiteBag_GetFrameOption(self, "columns")
+    local currentCols = LiteBag_GetFrameOption(self, 'columns')
 
     -- The BUTTONORDER doesn't matter for sizing so don't bother calling it.
     -- Search up or down from our current column size, for speed.
@@ -290,7 +290,7 @@ function LiteBagPanel_ResizeToFrame(self, width, height)
         end
     end
 
-    LiteBag_SetFrameOption(self, "columns", ncols)
+    LiteBag_SetFrameOption(self, 'columns', ncols)
     LiteBagPanel_UpdateSizeAndLayout(self)
 end
 
@@ -399,23 +399,23 @@ function LiteBagPanel_OnShow(self)
     LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBagPanel_UpdateItemButtons(self)
 
-    self:RegisterEvent("BAG_CLOSED")
-    self:RegisterEvent("BAG_UPDATE")
-    self:RegisterEvent("ITEM_LOCK_CHANGED")
-    self:RegisterEvent("BAG_UPDATE_COOLDOWN")
-    self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
-    self:RegisterEvent("QUEST_ACCEPTED")
-    self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
-    self:RegisterEvent("BAG_NEW_ITEMS_UPDATED")
-    self:RegisterEvent("BAG_SLOT_FLAGS_UPDATED")
-    self:RegisterEvent("BANK_BAG_SLOT_FLAGS_UPDATED")
-    self:RegisterEvent("MERCHANT_SHOW")
-    self:RegisterEvent("MERCHANT_CLOSED")
-    self:RegisterEvent("UNIT_INVENTORY_CHANGED")
-    self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+    self:RegisterEvent('BAG_CLOSED')
+    self:RegisterEvent('BAG_UPDATE')
+    self:RegisterEvent('ITEM_LOCK_CHANGED')
+    self:RegisterEvent('BAG_UPDATE_COOLDOWN')
+    self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
+    self:RegisterEvent('QUEST_ACCEPTED')
+    self:RegisterEvent('UNIT_QUEST_LOG_CHANGED')
+    self:RegisterEvent('BAG_NEW_ITEMS_UPDATED')
+    self:RegisterEvent('BAG_SLOT_FLAGS_UPDATED')
+    self:RegisterEvent('BANK_BAG_SLOT_FLAGS_UPDATED')
+    self:RegisterEvent('MERCHANT_SHOW')
+    self:RegisterEvent('MERCHANT_CLOSED')
+    self:RegisterEvent('UNIT_INVENTORY_CHANGED')
+    self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
 
     if self.isBank then
-        self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
+        self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
     end
 
     for e in pairs(PluginUpdateEvents) do self:RegisterEvent(e) end
@@ -424,7 +424,7 @@ end
 function LiteBagPanel_OnHide(self)
     LiteBag_Debug("Panel OnHide " .. self:GetName())
     -- Judging by the code in FrameXML/ContainerFrame.lua items are tagged
-    -- by the server as "new" in some cases, and you're supposed to clear
+    -- by the server as 'new' in some cases, and you're supposed to clear
     -- the new flag after you see it the first time.
     LiteBagPanel_ClearNewItems(self)
 
@@ -434,23 +434,23 @@ function LiteBagPanel_OnHide(self)
         ContainerFrame_CloseSpecializedTutorialForItem(b)
     end
 
-    self:UnregisterEvent("BAG_CLOSED")
-    self:UnregisterEvent("BAG_UPDATE")
-    self:UnregisterEvent("ITEM_LOCK_CHANGED")
-    self:UnregisterEvent("BAG_UPDATE_COOLDOWN")
-    self:UnregisterEvent("INVENTORY_SEARCH_UPDATE")
-    self:UnregisterEvent("QUEST_ACCEPTED")
-    self:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
-    self:UnregisterEvent("BAG_NEW_ITEMS_UPDATED")
-    self:UnregisterEvent("BAG_SLOT_FLAGS_UPDATED")
-    self:UnregisterEvent("BANK_BAG_SLOT_FLAGS_UPDATED")
-    self:UnregisterEvent("MERCHANT_SHOW")
-    self:UnregisterEvent("MERCHANT_CLOSED")
-    self:UnregisterEvent("UNIT_INVENTORY_CHANGED")
-    self:UnregisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+    self:UnregisterEvent('BAG_CLOSED')
+    self:UnregisterEvent('BAG_UPDATE')
+    self:UnregisterEvent('ITEM_LOCK_CHANGED')
+    self:UnregisterEvent('BAG_UPDATE_COOLDOWN')
+    self:UnregisterEvent('INVENTORY_SEARCH_UPDATE')
+    self:UnregisterEvent('QUEST_ACCEPTED')
+    self:UnregisterEvent('UNIT_QUEST_LOG_CHANGED')
+    self:UnregisterEvent('BAG_NEW_ITEMS_UPDATED')
+    self:UnregisterEvent('BAG_SLOT_FLAGS_UPDATED')
+    self:UnregisterEvent('BANK_BAG_SLOT_FLAGS_UPDATED')
+    self:UnregisterEvent('MERCHANT_SHOW')
+    self:UnregisterEvent('MERCHANT_CLOSED')
+    self:UnregisterEvent('UNIT_INVENTORY_CHANGED')
+    self:UnregisterEvent('PLAYER_SPECIALIZATION_CHANGED')
 
     if self.isBank then
-        self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
+        self:UnregisterEvent('PLAYERBANKSLOTS_CHANGED')
     end
 
     for e in pairs(PluginUpdateEvents) do self:UnregisterEvent(e) end
@@ -466,26 +466,26 @@ function LiteBagPanel_OnEvent(self, event, ...)
     local arg1, arg2 = ...
     LiteBag_Debug(format("Panel OnEvent %s %s %s %s", self:GetName(), event, tostring(arg1), tostring(arg2)))
 
-    if event == "PLAYER_LOGIN" then
+    if event == 'PLAYER_LOGIN' then
         LiteBagPanel_UpdateBagSlotCounts(self)
         return
     end
 
-    if event == "MERCHANT_SHOW" or event == "MERCHANT_CLOSED" then
+    if event == 'MERCHANT_SHOW' or event == 'MERCHANT_CLOSED' then
         LiteBagPanel_UpdateQuality(self)
         return
     end
 
-    if event == "BAG_CLOSED" then
+    if event == 'BAG_CLOSED' then
         -- BAG_CLOSED fires when you drag a bag out of a slot but for the
         -- bank GetContainerNumSlots doesn't return the updated size yet,
         -- so we have to wait until BAG_UPDATE_DELAYED fires.
-        self:RegisterEvent("BAG_UPDATE_DELAYED")
+        self:RegisterEvent('BAG_UPDATE_DELAYED')
         return
     end
 
-    if event == "BAG_UPDATE_DELAYED" then
-        self:UnregisterEvent("BAG_UPDATE_DELAYED")
+    if event == 'BAG_UPDATE_DELAYED' then
+        self:UnregisterEvent('BAG_UPDATE_DELAYED')
         LiteBagPanel_UpdateBagSlotCounts(self)
         LiteBagPanel_UpdateSizeAndLayout(self)
         LiteBagPanel_UpdateItemButtons(self)
@@ -496,7 +496,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
     -- Once had the vendor disappear in the middle of a mass sale and
     -- the items did not unlock despite actually selling.
 
-    if event == "ITEM_LOCK_CHANGED" then
+    if event == 'ITEM_LOCK_CHANGED' then
         -- bag, slot = arg1, arg2
         if arg1 and arg2 and self.itemButtonsByBag[arg1] then
             if arg1 == BANK_CONTAINER and arg2 > NUM_BANKGENERIC_SLOTS then
@@ -507,22 +507,22 @@ function LiteBagPanel_OnEvent(self, event, ...)
         return
     end
 
-    if event == "BAG_UPDATE_COOLDOWN" then
+    if event == 'BAG_UPDATE_COOLDOWN' then
         LiteBagPanel_UpdateCooldowns(self)
         return
     end
 
-    if event == "QUEST_ACCEPTED" or (event == "UNIT_QUEST_LOG_CHANGED" and arg1 == "player") then
+    if event == 'QUEST_ACCEPTED' or (event == 'UNIT_QUEST_LOG_CHANGED' and arg1 == 'player') then
         LiteBagPanel_UpdateQuestTextures(self)
         return
     end
 
-    if event == "INVENTORY_SEARCH_UPDATE" then
+    if event == 'INVENTORY_SEARCH_UPDATE' then
         LiteBagPanel_UpdateSearchResults(self)
         return
     end
 
-    if event == "PLAYERBANKSLOTS_CHANGED" then
+    if event == 'PLAYERBANKSLOTS_CHANGED' then
         -- slot = arg1
         if self.isBank then
             if arg1 > NUM_BANKGENERIC_SLOTS then
@@ -533,24 +533,24 @@ function LiteBagPanel_OnEvent(self, event, ...)
         return
     end
 
-    if event == "UNIT_INVENTORY_CHANGED" or event == "PLAYER_SPECIALIZATION_CHANGED" then
+    if event == 'UNIT_INVENTORY_CHANGED' or event == 'PLAYER_SPECIALIZATION_CHANGED' then
         LiteBagPanel_UpdateItemUpgrades(self)
         return
     end
 
-    if event == "BAG_UPDATE" then
+    if event == 'BAG_UPDATE' then
         -- bag = arg1
         LiteBagPanel_UpdateItemButtonsByBag(self, arg1)
         return
     end
 
-    if event == "BAG_SLOT_FLAGS_UPDATED" then
+    if event == 'BAG_SLOT_FLAGS_UPDATED' then
         -- bag = arg1
         LiteBagPanel_UpdateItemButtonsByBag(self, arg1)
         return
     end
 
-    if event == "BANK_BAG_SLOT_FLAGS_UPDATED" then
+    if event == 'BANK_BAG_SLOT_FLAGS_UPDATED' then
         -- bag = arg1 + NUM_BAG_SLOTS
         LiteBagPanel_UpdateItemButtonsByBag(self, arg1 + NUM_BAG_SLOTS)
         return

@@ -81,7 +81,7 @@ function LiteBagItemButton_UpdateItem(self)
 
     self.readable = readable
 
-    -- local normalTexture = _G[self:GetName() .. "NormalTexture"]
+    -- local normalTexture = _G[self:GetName() .. 'NormalTexture']
     if texture then
         self.icon:SetTexture(texture)
         self.hasItem = 1
@@ -116,7 +116,7 @@ function LiteBagItemButton_UpdateQuestTexture(self)
     local slot = self:GetID()
 
     local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bag, slot)
-    local questTexture = _G[self:GetName() .. "IconQuestTexture"]
+    local questTexture = _G[self:GetName() .. 'IconQuestTexture']
 
     if questId and not isActive then
         questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG)
@@ -185,7 +185,7 @@ function LiteBagItemButton_UpdateNewItemTexture(self)
         if quality and NEW_ITEM_ATLAS_BY_QUALITY[quality] then
             newItemTexture:SetAtlas(NEW_ITEM_ATLAS_BY_QUALITY[quality])
         else
-            newItemTexture:SetAtlas("bags-glow-white")
+            newItemTexture:SetAtlas('bags-glow-white')
         end
         if not flash:IsPlaying() and not newItemAnim:IsPlaying() then
             flash:Play()
@@ -211,7 +211,7 @@ function LiteBagItemButton_UpdateCooldown(self)
     if self.hasItem then
         ContainerFrame_UpdateCooldown(bag, self)
     else
-        _G[self:GetName() .. "Cooldown"]:Hide()
+        _G[self:GetName() .. 'Cooldown']:Hide()
     end
 
     LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateCooldown', self)
@@ -242,12 +242,12 @@ function LiteBagItemButton_UpdateTutorials(self)
     local slot = self:GetID()
     local itemID = select(10, GetContainerItemInfo(bag, slot))
 
-    if not GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_AZERITE_ITEM_IN_SLOT) then
+    if not GetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_AZERITE_ITEM_IN_SLOT) then
         -- Sets the .owner of the tutorial to bag:GetParent()
         ContainerFrame_ConsiderItemButtonForAzeriteTutorial(self, itemID)
     end
 
-    if not GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_ARTIFACT_RELIC_MATCH) then
+    if not GetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_ARTIFACT_RELIC_MATCH) then
         -- Sets the .owner of the tutorial to bag:GetParent()
         ContainerFrame_ConsiderItemButtonForRelicTutorial(self, itemID)
     end
@@ -281,8 +281,8 @@ function LiteBagItemButton_Update(self)
     LiteBagItemButton_CallHooks('LiteBagItemButton_Update', self)
 
     -- For debugging layouts
-    -- _G[self:GetName().."Count"]:SetText(format("%d,%d", self:GetParent():GetID(), self:GetID()))
-    -- _G[self:GetName().."Count"]:Show()
+    -- _G[self:GetName()..'Count']:SetText(format('%d,%d', self:GetParent():GetID(), self:GetID()))
+    -- _G[self:GetName()..'Count']:Show()
 end
 
 function LiteBagItemButton_OnLoad(self)

@@ -9,13 +9,15 @@
 
 ----------------------------------------------------------------------------]]--
 
+local L = LiteBag_Localize
+
 -- A popup dialog for confirming the bag sort.
-StaticPopupDialogs["LB_CONFIRM_SORT"] = {
+StaticPopupDialogs['LB_CONFIRM_SORT'] = {
     preferredIndex = STATICPOPUPS_NUMDIALOGS,
-    text = "%s\n"..CONFIRM_CONTINUE,
+    text = '%s\n'..CONFIRM_CONTINUE,
     button1 = YES,
     button2 = NO,
-    -- sound = "UI_BagSorting_01",
+    -- sound = 'UI_BagSorting_01',
     OnAccept = function (self, func) func() end,
     hideOnEscape = 1,
     timeout = 0,
@@ -23,17 +25,17 @@ StaticPopupDialogs["LB_CONFIRM_SORT"] = {
 
 -- Don't show the confirm popup if the shift key is held.
 local function DoOrStaticPopup(text, func)
-    if IsShiftKeyDown() or LiteBag_GetGlobalOption("NoConfirmSort") then
+    if IsShiftKeyDown() or LiteBag_GetGlobalOption('NoConfirmSort') then
         func()
     else
-        StaticPopup_Show("LB_CONFIRM_SORT", text, nil, func)
+        StaticPopup_Show('LB_CONFIRM_SORT', text, nil, func)
     end
 end
 
 -- Added to the bag sort tooltip.  Would be nice if it were localized.
-local TOOLTIP_NOCONFIRM_TEXT = format("%s: No confirmation", SHIFT_KEY)
+local TOOLTIP_NOCONFIRM_TEXT = format(L["%s: No confirmation"], SHIFT_KEY)
 
-local hiddenBagParent = CreateFrame("Frame")
+local hiddenBagParent = CreateFrame('Frame')
 
 local function ReplaceBlizzardInventory()
     local hideFunc =
@@ -58,7 +60,7 @@ local function ReplaceBlizzardInventory()
 
     -- Turn the Blizzard frames off
     for i=1, NUM_CONTAINER_FRAMES do
-        local f = _G["ContainerFrame"..i]
+        local f = _G['ContainerFrame'..i]
         f:SetParent(hiddenBankParent)
         f:UnregisterAllEvents()
     end
@@ -83,27 +85,27 @@ local function ReplaceBlizzardInventory()
     BagSlotButton_UpdateChecked = function () end
 
     -- Add the confirm text to the sort button mouseover tooltip.
-    BagItemAutoSortButton:HookScript("OnEnter", function (self)
-        if not LiteBag_GetGlobalOption("NoConfirmSort") then
+    BagItemAutoSortButton:HookScript('OnEnter', function (self)
+        if not LiteBag_GetGlobalOption('NoConfirmSort') then
             GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
         end
         GameTooltip:Show()
         end)
 
     -- Change the sort button to call our confirm function.
-    BagItemAutoSortButton:SetScript("OnClick", function (self)
+    BagItemAutoSortButton:SetScript('OnClick', function (self)
             DoOrStaticPopup(BAG_CLEANUP_BAGS, SortBags)
         end)
 
 end
 
-local hiddenBankParent = CreateFrame("Frame")
+local hiddenBankParent = CreateFrame('Frame')
 
 local function ReplaceBlizzardBank()
 
     -- The reagent bank in WoW 6.0 changed UseContainerItem() to have a
-    -- fourth argument which is true/false "should we put this thing into
-    -- the reagent bank", which ContainerFrameItemButton_OnClick sets with
+    -- fourth argument which is true/false 'should we put this thing into
+    -- the reagent bank', which ContainerFrameItemButton_OnClick sets with
     --      BankFrame:IsShown() and (BankFrame.selectedTab == 2)
     -- Since we can't override the secure OnClick handler and we can't
     -- change BankFrame without tainting, we have to reparent it, hide it
@@ -113,18 +115,18 @@ local function ReplaceBlizzardBank()
     hiddenBankParent:Hide()
     BankFrame:SetParent(hiddenBankParent)
     BankFrame:ClearAllPoints()
-    BankFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 0, 0)
+    BankFrame:SetPoint('TOPLEFT', UIParent, 'TOPLEFT', 0, 0)
     BankFrame:UnregisterAllEvents()
-    BankFrame:SetScript("OnShow", function () end)
-    BankFrame:SetScript("OnHide", function () end)
+    BankFrame:SetScript('OnShow', function () end)
+    BankFrame:SetScript('OnHide', function () end)
 
-    LiteBagBank:HookScript("OnShow", function () BankFrame:Show() end)
-    LiteBagBank:HookScript("OnHide", function () BankFrame:Hide() end)
+    LiteBagBank:HookScript('OnShow', function () BankFrame:Show() end)
+    LiteBagBank:HookScript('OnHide', function () BankFrame:Hide() end)
 
     -- Add the confirm text to the sort button tooltip.
 
-    BankItemAutoSortButton:HookScript("OnEnter", function (self)
-        if not LiteBag_GetGlobalOption("NoConfirmSort") then
+    BankItemAutoSortButton:HookScript('OnEnter', function (self)
+        if not LiteBag_GetGlobalOption('NoConfirmSort') then
             GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
         end
         GameTooltip:Show()
@@ -132,7 +134,7 @@ local function ReplaceBlizzardBank()
 
     -- Change the sort button to call our confirm function.
 
-    BankItemAutoSortButton:SetScript("OnClick", function (self)
+    BankItemAutoSortButton:SetScript('OnClick', function (self)
             local parent = self:GetParent()
             if (parent.selectedTab == 1) then
                 DoOrStaticPopup(BAG_CLEANUP_BANK, SortBankBags)
@@ -149,13 +151,13 @@ local function ReplaceBlizzard()
     -- Some other addons either replace the open functions themselves after
     -- us and cause the bag frames to show.
     for i=1, NUM_CONTAINER_FRAMES do
-        local f = _G["ContainerFrame"..i]
-        f:SetScript("OnShow", function (self)
+        local f = _G['ContainerFrame'..i]
+        f:SetScript('OnShow', function (self)
                 self:Hide()
                 LiteBagInventory:Show()
                 ReplaceBlizzardInventory()
             end)
-        f:SetScript("OnHide", nil)
+        f:SetScript('OnHide', nil)
     end
 end
 
@@ -163,5 +165,5 @@ end
 -- the bags too, try to hook later than them all.
 
 local replacer = CreateFrame('Frame', UIParent)
-replacer:SetScript("OnEvent", function () ReplaceBlizzard() end)
-replacer:RegisterEvent("PLAYER_LOGIN")
+replacer:SetScript('OnEvent', function () ReplaceBlizzard() end)
+replacer:RegisterEvent('PLAYER_LOGIN')

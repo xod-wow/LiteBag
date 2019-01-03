@@ -22,7 +22,7 @@ function LiteBagBagButton_GetFilter(self)
         return
     end
 
-    if IsInventoryItemProfessionBag("player", self.slotID) then
+    if IsInventoryItemProfessionBag('player', self.slotID) then
         return
     end
 
@@ -56,10 +56,10 @@ function LiteBagBagButton_Update(self)
     -- No slotID for backpack/bank, can they not be filtered?
 
     if self.bagID == BACKPACK_CONTAINER then
-        SetItemButtonTexture(self, "Interface\\Buttons\\Button-Backpack-Up")
+        SetItemButtonTexture(self, 'Interface\\Buttons\\Button-Backpack-Up')
         return
     elseif self.bagID == BANK_CONTAINER then
-        SetItemButtonTexture(self, "Interface\\Buttons\\Button-Backpack-Up")
+        SetItemButtonTexture(self, 'Interface\\Buttons\\Button-Backpack-Up')
         return
     end
 
@@ -67,8 +67,8 @@ function LiteBagBagButton_Update(self)
 
     LiteBagBagButton_SetFilterIcon(self)
 
-    local texture = _G[self:GetName().."IconTexture"]
-    local textureName = GetInventoryItemTexture("player", self.slotID)
+    local texture = _G[self:GetName()..'IconTexture']
+    local textureName = GetInventoryItemTexture('player', self.slotID)
 
     local numBankSlots, bankFull = GetNumBankSlots()
     local buyBankSlot = numBankSlots + ITEM_INVENTORY_BANK_BAG_OFFSET + 1
@@ -82,9 +82,9 @@ function LiteBagBagButton_Update(self)
     if textureName then
         SetItemButtonTexture(self, textureName)
     elseif self.purchaseCost then
-        SetItemButtonTexture(self, "Interface\\GuildBankFrame\\UI-GuildBankFrame-NewTab")
+        SetItemButtonTexture(self, 'Interface\\GuildBankFrame\\UI-GuildBankFrame-NewTab')
     else
-        textureName = select(2, GetInventorySlotInfo("Bag0Slot"))
+        textureName = select(2, GetInventorySlotInfo('Bag0Slot'))
         SetItemButtonTexture(self, textureName)
     end
 
@@ -97,11 +97,11 @@ function LiteBagBagButton_Update(self)
 end
 
 function LiteBagBagButton_OnLoad(self)
-    self:RegisterForDrag("LeftButton")
-    self:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+    self:RegisterForDrag('LeftButton')
+    self:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
 
-    self:SetScript("OnEvent", LiteBagBagButton_OnEvent)
-    self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
+    self:SetScript('OnEvent', LiteBagBagButton_OnEvent)
+    self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
 
     -- Blizzard's ContainerFrameFilterDropDown expects the texture
     -- to be attached to a button.  Fake it.
@@ -109,7 +109,7 @@ function LiteBagBagButton_OnLoad(self)
 end
 
 function LiteBagBagButton_OnEvent(self)
-    if event == "INVENTORY_SEARCH_UPDATE" then
+    if event == 'INVENTORY_SEARCH_UPDATE' then
         if IsContainerFiltered(self.bagID) then
             self.searchOverlay:Show()
         else
@@ -123,14 +123,14 @@ function LiteBagBagButton_OnEnter(self)
     local frame = self:GetParent()
     LiteBagPanel_HighlightBagButtons(frame, self:GetID())
 
-    GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+    GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
 
     if self.bagID == BACKPACK_CONTAINER then
         GameTooltip:SetText(BACKPACK_TOOLTIP)
     elseif self.bagID == BANK_CONTAINER then
         GameTooltip:SetText(BANK_BAG)
     else
-        local hasItem = GameTooltip:SetInventoryItem("player", self.slotID)
+        local hasItem = GameTooltip:SetInventoryItem('player', self.slotID)
         if not hasItem then
             if self.purchaseCost then
                 GameTooltip:ClearLines()
@@ -179,7 +179,7 @@ function LiteBagBagButton_OnClick(self)
     if self.purchaseCost then
         PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
         BankFrame.nextSlotCost = self.purchaseCost
-        StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
+        StaticPopup_Show('CONFIRM_BUY_BANK_SLOT')
         return
     end
 
@@ -188,5 +188,5 @@ function LiteBagBagButton_OnClick(self)
 end
 
 function LiteBagBagButtonFilterDropdown_OnLoad(self)
-    UIDropDownMenu_Initialize(self, ContainerFrameFilterDropDown_Initialize, "MENU")
+    UIDropDownMenu_Initialize(self, ContainerFrameFilterDropDown_Initialize, 'MENU')
 end

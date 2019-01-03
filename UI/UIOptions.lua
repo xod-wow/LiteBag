@@ -6,20 +6,21 @@
 
 ----------------------------------------------------------------------------]]--
 
+local L = LiteBag_Localize
 
 function LiteBagOptionsConfirmSort_OnLoad(self)
-    self.Text:SetText("Confirm before sorting.")
+    self.Text:SetText(L["Confirm before sorting."])
     self.SetOption =
         function (self, setting)
-            if not setting or setting == "0" then
-                LiteBag_SetGlobalOption("NoConfirmSort", true)
+            if not setting or setting == '0' then
+                LiteBag_SetGlobalOption('NoConfirmSort', true)
             else
-                LiteBag_SetGlobalOption("NoConfirmSort", nil)
+                LiteBag_SetGlobalOption('NoConfirmSort', nil)
             end
         end
     self.GetOption =
         function (self)
-            return not LiteBag_GetGlobalOption("NoConfirmSort")
+            return not LiteBag_GetGlobalOption('NoConfirmSort')
         end
     self.GetOptionDefault =
         function (self) return true end
@@ -27,20 +28,20 @@ function LiteBagOptionsConfirmSort_OnLoad(self)
 end
 
 function LiteBagOptionsEquipsetDisplay_OnLoad(self)
-    self.Text:SetText("Display equipment set membership icons.")
+    self.Text:SetText(L["Display equipment set membership icons."])
     self.SetOption =
         function (self, setting)
-            if not setting or setting == "0" then
-                LiteBag_SetGlobalOption("HideEquipsetIcon", true)
+            if not setting or setting == '0' then
+                LiteBag_SetGlobalOption('HideEquipsetIcon', true)
             else
-                LiteBag_SetGlobalOption("HideEquipsetIcon", nil)
+                LiteBag_SetGlobalOption('HideEquipsetIcon', nil)
             end
             LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
             LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
         end
     self.GetOption =
         function (self)
-            return not LiteBag_GetGlobalOption("HideEquipsetIcon")
+            return not LiteBag_GetGlobalOption('HideEquipsetIcon')
         end
     self.GetOptionDefault =
         function (self) return true end
@@ -48,20 +49,20 @@ function LiteBagOptionsEquipsetDisplay_OnLoad(self)
 end
 
 function LiteBagOptionsBindsOnDisplay_OnLoad(self)
-    self.Text:SetText("Display text for BoA and BoE items.")
+    self.Text:SetText(L["Display text for BoA and BoE items."])
     self.SetOption =
         function (self, setting)
-            if not setting or setting == "0" then
-                LiteBag_SetGlobalOption("ShowBindsOnText", nil)
+            if not setting or setting == '0' then
+                LiteBag_SetGlobalOption('ShowBindsOnText', nil)
             else
-                LiteBag_SetGlobalOption("ShowBindsOnText", true)
+                LiteBag_SetGlobalOption('ShowBindsOnText', true)
             end
             LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
             LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
         end
     self.GetOption =
         function (self)
-            return LiteBag_GetGlobalOption("ShowBindsOnText")
+            return LiteBag_GetGlobalOption('ShowBindsOnText')
         end
     self.GetOptionDefault =
         function (self) return false end
@@ -69,18 +70,18 @@ function LiteBagOptionsBindsOnDisplay_OnLoad(self)
 end
 
 function LiteBagOptionsSnapToPosition_OnLoad(self)
-    self.Text:SetText("Snap inventory frame to default backpack position.")
+    self.Text:SetText(L["Snap inventory frame to default backpack position."])
     self.SetOption =
         function (self, setting)
-            if not setting or setting == "0" then
-                LiteBag_SetGlobalOption("NoSnapToPosition", true)
+            if not setting or setting == '0' then
+                LiteBag_SetGlobalOption('NoSnapToPosition', true)
             else
-                LiteBag_SetGlobalOption("NoSnapToPosition", false)
+                LiteBag_SetGlobalOption('NoSnapToPosition', false)
             end
         end
     self.GetOption =
         function (self)
-            return not LiteBag_GetGlobalOption("NoSnapToPosition")
+            return not LiteBag_GetGlobalOption('NoSnapToPosition')
         end
     self.GetOptionDefault =
         function (self) return false end
@@ -89,7 +90,7 @@ end
 
 local function GetQualityText(i)
     if ITEM_QUALITY_COLORS[i] then
-        local desc = _G["ITEM_QUALITY"..i.."_DESC"]
+        local desc = _G['ITEM_QUALITY'..i..'_DESC']
         return ITEM_QUALITY_COLORS[i].hex..desc ..FONT_COLOR_CODE_CLOSE
     else
         return NEVER
@@ -99,7 +100,7 @@ end
 local function IconBorder_Initialize(self, level)
     if level == 1 then
         local info = UIDropDownMenu_CreateInfo()
-        local current = LiteBag_GetGlobalOption("ThickerIconBorder")
+        local current = LiteBag_GetGlobalOption('ThickerIconBorder')
 
         info.func =
              function (button, arg1, arg2, checked)
@@ -129,11 +130,11 @@ end
 function LiteBagOptionsIconBorder_OnLoad(self)
     self.SetOption =
         function (self, setting)
-            LiteBag_SetGlobalOption("ThickerIconBorder", setting)
+            LiteBag_SetGlobalOption('ThickerIconBorder', setting)
         end
     self.GetOption =
         function (self)
-            return LiteBag_GetGlobalOption("ThickerIconBorder")
+            return LiteBag_GetGlobalOption('ThickerIconBorder')
         end
     self.GetOptionDefault =
         function (self)
@@ -155,7 +156,7 @@ end
 local function PanelOrder_Initialize(self, level)
     if level == 1 then
         local info = UIDropDownMenu_CreateInfo()
-        local current = LiteBag_GetFrameOption(self.panel, "order")
+        local current = LiteBag_GetFrameOption(self.panel, 'order')
 
         info.func =
              function (button, arg1, arg2, checked)
@@ -171,14 +172,14 @@ local function PanelOrder_Initialize(self, level)
         UIDropDownMenu_AddButton(info)
 
         info.text = "Blizzard"
-        info.checked = ( current == "blizzard" )
-        info.arg1 = "blizzard"
+        info.checked = ( current == 'blizzard' )
+        info.arg1 = 'blizzard'
         info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
 
-        info.text = "Reverse"
-        info.checked = ( current == "reverse" )
-        info.arg1 = "reverse"
+        info.text = L["Reverse"]
+        info.checked = ( current == 'reverse' )
+        info.arg1 = 'reverse'
         info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
     end
@@ -187,11 +188,11 @@ end
 local function PanelOrder_OnLoad(self, panel)
     self.SetOption =
         function (self, setting)
-            LiteBag_SetFrameOption(panel, "order", setting)
+            LiteBag_SetFrameOption(panel, 'order', setting)
         end
     self.GetOption =
         function (self)
-            return LiteBag_GetFrameOption(panel, "layout")
+            return LiteBag_GetFrameOption(panel, 'layout')
         end
     self.GetOptionDefault =
         function (self)
@@ -214,7 +215,7 @@ end
 local function PanelLayout_Initialize(self, level)
     if level == 1 then
         local info = UIDropDownMenu_CreateInfo()
-        local current = LiteBag_GetFrameOption(self.panel, "layout")
+        local current = LiteBag_GetFrameOption(self.panel, 'layout')
 
         info.func =
             function (button, arg1, arg2, checked)
@@ -229,15 +230,15 @@ local function PanelLayout_Initialize(self, level)
         info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
 
-        info.text = "Bags"
-        info.checked = ( current == "bag" )
-        info.arg1 = "bag"
+        info.text = L["Bags"]
+        info.checked = ( current == 'bag' )
+        info.arg1 = 'bag'
         info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
 
-        info.text = "Reverse"
-        info.checked = ( current == "reverse" )
-        info.arg1 = "reverse"
+        info.text = L["Reverse"]
+        info.checked = ( current == 'reverse' )
+        info.arg1 = 'reverse'
         info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
     end
@@ -246,11 +247,11 @@ end
 local function PanelLayout_OnLoad(self, panel)
     self.SetOption =
         function (self, setting)
-            LiteBag_SetFrameOption(panel, "layout", setting)
+            LiteBag_SetFrameOption(panel, 'layout', setting)
         end
     self.GetOption =
         function (self)
-            return LiteBag_GetFrameOption(panel, "layout")
+            return LiteBag_GetFrameOption(panel, 'layout')
         end
     self.GetOptionDefault =
         function (self)
@@ -273,15 +274,15 @@ end
 local function SetupColumnsControl(self, panel, default)
     local n = self:GetName()
 
-    _G[n.."Low"]:SetText("8")
-    _G[n.."High"]:SetText("24")
+    _G[n..'Low']:SetText('8')
+    _G[n..'High']:SetText('24')
     self.SetOption =
             function (self, v)
-            LiteBag_SetFrameOption(panel, "columns", v)
+            LiteBag_SetFrameOption(panel, 'columns', v)
         end
     self.GetOption =
         function (self)
-            return LiteBag_GetFrameOption(panel, "columns") or default
+            return LiteBag_GetFrameOption(panel, 'columns') or default
         end
     self.GetOptionDefault =
             function (self) return default end
@@ -289,15 +290,15 @@ end
 
 local function SetupScaleControl(self, frame)
     local n = self:GetName()
-    _G[n.."Low"]:SetText(0.75)
-    _G[n.."High"]:SetText(1.25)
+    _G[n..'Low']:SetText(0.75)
+    _G[n..'High']:SetText(1.25)
     self.SetOption =
             function (self, v)
-            LiteBag_SetFrameOption(frame, "scale", v)
+            LiteBag_SetFrameOption(frame, 'scale', v)
         end
     self.GetOption =
             function (self)
-            return LiteBag_GetFrameOption(frame, "scale") or 1.0
+            return LiteBag_GetFrameOption(frame, 'scale') or 1.0
         end
     self.GetOptionDefault =
             function (self) return 1.0 end
@@ -305,8 +306,8 @@ end
 
 local function SetupBreakControl(self, frame, varname)
     local n = self:GetName()
-    _G[n.."Low"]:SetText(0)
-    _G[n.."High"]:SetText(24)
+    _G[n..'Low']:SetText(0)
+    _G[n..'High']:SetText(24)
     self.SetOption =
             function (self, v)
             if v == 0 then
@@ -324,46 +325,46 @@ local function SetupBreakControl(self, frame, varname)
 end
 
 function LiteBagOptionsInventoryColumns_OnLoad(self)
-    SetupColumnsControl(self, "LiteBagInventoryPanel", 8)
+    SetupColumnsControl(self, 'LiteBagInventoryPanel', 8)
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsInventoryColumns_OnValueChanged(self)
     local n = self:GetName()
-    _G[n.."Text"]:SetText(format("Columns: %d", self:GetValue()))
+    _G[n..'Text']:SetText(format(L["Columns: %d"], self:GetValue()))
     LiteBagOptionsControl_OnChanged(self)
 end
 
 function LiteBagOptionsInventoryScale_OnLoad(self)
-    SetupScaleControl(self, "LiteBagInventory")
+    SetupScaleControl(self, 'LiteBagInventory')
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsInventoryScale_OnValueChanged(self)
     local n = self:GetName()
-    _G[n.."Text"]:SetText(format("Scale: %0.2f", self:GetValue()))
+    _G[n..'Text']:SetText(format(L["Scale: %0.2f"], self:GetValue()))
     LiteBagOptionsControl_OnChanged(self)
 end
 
 function LiteBagOptionsBankColumns_OnLoad(self)
-    SetupColumnsControl(self, "LiteBagBankPanel", 14)
+    SetupColumnsControl(self, 'LiteBagBankPanel', 14)
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsBankColumns_OnValueChanged(self)
     local n = self:GetName()
-    _G[n.."Text"]:SetText(format("Columns: %d", self:GetValue()))
+    _G[n..'Text']:SetText(format(L["Columns: %d"], self:GetValue()))
     LiteBagOptionsControl_OnChanged(self)
 end
 
 function LiteBagOptionsBankScale_OnLoad(self)
-    SetupScaleControl(self, "LiteBagBank")
+    SetupScaleControl(self, 'LiteBagBank')
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsBankScale_OnValueChanged(self)
     local n = self:GetName()
-    _G[n.."Text"]:SetText(format("Scale: %0.2f", self:GetValue()))
+    _G[n..'Text']:SetText(format(L["Scale: %0.2f"], self:GetValue()))
     LiteBagOptionsControl_OnChanged(self)
 end
 
@@ -371,9 +372,9 @@ function LiteBagOptionsXBreak_OnValueChanged(self)
     local n = self:GetName()
     local v = self:GetValue()
     if v == 0 then
-        _G[n.."Text"]:SetText("No column gaps")
+        _G[n..'Text']:SetText(L["No column gaps"])
     else
-        _G[n.."Text"]:SetText(format("Gap: %d columns", v))
+        _G[n..'Text']:SetText(format(L["Gap: %d columns"], v))
     end
     LiteBagOptionsControl_OnChanged(self)
 end
@@ -382,47 +383,47 @@ function LiteBagOptionsYBreak_OnValueChanged(self)
     local n = self:GetName()
     local v = self:GetValue()
     if v == 0 then
-        _G[n.."Text"]:SetText("No row gaps")
+        _G[n..'Text']:SetText(L["No row gaps"])
     else
-        _G[n.."Text"]:SetText(format("Gap: %d rows", v))
+        _G[n..'Text']:SetText(format(L["Gap: %d rows"], v))
     end
     LiteBagOptionsControl_OnChanged(self)
 end
 
 function LiteBagOptionsInventoryXBreak_OnLoad(self)
-    SetupBreakControl(self, "LiteBagInventoryPanel", "xbreak")
+    SetupBreakControl(self, 'LiteBagInventoryPanel', 'xbreak')
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsInventoryYBreak_OnLoad(self)
-    SetupBreakControl(self, "LiteBagInventoryPanel", "ybreak")
+    SetupBreakControl(self, 'LiteBagInventoryPanel', 'ybreak')
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsBankXBreak_OnLoad(self)
-    SetupBreakControl(self, "LiteBagBankPanel", "xbreak")
+    SetupBreakControl(self, 'LiteBagBankPanel', 'xbreak')
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsBankYBreak_OnLoad(self)
-    SetupBreakControl(self, "LiteBagBankPanel", "ybreak")
+    SetupBreakControl(self, 'LiteBagBankPanel', 'ybreak')
     LiteBagOptionsControl_OnLoad(self)
 end
 
 
 function LiteBagOptionsBankOrder_OnLoad(self)
-    PanelOrder_OnLoad(self, "LiteBagBankPanel")
+    PanelOrder_OnLoad(self, 'LiteBagBankPanel')
 end
 
 function LiteBagOptionsBankLayout_OnLoad(self)
-    PanelLayout_OnLoad(self, "LiteBagBankPanel")
+    PanelLayout_OnLoad(self, 'LiteBagBankPanel')
 end
 
 function LiteBagOptionsInventoryOrder_OnLoad(self)
-    PanelOrder_OnLoad(self, "LiteBagInventoryPanel")
+    PanelOrder_OnLoad(self, 'LiteBagInventoryPanel')
 end
 
 function LiteBagOptionsInventoryLayout_OnLoad(self)
-    PanelLayout_OnLoad(self, "LiteBagInventoryPanel")
+    PanelLayout_OnLoad(self, 'LiteBagInventoryPanel')
 end
 

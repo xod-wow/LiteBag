@@ -26,7 +26,7 @@ function LiteBagFrame_SetPosition(self)
     LiteBag_Debug("Frame SetPosition " .. self:GetName())
     if self:IsUserPlaced() then return end
     self:ClearAllPoints()
-    self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
+    self:SetPoint('BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
 end
 
 function LiteBagFrame_StartMoving(self)
@@ -42,7 +42,7 @@ function LiteBagFrame_StopMoving(self)
         return
     end
 
-    if LiteBag_GetGlobalOption("NoSnapToPosition") then
+    if LiteBag_GetGlobalOption('NoSnapToPosition') then
         return
     end
 
@@ -90,7 +90,7 @@ function LiteBagFrame_OnShow(self)
     LiteBag_Debug("Frame OnShow " .. self:GetName())
 
     self:SetSize(self.currentPanel:GetSize())
-    self:SetScale(LiteBag_GetFrameOption(self, "scale") or 1.0)
+    self:SetScale(LiteBag_GetFrameOption(self, 'scale') or 1.0)
 
     LiteBagFrame_AttachSearchBox(self)
 
@@ -100,13 +100,13 @@ end
 function LiteBagFrame_AttachSearchBox(self)
     self.searchBox:SetParent(self)
     self.searchBox:ClearAllPoints()
-    self.searchBox:SetPoint("TOPRIGHT", self, "TOPRIGHT", -38, -35)
+    self.searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -38, -35)
     self.searchBox.anchorBag = self
     self.searchBox:Show()
 
     self.sortButton:SetParent(self)
     self.sortButton:ClearAllPoints()
-    self.sortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -7, -32)
+    self.sortButton:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -7, -32)
     self.sortButton.anchorBag = self
     self.sortButton:Show()
 end
@@ -121,7 +121,7 @@ end
 function LiteBagFrame_AddPanel(self, panel, tabTitle)
     LiteBag_Debug(format("Frame AddPanel %s %s", self:GetName(), panel:GetName()))
     panel:SetParent(self)
-    panel:SetPoint("TOPLEFT", self, "TOPLEFT")
+    panel:SetPoint('TOPLEFT', self, 'TOPLEFT')
 
     tinsert(self.panels, panel)
 

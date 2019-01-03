@@ -75,7 +75,7 @@ function LiteBagOptionsPanel_OnLoad(self)
     if self ~= LiteBagOptions then
         self.parent = LiteBagOptions.name
         if not self.name then
-            local n = self:GetAttribute("panel-name")
+            local n = self:GetAttribute('panel-name')
             self.name = _G[n] or n
         end
         self.title:SetText("LiteBag : " .. self.name)
@@ -114,7 +114,7 @@ end
 
 function LiteBagOptionsControl_OnChanged(self)
     if self.GetControl and self:GetControl() ~= self:GetOption() then
-        LiteBag_Debug("OnChanged " .. self:GetName())
+        LiteBag_Debug('OnChanged ' .. self:GetName())
         self:SetOption(self:GetControl())
     end
 end
