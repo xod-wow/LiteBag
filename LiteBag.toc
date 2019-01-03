@@ -5,6 +5,8 @@
 ## Email: mib@post.com
 ## SavedVariablesPerCharacter: LiteBag_OptionsDB
 
+Localization.lua
+
 Print.lua
 Options.lua
 
