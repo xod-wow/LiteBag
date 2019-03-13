@@ -4,7 +4,7 @@
 
 <Script file="BagButton.lua"/>
 
-<Button name="LiteBagBagButtonTemplate" inherits="ItemButtonTemplate" hidden="true" virtual="true">
+<ItemButton name="LiteBagBagButtonTemplate" hidden="true" virtual="true">
     <Size x="26" y="26" />
     <Layers>
         <Layer level="OVERLAY">
@@ -40,6 +40,6 @@
         <OnReceiveDrag function="LiteBagBagButton_OnClick" />
         <OnEvent function="LiteBagBagButton_OnEvent" />
     </Scripts>
-</Button>
+</ItemButton>
 
 </Ui>

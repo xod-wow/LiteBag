@@ -8,7 +8,7 @@
          file="Interface\Buttons\UI-Slot-Background"
          virtual="true" />
 
-<Button name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" hidden="true" virtual="true">
+<ItemButton name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" hidden="true" virtual="true">
 
     <Size x="37" y="37" />
 
@@ -31,6 +31,6 @@
         <OnEnter function="LiteBagItemButton_OnEnter" />
     </Scripts>
 
-</Button>
+</ItemButton>
 
 </Ui>

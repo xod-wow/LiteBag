@@ -6,53 +6,53 @@
 
 <Frame name="LiteBagPanelTemplate" virtual="true">
     <Frames>
-        <Button name="$parentButton1" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
+        <ItemButton name="$parentButton1" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
                 <Anchor point="TOPLEFT" x="60" y="-31" />
             </Anchors>
-        </Button>
+        </ItemButton>
 
-        <Button name="$parentButton2" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
+        <ItemButton name="$parentButton2" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
                 <Anchor point="LEFT" relativeTo="$parentButton1" relativePoint="RIGHT" x="4" />
             </Anchors>
-        </Button>
+        </ItemButton>
 
-        <Button name="$parentButton3" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
+        <ItemButton name="$parentButton3" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
                 <Anchor point="LEFT" relativeTo="$parentButton2" relativePoint="RIGHT" x="4" />
             </Anchors>
-        </Button>
+        </ItemButton>
 
-        <Button name="$parentButton4" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
+        <ItemButton name="$parentButton4" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
                 <Anchor point="LEFT" relativeTo="$parentButton3" relativePoint="RIGHT" x="4" />
             </Anchors>
-        </Button>
+        </ItemButton>
 
-        <Button name="$parentButton5" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
+        <ItemButton name="$parentButton5" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
                 <Anchor point="LEFT" relativeTo="$parentButton4" relativePoint="RIGHT" x="4" />
             </Anchors>
-        </Button>
+        </ItemButton>
 
-        <Button name="$parentButton6" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
+        <ItemButton name="$parentButton6" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
                 <Anchor point="LEFT" relativeTo="$parentButton5" relativePoint="RIGHT" x="4" />
             </Anchors>
-        </Button>
+        </ItemButton>
 
-        <Button name="$parentButton7" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
+        <ItemButton name="$parentButton7" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
                 <Anchor point="LEFT" relativeTo="$parentButton6" relativePoint="RIGHT" x="4" />
             </Anchors>
-        </Button>
+        </ItemButton>
 
-        <Button name="$parentButton8" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
+        <ItemButton name="$parentButton8" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
                 <Anchor point="LEFT" relativeTo="$parentButton7" relativePoint="RIGHT" x="4" />
             </Anchors>
-        </Button>
+        </ItemButton>
     </Frames>
     <Scripts>
         <OnLoad function="LiteBagPanel_OnLoad" />

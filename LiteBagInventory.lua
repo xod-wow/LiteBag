@@ -29,12 +29,12 @@ local CLOSE_EVENTS = {
 -- This updates the highlights for the bag open/closed buttons that are
 -- part of the MainMenuBar at the bottom in the default Blizzard interface.
 
-local function SetMainMenuBarButtons(self, checked)
-    MainMenuBarBackpackButton:SetChecked(checked)
-    CharacterBag0Slot:SetChecked(checked)
-    CharacterBag1Slot:SetChecked(checked)
-    CharacterBag2Slot:SetChecked(checked)
-    CharacterBag3Slot:SetChecked(checked)
+local function SetMainMenuBarButtons(checked)
+    MainMenuBarBackpackButton.SlotHighlightTexture:SetShown(checked)
+    CharacterBag0Slot.SlotHighlightTexture:SetShown(checked)
+    CharacterBag1Slot.SlotHighlightTexture:SetShown(checked)
+    CharacterBag2Slot.SlotHighlightTexture:SetShown(checked)
+    CharacterBag3Slot.SlotHighlightTexture:SetShown(checked)
 end
 
 function LiteBagInventory_OnLoad(self)
