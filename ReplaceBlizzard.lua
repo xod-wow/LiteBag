@@ -39,21 +39,18 @@ local hiddenBagParent = CreateFrame('Frame')
 
 local function ReplaceBlizzardInventory()
     local hideFunc =
-        function (caller, forceUpdate)
+        function (caller)
             LiteBagInventory:Hide()
-            if forceUpdate then LiteBagFrame_Update(LiteBagInventory) end
         end
-    local showFunc = function (caller, forceUpdate)
+    local showFunc = function (caller)
             LiteBagInventory:Show()
-            if forceUpdate then LiteBagFrame_Update(LiteBagInventory) end
         end
-    local toggleFunc = function (caller, forceUpdate) 
+    local toggleFunc = function (caller)
             if LiteBagInventory:IsShown() then
                 LiteBagInventory:Hide()
             else
                 LiteBagInventory:Show()
             end
-            if forceUpdate then LiteBagFrame_Update(LiteBagInventory) end
         end
 
     hiddenBagParent:Hide()
