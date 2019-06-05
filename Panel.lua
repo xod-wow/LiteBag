@@ -489,6 +489,8 @@ function LiteBagPanel_OnEvent(self, event, ...)
         LiteBagPanel_UpdateBagSlotCounts(self)
         LiteBagPanel_UpdateSizeAndLayout(self)
         LiteBagPanel_UpdateItemButtons(self)
+        local frame = self:GetParent()
+        frame:SetHeight(self:GetHeight())
         return
     end
 
