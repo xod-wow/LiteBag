@@ -1,4 +1,4 @@
-## Interface: 80200
+## Interface: 80205
 ## Title: LiteBag
 ## Version: @project-version@
 ## Author: Xodiv of Proudmoore
