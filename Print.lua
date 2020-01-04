@@ -15,16 +15,9 @@ local addonName, addonTable = ...
     Printing to active chat frame.
 ----------------------------------------------------------------------------]]--
 
-local function ActiveChatFrame()
-    for i = 1, NUM_CHAT_WINDOWS do
-        local f = _G['ChatFrame'..i]
-        if f and f:IsShown() then return f end
-    end
-    return DEFAULT_CHAT_FRAME
-end
-
 function LiteBag_Print(...)
-    ActiveChatFrame():AddMessage('|cff00ff00LiteBag:|r ' .. format(...))
+    local f = SELECTED_CHAT_FRAME or DEFAULT_CHAT_FRAME
+    f:AddMessage('|cff00ff00LiteBag:|r ' .. format(...))
 end
 
 function LiteBag_Debug(...)
