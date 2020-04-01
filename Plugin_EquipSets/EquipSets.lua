@@ -21,7 +21,7 @@
 local function GetEquipmentSetMemberships(bag, slot)
     local ids = { }
 
-    for _, id in ipairs(C_EquipmentSet.GetEquipmentSetIDs()) do
+    for i, id in ipairs(C_EquipmentSet.GetEquipmentSetIDs()) do
         local locations = C_EquipmentSet.GetItemLocations(id) or {}
         for _, l in pairs(locations) do
             local lplayer, lbank, lbags, lvoid, lslot, lbag = EquipmentManager_UnpackLocation(l)
