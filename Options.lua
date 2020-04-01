@@ -133,8 +133,8 @@ function LiteBag_OptionSlashFunc(argstr)
     end
 
     if cmd == 'inventory.gaps' then
-        x = tonumber(arg1)
-        y = tonumber(arg2)
+        local x = tonumber(arg1)
+        local y = tonumber(arg2)
         if x == 0 then x = nil end
         if y == 0 then y = nil end
         LiteBag_SetFrameOption(LiteBagInventoryPanel, 'xbreak', x)

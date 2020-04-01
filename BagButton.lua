@@ -67,7 +67,6 @@ function LiteBagBagButton_Update(self)
 
     LiteBagBagButton_SetFilterIcon(self)
 
-    local texture = _G[self:GetName()..'IconTexture']
     local textureName = GetInventoryItemTexture('player', self.slotID)
 
     local numBankSlots, bankFull = GetNumBankSlots()

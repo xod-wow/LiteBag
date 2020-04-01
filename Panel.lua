@@ -207,8 +207,6 @@ LAYOUTS.bag =
 function LiteBagPanel_ApplyLayout(self, layoutGrid)
     local anchor, m, xOff, yOff
 
-    local maxX, maxY = 0, 0
-
     if layoutGrid.reverseDirection then
         anchor, m, xOff, yOff = 'BOTTOMRIGHT', -1, -RIGHT_OFFSET, -BOTTOM_OFFSET
     else

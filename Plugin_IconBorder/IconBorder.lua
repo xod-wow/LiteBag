@@ -22,7 +22,7 @@ local function Update(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
-    local _, _, _, quality, _, _, _, isFiltered, noValue, itemID = GetContainerItemInfo(bag, slot)
+    local quality = select(4, GetContainerItemInfo(bag, slot))
 
     if not quality then
         return

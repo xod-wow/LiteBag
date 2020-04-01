@@ -150,12 +150,7 @@ function LiteBagItemButton_UpdateQuality(self)
 end
 
 function LiteBagItemButton_UpdateContext(self)
-    local bag = self:GetParent():GetID()
-    local slot = self:GetID()
-    local itemLocation = ItemLocation:CreateFromBagAndSlot(bag, slot)
-
     self:UpdateItemContextMatching()
-
     LiteBagItemButton_CallHooks('LiteBagItemButton_UpdateContext', self)
 end
 
