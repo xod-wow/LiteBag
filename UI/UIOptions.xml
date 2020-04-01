@@ -51,7 +51,7 @@
                 <Anchor point="TOPLEFT" relativePoint="CENTER" x="6" y="-6" />
             </Anchors>
 
-            <Backdrop edgefile="Interface\Tooltips\UI-Tooltip-Border" ile="true">
+            <Backdrop edgefile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
                 <EdgeSize val="16" />
                 <TileSize val="16" />
                 <BackgroundInsets>
