@@ -537,10 +537,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
     end
 
     if event == 'MERCHANT_SHOW' or event == 'MERCHANT_CLOSED' then
-        local bag = GetBagFrame(self, arg1)
-        if bag then
-            LiteBagPanel_UpdateBag(bag)
-        end
+        LiteBagPanel_UpdateAllBags(self)
         return
     end
 
