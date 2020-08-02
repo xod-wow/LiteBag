@@ -324,114 +324,114 @@ function LiteBagPanel_UpdateBag(self)
         local id = self:GetID()
         local name, itemButton
         local texture, itemCount, locked, quality, readable, itemLink, isFiltered, noValue, itemID, _
-        local isQuestItem, questId, isActive, questTexture;
-        local battlepayItemTexture, newItemTexture, flash, newItemAnim;
-        local tooltipOwner = GameTooltip:GetOwner();
-        local baseSize = GetContainerNumSlots(id);
+        local isQuestItem, questId, isActive, questTexture
+        local battlepayItemTexture, newItemTexture, flash, newItemAnim
+        local tooltipOwner = GameTooltip:GetOwner()
+        local baseSize = GetContainerNumSlots(id)
 
-        ContainerFrame_CloseTutorial(self);
+        ContainerFrame_CloseTutorial(self)
 
-        local shouldDoAzeriteChecks = not Kiosk.IsEnabled() and not GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_AZERITE_ITEM_IN_SLOT) and not ContainerFrame_IsTutorialShown();
+        local shouldDoAzeriteChecks = not Kiosk.IsEnabled() and not GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_AZERITE_ITEM_IN_SLOT) and not ContainerFrame_IsTutorialShown()
 
         for i = 1, self.size do
             itemButton = self.itemButtons[i]
             name  = itemButton:GetName()
 
-            texture, itemCount, locked, quality, readable, _, itemLink, isFiltered, noValue, itemID = GetContainerItemInfo(id, itemButton:GetID());
-            isQuestItem, questId, isActive = GetContainerItemQuestInfo(id, itemButton:GetID());
+            texture, itemCount, locked, quality, readable, _, itemLink, isFiltered, noValue, itemID = GetContainerItemInfo(id, itemButton:GetID())
+            isQuestItem, questId, isActive = GetContainerItemQuestInfo(id, itemButton:GetID())
 
-            SetItemButtonTexture(itemButton, texture);
-            SetItemButtonQuality(itemButton, quality, itemLink);
-            SetItemButtonCount(itemButton, itemCount);
-            SetItemButtonDesaturated(itemButton, locked);
+            SetItemButtonTexture(itemButton, texture)
+            SetItemButtonQuality(itemButton, quality, itemLink)
+            SetItemButtonCount(itemButton, itemCount)
+            SetItemButtonDesaturated(itemButton, locked)
 
-            questTexture = _G[name.."IconQuestTexture"];
+            questTexture = _G[name.."IconQuestTexture"]
             if ( questId and not isActive ) then
-                questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG);
-                questTexture:Show();
+                questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG)
+                questTexture:Show()
             elseif ( questId or isQuestItem ) then
-                questTexture:SetTexture(TEXTURE_ITEM_QUEST_BORDER);
-                questTexture:Show();
+                questTexture:SetTexture(TEXTURE_ITEM_QUEST_BORDER)
+                questTexture:Show()
             else
-                questTexture:Hide();
+                questTexture:Hide()
             end
 
-            local isNewItem = C_NewItems.IsNewItem(id, itemButton:GetID());
-            local isBattlePayItem = IsBattlePayItem(id, itemButton:GetID());
+            local isNewItem = C_NewItems.IsNewItem(id, itemButton:GetID())
+            local isBattlePayItem = IsBattlePayItem(id, itemButton:GetID())
 
-            battlepayItemTexture = itemButton.BattlepayItemTexture;
-            newItemTexture = itemButton.NewItemTexture;
-            flash = itemButton.flashAnim;
-            newItemAnim = itemButton.newitemglowAnim;
+            battlepayItemTexture = itemButton.BattlepayItemTexture
+            newItemTexture = itemButton.NewItemTexture
+            flash = itemButton.flashAnim
+            newItemAnim = itemButton.newitemglowAnim
 
             if ( isNewItem ) then
                 if (isBattlePayItem) then
-                    newItemTexture:Hide();
-                    battlepayItemTexture:Show();
+                    newItemTexture:Hide()
+                    battlepayItemTexture:Show()
                 else
                     if (quality and NEW_ITEM_ATLAS_BY_QUALITY[quality]) then
-                        newItemTexture:SetAtlas(NEW_ITEM_ATLAS_BY_QUALITY[quality]);
+                        newItemTexture:SetAtlas(NEW_ITEM_ATLAS_BY_QUALITY[quality])
                     else
-                        newItemTexture:SetAtlas("bags-glow-white");
+                        newItemTexture:SetAtlas("bags-glow-white")
                     end
-                    battlepayItemTexture:Hide();
-                    newItemTexture:Show();
+                    battlepayItemTexture:Hide()
+                    newItemTexture:Show()
                 end
                 if (not flash:IsPlaying() and not newItemAnim:IsPlaying()) then
-                    flash:Play();
-                    newItemAnim:Play();
+                    flash:Play()
+                    newItemAnim:Play()
                 end
             else
-                battlepayItemTexture:Hide();
-                newItemTexture:Hide();
+                battlepayItemTexture:Hide()
+                newItemTexture:Hide()
                 if (flash:IsPlaying() or newItemAnim:IsPlaying()) then
-                    flash:Stop();
-                    newItemAnim:Stop();
+                    flash:Stop()
+                    newItemAnim:Stop()
                 end
             end
 
-            itemButton.JunkIcon:Hide();
+            itemButton.JunkIcon:Hide()
 
-            local itemLocation = ItemLocation:CreateFromBagAndSlot(self:GetID(), itemButton:GetID());
+            local itemLocation = ItemLocation:CreateFromBagAndSlot(self:GetID(), itemButton:GetID())
             if C_Item.DoesItemExist(itemLocation) then
-                local isJunk = quality == Enum.ItemQuality.Poor and not noValue and MerchantFrame:IsShown();
-                itemButton.JunkIcon:SetShown(isJunk);
+                local isJunk = quality == Enum.ItemQuality.Poor and not noValue and MerchantFrame:IsShown()
+                itemButton.JunkIcon:SetShown(isJunk)
             end
 
-            itemButton:UpdateItemContextMatching();
+            itemButton:UpdateItemContextMatching()
 
-            ContainerFrameItemButton_UpdateItemUpgradeIcon(itemButton);
+            ContainerFrameItemButton_UpdateItemUpgradeIcon(itemButton)
 
             if ( texture ) then
-                ContainerFrame_UpdateCooldown(id, itemButton);
-                itemButton.hasItem = 1;
+                ContainerFrame_UpdateCooldown(id, itemButton)
+                itemButton.hasItem = 1
             else
-                _G[name.."Cooldown"]:Hide();
-                itemButton.hasItem = nil;
+                _G[name.."Cooldown"]:Hide()
+                itemButton.hasItem = nil
             end
-            itemButton.readable = readable;
+            itemButton.readable = readable
 
             if ( itemButton == tooltipOwner ) then
                 if (GetContainerItemInfo(self:GetID(), itemButton:GetID())) then
-                    itemButton.UpdateTooltip(itemButton);
+                    itemButton.UpdateTooltip(itemButton)
                 else
-                    GameTooltip:Hide();
+                    GameTooltip:Hide()
                 end
             end
 
-            itemButton:SetMatchesSearch(not isFiltered);
+            itemButton:SetMatchesSearch(not isFiltered)
             if ( not isFiltered ) then
                 if shouldDoAzeriteChecks then
-                    shouldDoAzeriteChecks = ContainerFrame_ConsiderItemButtonForAzeriteTutorial(itemButton, itemID);
+                    shouldDoAzeriteChecks = ContainerFrame_ConsiderItemButtonForAzeriteTutorial(itemButton, itemID)
                 end
             end
 
             LiteBagItemButton_CallHooks('LiteBagItemButton_Update', itemButton)
         end
 
-        local bagButton = ContainerFrame_GetBagButton(self);
+        local bagButton = ContainerFrame_GetBagButton(self)
         if bagButton then
-            bagButton:UpdateItemContextMatching();
+            bagButton:UpdateItemContextMatching()
         end
 end
 
