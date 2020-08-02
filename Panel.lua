@@ -94,8 +94,8 @@ function LiteBagPanel_UpdateBagSlotCounts(self)
             size = size + 1
             self.itemButtons[size] = bag.itemButtons[i]
         end
-        for i,b in ipairs(self.itemButtons) do
-            b:SetShown(i <= self.size)
+        for i,b in ipairs(bag.itemButtons) do
+            b:SetShown(i <= bag.size)
         end
     end
     self.size = size
@@ -236,12 +236,6 @@ local function LiteBagPanel_ApplyLayout(self, layoutGrid)
         n = n + 1
     end
 
-    -- Hide the leftovers
-    while n <= #self.itemButtons do
-        self.itemButtons[n]:Hide()
-        n = n + 1
-    end
-
     -- Return the total panel width and height
     return layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET,
            layoutGrid.totalHeight + TOP_OFFSET + BOTTOM_OFFSET
@@ -319,19 +313,17 @@ function LiteBagPanel_UnhighlightBagButtons(self, bagID)
 end
 
 function LiteBagPanel_ClearNewItems(self)
-    for i, b in ipairs(self.itemButtons) do
-        if i > self.size then return end
-        LiteBagItemButton_ClearNewItem(b)
+    for i = 1, self.size do
+        LiteBagItemButton_ClearNewItem(self.itemButtons[i])
     end
 end
 
 -- This is a modied copy of ContainerFrame_Update from FrameXML/ContainerFrame.lua
 
 function LiteBagPanel_UpdateBag(self)
-        local id = self:GetID();
-        local name = self:GetName();
-        local itemButton;
-        local texture, itemCount, locked, quality, readable, itemLink, isFiltered, noValue, itemID, _;
+        local id = self:GetID()
+        local name, itemButton
+        local texture, itemCount, locked, quality, readable, itemLink, isFiltered, noValue, itemID, _
         local isQuestItem, questId, isActive, questTexture;
         local battlepayItemTexture, newItemTexture, flash, newItemAnim;
         local tooltipOwner = GameTooltip:GetOwner();
@@ -341,8 +333,9 @@ function LiteBagPanel_UpdateBag(self)
 
         local shouldDoAzeriteChecks = not Kiosk.IsEnabled() and not GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_AZERITE_ITEM_IN_SLOT) and not ContainerFrame_IsTutorialShown();
 
-        for i, itemButton in ipairs(self.itemButtons) do
-            local name  = itemButton:GetName()
+        for i = 1, self.size do
+            itemButton = self.itemButtons[i]
+            name  = itemButton:GetName()
 
             texture, itemCount, locked, quality, readable, _, itemLink, isFiltered, noValue, itemID = GetContainerItemInfo(id, itemButton:GetID());
             isQuestItem, questId, isActive = GetContainerItemQuestInfo(id, itemButton:GetID());
