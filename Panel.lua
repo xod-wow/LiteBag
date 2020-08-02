@@ -32,6 +32,7 @@ function LiteBagPanel_Initialize(self, bagIDs)
         local name = format('%sContainerFrame%d', self:GetName(), i)
         local bagFrame = CreateFrame('Frame', name, self)
         bagFrame:SetID(id)
+        bagFrame.itemButtons = { }
         tinsert(self.bagFrames, bagFrame)
     end
 
@@ -50,7 +51,6 @@ function LiteBagPanel_Initialize(self, bagIDs)
             b:SetID(bagIDs[i])
             LiteBagBagButton_Update(b)
             b:Show()
-            self.itemButtonsByBag[bagIDs[i]] = { }
         else
             b:Hide()
         end
@@ -62,31 +62,43 @@ function LiteBagPanel_Initialize(self, bagIDs)
     self:RegisterEvent('PLAYER_LOGIN')
 end
 
+local function GetBagFrame(self, id)
+    for _, bag in ipairs(self.bagFrames) do
+        if bag:GetID() == id then
+            return bag
+        end
+    end
+end
+
 function LiteBagPanel_UpdateBagSlotCounts(self)
     LiteBag_Debug("Panel UpdateBagSlotCounts " .. self:GetName())
-    local n = 0
+    local size = 0
 
     for _, b in ipairs(self.bagButtons) do
-        wipe(self.itemButtonsByBag[b:GetID()])
         LiteBagBagButton_Update(b)
     end
 
+    wipe(self.itemButtons)
+
     for _, bag in ipairs(self.bagFrames) do
         local bagID = bag:GetID()
-        for slot = 1, GetContainerNumSlots(bagID) do
-            n = n + 1
-            if not self.itemButtons[n] then
-                local name = format('%sItemButton%d', self:GetName(), n)
-                self.itemButtons[n] = CreateFrame('ItemButton', name, nil, 'LiteBagItemButtonTemplate')
-                self.itemButtons[n]:SetSize(37, 37)
+        bag.size = GetContainerNumSlots(bagID)
+        for i = 1, GetContainerNumSlots(bagID) do
+            if not bag.itemButtons[i] then
+                local name = format('%sItem%d', bag:GetName(), i)
+                bag.itemButtons[i] = CreateFrame('ItemButton', name, nil, 'LiteBagItemButtonTemplate')
+                bag.itemButtons[i]:SetSize(37, 37)
             end
-            self.itemButtons[n]:SetID(slot)
-            self.itemButtons[n]:SetParent(bag)
-            self.itemButtonsByBag[bagID][slot] = self.itemButtons[n]
+            bag.itemButtons[i]:SetID(i)
+            bag.itemButtons[i]:SetParent(bag)
+            size = size + 1
+            self.itemButtons[size] = bag.itemButtons[i]
+        end
+        for i,b in ipairs(self.itemButtons) do
+            b:SetShown(i <= self.size)
         end
     end
-
-    self.size = n
+    self.size = size
 end
 
 local function inDiffBag(a, b)
@@ -104,8 +116,8 @@ BUTTONORDERS.blizzard =
     function (self)
         local itemButtons = { }
         for b = #self.bagFrames, 1, -1 do
-            local bagID = self.bagFrames[b]:GetID()
-            for _, b in ipairs(self.itemButtonsByBag[bagID]) do
+            local bag = self.bagFrames[b]
+            for _, b in ipairs(bag.itemButtons) do
                 tinsert(itemButtons, b)
             end
         end
@@ -204,7 +216,7 @@ LAYOUTS.bag =
         return grid
     end
 
-function LiteBagPanel_ApplyLayout(self, layoutGrid)
+local function LiteBagPanel_ApplyLayout(self, layoutGrid)
     local anchor, m, xOff, yOff
 
     if layoutGrid.reverseDirection then
@@ -293,16 +305,16 @@ function LiteBagPanel_ResizeToFrame(self, width, height)
 end
 
 function LiteBagPanel_HighlightBagButtons(self, bagID)
-    for i, b in ipairs(self.itemButtonsByBag[bagID]) do
-        if i > self.size then return end
-        b:LockHighlight()
+    local bag = GetBagFrame(self, bagID)
+    for i = 1, bag.size do
+        bag.itemButtons[i]:LockHighlight()
     end
 end
 
 function LiteBagPanel_UnhighlightBagButtons(self, bagID)
-    for i, b in ipairs(self.itemButtonsByBag[bagID]) do
-        if i > self.size then return end
-        b:UnlockHighlight()
+    local bag = GetBagFrame(self, bagID)
+    for i = 1, bag.size do
+        bag.itemButtons[i]:UnlockHighlight()
     end
 end
 
@@ -313,76 +325,135 @@ function LiteBagPanel_ClearNewItems(self)
     end
 end
 
-function LiteBagPanel_UpdateItemButtonsByBag(self, bag)
-    for _,b in ipairs(self.bagFrames) do
-        if b:GetID() == bag then
-            ContainerFrame_CloseSpecializedTutorialForItem(b)
+-- This is a modied copy of ContainerFrame_Update from FrameXML/ContainerFrame.lua
+
+function LiteBagPanel_UpdateBag(self)
+        local id = self:GetID();
+        local name = self:GetName();
+        local itemButton;
+        local texture, itemCount, locked, quality, readable, itemLink, isFiltered, noValue, itemID, _;
+        local isQuestItem, questId, isActive, questTexture;
+        local battlepayItemTexture, newItemTexture, flash, newItemAnim;
+        local tooltipOwner = GameTooltip:GetOwner();
+        local baseSize = GetContainerNumSlots(id);
+
+        ContainerFrame_CloseTutorial(self);
+
+        local shouldDoAzeriteChecks = not Kiosk.IsEnabled() and not GetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_AZERITE_ITEM_IN_SLOT) and not ContainerFrame_IsTutorialShown();
+
+        for i, itemButton in ipairs(self.itemButtons) do
+            local name  = itemButton:GetName()
+
+            texture, itemCount, locked, quality, readable, _, itemLink, isFiltered, noValue, itemID = GetContainerItemInfo(id, itemButton:GetID());
+            isQuestItem, questId, isActive = GetContainerItemQuestInfo(id, itemButton:GetID());
+
+            SetItemButtonTexture(itemButton, texture);
+            SetItemButtonQuality(itemButton, quality, itemLink);
+            SetItemButtonCount(itemButton, itemCount);
+            SetItemButtonDesaturated(itemButton, locked);
+
+            questTexture = _G[name.."IconQuestTexture"];
+            if ( questId and not isActive ) then
+                questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG);
+                questTexture:Show();
+            elseif ( questId or isQuestItem ) then
+                questTexture:SetTexture(TEXTURE_ITEM_QUEST_BORDER);
+                questTexture:Show();
+            else
+                questTexture:Hide();
+            end
+
+            local isNewItem = C_NewItems.IsNewItem(id, itemButton:GetID());
+            local isBattlePayItem = IsBattlePayItem(id, itemButton:GetID());
+
+            battlepayItemTexture = itemButton.BattlepayItemTexture;
+            newItemTexture = itemButton.NewItemTexture;
+            flash = itemButton.flashAnim;
+            newItemAnim = itemButton.newitemglowAnim;
+
+            if ( isNewItem ) then
+                if (isBattlePayItem) then
+                    newItemTexture:Hide();
+                    battlepayItemTexture:Show();
+                else
+                    if (quality and NEW_ITEM_ATLAS_BY_QUALITY[quality]) then
+                        newItemTexture:SetAtlas(NEW_ITEM_ATLAS_BY_QUALITY[quality]);
+                    else
+                        newItemTexture:SetAtlas("bags-glow-white");
+                    end
+                    battlepayItemTexture:Hide();
+                    newItemTexture:Show();
+                end
+                if (not flash:IsPlaying() and not newItemAnim:IsPlaying()) then
+                    flash:Play();
+                    newItemAnim:Play();
+                end
+            else
+                battlepayItemTexture:Hide();
+                newItemTexture:Hide();
+                if (flash:IsPlaying() or newItemAnim:IsPlaying()) then
+                    flash:Stop();
+                    newItemAnim:Stop();
+                end
+            end
+
+            itemButton.JunkIcon:Hide();
+
+            local itemLocation = ItemLocation:CreateFromBagAndSlot(self:GetID(), itemButton:GetID());
+            if C_Item.DoesItemExist(itemLocation) then
+                local isJunk = quality == Enum.ItemQuality.Poor and not noValue and MerchantFrame:IsShown();
+                itemButton.JunkIcon:SetShown(isJunk);
+            end
+
+            itemButton:UpdateItemContextMatching();
+
+            ContainerFrameItemButton_UpdateItemUpgradeIcon(itemButton);
+
+            if ( texture ) then
+                ContainerFrame_UpdateCooldown(id, itemButton);
+                itemButton.hasItem = 1;
+            else
+                _G[name.."Cooldown"]:Hide();
+                itemButton.hasItem = nil;
+            end
+            itemButton.readable = readable;
+
+            if ( itemButton == tooltipOwner ) then
+                if (GetContainerItemInfo(self:GetID(), itemButton:GetID())) then
+                    itemButton.UpdateTooltip(itemButton);
+                else
+                    GameTooltip:Hide();
+                end
+            end
+
+            itemButton:SetMatchesSearch(not isFiltered);
+            if ( not isFiltered ) then
+                if shouldDoAzeriteChecks then
+                    shouldDoAzeriteChecks = ContainerFrame_ConsiderItemButtonForAzeriteTutorial(itemButton, itemID);
+                end
+            end
+
+            LiteBagItemButton_CallHooks('LiteBagItemButton_Update', itemButton)
         end
-    end
-    for _,b in ipairs(self.itemButtonsByBag[bag] or {}) do
-        LiteBagItemButton_Update(b)
-    end
+
+        local bagButton = ContainerFrame_GetBagButton(self);
+        if bagButton then
+            bagButton:UpdateItemContextMatching();
+        end
 end
 
-function LiteBagPanel_UpdateItemButtons(self)
-    -- The owner is set to the itemButton parent so we have to call
-    -- this once per bag.
+function LiteBagPanel_UpdateAllBags(self)
     for _, b in ipairs(self.bagFrames) do
-        ContainerFrame_CloseSpecializedTutorialForItem(b)
+        LiteBagPanel_UpdateBag(b)
     end
-
     for i, b in ipairs(self.itemButtons) do
-        if i > self.size then return end
-        LiteBagItemButton_Update(b)
-    end
-end
-
-function LiteBagPanel_UpdateItemUpgrades(self)
-    for i, b in ipairs(self.itemButtons)  do
-        if i > self.size then return end
-        LiteBagItemButton_UpdateItemUpgrade(b)
-    end
-end
-
-function LiteBagPanel_UpdateCooldowns(self)
-    for i, b in ipairs(self.itemButtons)  do
-        if i > self.size then return end
-        LiteBagItemButton_UpdateCooldown(b)
-    end
-end
-
-function LiteBagPanel_UpdateSearchResults(self)
-    for i, b in ipairs(self.itemButtons) do
-        if i > self.size then return end
-        LiteBagItemButton_UpdateFiltered(b)
-    end
-end
-
-function LiteBagPanel_UpdateLocked(self)
-    for i, b in ipairs(self.itemButtons) do
-        if i > self.size then return end
-        LiteBagItemButton_UpdateLocked(b)
-    end
-end
-
-function LiteBagPanel_UpdateQuality(self)
-    for i, b in ipairs(self.itemButtons) do
-        if i > self.size then return end
-        LiteBagItemButton_UpdateQuality(b)
-    end
-end
-
-function LiteBagPanel_UpdateQuestTextures(self)
-    for i, b in ipairs(self.itemButtons) do
-        if i > self.size then return end
-        LiteBagItemButton_UpdateQuestTexture(b)
+        if i > self.size then b:Hide() end
     end
 end
 
 function LiteBagPanel_OnLoad(self)
     self.size = 0
     self.itemButtons = { }
-    self.itemButtonsByBag = { }
     self.bagFrames = { }
 end
 
@@ -395,7 +466,7 @@ function LiteBagPanel_OnShow(self)
     LiteBag_Debug("Panel OnShow " .. self:GetName())
     LiteBagPanel_UpdateBagSlotCounts(self)
     LiteBagPanel_UpdateSizeAndLayout(self)
-    LiteBagPanel_UpdateItemButtons(self)
+    LiteBagPanel_UpdateAllBags(self)
 
     self:RegisterEvent('BAG_CLOSED')
     self:RegisterEvent('BAG_UPDATE')
@@ -421,16 +492,6 @@ end
 
 function LiteBagPanel_OnHide(self)
     LiteBag_Debug("Panel OnHide " .. self:GetName())
-    -- Judging by the code in FrameXML/ContainerFrame.lua items are tagged
-    -- by the server as 'new' in some cases, and you're supposed to clear
-    -- the new flag after you see it the first time.
-    LiteBagPanel_ClearNewItems(self)
-
-    for _, b in ipairs(self.bagFrames) do
-        -- The owner is set to the itemButton parent so we have to call
-        -- this once per bag.
-        ContainerFrame_CloseSpecializedTutorialForItem(b)
-    end
 
     self:UnregisterEvent('BAG_CLOSED')
     self:UnregisterEvent('BAG_UPDATE')
@@ -452,6 +513,12 @@ function LiteBagPanel_OnHide(self)
     end
 
     for e in pairs(PluginUpdateEvents) do self:UnregisterEvent(e) end
+
+    for _, bag in ipairs(self.bagFrames) do
+        ContainerFrame_CloseTutorial(bag)
+        UpdateNewItemList(bag)
+    end
+
 end
 
 -- These events are only registered while the panel is shown, so we can call
@@ -459,7 +526,7 @@ end
 --
 -- Some events that fire a lot have specific code to just update the
 -- bags or changes that they fire for (where possible).  Others are
--- rare enough it's OK to call LiteBagPanel_UpdateItemButtons to do everything.
+-- rare enough it's OK to call LiteBagPanel_UpdateAllBags to do everything.
 function LiteBagPanel_OnEvent(self, event, ...)
     local arg1, arg2 = ...
     LiteBag_Debug(format("Panel OnEvent %s %s %s %s", self:GetName(), event, tostring(arg1), tostring(arg2)))
@@ -470,7 +537,10 @@ function LiteBagPanel_OnEvent(self, event, ...)
     end
 
     if event == 'MERCHANT_SHOW' or event == 'MERCHANT_CLOSED' then
-        LiteBagPanel_UpdateQuality(self)
+        local bag = GetBagFrame(self, arg1)
+        if bag then
+            LiteBagPanel_UpdateBag(bag)
+        end
         return
     end
 
@@ -486,39 +556,41 @@ function LiteBagPanel_OnEvent(self, event, ...)
         self:UnregisterEvent('BAG_UPDATE_DELAYED')
         LiteBagPanel_UpdateBagSlotCounts(self)
         LiteBagPanel_UpdateSizeAndLayout(self)
-        LiteBagPanel_UpdateItemButtons(self)
+        LiteBagPanel_UpdateAllBags(self)
         local frame = self:GetParent()
         frame:SetHeight(self:GetHeight())
         return
     end
 
-    -- XXX FIXME XXX
-    -- Once had the vendor disappear in the middle of a mass sale and
-    -- the items did not unlock despite actually selling.
-
     if event == 'ITEM_LOCK_CHANGED' then
-        -- bag, slot = arg1, arg2
-        if arg1 and arg2 and self.itemButtonsByBag[arg1] then
-            if arg1 == BANK_CONTAINER and arg2 > NUM_BANKGENERIC_SLOTS then
-                return
-            end
-            LiteBagItemButton_UpdateLocked(self.itemButtonsByBag[arg1][arg2])
+        if arg1 == BANK_CONTAINER and arg2 > NUM_BANKGENERIC_SLOTS then
+            return
+        end
+        local bag = GetBagFrame(self, arg1)
+        if arg2 and bag then
+            -- the bags are packed in a weird way inside the blizz containers
+            -- so we have to do some arithmetic to make it come out right
+            ContainerFrame_UpdateLockedItem(bag, bag.size + 1 - arg2)
         end
         return
     end
 
     if event == 'BAG_UPDATE_COOLDOWN' then
-        LiteBagPanel_UpdateCooldowns(self)
+        for _, bag in ipairs(self.bagFrames) do
+            ContainerFrame_UpdateCooldowns(bag)
+        end
         return
     end
 
     if event == 'QUEST_ACCEPTED' or (event == 'UNIT_QUEST_LOG_CHANGED' and arg1 == 'player') then
-        LiteBagPanel_UpdateQuestTextures(self)
+        LiteBagPanel_Update(self)
         return
     end
 
     if event == 'INVENTORY_SEARCH_UPDATE' then
-        LiteBagPanel_UpdateSearchResults(self)
+        for _, bag in ipairs(self.bagFrames) do
+            ContainerFrame_UpdateSearchResults(bag)
+        end
         return
     end
 
@@ -528,31 +600,39 @@ function LiteBagPanel_OnEvent(self, event, ...)
             if arg1 > NUM_BANKGENERIC_SLOTS then
                 LiteBagPanel_UpdateBagSlotCounts(self)
             end
-            LiteBagPanel_UpdateItemButtons(self)
+            LiteBagPanel_UpdateAllBags(self)
         end
         return
     end
 
     if event == 'UNIT_INVENTORY_CHANGED' or event == 'PLAYER_SPECIALIZATION_CHANGED' then
-        LiteBagPanel_UpdateItemUpgrades(self)
+        for _, bag in ipairs(self.bagFrames) do
+            ContainerFrame_UpdateItemUpgradeIcons(bag)
+        end
         return
     end
 
     if event == 'BAG_UPDATE' then
-        -- bag = arg1
-        LiteBagPanel_UpdateItemButtonsByBag(self, arg1)
+        local bag = GetBagFrame(self, arg1)
+        if bag then
+            LiteBagPanel_UpdateBag(bag)
+        end
         return
     end
 
     if event == 'BAG_SLOT_FLAGS_UPDATED' then
-        -- bag = arg1
-        LiteBagPanel_UpdateItemButtonsByBag(self, arg1)
+        local bag = GetBagFrame(self, arg1)
+        if bag then
+            LiteBagPanel_UpdateBag(bag)
+        end
         return
     end
 
     if event == 'BANK_BAG_SLOT_FLAGS_UPDATED' then
-        -- bag = arg1 + NUM_BAG_SLOTS
-        LiteBagPanel_UpdateItemButtonsByBag(self, arg1 + NUM_BAG_SLOTS)
+        local bag = GetBagFrame(self, arg1 + NUM_BAG_SLOTS)
+        if bag then
+            LiteBagPanel_UpdateBag(bag)
+        end
         return
     end
 
@@ -560,5 +640,5 @@ function LiteBagPanel_OnEvent(self, event, ...)
     --
     -- BAG_NEW_ITEMS_UPDATED 
 
-    LiteBagPanel_UpdateItemButtons(self)
+    LiteBagPanel_UpdateAllBags(self)
 end

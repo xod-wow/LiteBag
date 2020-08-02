@@ -4,13 +4,7 @@
 
 <Script file="ItemButton.lua"/>
 
-<Texture name="LiteBagItemButtonBackgroundTexture"
-         file="Interface\Buttons\UI-Slot-Background"
-         virtual="true" />
-
 <ItemButton name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" hidden="true" virtual="true">
-
-    <Size x="37" y="37" />
 
     <Layers>
         <Layer level="BACKGROUND">
@@ -24,12 +18,6 @@
             </Texture>
         </Layer>
     </Layers>
-
-    <!-- Note: Can't inherit OnClick/OnDrag scripts because it's secure. -->
-    <Scripts>
-        <OnLoad function="LiteBagItemButton_OnLoad" />
-        <OnEnter function="LiteBagItemButton_OnEnter" />
-    </Scripts>
 
 </ItemButton>
 

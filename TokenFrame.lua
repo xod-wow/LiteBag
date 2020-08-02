@@ -13,16 +13,15 @@
 
 function LiteBagTokensFrame_Update(self)
     local watchButton
-    local name, count, icon, currencyID
 
     self.shouldShow = false
     for i = 1,MAX_WATCHED_TOKENS do
-        name, count, icon, currencyID = GetBackpackCurrencyInfo(i)
+        local info = C_CurrencyInfo.GetBackpackCurrencyInfo(i)
         watchButton = _G[self:GetName()..'Token'..i]
-        if name then
-            watchButton.icon:SetTexture(icon)
-            watchButton.count:SetText(count <= 99999 and count or '*')
-            watchButton.currencyID = currencyID
+        if info then
+            watchButton.icon:SetTexture(info.iconFileID)
+            watchButton.count:SetText(info.quantity <= 99999 and info.quantity or '*')
+            watchButton.currencyID = info.currencyTypesID
             watchButton:Show()
             self.shouldShow = true
         else
