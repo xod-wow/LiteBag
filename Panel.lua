@@ -436,11 +436,8 @@ function LiteBagPanel_UpdateBag(self)
 end
 
 function LiteBagPanel_UpdateAllBags(self)
-    for _, b in ipairs(self.bagFrames) do
-        LiteBagPanel_UpdateBag(b)
-    end
-    for i, b in ipairs(self.itemButtons) do
-        if i > self.size then b:Hide() end
+    for _, bag in ipairs(self.bagFrames) do
+        LiteBagPanel_UpdateBag(bag)
     end
 end
 
