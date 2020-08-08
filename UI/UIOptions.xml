@@ -40,6 +40,15 @@
                 <Anchor point="BOTTOMLEFT" x="12" y="12" />
                 <Anchor point="TOPRIGHT" relativePoint="CENTER" x="-6" y="-28" />
             </Anchors>
+            <Layers>
+                <Layer level="OVERLAY">
+                    <FontString inherits="GameFontNormalMed2" text="BANK">
+                        <Anchors>
+                            <Anchor point="BOTTOM" relativePoint="TOP" y="8" />
+                        </Anchors>
+                    </FontString>
+                </Layer>
+            </Layers>
         </Frame>
         <Frame name="$parentInventoryBox" enableMouse="false" frameStrata="BACKGROUND" inherits="TooltipBackdropTemplate">
             <KeyValues>
@@ -52,25 +61,17 @@
                 <Anchor point="BOTTOMRIGHT" x="-12" y="12" />
                 <Anchor point="TOPLEFT" relativePoint="CENTER" x="6" y="-28" />
             </Anchors>
+            <Layers>
+                <Layer level="OVERLAY">
+                    <FontString inherits="GameFontNormalMed2" text="INVENTORY_TOOLTIP">
+                        <Anchors>
+                            <Anchor point="BOTTOM" relativePoint="TOP" y="8" />
+                        </Anchors>
+                    </FontString>
+                </Layer>
+            </Layers>
         </Frame>
-    </Frames>
 
-    <Layers>
-        <Layer level="OVERLAY">
-            <FontString inherits="GameFontNormalMed2" text="BANK">
-                <Anchors>
-                    <Anchor point="BOTTOM" relativeTo="$parentBankBox" relativePoint="TOP" y="8" />
-                </Anchors>
-            </FontString>
-            <FontString inherits="GameFontNormalMed2" text="INVENTORY_TOOLTIP">
-                <Anchors>
-                    <Anchor point="BOTTOM" relativeTo="$parentInventoryBox" relativePoint="TOP" y="8" />
-                </Anchors>
-            </FontString>
-        </Layer>
-    </Layers>
-
-    <Frames>
         <CheckButton name="$parentConfirmSort" inherits="InterfaceOptionsCheckButtonTemplate">
             <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="$parentGlobalBox" relativePoint="TOPLEFT" x="16" y="-16" />
@@ -125,9 +126,7 @@
                 </Layer>
             </Layers>
         </Frame>
-    </Frames>
 
-    <Frames>
         <Slider name="$parentInventoryColumns" minValue="8" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
             <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="$parentInventoryBox" x="20" y="-32" />
@@ -203,9 +202,7 @@
                 </Layer>
             </Layers>
         </Frame>
-    </Frames>
 
-    <Frames>
         <Slider name="$parentBankColumns" minValue="8" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
             <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="$parentBankBox" x="20" y="-32" />
