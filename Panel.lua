@@ -569,7 +569,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
     end
 
     if event == 'QUEST_ACCEPTED' or (event == 'UNIT_QUEST_LOG_CHANGED' and arg1 == 'player') then
-        LiteBagPanel_Update(self)
+        LiteBagPanel_UpdateAllBags(self)
         return
     end
 
