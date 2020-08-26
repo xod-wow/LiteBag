@@ -487,8 +487,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
         LiteBagPanel_UpdateBagSlotCounts(self)
         LiteBagPanel_UpdateSizeAndLayout(self)
         LiteBagPanel_UpdateItemButtons(self)
-        local frame = self:GetParent()
-        frame:SetHeight(self:GetHeight())
+        self:GetParent():SetHeight(self:GetHeight())
         return
     end
 
@@ -527,6 +526,8 @@ function LiteBagPanel_OnEvent(self, event, ...)
         if self.isBank then
             if arg1 > NUM_BANKGENERIC_SLOTS then
                 LiteBagPanel_UpdateBagSlotCounts(self)
+                LiteBagPanel_UpdateSizeAndLayout(self)
+                self:GetParent():SetHeight(self:GetHeight())
             end
             LiteBagPanel_UpdateItemButtons(self)
         end
