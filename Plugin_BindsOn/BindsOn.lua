@@ -2,20 +2,21 @@
 
   LiteBag/Plugin_BindsOn/BindsOn.lua
 
-  Copyright 2013-2018 Mike Battersby
+  Copyright 2013-2020 Mike Battersby
 
   Released under the terms of the GNU General Public License version 2 (GPLv2).
   See the file LICENSE.txt.
 
 ----------------------------------------------------------------------------]]--
 
--- Map tooltip text to display text, from BindsWhen by phanx
---
+local L = LiteBag_Localize
 
-local BoAText = BATTLENET_FONT_COLOR_CODE .. "BoA" .. FONT_COLOR_CODE_CLOSE
-local BoEText = GREEN_FONT_COLOR_CODE .. "BoE" .. FONT_COLOR_CODE_CLOSE
+-- Map tooltip text to display text, from BindsWhen by phanx
+
+local BoAText = BATTLENET_FONT_COLOR:WrapTextInColorCode( L["BoA"] )
+local BoEText = GREEN_FONT_COLOR:WrapTextInColorCode( L["BoE"] )
 local BoPText = false
-local PetText = HIGHLIGHT_FONT_COLOR_CODE .. PET .. FONT_COLOR_CODE_CLOSE
+local PetText = HIGHLIGHT_FONT_COLOR:WrapTextInColorCode( L["Pet"] )
 local NoBindText = false
 
 local TextForBind = {
