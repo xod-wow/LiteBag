@@ -12,27 +12,33 @@
 -- Mostly copied from BackpackTokenFrame_Update in Blizzard_TokenUI.lua
 
 function LiteBagTokensFrame_Update(self)
-    local watchButton
+    for i = 1, MAX_WATCHED_TOKENS do
+        local watchButton = self.Tokens[i]
+        local currencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo(i)
 
-    self.shouldShow = false
-    for i = 1,MAX_WATCHED_TOKENS do
-        local info = C_CurrencyInfo.GetBackpackCurrencyInfo(i)
-        watchButton = _G[self:GetName()..'Token'..i]
-        if info then
-            watchButton.icon:SetTexture(info.iconFileID)
-            watchButton.count:SetText(info.quantity <= 99999 and info.quantity or '*')
-            watchButton.currencyID = info.currencyTypesID
+        if currencyInfo then
+            local count = currencyInfo.quantity
+            watchButton.icon:SetTexture(currencyInfo.iconFileID)
+
+            local currencyText = BreakUpLargeNumbers(count)
+            if strlenutf8(currencyText) > 5 then
+                currencyText = AbbreviateNumbers(count)
+            end
+
+            watchButton.count:SetText(currencyText)
+            watchButton.currencyID = currencyInfo.currencyTypesID
             watchButton:Show()
+
             self.shouldShow = true
+            self.numWatchedTokens = i
         else
             watchButton:Hide()
+            if i == 1 then
+                self.shouldShow = nil
+            end
         end
     end
-    if self.shouldShow then
-        self:Show()
-    else
-        self:Hide()
-    end
+    self:SetShown(self.shouldShow)
 end
 
 -- It might be simpler to watch event CURRENCY_DISPLAY_UPDATE instead.
