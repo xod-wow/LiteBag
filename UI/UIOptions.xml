@@ -19,9 +19,8 @@
         <Frame name="$parentGlobalBox" enableMouse="false" frameStrata="BACKGROUND" inherits="TooltipBackdropTemplate">
             <KeyValues>
                 <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
-                <KeyValue key="backdropColorAlpha" value="0.5" type="number"/>
+                <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
                 <KeyValue key="backdropBorderColor" value="GRAY_FONT_COLOR" type="global"/>
-                <KeyValue key="backdropBorderColorAlpha" value="0.5" type="number"/>
             </KeyValues>
             <Anchors>
                 <Anchor point="TOPLEFT" x="12" y="-48" />
@@ -32,9 +31,8 @@
         <Frame name="$parentBankBox" enableMouse="false" frameStrata="LOW" inherits="TooltipBackdropTemplate">
             <KeyValues>
                 <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
-                <KeyValue key="backdropColorAlpha" value="0.5" type="number"/>
+                <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
                 <KeyValue key="backdropBorderColor" value="GRAY_FONT_COLOR" type="global"/>
-                <KeyValue key="backdropBorderColorAlpha" value="0.5" type="number"/>
             </KeyValues>
             <Anchors>
                 <Anchor point="BOTTOMLEFT" x="12" y="12" />
@@ -53,9 +51,8 @@
         <Frame name="$parentInventoryBox" enableMouse="false" frameStrata="BACKGROUND" inherits="TooltipBackdropTemplate">
             <KeyValues>
                 <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
-                <KeyValue key="backdropColorAlpha" value="0.5" type="number"/>
+                <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
                 <KeyValue key="backdropBorderColor" value="GRAY_FONT_COLOR" type="global"/>
-                <KeyValue key="backdropBorderColorAlpha" value="0.5" type="number"/>
             </KeyValues>
             <Anchors>
                 <Anchor point="BOTTOMRIGHT" x="-12" y="12" />
