@@ -11,24 +11,30 @@
 
 local L = LiteBag_Localize
 
--- Map tooltip text to display text, from BindsWhen by phanx
+-- If there's no translation use these icons. No idea what a good icon for
+-- BoE would be though.
 
-local BoAText = BATTLENET_FONT_COLOR:WrapTextInColorCode( L["BoA"] )
-local BoEText = GREEN_FONT_COLOR:WrapTextInColorCode( L["BoE"] )
-local BoPText = false
-local PetText = HIGHLIGHT_FONT_COLOR:WrapTextInColorCode( L["Pet"] )
+local PetIconString = [[|TInterface\CURSOR\WildPetCapturable:12|t]]
+local BoAIconString = [[|TInterface\Addons\LiteBag\Plugin_BindsOn\Blizz:12:32|t]]
+
+local BoAText = rawget(L, 'BoA') or BoAIconString
+local BoEText = L["BoE"]
+local PetText = rawget(L, 'Pet') or PetIconString
 local NoBindText = false
 
+-- Map tooltip text to display text, from BindsWhen by phanx
+-- Looks through the first five tooltip left texts for these keys.
+
 local TextForBind = {
-    [ITEM_ACCOUNTBOUND]        = BoAText,
-    [ITEM_BNETACCOUNTBOUND]    = BoAText,
-    [ITEM_BIND_TO_ACCOUNT]     = BoAText,
-    [ITEM_BIND_TO_BNETACCOUNT] = BoAText,
-    [ITEM_BIND_ON_EQUIP]       = BoEText,
-    [ITEM_BIND_ON_USE]         = BoEText,
+    [ITEM_ACCOUNTBOUND]        = BATTLENET_FONT_COLOR:WrapTextInColorCode( BoAText ),
+    [ITEM_BNETACCOUNTBOUND]    = BATTLENET_FONT_COLOR:WrapTextInColorCode( BoAText ),
+    [ITEM_BIND_TO_ACCOUNT]     = BATTLENET_FONT_COLOR:WrapTextInColorCode( BoAText ),
+    [ITEM_BIND_TO_BNETACCOUNT] = BATTLENET_FONT_COLOR:WrapTextInColorCode( BoAText ),
+    [ITEM_BIND_ON_EQUIP]       = GREEN_FONT_COLOR:WrapTextInColorCode( BoEText ),
+    [ITEM_BIND_ON_USE]         = GREEN_FONT_COLOR:WrapTextInColorCode( BoEText ),
     [ITEM_SOULBOUND]           = false,
     [ITEM_BIND_ON_PICKUP]      = false,
-    [TOOLTIP_BATTLE_PET]       = PetText,
+    [TOOLTIP_BATTLE_PET]       = HIGHLIGHT_FONT_COLOR:WrapTextInColorCode( PetText ),
 }
 
 local scanTip = CreateFrame("GameTooltip", "LiteBagBindOnScanTooltip")
