@@ -14,7 +14,7 @@
                     <Anchor point="TOPLEFT" x="-1" y="-1" />
                 </Anchors>
                 <TexCoords left="0" right="0.640625" top="0" bottom="0.640625" />
-                <Color r="0.5" b="0.5" g="0.5" a="0.8" />
+                <Color r="1" b="1" g="1" a="0.5" />
             </Texture>
         </Layer>
     </Layers>
