@@ -20,9 +20,9 @@ fetch () {
     curl -s -H "X-Api-Token: $APIKEY" "https://wow.curseforge.com/api/projects/50424/localization/export?export-type=TableAdditions&lang=$1&unlocalized=Ignore" | awk -F' = ' '{ printf("    %-21s = %s\n", $1, $2) }'
 }
 
-# header "enUS / enGB / Default"
-# fetch enUS
-# echo
+header "enUS / enGB / Default"
+fetch enUS
+echo
 
 for locale in "deDE" "esES" "frFR" "itIT" "koKR" "ptBR" "ruRU" "zhCN" "zhTW"; do
 
