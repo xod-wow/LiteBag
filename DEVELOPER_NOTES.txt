@@ -24,17 +24,13 @@
 
     LiteBag is pretty simple, all of the complexity is in the detail:
 
-        LiteBagItemButtonTemplate is an item button that inherits from
-        ContainerFrameItemButtonTemplate.  It can do all its own updating.
-        The updating code is more or less split out and copied from
-        ContainerFrame.lua.
-
         LiteBagBagButtonTemplate is a button to hold the actual bag iself,
         where you drag a new bag on when you buy one.
 
-        LiteBagPanelTemplate is a panel of item buttons and the code for
-        arranging them according to various settings.  It's assigned soma
-        bag IDs.
+        LiteBagPanelTemplate is a panel of ContainerFrameItemButton buttons
+        and the code for arranging them according to various settings.  It's
+        assigned some bag IDs, listens for the bag events, and does all the
+        updating of its ItemButtons.
 
         LiteBagFrameTemplate is a portraitframe set up to hold the panel
         and the bag buttons. It's able to be resized by dragging. It listens

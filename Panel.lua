@@ -458,23 +458,26 @@ function LiteBagPanel_OnShow(self)
     LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBagPanel_UpdateAllBags(self)
 
+    -- From ContainerFrame:OnLoad()
+    -- self:RegisterEvent('BAG_OPEN')
     self:RegisterEvent('BAG_CLOSED')
-    self:RegisterEvent('BAG_UPDATE')
-    self:RegisterEvent('ITEM_LOCK_CHANGED')
-    self:RegisterEvent('BAG_UPDATE_COOLDOWN')
-    self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
     self:RegisterEvent('QUEST_ACCEPTED')
     self:RegisterEvent('UNIT_QUEST_LOG_CHANGED')
-    self:RegisterEvent('BAG_NEW_ITEMS_UPDATED')
-    self:RegisterEvent('BAG_SLOT_FLAGS_UPDATED')
-    self:RegisterEvent('BANK_BAG_SLOT_FLAGS_UPDATED')
-    self:RegisterEvent('MERCHANT_SHOW')
-    self:RegisterEvent('MERCHANT_CLOSED')
+
+    -- From ContainerFrame:OnShow()
+    self:RegisterEvent('BAG_UPDATE')
     self:RegisterEvent('UNIT_INVENTORY_CHANGED')
     self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
+    self:RegisterEvent('ITEM_LOCK_CHANGED')
+    self:RegisterEvent('BAG_UPDATE_COOLDOWN')
+    -- self:RegisterEvent('DISPLAY_SIZE_CHANGED')
+    self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
+    self:RegisterEvent('BAG_NEW_ITEMS_UPDATED')
+    self:RegisterEvent('BAG_SLOT_FLAGS_UPDATED')
 
     if self.isBank then
         self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
+        self:RegisterEvent('PLAYERBANKBAGSLOTS_CHANGED')
     end
 
     for e in pairs(PluginUpdateEvents) do self:RegisterEvent(e) end
@@ -483,36 +486,19 @@ end
 function LiteBagPanel_OnHide(self)
     LiteBag_Debug("Panel OnHide " .. self:GetName())
 
-    self:UnregisterEvent('BAG_CLOSED')
-    self:UnregisterEvent('BAG_UPDATE')
-    self:UnregisterEvent('ITEM_LOCK_CHANGED')
-    self:UnregisterEvent('BAG_UPDATE_COOLDOWN')
-    self:UnregisterEvent('INVENTORY_SEARCH_UPDATE')
-    self:UnregisterEvent('QUEST_ACCEPTED')
-    self:UnregisterEvent('UNIT_QUEST_LOG_CHANGED')
-    self:UnregisterEvent('BAG_NEW_ITEMS_UPDATED')
-    self:UnregisterEvent('BAG_SLOT_FLAGS_UPDATED')
-    self:UnregisterEvent('BANK_BAG_SLOT_FLAGS_UPDATED')
-    self:UnregisterEvent('MERCHANT_SHOW')
-    self:UnregisterEvent('MERCHANT_CLOSED')
-    self:UnregisterEvent('UNIT_INVENTORY_CHANGED')
-    self:UnregisterEvent('PLAYER_SPECIALIZATION_CHANGED')
-
-    if self.isBank then
-        self:UnregisterEvent('PLAYERBANKSLOTS_CHANGED')
-    end
-
-    for e in pairs(PluginUpdateEvents) do self:UnregisterEvent(e) end
+    self:UnregisterAllEvents()
 
     for _, bag in ipairs(self.bagFrames) do
-        ContainerFrame_CloseTutorial(bag)
         UpdateNewItemList(bag)
+        ContainerFrame_CloseTutorial(bag)
     end
 
 end
 
--- These events are only registered while the panel is shown, so we can call
--- the update functions without worrying that we don't need to.
+-- These events are only registered while the panel is shown (except for
+-- PLAYER_LOGIN), so we can call the update functions without worrying that we
+-- don't need to.
+
 --
 -- Some events that fire a lot have specific code to just update the
 -- bags or changes that they fire for (where possible).  Others are
@@ -616,6 +602,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
         return
     end
 
+    -- ContainerFrame handles this event but never registers it?
     if event == 'BANK_BAG_SLOT_FLAGS_UPDATED' then
         local bag = GetBagFrame(self, arg1 + NUM_BAG_SLOTS)
         if bag then
