@@ -58,7 +58,7 @@ local function ReplaceBlizzardInventory()
     -- Turn the Blizzard frames off
     for i=1, NUM_CONTAINER_FRAMES do
         local f = _G['ContainerFrame'..i]
-        f:SetParent(hiddenBankParent)
+        f:SetParent(hiddenBagParent)
         f:UnregisterAllEvents()
     end
                 
