@@ -13,7 +13,7 @@ local L = LiteBag_Localize
 
 -- A popup dialog for confirming the bag sort.
 StaticPopupDialogs['LB_CONFIRM_SORT'] = {
-    preferredIndex = STATICPOPUPS_NUMDIALOGS,
+    preferredIndex = STATICPOPUP_NUMDIALOGS,
     text = '%s\n'..CONFIRM_CONTINUE,
     button1 = YES,
     button2 = NO,
