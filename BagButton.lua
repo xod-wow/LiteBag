@@ -104,7 +104,7 @@ function LiteBagBagButton_OnLoad(self)
     self.FilterIcon.Icon = self.FilterIcon
 end
 
-function LiteBagBagButton_OnEvent(self)
+function LiteBagBagButton_OnEvent(self, event, ...)
     if event == 'INVENTORY_SEARCH_UPDATE' then
         if IsContainerFiltered(self.bagID) then
             self.searchOverlay:Show()
