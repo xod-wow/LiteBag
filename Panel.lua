@@ -10,7 +10,6 @@
 ----------------------------------------------------------------------------]]--
 
 local MIN_COLUMNS = 8
-local DEFAULT_SCALE = 1.0
 
 -- These are the gaps between the buttons
 local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4

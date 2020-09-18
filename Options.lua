@@ -13,13 +13,8 @@ local addonName, addonTable = ...
 
 local L = LiteBag_Localize
 
-local function UpgradeDBVersion()
-    local db = LiteBag_OptionsDB
-end
-
 function LiteBag_InitializeOptions()
     LiteBag_OptionsDB = LiteBag_OptionsDB or { }
-    UpgradeDBVersion()
 end
 
 function LiteBag_SetFrameOption(frame, option, value)
