@@ -247,9 +247,7 @@ end
 function LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBag_Debug("Panel UpdateSizeAndLayout " .. self:GetName())
 
-    local ncols = LiteBag_GetFrameOption(self, 'columns') or
-                    self.defaultColumns or
-                    MIN_COLUMNS
+    local ncols = LiteBag_GetFrameOption(self, 'columns') or self.defaultColumns
     local layout = LiteBag_GetFrameOption(self, 'layout')
     local order = LiteBag_GetFrameOption(self, 'order')
 
@@ -271,7 +269,9 @@ function LiteBagPanel_ResizeToFrame(self, width, height)
     if not layout or not LAYOUTS[layout] then layout = 'default' end
 
     local ncols = MIN_COLUMNS
-    local currentCols = LiteBag_GetFrameOption(self, 'columns')
+    local currentCols = LiteBag_GetFrameOption(self, 'columns') or
+                            self.defaultColumns or
+                            MIN_COLUMNS
 
     -- The BUTTONORDER doesn't matter for sizing so don't bother calling it.
     -- Search up or down from our current column size, for speed.

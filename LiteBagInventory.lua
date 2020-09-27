@@ -49,6 +49,7 @@ function LiteBagInventory_Initialize(self)
 
     local panel = CreateFrame('Frame', 'LiteBagInventoryPanel', self, 'LiteBagPanelTemplate')
     LiteBagPanel_Initialize(panel, INVENTORY_BAG_IDS)
+    panel.defaultColumns = 8
     panel.canResize = true
     LiteBagFrame_AddPanel(self, panel, GetBagName(0))
 
