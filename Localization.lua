@@ -17,42 +17,14 @@ local L = LiteBag_Localize
 
 local locale = GetLocale()
 
+-- These are overrides for the defaults, which is the icons
+
+if locale == "enUS" or locale == "enGB" then
+    L["Pet"] = "Pet"
+    L["BoA"] = "BoA"
+end
+
 -- :r! sh fetchlocale.sh -------------------------------------------------------
-
--- enUS / enGB / Default -------------------------------------------------------
-
-    L                     = L or {}
-    L["%s: No confirmation"] = "%s: No confirmation"
-    L["Bag sort confirmation popup:"] = "Bag sort confirmation popup:"
-    L["Bags"]             = "Bags"
-    L["Bank button layout set to:"] = "Bank button layout set to:"
-    L["Bank button order set to:"] = "Bank button order set to:"
-    L["Bank columns set to:"] = "Bank columns set to:"
-    L["Bank scale set to: %0.2f"] = "Bank scale set to: %0.2f"
-    L["BoA"]              = "BoA"
-    L["BoE"]              = "BoE"
-    L["Can't set number of columns to less than 8."] = "Can't set number of columns to less than 8."
-    L["Columns: %d"]      = "Columns: %d"
-    L["Confirm before sorting."] = "Confirm before sorting."
-    L["Debugging:"]       = "Debugging:"
-    L["Display equipment set membership icons."] = "Display equipment set membership icons."
-    L["Display text for BoA and BoE items."] = "Display text for BoA and BoE items."
-    L["Equipment set icon display:"] = "Equipment set icon display:"
-    L["Gap: %d columns"]  = "Gap: %d columns"
-    L["Gap: %d rows"]     = "Gap: %d rows"
-    L["Inventory button layout set to:"] = "Inventory button layout set to:"
-    L["Inventory button order set to:"] = "Inventory button order set to:"
-    L["Inventory columns set to:"] = "Inventory columns set to:"
-    L["Inventory gaps set to: %s %s"] = "Inventory gaps set to:"
-    L["Inventory scale set to: %0.2f"] = "Inventory scale set to: %0.2f"
-    L["Inventory snap to default position:"] = "Inventory snap to default position:"
-    L["No column gaps"]   = "No column gaps"
-    L["No row gaps"]      = "No row gaps"
-    L["Pet"]              = "Pet"
-    L["Reverse"]          = "Reverse"
-    L["Scale must be between 0 and 2."] = "Scale must be between 0 and 2."
-    L["Scale: %0.2f"]     = "Scale: %0.2f"
-    L["Snap inventory frame to default backpack position."] = "Snap inventory frame to default backpack position."
 
 -- deDE ------------------------------------------------------------------------
 
@@ -93,8 +65,8 @@ if locale == "frFR" then
     L["Inventory gaps set to: %s %s"] = "Écarts de l'inventaire définis sur:"
     L["Inventory scale set to: %0.2f"] = "Échelle de l'inventaire définie sur: %0.2f"
     L["Inventory snap to default position:"] = "Inventaire ancré à la position par défaut:"
-    L["No column gaps"]   = "Aucun espace entre les colonnes"
-    L["No row gaps"]      = "Aucun espace entre les rangées"
+    L["No column gaps"]   = "Écart de colonnes nul"
+    L["No row gaps"]      = "Écart de rangées nul"
     L["Pet"]              = "Pet"
     L["Reverse"]          = "Inverse"
     L["Scale must be between 0 and 2."] = "L'écart doit être entre 0 et 2."
@@ -106,6 +78,37 @@ end
 
 if locale == "itIT" then
     L                     = L or {}
+    L["%s: No confirmation"] = "%s: Non confermata"
+    L["Bag sort confirmation popup:"] = "Popup di conferma per l'ordinamento dello zaino"
+    L["Bags"]             = "Zaini"
+    L["Bank button layout set to:"] = "Disposizione dei pulsanti della banca impostata su:"
+    L["Bank button order set to:"] = "Ordine dei pulsanti della banca impostati su:"
+    L["Bank columns set to:"] = "Colonne della banca impostate su:"
+    L["Bank scale set to: %0.2f"] = "Scala della banca impostata su: %0.2f"
+    L["BoA"]              = "BoA"
+    L["BoE"]              = "BoE"
+    L["Can't set number of columns to less than 8."] = "Non puoi impostare il numero delle colonne meno di 8."
+    L["Columns: %d"]      = "Colonne: %d"
+    L["Confirm before sorting."] = "Conferma prima di riordinare."
+    L["Debugging:"]       = "Debug:"
+    L["Display equipment set membership icons."] = "Visualizza le icone di appartenenza dell'equipaggiamento."
+    L["Display text for BoA and BoE items."] = "Mostra testo per oggetti BoA e BoE."
+    L["Equipment set icon display:"] = "Mostra icone sull'equipaggiamento:"
+    L["Gap: %d columns"]  = "Spaziatura: %d tra colonne"
+    L["Gap: %d rows"]     = "Spaziatura: %d tra righe"
+    L["Inventory button layout set to:"] = "Disposizione dei pulsanti dell'inventario impostata su:"
+    L["Inventory button order set to:"] = "Ordine dei pulsanti dell'inventario impostato su:"
+    L["Inventory columns set to:"] = "Colonne dell'inventario impostate su:"
+    L["Inventory gaps set to: %s %s"] = "Spaziature nell'inventario impostate su: %s %s"
+    L["Inventory scale set to: %0.2f"] = "Scala dell'inventario impostata su: %0.2f"
+    L["Inventory snap to default position:"] = "Posizione inventario predefinita:"
+    L["No column gaps"]   = "Nessuna spaziatura tra colonne"
+    L["No row gaps"]      = "Nessuna spaziatura tra righe"
+    L["Pet"]              = "Pet"
+    L["Reverse"]          = "Inversione"
+    L["Scale must be between 0 and 2."] = "La scala deve essere compresa tra 0 e 2."
+    L["Scale: %0.2f"]     = "Scala: %0.2f"
+    L["Snap inventory frame to default backpack position."] = "Posiziona l'inventario nella posizione dello zaino predefinita."
 end
 
 -- koKR ------------------------------------------------------------------------
@@ -143,6 +146,8 @@ if locale == "zhTW" then
     L["Bank button order set to:"] = "銀行按鈕順序設為:"
     L["Bank columns set to:"] = "銀行直欄設為:"
     L["Bank scale set to: %0.2f"] = "銀行縮放大小設為: %0.2f"
+    L["BoA"]              = "帳綁"
+    L["BoE"]              = "裝綁"
     L["Can't set number of columns to less than 8."] = "欄位數目不能小於 8。"
     L["Columns: %d"]      = "欄數: %d"
     L["Confirm before sorting."] = "清理前需要確認"
