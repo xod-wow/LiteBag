@@ -267,7 +267,7 @@ function LiteBagPanel_ResizeToFrame(self, width, height)
     local layout = LiteBag_GetFrameOption(self, 'layout')
     if not layout or not LAYOUTS[layout] then layout = 'default' end
 
-    local ncols = MIN_COLUMNS
+    local ncols
     local currentCols = LiteBag_GetFrameOption(self, 'columns') or
                             self.defaultColumns or
                             MIN_COLUMNS
@@ -276,6 +276,7 @@ function LiteBagPanel_ResizeToFrame(self, width, height)
     -- Search up or down from our current column size, for speed.
 
     if width < self:GetWidth() then
+        ncols = MIN_COLUMNS
         for i = currentCols, MIN_COLUMNS, -1 do
             local layoutGrid = LAYOUTS[layout](self, self.itemButtons, i)
             if layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET <= width then
@@ -284,7 +285,8 @@ function LiteBagPanel_ResizeToFrame(self, width, height)
             end
         end
     else
-        for i = currentCols+1, self.size, 1 do
+        ncols = self.size
+        for i = currentCols+1, self.size+1, 1 do
             local layoutGrid = LAYOUTS[layout](self, self.itemButtons, i)
             if layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET > width then
                 ncols = i-1
