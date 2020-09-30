@@ -14,7 +14,7 @@ local L = LiteBag_Localize
 -- If there's no translation use these icons. No idea what a good icon for
 -- BoE would be though.
 
-local PetIconString = [[|TInterface\CURSOR\WildPetCapturable:12|t]]
+local PetIconString = [[|TInterface\CURSOR\WildPetCapturable:14|t]]
 local BoAIconString = [[|TInterface\Addons\LiteBag\Plugin_BindsOn\Blizz:12:32|t]]
 
 local BoAText = rawget(L, 'BoA') or BoAIconString
