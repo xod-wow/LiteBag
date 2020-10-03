@@ -1,6 +1,6 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/ItemButton.lua
+  LiteBag/Hooks.lua
 
   Copyright 2013-2020 Mike Battersby
 
@@ -12,16 +12,16 @@
 -- hooksecurefunc is just too slow
 local hooks = { }
 
-function LiteBagItemButton_RegisterHook(func, hook)
+function LiteBag_RegisterHook(func, hook)
     hooks[func] = hooks[func] or { }
     hooks[func][hook] = true
 end
 
-function LiteBagItemButton_UnregisterHook(func, hook)
+function LiteBag_UnregisterHook(func, hook)
     hooks[func][hook] = nil
 end
 
-function LiteBagItemButton_CallHooks(func, self)
+function LiteBag_CallHooks(func, self)
     for f in pairs(hooks[func] or {}) do
          f(self)
     end

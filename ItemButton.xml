@@ -2,8 +2,6 @@
 
 <!-- Copyright 2013-2020 Mike Battersby -->
 
-<Script file="ItemButton.lua"/>
-
 <ItemButton name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" hidden="true" virtual="true">
 
     <Layers>

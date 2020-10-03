@@ -427,7 +427,7 @@ function LiteBagPanel_UpdateBag(self)
                 end
             end
 
-            LiteBagItemButton_CallHooks('LiteBagItemButton_Update', itemButton)
+            LiteBag_CallHooks('LiteBagItemButton_Update', itemButton)
         end
 
         local bagButton = ContainerFrame_GetBagButton(self)
@@ -448,7 +448,7 @@ function LiteBagPanel_OnLoad(self)
     self.bagFrames = { }
 end
 
-function LiteBagPanel_AddUpdateEvent(e)
+function LiteBag_AddUpdateEvent(e)
     if e == 'PLAYER_LOGIN' then return end
     PluginUpdateEvents[e] = true
 end

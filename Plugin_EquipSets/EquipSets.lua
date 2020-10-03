@@ -110,5 +110,5 @@ local function Update(button)
     end
 end
 
-LiteBagItemButton_RegisterHook('LiteBagItemButton_Update', Update)
-LiteBagPanel_AddUpdateEvent("EQUIPMENT_SETS_CHANGED")
+LiteBag_RegisterHook('LiteBagItemButton_Update', Update)
+LiteBag_AddUpdateEvent("EQUIPMENT_SETS_CHANGED")
