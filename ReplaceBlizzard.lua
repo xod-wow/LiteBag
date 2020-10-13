@@ -13,7 +13,7 @@ local L = LiteBag_Localize
 
 -- A popup dialog for confirming the bag sort.
 StaticPopupDialogs['LB_CONFIRM_SORT'] = {
-    preferredIndex = STATICPOPUPS_NUMDIALOGS,
+    preferredIndex = STATICPOPUP_NUMDIALOGS,
     text = '%s\n'..CONFIRM_CONTINUE,
     button1 = YES,
     button2 = NO,
@@ -58,7 +58,7 @@ local function ReplaceBlizzardInventory()
     -- Turn the Blizzard frames off
     for i=1, NUM_CONTAINER_FRAMES do
         local f = _G['ContainerFrame'..i]
-        f:SetParent(hiddenBankParent)
+        f:SetParent(hiddenBagParent)
         f:UnregisterAllEvents()
     end
                 

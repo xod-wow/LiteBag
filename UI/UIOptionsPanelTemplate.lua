@@ -16,7 +16,7 @@
 function LiteBagOptionsPanel_Open()
     local f = LiteBagOptions
     if not f.CurrentOptionsPanel then
-        f.CurrentOptionsPanel = LiteBagOptionsMounts
+        f.CurrentOptionsPanel = LiteBagOptions
     end
     InterfaceOptionsFrame:Show()
     InterfaceOptionsFrame_OpenToCategory(f.CurrentOptionsPanel)

@@ -16,67 +16,59 @@
     </Layers>
 
     <Frames>
-        <Frame name="$parentGlobalBox" enableMouse="false" alpha="0.5">
+        <Frame name="$parentGlobalBox" enableMouse="false" frameStrata="BACKGROUND" inherits="TooltipBackdropTemplate">
+            <KeyValues>
+                <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
+                <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
+                <KeyValue key="backdropBorderColor" value="GRAY_FONT_COLOR" type="global"/>
+            </KeyValues>
             <Anchors>
                 <Anchor point="TOPLEFT" x="12" y="-48" />
                 <Anchor point="RIGHT" x="-12" />
                 <Anchor point="BOTTOM" relativePoint="CENTER" y="6" />
             </Anchors>
-
-            <Backdrop edgefile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-                <EdgeSize val="16" />
-                <TileSize val="16" />
-                <BackgroundInsets>
-                    <AbsInset left="5" right="5" top="5" bottom="5" />
-                </BackgroundInsets>
-            </Backdrop>
         </Frame>
-        <Frame name="$parentBankBox" enableMouse="false" alpha="0.5">
+        <Frame name="$parentBankBox" enableMouse="false" frameStrata="LOW" inherits="TooltipBackdropTemplate">
+            <KeyValues>
+                <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
+                <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
+                <KeyValue key="backdropBorderColor" value="GRAY_FONT_COLOR" type="global"/>
+            </KeyValues>
             <Anchors>
                 <Anchor point="BOTTOMLEFT" x="12" y="12" />
-                <Anchor point="TOPRIGHT" relativePoint="CENTER" x="-6" y="-6" />
+                <Anchor point="TOPRIGHT" relativePoint="CENTER" x="-6" y="-28" />
             </Anchors>
-
-            <Backdrop edgefile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-                <EdgeSize val="16" />
-                <TileSize val="16" />
-                <BackgroundInsets>
-                    <AbsInset left="5" right="5" top="5" bottom="5" />
-                </BackgroundInsets>
-            </Backdrop>
+            <Layers>
+                <Layer level="OVERLAY">
+                    <FontString inherits="GameFontNormalMed2" text="BANK">
+                        <Anchors>
+                            <Anchor point="BOTTOM" relativePoint="TOP" y="8" />
+                        </Anchors>
+                    </FontString>
+                </Layer>
+            </Layers>
         </Frame>
-        <Frame name="$parentInventoryBox" enableMouse="false" alpha="0.5">
+        <Frame name="$parentInventoryBox" enableMouse="false" frameStrata="BACKGROUND" inherits="TooltipBackdropTemplate">
+            <KeyValues>
+                <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
+                <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
+                <KeyValue key="backdropBorderColor" value="GRAY_FONT_COLOR" type="global"/>
+            </KeyValues>
             <Anchors>
                 <Anchor point="BOTTOMRIGHT" x="-12" y="12" />
-                <Anchor point="TOPLEFT" relativePoint="CENTER" x="6" y="-6" />
+                <Anchor point="TOPLEFT" relativePoint="CENTER" x="6" y="-28" />
             </Anchors>
-
-            <Backdrop edgefile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-                <EdgeSize val="16" />
-                <TileSize val="16" />
-                <BackgroundInsets>
-                    <AbsInset left="5" right="5" top="5" bottom="5" />
-                </BackgroundInsets>
-            </Backdrop>
+            <Layers>
+                <Layer level="OVERLAY">
+                    <FontString inherits="GameFontNormalMed2" text="INVENTORY_TOOLTIP">
+                        <Anchors>
+                            <Anchor point="BOTTOM" relativePoint="TOP" y="8" />
+                        </Anchors>
+                    </FontString>
+                </Layer>
+            </Layers>
         </Frame>
-    </Frames>
 
-    <Layers>
-        <Layer level="ARTWORK">
-            <FontString inherits="GameFontNormalMed2" text="BANK">
-                <Anchors>
-                    <Anchor point="TOP" relativeTo="$parentBankBox" y="-8" />
-                </Anchors>
-            </FontString>
-            <FontString inherits="GameFontNormalMed2" text="INVENTORY_TOOLTIP">
-                <Anchors>
-                    <Anchor point="TOP" relativeTo="$parentInventoryBox" y="-8" />
-                </Anchors>
-            </FontString>
-        </Layer>
-    </Layers>
-
-    <Frames>
         <CheckButton name="$parentConfirmSort" inherits="InterfaceOptionsCheckButtonTemplate">
             <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="$parentGlobalBox" relativePoint="TOPLEFT" x="16" y="-16" />
@@ -116,13 +108,13 @@
         <Frame name="$parentIconBorder" inherits="UIDropDownMenuTemplate">
             <Size x="93" y="22" />
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentSnapToPosition" relativePoint="BOTTOMLEFT" x="28" y="-20" />
+                <Anchor point="TOPLEFT" relativeTo="$parentSnapToPosition" relativePoint="BOTTOMLEFT" x="30" y="-24" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsIconBorder_OnLoad" />
             </Scripts>
             <Layers>
-                <Layer level="BACKGROUND">
+                <Layer level="OVERLAY">
                     <FontString inherits="GameFontHighlight" text="Show thicker icon borders for this quality and above.">
                         <Anchors>
                             <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="4" />
@@ -131,26 +123,24 @@
                 </Layer>
             </Layers>
         </Frame>
-    </Frames>
 
-    <Frames>
         <Slider name="$parentInventoryColumns" minValue="8" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryBox" x="20" y="-48" />
+                <Anchor point="TOPLEFT" relativeTo="$parentInventoryBox" x="20" y="-32" />
                 <Anchor point="RIGHT" relativeTo="$parentInventoryBox" relativePoint="CENTER" x="-8" />
             </Anchors>
             <Scripts>
-                <OnLoad function="LiteBagOptionsInventoryColumns_OnLoad" />
+                <OnLoad inherit="append" function="LiteBagOptionsInventoryColumns_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsInventoryColumns_OnValueChanged" />
             </Scripts>
         </Slider>
         <Slider name="$parentInventoryScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPRIGHT" relativeTo="$parentInventoryBox" x="-20" y="-48" />
+                <Anchor point="TOPRIGHT" relativeTo="$parentInventoryBox" x="-20" y="-32" />
                 <Anchor point="LEFT" relativeTo="$parentInventoryBox" relativePoint="CENTER" x="8" />
             </Anchors>
             <Scripts>
-                <OnLoad function="LiteBagOptionsInventoryScale_OnLoad" />
+                <OnLoad inherit="append" function="LiteBagOptionsInventoryScale_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsInventoryScale_OnValueChanged" />
             </Scripts>
         </Slider>
@@ -160,7 +150,7 @@
                 <Anchor point="RIGHT" relativeTo="$parentInventoryColumns" />
             </Anchors>
             <Scripts>
-                <OnLoad function="LiteBagOptionsInventoryXBreak_OnLoad" />
+                <OnLoad inherit="append" function="LiteBagOptionsInventoryXBreak_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsXBreak_OnValueChanged" />
             </Scripts>
         </Slider>
@@ -170,7 +160,7 @@
                 <Anchor point="RIGHT" relativeTo="$parentInventoryScale" />
             </Anchors>
             <Scripts>
-                <OnLoad function="LiteBagOptionsInventoryYBreak_OnLoad" />
+                <OnLoad inherit="append" function="LiteBagOptionsInventoryYBreak_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsYBreak_OnValueChanged" />
             </Scripts>
         </Slider>
@@ -183,7 +173,7 @@
                 <OnLoad function="LiteBagOptionsInventoryOrder_OnLoad" />
             </Scripts>
             <Layers>
-                <Layer level="BACKGROUND">
+                <Layer level="OVERLAY">
                     <FontString inherits="GameFontHighlight" text="Icon order:">
                         <Anchors>
                             <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />
@@ -200,7 +190,7 @@
                 <OnLoad function="LiteBagOptionsInventoryLayout_OnLoad" />
             </Scripts>
             <Layers>
-                <Layer level="BACKGROUND">
+                <Layer level="OVERLAY">
                     <FontString inherits="GameFontHighlight" text="Icon layout:">
                         <Anchors>
                             <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />
@@ -209,26 +199,24 @@
                 </Layer>
             </Layers>
         </Frame>
-    </Frames>
 
-    <Frames>
         <Slider name="$parentBankColumns" minValue="8" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentBankBox" x="20" y="-48" />
+                <Anchor point="TOPLEFT" relativeTo="$parentBankBox" x="20" y="-32" />
                 <Anchor point="RIGHT" relativeTo="$parentBankBox" relativePoint="CENTER" x="-8" />
             </Anchors>
             <Scripts>
-                <OnLoad function="LiteBagOptionsBankColumns_OnLoad" />
+                <OnLoad inherit="append" function="LiteBagOptionsBankColumns_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsBankColumns_OnValueChanged" />
             </Scripts>
         </Slider>
         <Slider name="$parentBankScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPRIGHT" relativeTo="$parentBankBox" x="-20" y="-48" />
+                <Anchor point="TOPRIGHT" relativeTo="$parentBankBox" x="-20" y="-32" />
                 <Anchor point="LEFT" relativeTo="$parentBankBox" relativePoint="CENTER" x="8" />
             </Anchors>
             <Scripts>
-                <OnLoad function="LiteBagOptionsBankScale_OnLoad" />
+                <OnLoad inherit="append" function="LiteBagOptionsBankScale_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsBankScale_OnValueChanged" />
             </Scripts>
         </Slider>
@@ -238,7 +226,7 @@
                 <Anchor point="RIGHT" relativeTo="$parentBankColumns" />
             </Anchors>
             <Scripts>
-                <OnLoad function="LiteBagOptionsBankXBreak_OnLoad" />
+                <OnLoad inherit="append" function="LiteBagOptionsBankXBreak_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsXBreak_OnValueChanged" />
             </Scripts>
         </Slider>
@@ -248,7 +236,7 @@
                 <Anchor point="RIGHT" relativeTo="$parentBankScale" />
             </Anchors>
             <Scripts>
-                <OnLoad function="LiteBagOptionsBankYBreak_OnLoad" />
+                <OnLoad inherit="append" function="LiteBagOptionsBankYBreak_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsYBreak_OnValueChanged" />
             </Scripts>
         </Slider>
@@ -261,7 +249,7 @@
                 <OnLoad function="LiteBagOptionsBankOrder_OnLoad" />
             </Scripts>
             <Layers>
-                <Layer level="BACKGROUND">
+                <Layer level="OVERLAY">
                     <FontString inherits="GameFontHighlight" text="Icon order:">
                         <Anchors>
                             <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />
@@ -278,7 +266,7 @@
                 <OnLoad function="LiteBagOptionsBankLayout_OnLoad" />
             </Scripts>
             <Layers>
-                <Layer level="BACKGROUND">
+                <Layer level="OVERLAY">
                     <FontString inherits="GameFontHighlight" text="Icon layout:">
                         <Anchors>
                             <Anchor point="TOPRIGHT" relativePoint="TOPLEFT" x="8" y="-6" />

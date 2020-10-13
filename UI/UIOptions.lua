@@ -36,8 +36,8 @@ function LiteBagOptionsEquipsetDisplay_OnLoad(self)
             else
                 LiteBag_SetGlobalOption('HideEquipsetIcon', nil)
             end
-            LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
-            LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
+            LiteBagPanel_UpdateAllBags(LiteBagInventoryPanel)
+            LiteBagPanel_UpdateAllBags(LiteBagBankPanel)
         end
     self.GetOption =
         function (self)
@@ -57,8 +57,8 @@ function LiteBagOptionsBindsOnDisplay_OnLoad(self)
             else
                 LiteBag_SetGlobalOption('ShowBindsOnText', true)
             end
-            LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
-            LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
+            LiteBagPanel_UpdateAllBags(LiteBagInventoryPanel)
+            LiteBagPanel_UpdateAllBags(LiteBagBankPanel)
         end
     self.GetOption =
         function (self)
@@ -107,8 +107,8 @@ local function IconBorder_Initialize(self, level)
                 self.value = arg1
                 self:SetOption(arg1)
                 UIDropDownMenu_SetText(self, GetQualityText(arg1))
-                LiteBagPanel_UpdateItemButtons(LiteBagInventoryPanel)
-                LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
+                LiteBagPanel_UpdateAllBags(LiteBagInventoryPanel)
+                LiteBagPanel_UpdateAllBags(LiteBagBankPanel)
              end
 
         info.text = GetQualityText(nil)
@@ -118,7 +118,7 @@ local function IconBorder_Initialize(self, level)
 
         UIDropDownMenu_AddSeparator()
 
-        for i = NUM_LE_ITEM_QUALITYS-1, 0, -1 do
+        for i = Enum.ItemQualityMeta.NumValues-1, 0, -1 do
             info.text = GetQualityText(i)
             info.checked = ( current == i )
             info.arg1 = i
