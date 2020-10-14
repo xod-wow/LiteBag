@@ -54,7 +54,8 @@ function LiteBagBank_Initialize(self)
 
     -- Different inset texture for the bank
 
-    self.Inset.Bg:SetTexture('Interface\\FrameGeneral\\UI-Background-Rock', true, true)
+    self.Inset.Bg:SetTexture("Interface\\BankFrame\\Bank-Background", true, true)
+    self.Inset.Bg:SetVertexColor(0.4, 0.4, 0.4, 1)
 
     -- Select the right search box 
     self.searchBox = BankItemSearchBox

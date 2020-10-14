@@ -2,7 +2,15 @@
 
 <!-- Copyright 2013-2020 Mike Battersby -->
 
+<Script file="ItemButton.lua" />
+
 <ItemButton name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" hidden="true" virtual="true">
+
+    <!-- Note: Can't inherit OnClick/OnDrag scripts because it's secure. -->
+    <Scripts>
+        <OnLoad inherit="append" function="LiteBagItemButton_OnLoad" />
+        <OnEnter function="LiteBagItemButton_OnEnter" />
+    </Scripts>
 
     <Layers>
         <Layer level="BACKGROUND">
