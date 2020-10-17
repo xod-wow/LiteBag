@@ -8,7 +8,7 @@
 
     <!-- Note: Can't inherit OnClick/OnDrag scripts because it's secure. -->
     <Scripts>
-        <OnLoad inherit="append" function="LiteBagItemButton_OnLoad" />
+        <OnLoad inherit="prepend" function="LiteBagItemButton_OnLoad" />
         <OnEnter function="LiteBagItemButton_OnEnter" />
     </Scripts>
 
