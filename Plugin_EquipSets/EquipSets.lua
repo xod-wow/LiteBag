@@ -27,7 +27,7 @@ local function GetEquipmentSetMemberships(bag, slot)
             local lplayer, lbank, lbags, lvoid, lslot, lbag = EquipmentManager_UnpackLocation(l)
             if lbank == true and lbags == false then
                 lbag = -1
-                lslot = lslot - 47
+                lslot = lslot - BankButtonIDToInvSlotID(1) + 1
             end
             if slot == lslot and bag == lbag then
                 ids[i] = true
