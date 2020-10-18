@@ -8,6 +8,12 @@
 
 local L = LiteBag_Localize
 
+local MenuTextMapping  = {
+    ['bag'] = L['Bags'],
+    ['reverse'] = L['Reverse'],
+    ['blizzard'] = 'Blizzard'
+}
+
 function LiteBagOptionsConfirmSort_OnLoad(self)
     self.Text:SetText(L["Confirm before sorting."])
     self.SetOption =
@@ -171,13 +177,13 @@ local function PanelOrder_Initialize(self, level)
         info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
 
-        info.text = "Blizzard"
+        info.text = MenuTextMapping['blizzard']
         info.checked = ( current == 'blizzard' )
         info.arg1 = 'blizzard'
         info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
 
-        info.text = L["Reverse"]
+        info.text = MenuTextMapping['reverse']
         info.checked = ( current == 'reverse' )
         info.arg1 = 'reverse'
         info.arg2 = info.text
@@ -192,7 +198,7 @@ local function PanelOrder_OnLoad(self, panel)
         end
     self.GetOption =
         function (self)
-            return LiteBag_GetFrameOption(panel, 'layout')
+            return LiteBag_GetFrameOption(panel, 'order')
         end
     self.GetOptionDefault =
         function (self)
@@ -205,7 +211,11 @@ local function PanelOrder_OnLoad(self, panel)
     self.SetControl =
         function (self, v)
             self.value = v
-            UIDropDownMenu_SetText(self, v or DEFAULT)
+            if v then
+                UIDropDownMenu_SetText(self, MenuTextMapping[v])
+            else
+                UIDropDownMenu_SetText(self, DEFAULT)
+            end
         end
     self.panel = panel
     UIDropDownMenu_Initialize(self, PanelOrder_Initialize)
@@ -230,13 +240,13 @@ local function PanelLayout_Initialize(self, level)
         info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
 
-        info.text = L["Bags"]
+        info.text = MenuTextMapping['bag']
         info.checked = ( current == 'bag' )
         info.arg1 = 'bag'
         info.arg2 = info.text
         UIDropDownMenu_AddButton(info)
 
-        info.text = L["Reverse"]
+        info.text = MenuTextMapping['reverse']
         info.checked = ( current == 'reverse' )
         info.arg1 = 'reverse'
         info.arg2 = info.text
@@ -264,7 +274,11 @@ local function PanelLayout_OnLoad(self, panel)
     self.SetControl =
         function (self, v)
             self.value = v
-            UIDropDownMenu_SetText(self, v or DEFAULT)
+            if v then
+                UIDropDownMenu_SetText(self, MenuTextMapping[v])
+            else
+                UIDropDownMenu_SetText(self, DEFAULT)
+            end
         end
     self.panel = panel
     UIDropDownMenu_Initialize(self, PanelLayout_Initialize)
