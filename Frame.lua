@@ -163,7 +163,7 @@ function LiteBagFrame_Update(self)
 
     -- Contexts need to be able to force a redraw
     if self.currentPanel then
-        LiteBagPanel_UpdateItemButtons(self.currentPanel)
+        LiteBagPanel_UpdateAllBags(self.currentPanel)
     end
 end
 

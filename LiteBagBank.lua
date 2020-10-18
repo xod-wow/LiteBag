@@ -99,7 +99,7 @@ function LiteBagBank_OnEvent(self, event, arg1, arg2, ...)
         if self.selectedTab == 1 then
             LiteBagPanel_UpdateBagSlotCounts(LiteBagBankPanel)
             LiteBagPanel_UpdateSizeAndLayout(LiteBagBankPanel)
-            LiteBagPanel_UpdateItemButtons(LiteBagBankPanel)
+            LiteBagPanel_UpdateAllBags(LiteBagBankPanel)
         end
     end
 end
