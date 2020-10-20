@@ -63,8 +63,7 @@
                 <Anchor point="BOTTOMRIGHT" x="-2" y="9" />
             </Anchors>
             <Scripts>
-                <OnLoad>
-                    SmallMoneyFrame_OnLoad(self)
+                <OnLoad inherit="prepend">
                     MoneyFrame_SetType(self, "PLAYER")
                     MoneyFrame_SetMaxDisplayWidth(self, 168)
                 </OnLoad>
@@ -79,9 +78,8 @@
         </Frame>
 
         <Frame name="$parentTokenFrame" parentKey="tokenFrame" inherits="LiteBagTokenFrameTemplate">
-            <Size x="168" y="13" />
             <Anchors>
-                <Anchor point="BOTTOMLEFT" x="2" y="8" />
+                <Anchor point="CENTER" relativeTo="$parentTokenFrameBorder" y="-1" />
             </Anchors>
         </Frame>
 
