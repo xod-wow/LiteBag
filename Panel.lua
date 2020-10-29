@@ -87,6 +87,7 @@ function LiteBagPanel_UpdateBagSlotCounts(self)
                 local name = format('%sItem%d', bag:GetName(), i)
                 bag.itemButtons[i] = CreateFrame('ItemButton', name, nil, 'LiteBagItemButtonTemplate')
                 bag.itemButtons[i]:SetSize(37, 37)
+                LiteBag_CallHooks('LiteBagItemButton_Create', bag.itemButtons[i])
             end
             bag.itemButtons[i]:SetID(i)
             bag.itemButtons[i]:SetParent(bag)

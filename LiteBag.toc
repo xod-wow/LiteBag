@@ -5,6 +5,7 @@
 ## Version: @project-version@
 ## Author: Xodiv-Nagrand
 ## Email: mib@post.com
+## OptionalDependencies: Masque
 ## SavedVariablesPerCharacter: LiteBag_OptionsDB
 
 Localization.lua
@@ -25,6 +26,7 @@ ReplaceBlizzard.lua
 Plugin_BindsOn\BindsOn.xml
 Plugin_EquipSets\EquipSets.xml
 Plugin_IconBorder\IconBorder.xml
+Plugin_Masque\Masque.xml
 
 UI\UIOptionsPanelTemplate.xml
 UI\UIOptions.xml
