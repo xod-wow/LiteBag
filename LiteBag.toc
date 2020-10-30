@@ -26,7 +26,7 @@ ReplaceBlizzard.lua
 Plugin_BindsOn\BindsOn.xml
 Plugin_EquipSets\EquipSets.xml
 Plugin_IconBorder\IconBorder.xml
-Plugin_Masque\Masque.xml
+#Plugin_Masque\Masque.xml
 
 UI\UIOptionsPanelTemplate.xml
 UI\UIOptions.xml
