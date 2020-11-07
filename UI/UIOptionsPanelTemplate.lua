@@ -134,4 +134,3 @@ end
 function LiteBagOptionsSlider_OnMouseWheel(self, direction)
     self:SetValue(self:GetValue() + direction * self:GetValueStep())
 end
-

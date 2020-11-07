@@ -133,6 +133,7 @@
             <Scripts>
                 <OnLoad inherit="append" function="LiteBagOptionsInventoryColumns_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsInventoryColumns_OnValueChanged" />
+                <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
         <Slider name="$parentInventoryScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
@@ -143,6 +144,7 @@
             <Scripts>
                 <OnLoad inherit="append" function="LiteBagOptionsInventoryScale_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsInventoryScale_OnValueChanged" />
+                <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
         <Slider name="$parentInventoryXBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
@@ -153,6 +155,7 @@
             <Scripts>
                 <OnLoad inherit="append" function="LiteBagOptionsInventoryXBreak_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsXBreak_OnValueChanged" />
+                <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
         <Slider name="$parentInventoryYBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
@@ -163,6 +166,7 @@
             <Scripts>
                 <OnLoad inherit="append" function="LiteBagOptionsInventoryYBreak_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsYBreak_OnValueChanged" />
+                <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
         <Frame name="$parentInventoryOrder" inherits="UIDropDownMenuTemplate">
@@ -211,6 +215,7 @@
             <Scripts>
                 <OnLoad inherit="append" function="LiteBagOptionsBankColumns_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsBankColumns_OnValueChanged" />
+                <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
         <Slider name="$parentBankScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
@@ -221,6 +226,7 @@
             <Scripts>
                 <OnLoad inherit="append" function="LiteBagOptionsBankScale_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsBankScale_OnValueChanged" />
+                <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
         <Slider name="$parentBankXBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
@@ -231,6 +237,7 @@
             <Scripts>
                 <OnLoad inherit="append" function="LiteBagOptionsBankXBreak_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsXBreak_OnValueChanged" />
+                <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
         <Slider name="$parentBankYBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
@@ -241,6 +248,7 @@
             <Scripts>
                 <OnLoad inherit="append" function="LiteBagOptionsBankYBreak_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsYBreak_OnValueChanged" />
+                <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
         <Frame name="$parentBankOrder" inherits="UIDropDownMenuTemplate">
