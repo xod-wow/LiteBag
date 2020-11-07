@@ -14,13 +14,11 @@
 
     <Layers>
         <Layer level="BACKGROUND">
-            <Texture name="$parentBackgroundTexture" file="Interface\Buttons\UI-Slot-Background" parentKey="backgroundTexture">
-                <Size x="38.5" y="38.5" />
-                <Anchors>
-                    <Anchor point="TOPLEFT" x="-1" y="-1" />
-                </Anchors>
-                <TexCoords left="0" right="0.640625" top="0" bottom="0.640625" />
-                <Color r="1" b="1" g="1" a="0.5" />
+            <Texture parentKey="Background" file="Interface\PaperDoll\UI-Backpack-Emptyslot">
+                <Size x="35" y="35" />
+                <Anchors><Anchor point="CENTER" /></Anchors>
+                <TexCoords left="0.09375" right="0.90625" top="0.09375" bottom="0.90625" />
+                <Color r="1" g="0.95" b="0.9" a="0.5" />
             </Texture>
         </Layer>
     </Layers>
