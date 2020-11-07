@@ -155,8 +155,13 @@ function LiteBagOptionsIconBorder_OnLoad(self)
             self.value = v
             UIDropDownMenu_SetText(self, GetQualityText(v))
         end
-    UIDropDownMenu_Initialize(self, IconBorder_Initialize)
     LiteBagOptionsControl_OnLoad(self)
+end
+
+function LiteBagOptionsIconBorder_OnShow(self)
+    if not self:GetAttribute('initmenu') then
+        UIDropDownMenu_Initialize(self, IconBorder_Initialize)
+    end
 end
 
 local function PanelOrder_Initialize(self, level)
@@ -218,8 +223,13 @@ local function PanelOrder_OnLoad(self, panel)
             end
         end
     self.panel = panel
-    UIDropDownMenu_Initialize(self, PanelOrder_Initialize)
     LiteBagOptionsControl_OnLoad(self)
+end
+
+function LiteBagOptionsPanelOrder_OnShow(self)
+    if not self:GetAttribute('initmenu') then
+        UIDropDownMenu_Initialize(self, PanelOrder_Initialize)
+    end
 end
 
 local function PanelLayout_Initialize(self, level)
@@ -281,8 +291,13 @@ local function PanelLayout_OnLoad(self, panel)
             end
         end
     self.panel = panel
-    UIDropDownMenu_Initialize(self, PanelLayout_Initialize)
     LiteBagOptionsControl_OnLoad(self)
+end
+
+function LiteBagOptionsPanelLayout_OnShow(self)
+    if not self:GetAttribute('initmenu') then
+        UIDropDownMenu_Initialize(self, PanelLayout_Initialize)
+    end
 end
 
 local function SetupColumnsControl(self, panel, default)

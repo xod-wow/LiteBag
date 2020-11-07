@@ -112,6 +112,7 @@
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsIconBorder_OnLoad" />
+                <OnShow function="LiteBagOptionsIconBorder_OnShow" />
             </Scripts>
             <Layers>
                 <Layer level="OVERLAY">
@@ -171,6 +172,7 @@
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsInventoryOrder_OnLoad" />
+                <OnShow function="LiteBagOptionsPanelOrder_OnShow" />
             </Scripts>
             <Layers>
                 <Layer level="OVERLAY">
@@ -188,6 +190,7 @@
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsInventoryLayout_OnLoad" />
+                <OnShow function="LiteBagOptionsPanelLayout_OnShow" />
             </Scripts>
             <Layers>
                 <Layer level="OVERLAY">
@@ -247,6 +250,7 @@
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsBankOrder_OnLoad" />
+                <OnShow function="LiteBagOptionsPanelOrder_OnShow" />
             </Scripts>
             <Layers>
                 <Layer level="OVERLAY">
@@ -264,6 +268,7 @@
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsBankLayout_OnLoad" />
+                <OnShow function="LiteBagOptionsPanelLayout_OnShow" />
             </Scripts>
             <Layers>
                 <Layer level="OVERLAY">

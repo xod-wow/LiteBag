@@ -183,6 +183,8 @@ function LiteBagBagButton_OnClick(self)
     ToggleDropDownMenu(1, nil, self.FilterDropDown, self, 0, 0)
 end
 
-function LiteBagBagButtonFilterDropdown_OnLoad(self)
-    UIDropDownMenu_Initialize(self, ContainerFrameFilterDropDown_Initialize, 'MENU')
+function LiteBagBagButtonFilterDropdown_OnShow(self)
+    if not self:GetAttribute('initmenu') then
+        UIDropDownMenu_Initialize(self, ContainerFrameFilterDropDown_Initialize, "MENU")
+    end
 end

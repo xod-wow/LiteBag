@@ -130,3 +130,8 @@ function LiteBagOptionsControl_OnLoad(self, parent)
 
     LiteBagOptionsPanel_RegisterControl(self, parent)
 end
+
+function LiteBagOptionsSlider_OnMouseWheel(self, direction)
+    self:SetValue(self:GetValue() + direction * self:GetValueStep())
+end
+

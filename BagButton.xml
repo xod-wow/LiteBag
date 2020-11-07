@@ -18,7 +18,7 @@
     <Frames>
         <Frame name="$parentFilterDropdown" parentKey="FilterDropDown" inherits="UIDropDownMenuTemplate">
             <Scripts>
-                <OnLoad function="LiteBagBagButtonFilterDropdown_OnLoad" />
+                <OnShow function="LiteBagBagButtonFilterDropdown_OnShow" />
             </Scripts>
         </Frame>
     </Frames>
