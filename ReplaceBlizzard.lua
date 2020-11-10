@@ -44,7 +44,7 @@ local function ReplaceBlizzardInventory()
         end
     local showFunc = function (caller)
             if LiteBagInventory:IsShown() then
-                LiteBagInventory:UpdateAllBags()
+                LiteBagFrame_Update(LiteBagInventory)
             else
                 LiteBagInventory:Show()
             end
