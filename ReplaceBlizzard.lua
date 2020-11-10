@@ -43,7 +43,11 @@ local function ReplaceBlizzardInventory()
             LiteBagInventory:Hide()
         end
     local showFunc = function (caller)
-            LiteBagInventory:Show()
+            if LiteBagInventory:IsShown() then
+                LiteBagInventory:UpdateAllBags()
+            else
+                LiteBagInventory:Show()
+            end
         end
     local toggleFunc = function (caller)
             if LiteBagInventory:IsShown() then
