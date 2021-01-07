@@ -8,6 +8,8 @@
 ## OptionalDependencies: Masque
 ## SavedVariablesPerCharacter: LiteBag_OptionsDB
 
+!TaintFix.lua
+
 Localization.lua
 
 Print.lua
