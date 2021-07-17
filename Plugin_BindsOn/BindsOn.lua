@@ -106,4 +106,4 @@ local function Update(button)
     button.LiteBagBindsOnText:Show()
 end
 
-LiteBag_RegisterHook('LiteBagItemButton_Update', Update)
+LB.RegisterHook('LiteBagItemButton_Update', Update)

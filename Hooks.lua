@@ -14,16 +14,16 @@ local addonName, LB = ...
 -- hooksecurefunc is just too slow
 local hooks = { }
 
-function LiteBag_RegisterHook(func, hook)
+function LB.RegisterHook(func, hook)
     hooks[func] = hooks[func] or { }
     hooks[func][hook] = true
 end
 
-function LiteBag_UnregisterHook(func, hook)
+function LB.UnregisterHook(func, hook)
     hooks[func][hook] = nil
 end
 
-function LiteBag_CallHooks(func, self)
+function LB.CallHooks(func, self)
     for f in pairs(hooks[func] or {}) do
          f(self)
     end

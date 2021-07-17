@@ -112,5 +112,5 @@ local function Update(button)
     end
 end
 
-LiteBag_RegisterHook('LiteBagItemButton_Update', Update)
+LB.RegisterHook('LiteBagItemButton_Update', Update)
 LiteBag_AddUpdateEvent("EQUIPMENT_SETS_CHANGED")

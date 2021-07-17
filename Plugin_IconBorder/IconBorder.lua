@@ -36,4 +36,4 @@ local function Update(self)
 
 end
 
-LiteBag_RegisterHook('LiteBagItemButton_Update', Update)
+LB.RegisterHook('LiteBagItemButton_Update', Update)
