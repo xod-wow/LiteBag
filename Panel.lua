@@ -335,7 +335,7 @@ function LiteBagPanel_UpdateBag(self)
 
         local shouldDoTutorialChecks = ContainerFrame_ShouldDoTutorialChecks()
 
-        for i = 1, self.size, 1 do
+        for i = 1, self.size or 0, 1 do
             itemButton = self.itemButtons[i]
             name  = itemButton:GetName()
 
