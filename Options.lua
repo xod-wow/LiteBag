@@ -13,6 +13,18 @@ local addonName, addonTable = ...
 
 local L = LiteBag_Localize
 
+local OptionsCallbacks = {}
+
+function LiteBag_AddOptionsCallback(f, ...)
+    table.insert(OptionsCallbacks, { f, ... })
+end
+
+local function LiteBag_FireOptionsCallbacks()
+    for _, t in ipairs(OptionsCallbacks) do
+        t[1](select(2, unpack(t)))
+    end
+end
+
 function LiteBag_InitializeOptions()
     LiteBag_OptionsDB = LiteBag_OptionsDB or { }
 end
@@ -22,6 +34,7 @@ function LiteBag_SetFrameOption(frame, option, value)
     local n = 'Frame:' .. frame:GetName()
     LiteBag_OptionsDB[n] = LiteBag_OptionsDB[n] or { }
     LiteBag_OptionsDB[n][option] = value
+    LiteBag_FireOptionsCallbacks()
 end
 
 function LiteBag_GetFrameOption(frame, option)
@@ -33,6 +46,7 @@ end
 
 function LiteBag_SetGlobalOption(option, value)
     LiteBag_OptionsDB[option] = value
+    LiteBag_FireOptionsCallbacks()
 end
 
 function LiteBag_GetGlobalOption(option)
