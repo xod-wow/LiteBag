@@ -456,7 +456,7 @@ function LiteBagPanel_OnLoad(self)
     self.bagFrames = { }
 end
 
-function LiteBag_AddUpdateEvent(e)
+function LB.AddUpdateEvent(e)
     if e == 'PLAYER_LOGIN' then return end
     PluginUpdateEvents[e] = true
 end
