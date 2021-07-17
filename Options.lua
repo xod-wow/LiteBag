@@ -16,9 +16,13 @@ local L = LiteBag_Localize
 local OptionsCallbacks = {}
 
 function LiteBag_RegisterOptionsCallback(f, method, ...)
-    LiteBag_Debug('Registering ' .. f:GetName() .. ':'..method)
+    LiteBag_Debug('Register on ' .. f:GetName())
     OptionsCallbacks[f] = OptionsCallbacks[f] or { }
-    table.insert(OptionsCallbacks[f], { f[method], f, ... })
+    if type(method) == 'function' then
+        table.insert(OptionsCallbacks[f], { method, f, ... })
+    else
+        table.insert(OptionsCallbacks[f], { f[method], f, ... })
+    end
 end
 
 function LiteBag_UnregisterOptionsCallbacks(f)
