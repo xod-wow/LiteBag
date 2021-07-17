@@ -4,12 +4,12 @@
 
 <Script file="ItemButton.lua" />
 
-<ItemButton name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" hidden="true" virtual="true">
+<ItemButton name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" virtual="true" mixin="LiteBagItemButtonMixin">
 
     <!-- Note: Can't inherit OnClick/OnDrag scripts because it's secure. -->
     <Scripts>
-        <OnLoad inherit="prepend" function="LiteBagItemButton_OnLoad" />
-        <OnEnter function="LiteBagItemButton_OnEnter" />
+        <OnLoad inherit="prepend" method="OnLoad" />
+        <OnEnter method="OnEnter" />
     </Scripts>
 
     <Layers>
