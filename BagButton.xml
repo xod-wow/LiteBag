@@ -4,7 +4,7 @@
 
 <Script file="BagButton.lua"/>
 
-<ItemButton name="LiteBagBagButtonTemplate" hidden="true" virtual="true">
+<ItemButton name="LiteBagBagButtonTemplate" hidden="true" virtual="true" mixin="LiteBagBagButtonMixin">
     <Size x="26" y="26" />
     <Layers>
         <Layer level="OVERLAY">
@@ -30,15 +30,13 @@
             tex:SetWidth(64 *  w / 37)
             tex:SetHeight(64 * h / 37)
         </OnSizeChanged>
-        <OnLoad>
-            LiteBagBagButton_OnLoad(self)
-        </OnLoad>
-        <OnClick function="LiteBagBagButton_OnClick" />
-        <OnEnter function="LiteBagBagButton_OnEnter" />
-        <OnLeave function="LiteBagBagButton_OnLeave" />
-        <OnDragStart function="LiteBagBagButton_OnDrag" />
-        <OnReceiveDrag function="LiteBagBagButton_OnClick" />
-        <OnEvent function="LiteBagBagButton_OnEvent" />
+        <OnLoad method="OnLoad" />
+        <OnClick method="OnClick" />
+        <OnEnter method="OnEnter" />
+        <OnLeave method="OnLeave" />
+        <OnDragStart method="OnDrag" />
+        <OnReceiveDrag method="OnClick" />
+        <OnEvent method="OnEvent" />
     </Scripts>
 </ItemButton>
 

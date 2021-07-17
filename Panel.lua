@@ -50,7 +50,7 @@ function LiteBagPanel_Initialize(self, bagIDs)
     for i, b in ipairs(self.bagButtons) do
         if bagIDs[i] then
             b:SetID(bagIDs[i])
-            LiteBagBagButton_Update(b)
+            b:Update()
             b:Show()
         else
             b:Hide()
@@ -76,7 +76,7 @@ function LiteBagPanel_UpdateBagSlotCounts(self)
     local size = 0
 
     for _, b in ipairs(self.bagButtons) do
-        LiteBagBagButton_Update(b)
+        b:Update()
     end
 
     wipe(self.itemButtons)

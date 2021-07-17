@@ -18,7 +18,9 @@ do
     end
 end
 
-function LiteBagBagButton_GetFilter(self)
+LiteBagBagButtonMixin = {}
+
+function LiteBagBagButtonMixin:GetFilter()
 
     if self.bagID == BACKPACK_CONTAINER or self.bagID == BANK_CONTAINER then
         return
@@ -37,9 +39,9 @@ function LiteBagBagButton_GetFilter(self)
     end
 end
 
-function LiteBagBagButton_SetFilterIcon(self)
+function LiteBagBagButtonMixin:SetFilterIcon()
 
-    local i = LiteBagBagButton_GetFilter(self)
+    local i = self:GetFilter()
     if i then
         self.FilterIcon:SetAtlas(BAG_FILTER_ICONS[i], true)
         self.FilterIcon:Show()
@@ -49,7 +51,7 @@ function LiteBagBagButton_SetFilterIcon(self)
 
 end
 
-function LiteBagBagButton_Update(self)
+function LiteBagBagButtonMixin:Update()
 
     self.bagID = self:GetID()
     self.isBank = BankContainers[self:GetID()]
@@ -64,7 +66,7 @@ function LiteBagBagButton_Update(self)
 
     self.slotID = ContainerIDToInventoryID(self:GetID())
 
-    LiteBagBagButton_SetFilterIcon(self)
+    self:SetFilterIcon()
 
     local textureName = GetInventoryItemTexture('player', self.slotID)
 
@@ -94,11 +96,10 @@ function LiteBagBagButton_Update(self)
 
 end
 
-function LiteBagBagButton_OnLoad(self)
+function LiteBagBagButtonMixin:OnLoad()
     self:RegisterForDrag('LeftButton')
     self:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
 
-    self:SetScript('OnEvent', LiteBagBagButton_OnEvent)
     self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
 
     -- Blizzard's ContainerFrameFilterDropDown expects the texture
@@ -106,7 +107,7 @@ function LiteBagBagButton_OnLoad(self)
     self.FilterIcon.Icon = self.FilterIcon
 end
 
-function LiteBagBagButton_OnEvent(self, event, ...)
+function LiteBagBagButtonMixin:OnEvent(event, ...)
     if event == 'INVENTORY_SEARCH_UPDATE' then
         if IsContainerFiltered(self.bagID) then
             self.searchOverlay:Show()
@@ -116,7 +117,7 @@ function LiteBagBagButton_OnEvent(self, event, ...)
     end
 end
 
-function LiteBagBagButton_OnEnter(self)
+function LiteBagBagButtonMixin:OnEnter()
 
     local frame = self:GetParent()
     LiteBagPanel_HighlightBagButtons(frame, self:GetID())
@@ -142,7 +143,7 @@ function LiteBagBagButton_OnEnter(self)
                 GameTooltip:SetText(BAGSLOT)
             end
         else
-            local i = LiteBagBagButton_GetFilter(self)
+            local i = self:GetFilter()
             if i then
                 GameTooltip:AddLine(BAG_FILTER_ASSIGNED_TO:format(BAG_FILTER_LABELS[i]))
             end
@@ -151,20 +152,20 @@ function LiteBagBagButton_OnEnter(self)
     GameTooltip:Show()
 end
 
-function LiteBagBagButton_OnLeave(self)
+function LiteBagBagButtonMixin:OnLeave()
     local frame = self:GetParent()
     LiteBagPanel_UnhighlightBagButtons(frame, self:GetID())
     GameTooltip:Hide()
     ResetCursor()
 end
 
-function LiteBagBagButton_OnDrag(self)
+function LiteBagBagButtonMixin:OnDrag()
     if self.bagID ~= BACKPACK_CONTAINER and self.bagID ~= BANK_CONTAINER then
         PickupBagFromSlot(self.slotID)
     end
 end
 
-function LiteBagBagButton_OnClick(self)
+function LiteBagBagButtonMixin:OnClick()
     if CursorHasItem() then
         if self.bagID == BACKPACK_CONTAINER then
             PutItemInBackpack()
