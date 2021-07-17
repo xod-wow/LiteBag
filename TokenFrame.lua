@@ -13,7 +13,9 @@ local addonName, LB = ...
 
 -- Mostly copied from BackpackTokenFrame_Update in Blizzard_TokenUI.lua
 
-function LiteBagTokensFrame_Update(self)
+LiteBagTokenFrameMixin = {}
+
+function LiteBagTokenFrameMixin:Update()
     for i = 1, MAX_WATCHED_TOKENS do
         local watchButton = self.Tokens[i]
         local currencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo(i)
@@ -47,13 +49,10 @@ end
 -- Don't replace the function because parts of the TokenFrame rely on
 -- the BackpackTokenFrame even though it's hidden.
 
-function LiteBagTokensFrame_OnLoad(self)
-    hooksecurefunc(
-            'BackpackTokenFrame_Update',
-            function () LiteBagTokensFrame_Update(self) end
-        )
+function LiteBagTokenFrameMixin:OnLoad()
+    hooksecurefunc('BackpackTokenFrame_Update', function () self:Update() end)
 end
 
-function LiteBagTokensFrame_OnShow(self)
-    LiteBagTokensFrame_Update(self)
+function LiteBagTokenFrameMixin:OnShow()
+    self:Update()
 end

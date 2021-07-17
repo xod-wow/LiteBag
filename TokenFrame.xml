@@ -4,7 +4,7 @@
 
 <Script file="TokenFrame.lua" />
 
-<Frame name="LiteBagTokenFrameTemplate" virtual="true">
+<Frame name="LiteBagTokenFrameTemplate" virtual="true" mixin="LiteBagTokenFrameMixin">
 
     <Size x="150" y="12" />
 
@@ -30,8 +30,8 @@
     </Frames>
 
     <Scripts>
-        <OnLoad function="LiteBagTokensFrame_OnLoad" />
-        <OnShow function="LiteBagTokensFrame_OnShow" />
+        <OnLoad method="OnLoad" />
+        <OnShow method="OnShow" />
     </Scripts>
 </Frame>
 
