@@ -71,7 +71,7 @@ end
 
 function LiteBagBank_OnEvent(self, event, arg1, arg2, ...)
 
-    LiteBag_Debug(format("Bank OnEvent %s %s %s", event, tostring(arg1), tostring(arg2)))
+    LB.Debug(format("Bank OnEvent %s %s %s", event, tostring(arg1), tostring(arg2)))
     if event == 'ADDON_LOADED' then
         if arg1 == 'LiteBag' then
             LiteBagBank_Initialize(self)

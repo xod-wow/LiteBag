@@ -23,19 +23,19 @@ end
 -- code depending on which (default) action bars are shown.
 
 function LiteBagFrame_SetPosition(self)
-    LiteBag_Debug("Frame SetPosition " .. self:GetName())
+    LB.Debug("Frame SetPosition " .. self:GetName())
     if self:IsUserPlaced() then return end
     self:ClearAllPoints()
     self:SetPoint('BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
 end
 
 function LiteBagFrame_StartMoving(self)
-    LiteBag_Debug("Frame StartMoving " .. self:GetName())
+    LB.Debug("Frame StartMoving " .. self:GetName())
     self:StartMoving()
 end
 
 function LiteBagFrame_StopMoving(self)
-    LiteBag_Debug("Frame StopMoving " .. self:GetName())
+    LB.Debug("Frame StopMoving " .. self:GetName())
     self:StopMovingOrSizing()
 
     if not self.currentPanel or not self.currentPanel.isBackpack then
@@ -53,7 +53,7 @@ function LiteBagFrame_StopMoving(self)
 end
 
 function LiteBagFrame_StartSizing(self, point)
-    LiteBag_Debug("Frame StartSizing " .. self:GetName())
+    LB.Debug("Frame StartSizing " .. self:GetName())
     if not self.currentPanel or not self.currentPanel.canResize then
         return
     end
@@ -63,7 +63,7 @@ function LiteBagFrame_StartSizing(self, point)
 end
 
 function LiteBagFrame_StopSizing(self)
-    LiteBag_Debug("Frame StopSizing " .. self:GetName())
+    LB.Debug("Frame StopSizing " .. self:GetName())
     self:StopMovingOrSizing()
     self.sizing = nil
 
@@ -71,7 +71,7 @@ function LiteBagFrame_StopSizing(self)
 end
 
 function LiteBagFrame_OnSizeChanged(self, w, h)
-    LiteBag_Debug(format("Frame OnSizeChanged %s %d,%d",self:GetName(), w, h))
+    LB.Debug(format("Frame OnSizeChanged %s %d,%d",self:GetName(), w, h))
     if not self.sizing then return end
 
     LiteBagPanel_ResizeToFrame(self.currentPanel, w, h)
@@ -82,12 +82,12 @@ function LiteBagFrame_OnSizeChanged(self, w, h)
 end
 
 function LiteBagFrame_OnHide(self)
-    LiteBag_Debug("Frame OnHide " .. self:GetName())
+    LB.Debug("Frame OnHide " .. self:GetName())
     PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
 end
 
 function LiteBagFrame_OnShow(self)
-    LiteBag_Debug("Frame OnShow " .. self:GetName())
+    LB.Debug("Frame OnShow " .. self:GetName())
 
     self:SetSize(self.currentPanel:GetSize())
     self:SetScale(LB.Options:GetFrameOption(self, 'scale') or 1.0)
@@ -112,14 +112,14 @@ function LiteBagFrame_AttachSearchBox(self)
 end
 
 function LiteBagFrame_TabOnClick(tab)
-    LiteBag_Debug("Frame TabOnClick " .. tab:GetName())
+    LB.Debug("Frame TabOnClick " .. tab:GetName())
     local parent = tab:GetParent()
     PanelTemplates_SetTab(parent, tab:GetID())
     LiteBagFrame_ShowPanel(parent, tab:GetID())
 end
 
 function LiteBagFrame_AddPanel(self, panel, tabTitle)
-    LiteBag_Debug(format("Frame AddPanel %s %s", self:GetName(), panel:GetName()))
+    LB.Debug(format("Frame AddPanel %s %s", self:GetName(), panel:GetName()))
     panel:SetParent(self)
     panel:SetPoint('TOPLEFT', self, 'TOPLEFT')
 
@@ -140,7 +140,7 @@ function LiteBagFrame_AddPanel(self, panel, tabTitle)
 end
 
 function LiteBagFrame_ShowPanel(self, n)
-    LiteBag_Debug(format("Frame ShowPanel %s %d", self:GetName(), n))
+    LB.Debug(format("Frame ShowPanel %s %d", self:GetName(), n))
     for i,panel in ipairs(self.panels) do
         panel:SetShown(i == n)
     end
@@ -159,7 +159,7 @@ function LiteBagFrame_ShowPanel(self, n)
 end
 
 function LiteBagFrame_Update(self)
-    LiteBag_Debug(format("Frame Update %s", self:GetName()))
+    LB.Debug(format("Frame Update %s", self:GetName()))
 
     -- Contexts need to be able to force a redraw
     if self.currentPanel then

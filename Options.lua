@@ -17,7 +17,7 @@ LB.Options = CreateFrame('Frame')
 LB.Options.callbacks = {}
 
 function LB.Options:RegisterCallback(f, method, ...)
-    LiteBag_Debug('Register on ' .. f:GetName())
+    LB.Debug('Register on ' .. f:GetName())
     self.callbacks[f] = self.callbacks[f] or { }
     if type(method) == 'function' then
         table.insert(self.callbacks[f], { method, f, ... })
@@ -32,7 +32,7 @@ end
 
 function LB.Options:Fire()
     for f, callbacks in pairs(self.callbacks) do
-        LiteBag_Debug('Firing on ' .. f:GetName())
+        LB.Debug('Firing on ' .. f:GetName())
         for _,t in ipairs(callbacks) do
             local method = t[1]
             method(select(2, unpack(t)))
@@ -95,39 +95,39 @@ local function SlashFunc(argstr)
 
     if cmd == 'confirmsort' and arg1 ~= nil then
         LB.Options:SetGlobalOption('NoConfirmSort', onOff)
-        LiteBag_Print(L["Bag sort confirmation popup:"].." "..tostring(onOff))
+        LB.Print(L["Bag sort confirmation popup:"].." "..tostring(onOff))
         return
     end
 
     if cmd == 'equipset' then
         LB.Options:SetGlobalOption('HideEquipsetIcon', onOff)
-        LiteBag_Print(L["Equipment set icon display:"].." "..tostring(onOff))
+        LB.Print(L["Equipment set icon display:"].." "..tostring(onOff))
         return
     end
 
     if cmd == 'debug' then
         LB.Options:SetGlobalOption('DebugEnabled', onOff)
-        LiteBag_Print(L["Debugging:"].." "..tostring(onOff))
+        LB.Print(L["Debugging:"].." "..tostring(onOff))
         return
     end
 
     if cmd == 'inventory.snap' then
         LB.Options:SetFrameOption(LiteBagInventoryPanel, 'NoSnapToPosition', onOff)
-        LiteBag_Print(L["Inventory snap to default position:"].." "..tostring(onOff))
+        LB.Print(L["Inventory snap to default position:"].." "..tostring(onOff))
         return
     end
 
     if cmd == 'inventory.layout' then
         if arg1 == 'default' then arg1 = nil end
         LB.Options:SetFrameOption(LiteBagInventoryPanel, 'layout', arg1)
-        LiteBag_Print(L["Inventory button layout set to:"].." "..tostring(arg1))
+        LB.Print(L["Inventory button layout set to:"].." "..tostring(arg1))
         return
     end
 
     if cmd == 'inventory.order' then
         if arg1 == 'default' then arg1 = nil end
         LB.Options:SetFrameOption(LiteBagInventoryPanel, 'order', arg1)
-        LiteBag_Print(L["Inventory button order set to:"].." "..tostring(arg1))
+        LB.Print(L["Inventory button order set to:"].." "..tostring(arg1))
         return
     end
 
@@ -135,9 +135,9 @@ local function SlashFunc(argstr)
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
             LB.Options:SetFrameOption(LiteBagInventoryPanel, 'columns', arg1)
-            LiteBag_Print(L["Inventory columns set to:"].." "..arg1)
+            LB.Print(L["Inventory columns set to:"].." "..arg1)
         else
-            LiteBag_Print(L["Can't set number of columns to less than 8."])
+            LB.Print(L["Can't set number of columns to less than 8."])
         end
         return
     end
@@ -149,7 +149,7 @@ local function SlashFunc(argstr)
         if y == 0 then y = nil end
         LB.Options:SetFrameOption(LiteBagInventoryPanel, 'xbreak', x)
         LB.Options:SetFrameOption(LiteBagInventoryPanel, 'ybreak', y)
-        LiteBag_Print(format(L["Inventory gaps set to: %s %s"], tostring(x), tostring(y)))
+        LB.Print(format(L["Inventory gaps set to: %s %s"], tostring(x), tostring(y)))
         return
     end
 
@@ -157,9 +157,9 @@ local function SlashFunc(argstr)
         arg1 = tonumber(arg1)
         if arg1 > 0 and arg1 <= 2 then
             LB.Options:SetFrameOption(LiteBagInventory, 'scale', arg1)
-            LiteBag_Print(format(L["Inventory scale set to: %0.2f"], arg1))
+            LB.Print(format(L["Inventory scale set to: %0.2f"], arg1))
         else
-            LiteBag_Print(L["Scale must be between 0 and 2."])
+            LB.Print(L["Scale must be between 0 and 2."])
         end
         return
     end
@@ -167,14 +167,14 @@ local function SlashFunc(argstr)
     if cmd == 'bank.layout' then
         if arg1 == 'default' or arg1 == DEFAULT then arg1 = nil end
         LB.Options:SetFrameOption(LiteBagBankPanel, 'layout', arg1)
-        LiteBag_Print(L["Bank button layout set to:"].." "..tostring(arg1))
+        LB.Print(L["Bank button layout set to:"].." "..tostring(arg1))
         return
     end
 
     if cmd == 'bank.order' then
         if arg1 == 'default' then arg1 = nil end
         LB.Options:SetFrameOption(LiteBagBankPanel, 'order', arg1)
-        LiteBag_Print(L["Bank button order set to:"].." "..tostring(arg1))
+        LB.Print(L["Bank button order set to:"].." "..tostring(arg1))
         return
     end
 
@@ -182,9 +182,9 @@ local function SlashFunc(argstr)
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
             LB.Options:SetFrameOption(LiteBagBankPanel, 'columns', arg1)
-            LiteBag_Print(L["Bank columns set to:"].." "..arg1)
+            LB.Print(L["Bank columns set to:"].." "..arg1)
         else
-            LiteBag_Print("Can't set number of columns to less than 8.")
+            LB.Print("Can't set number of columns to less than 8.")
         end
         return
     end
@@ -193,29 +193,29 @@ local function SlashFunc(argstr)
         arg1 = tonumber(arg1)
         if arg1 > 0 and arg1 <= 2 then
             LB.Options:SetFrameOption(LiteBagBank, 'scale', arg1)
-            LiteBag_Print(format(L["Bank scale set to: %0.2f"], arg1))
+            LB.Print(format(L["Bank scale set to: %0.2f"], arg1))
         else
-            LiteBag_Print(L["Scale must be between 0 and 2."])
+            LB.Print(L["Scale must be between 0 and 2."])
         end
         return
     end
             
-    LiteBag_Print('Usage:')
-    LiteBag_Print('  /litebag bank.columns <n>')
-    LiteBag_Print('  /litebag bank.gaps <x> <y>')
-    LiteBag_Print('  /litebag bank.layout <default | bag | reverse>')
-    LiteBag_Print('  /litebag bank.order <default | blizzard | reverse>')
-    LiteBag_Print('  /litebag bank.scale <s>')
-    LiteBag_Print('  /litebag inventory.columns <n>')
-    LiteBag_Print('  /litebag inventory.gaps <x> <y>')
-    LiteBag_Print('  /litebag inventory.layout <default | bag | reverse>')
-    LiteBag_Print('  /litebag inventory.order <default | blizzard | reverse>')
-    LiteBag_Print('  /litebag inventory.scale <s>')
-    LiteBag_Print('  /litebag inventory.snap <on | off>')
-    LiteBag_Print('  /litebag confirmsort <on | off>')
-    LiteBag_Print('  /litebag equipset <on | off>')
-    LiteBag_Print('  /litebag iconborder <minquality>')
-    LiteBag_Print('  /litebag debug <on | off>')
+    LB.Print('Usage:')
+    LB.Print('  /litebag bank.columns <n>')
+    LB.Print('  /litebag bank.gaps <x> <y>')
+    LB.Print('  /litebag bank.layout <default | bag | reverse>')
+    LB.Print('  /litebag bank.order <default | blizzard | reverse>')
+    LB.Print('  /litebag bank.scale <s>')
+    LB.Print('  /litebag inventory.columns <n>')
+    LB.Print('  /litebag inventory.gaps <x> <y>')
+    LB.Print('  /litebag inventory.layout <default | bag | reverse>')
+    LB.Print('  /litebag inventory.order <default | blizzard | reverse>')
+    LB.Print('  /litebag inventory.scale <s>')
+    LB.Print('  /litebag inventory.snap <on | off>')
+    LB.Print('  /litebag confirmsort <on | off>')
+    LB.Print('  /litebag equipset <on | off>')
+    LB.Print('  /litebag iconborder <minquality>')
+    LB.Print('  /litebag debug <on | off>')
 end
 
 --[[----------------------------------------------------------------------------

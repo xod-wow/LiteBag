@@ -46,14 +46,14 @@ function LiteBagOptionsPanel_RestoreOldOptions(self)
 end
 
 function LiteBagOptionsPanel_Refresh(self)
-    LiteBag_Debug('Refresh ' .. self:GetName())
+    LB.Debug('Refresh ' .. self:GetName())
     for _,control in ipairs(self.controls or {}) do
         control:SetControl(control:GetOption())
     end
 end
 
 function LiteBagOptionsPanel_Default(self)
-    LiteBag_Debug('Default ' .. self:GetName())
+    LB.Debug('Default ' .. self:GetName())
     for _,control in ipairs(self.controls or {}) do
         if control.GetOptionDefault then
             control:SetOption(control:GetOptionDefault())
@@ -133,7 +133,7 @@ end
 
 function LiteBagOptionsControl_OnChanged(self)
     if self.GetControl and self:GetControl() ~= self:GetOption() then
-        LiteBag_Debug('OnChanged ' .. self:GetName())
+        LB.Debug('OnChanged ' .. self:GetName())
         self:SetOption(self:GetControl())
     end
 end

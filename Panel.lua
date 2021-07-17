@@ -24,7 +24,7 @@ local RIGHT_OFFSET, BOTTOM_OFFSET = 14, 35
 local PluginUpdateEvents = { }
 
 function LiteBagPanel_Initialize(self, bagIDs)
-    LiteBag_Debug("Panel Initialize " .. self:GetName())
+    LB.Debug("Panel Initialize " .. self:GetName())
 
     -- Create the dummy container frames, so each itembutton can be parented
     -- by one allowing us to use all the Blizzard container frame code
@@ -72,7 +72,7 @@ local function GetBagFrame(self, id)
 end
 
 function LiteBagPanel_UpdateBagSlotCounts(self)
-    LiteBag_Debug("Panel UpdateBagSlotCounts " .. self:GetName())
+    LB.Debug("Panel UpdateBagSlotCounts " .. self:GetName())
     local size = 0
 
     for _, b in ipairs(self.bagButtons) do
@@ -247,7 +247,7 @@ end
 -- padding on the edges to align the buttons into the inset.
 
 function LiteBagPanel_UpdateSizeAndLayout(self)
-    LiteBag_Debug("Panel UpdateSizeAndLayout " .. self:GetName())
+    LB.Debug("Panel UpdateSizeAndLayout " .. self:GetName())
 
     local ncols = LB.Options:GetFrameOption(self, 'columns') or self.defaultColumns
     local layout = LB.Options:GetFrameOption(self, 'layout')
@@ -260,12 +260,12 @@ function LiteBagPanel_UpdateSizeAndLayout(self)
     local layoutGrid = LAYOUTS[layout](self, itemButtons, ncols)
     local frameW, frameH = LiteBagPanel_ApplyLayout(self, layoutGrid)
 
-    LiteBag_Debug(format("Panel SetSize %s %d,%d", self:GetName(), frameW, frameH))
+    LB.Debug(format("Panel SetSize %s %d,%d", self:GetName(), frameW, frameH))
     self:SetSize(frameW, frameH)
 end
 
 function LiteBagPanel_ResizeToFrame(self, width, height)
-    LiteBag_Debug(format("Panel ResizeToFrame %s %d,%d", self:GetName(), width, height))
+    LB.Debug(format("Panel ResizeToFrame %s %d,%d", self:GetName(), width, height))
 
     local layout = LB.Options:GetFrameOption(self, 'layout')
     if not layout or not LAYOUTS[layout] then layout = 'default' end
@@ -469,7 +469,7 @@ function LiteBagPanel_Update(self)
 end
 
 function LiteBagPanel_OnShow(self)
-    LiteBag_Debug("Panel OnShow " .. self:GetName())
+    LB.Debug("Panel OnShow " .. self:GetName())
     LiteBagPanel_Update(self)
 
     LB.Options:RegisterCallback(self, LiteBagPanel_UpdateAllBags)
@@ -500,7 +500,7 @@ function LiteBagPanel_OnShow(self)
 end
 
 function LiteBagPanel_OnHide(self)
-    LiteBag_Debug("Panel OnHide " .. self:GetName())
+    LB.Debug("Panel OnHide " .. self:GetName())
 
     LB.Options:UnregisterAllCallbacks(self)
     self:UnregisterAllEvents()
@@ -522,7 +522,7 @@ end
 -- rare enough it's OK to call LiteBagPanel_UpdateAllBags to do everything.
 function LiteBagPanel_OnEvent(self, event, ...)
     local arg1, arg2 = ...
-    LiteBag_Debug(format("Panel OnEvent %s %s %s %s", self:GetName(), event, tostring(arg1), tostring(arg2)))
+    LB.Debug(format("Panel OnEvent %s %s %s %s", self:GetName(), event, tostring(arg1), tostring(arg2)))
 
     if event == 'PLAYER_LOGIN' then
         LiteBagPanel_UpdateBagSlotCounts(self)
