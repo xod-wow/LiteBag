@@ -472,7 +472,7 @@ function LiteBagPanel_OnShow(self)
     LB.Debug("Panel OnShow " .. self:GetName())
     LiteBagPanel_Update(self)
 
-    LB.Options:RegisterCallback(self, LiteBagPanel_UpdateAllBags)
+    -- LB.Options:RegisterCallback(self, LiteBagPanel_UpdateAllBags)
 
     -- From ContainerFrame:OnLoad()
     -- self:RegisterEvent('BAG_OPEN')
@@ -502,7 +502,7 @@ end
 function LiteBagPanel_OnHide(self)
     LB.Debug("Panel OnHide " .. self:GetName())
 
-    LB.Options:UnregisterAllCallbacks(self)
+    -- LB.Options:UnregisterAllCallbacks(self)
     self:UnregisterAllEvents()
 
     for _, bag in ipairs(self.bagFrames) do
