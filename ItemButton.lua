@@ -15,7 +15,7 @@ LiteBagItemButtonMixin = {}
 
 function LiteBagItemButtonMixin:OnLoad()
     self.GetInventorySlot = ButtonInventorySlot
-    self.UpdateTooltip = LiteBagItemButton_OnEnter
+    self.UpdateTooltip = self.OnEnter
 end
 
 function LiteBagItemButtonMixin:OnEnter()
