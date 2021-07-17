@@ -15,13 +15,23 @@ local L = LiteBag_Localize
 
 local OptionsCallbacks = {}
 
-function LiteBag_AddOptionsCallback(f, ...)
-    table.insert(OptionsCallbacks, { f, ... })
+function LiteBag_RegisterOptionsCallback(f, method, ...)
+    LiteBag_Debug('Registering ' .. f:GetName() .. ':'..method)
+    OptionsCallbacks[f] = OptionsCallbacks[f] or { }
+    table.insert(OptionsCallbacks[f], { f[method], f, ... })
+end
+
+function LiteBag_UnregisterOptionsCallbacks(f)
+    OptionsCallbacks[f] = nil
 end
 
 local function LiteBag_FireOptionsCallbacks()
-    for _, t in ipairs(OptionsCallbacks) do
-        t[1](select(2, unpack(t)))
+    for f, callbacks in pairs(OptionsCallbacks) do
+        LiteBag_Debug('Firing on ' .. f:GetName())
+        for _,t in ipairs(callbacks) do
+            local method = t[1]
+            method(select(2, unpack(t)))
+        end
     end
 end
 
