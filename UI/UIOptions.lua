@@ -42,8 +42,6 @@ function LiteBagOptionsEquipsetDisplay_OnLoad(self)
             else
                 LiteBag_SetGlobalOption('HideEquipsetIcon', nil)
             end
-            LiteBagPanel_UpdateAllBags(LiteBagInventoryPanel)
-            LiteBagPanel_UpdateAllBags(LiteBagBankPanel)
         end
     self.GetOption =
         function (self)
@@ -63,8 +61,6 @@ function LiteBagOptionsBindsOnDisplay_OnLoad(self)
             else
                 LiteBag_SetGlobalOption('ShowBindsOnText', true)
             end
-            LiteBagPanel_UpdateAllBags(LiteBagInventoryPanel)
-            LiteBagPanel_UpdateAllBags(LiteBagBankPanel)
         end
     self.GetOption =
         function (self)
@@ -111,10 +107,7 @@ local function IconBorder_Initialize(self, level)
         info.func =
              function (button, arg1, arg2, checked)
                 self.value = arg1
-                self:SetOption(arg1)
-                UIDropDownMenu_SetText(self, GetQualityText(arg1))
-                LiteBagPanel_UpdateAllBags(LiteBagInventoryPanel)
-                LiteBagPanel_UpdateAllBags(LiteBagBankPanel)
+                LiteBagOptionsControl_OnChanged(self)
              end
 
         info.text = GetQualityText(nil)
@@ -170,11 +163,10 @@ local function PanelOrder_Initialize(self, level)
         local current = LiteBag_GetFrameOption(self.panel, 'order')
 
         info.func =
-             function (button, arg1, arg2, checked)
-                 self.value = arg1
-                 self:SetOption(arg1)
-                 UIDropDownMenu_SetText(self, arg2 or DEFAULT)
-             end
+            function (button, arg1, arg2, checked)
+                self.value = arg1
+                LiteBagOptionsControl_OnChanged(self)
+            end
 
         info.text = DEFAULT
         info.checked = ( current == nil )
@@ -240,8 +232,7 @@ local function PanelLayout_Initialize(self, level)
         info.func =
             function (button, arg1, arg2, checked)
                 self.value = arg1
-                self:SetOption(arg1)
-                UIDropDownMenu_SetText(self, arg2 or DEFAULT)
+                LiteBagOptionsControl_OnChanged(self)
             end
 
         info.text = DEFAULT

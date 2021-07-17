@@ -22,17 +22,36 @@ function LiteBagOptionsPanel_Open()
     InterfaceOptionsFrame_OpenToCategory(f.CurrentOptionsPanel)
 end
 
+function LiteBagOptionsPanel_SaveOldOptions(self)
+    for _,control in ipairs(self.controls or {}) do
+        control.oldValue = control:GetOption()
+    end
+end
+
+function LiteBagOptionsPanel_ClearOldOptions(self)
+    for _,control in ipairs(self.controls or {}) do
+        control.oldValue = nil
+    end
+end
+
+function LiteBagOptionsPanel_RestoreOldOptions(self)
+    for _,control in ipairs(self.controls or {}) do
+        if control.oldValue ~= nil then
+            control:SetOption(control.oldValue)
+            control.oldValue = nil
+        end
+    end
+end
 
 function LiteBagOptionsPanel_Refresh(self)
+    LiteBag_Debug('Refresh ' .. self:GetName())
     for _,control in ipairs(self.controls or {}) do
-        if control.oldValue == nil then
-            control.oldValue = control:GetOption()
-        end
-        control:SetControl(control.oldValue)
+        control:SetControl(control:GetOption())
     end
 end
 
 function LiteBagOptionsPanel_Default(self)
+    LiteBag_Debug('Default ' .. self:GetName())
     for _,control in ipairs(self.controls or {}) do
         if control.GetOptionDefault then
             control:SetOption(control:GetOptionDefault())
@@ -41,18 +60,12 @@ function LiteBagOptionsPanel_Default(self)
 end
 
 function LiteBagOptionsPanel_Okay(self)
-    for _,control in ipairs(self.controls or {}) do
-        control.oldValue = nil
-    end
+    LiteBagOptionsPanel_ClearOldOptions(self)
 end
 
 function LiteBagOptionsPanel_Cancel(self)
-    for _,control in ipairs(self.controls or {}) do
-        if control.oldValue ~= nil then
-            control:SetOption(control.oldValue)
-            control.oldValue = nil
-        end
-    end
+    LiteBagOptionsPanel_RestoreOldOptions(self)
+    LiteBagOptionsPanel_ClearOldOptions(self)
 end
 
 function LiteBagOptionsPanel_RegisterControl(control, parent)
@@ -63,10 +76,14 @@ end
 
 function LiteBagOptionsPanel_OnShow(self)
     LiteBagOptions.CurrentOptionsPanel = self
+    LiteBag_RegisterOptionsCallback(self, 'refresh')
+
+    LiteBagOptionsPanel_SaveOldOptions(self)
     LiteBagOptionsPanel_Refresh(self)
 end
 
 function LiteBagOptionsPanel_OnHide(self)
+    LiteBag_UnregisterOptionsCallbacks(self)
     LiteBagOptionsPanel_Okay(self)
 end
 
