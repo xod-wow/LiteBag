@@ -11,9 +11,11 @@
 -- Vim reformatter from curseforge "Global Strings" export.
 -- %s/^\(L\..*\) = \(.*\)/\=printf('%-24s= %s', submatch(1), submatch(2))/
 
-LiteBag_Localize = setmetatable({ }, {__index=function (t,k) return k end})
+local addonName, LB = ...
 
-local L = LiteBag_Localize
+LB.Localize = setmetatable({ }, {__index=function (t,k) return k end})
+
+local L = LB.Localize
 
 local locale = GetLocale()
 

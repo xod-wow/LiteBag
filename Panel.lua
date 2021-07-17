@@ -9,6 +9,8 @@
 
 ----------------------------------------------------------------------------]]--
 
+local addonName, LB = ...
+
 local MIN_COLUMNS = 8
 
 -- These are the gaps between the buttons
@@ -141,8 +143,8 @@ LAYOUTS.default =
 
         local w, h = itemButtons[1]:GetSize()
 
-        local xBreak = LiteBag_GetFrameOption(self, 'xbreak')
-        local yBreak = LiteBag_GetFrameOption(self, 'ybreak')
+        local xBreak = LB.Options:GetFrameOption(self, 'xbreak')
+        local yBreak = LB.Options:GetFrameOption(self, 'ybreak')
 
         local row, col, maxCol, maxXGap = 0, 0, 0, 0
 
@@ -247,9 +249,9 @@ end
 function LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBag_Debug("Panel UpdateSizeAndLayout " .. self:GetName())
 
-    local ncols = LiteBag_GetFrameOption(self, 'columns') or self.defaultColumns
-    local layout = LiteBag_GetFrameOption(self, 'layout')
-    local order = LiteBag_GetFrameOption(self, 'order')
+    local ncols = LB.Options:GetFrameOption(self, 'columns') or self.defaultColumns
+    local layout = LB.Options:GetFrameOption(self, 'layout')
+    local order = LB.Options:GetFrameOption(self, 'order')
 
     if not layout or not LAYOUTS[layout] then layout = 'default' end
     if not order or not BUTTONORDERS[order] then order = 'default' end
@@ -265,11 +267,11 @@ end
 function LiteBagPanel_ResizeToFrame(self, width, height)
     LiteBag_Debug(format("Panel ResizeToFrame %s %d,%d", self:GetName(), width, height))
 
-    local layout = LiteBag_GetFrameOption(self, 'layout')
+    local layout = LB.Options:GetFrameOption(self, 'layout')
     if not layout or not LAYOUTS[layout] then layout = 'default' end
 
     local ncols
-    local currentCols = LiteBag_GetFrameOption(self, 'columns') or
+    local currentCols = LB.Options:GetFrameOption(self, 'columns') or
                             self.defaultColumns or
                             MIN_COLUMNS
 
@@ -296,7 +298,7 @@ function LiteBagPanel_ResizeToFrame(self, width, height)
         end
     end
 
-    LiteBag_SetFrameOption(self, 'columns', ncols)
+    LB.Options:SetFrameOption(self, 'columns', ncols)
     LiteBagPanel_UpdateSizeAndLayout(self)
 end
 
@@ -459,11 +461,18 @@ function LiteBag_AddUpdateEvent(e)
     PluginUpdateEvents[e] = true
 end
 
-function LiteBagPanel_OnShow(self)
-    LiteBag_Debug("Panel OnShow " .. self:GetName())
+function LiteBagPanel_Update(self)
     LiteBagPanel_UpdateBagSlotCounts(self)
     LiteBagPanel_UpdateSizeAndLayout(self)
     LiteBagPanel_UpdateAllBags(self)
+    self:GetParent():SetHeight(self:GetHeight())
+end
+
+function LiteBagPanel_OnShow(self)
+    LiteBag_Debug("Panel OnShow " .. self:GetName())
+    LiteBagPanel_Update(self)
+
+    LB.Options:RegisterCallback(self, LiteBagPanel_UpdateAllBags)
 
     -- From ContainerFrame:OnLoad()
     -- self:RegisterEvent('BAG_OPEN')
@@ -493,6 +502,7 @@ end
 function LiteBagPanel_OnHide(self)
     LiteBag_Debug("Panel OnHide " .. self:GetName())
 
+    LB.Options:UnregisterAllCallbacks(self)
     self:UnregisterAllEvents()
 
     for _, bag in ipairs(self.bagFrames) do
@@ -534,10 +544,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
 
     if event == 'BAG_UPDATE_DELAYED' then
         self:UnregisterEvent('BAG_UPDATE_DELAYED')
-        LiteBagPanel_UpdateBagSlotCounts(self)
-        LiteBagPanel_UpdateSizeAndLayout(self)
-        LiteBagPanel_UpdateAllBags(self)
-        self:GetParent():SetHeight(self:GetHeight())
+        LiteBagPanel_Update(self)
         return
     end
 

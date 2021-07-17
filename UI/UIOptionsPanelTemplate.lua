@@ -13,6 +13,8 @@
 
 ----------------------------------------------------------------------------]]--
 
+local addonName, LB = ...
+
 function LiteBagOptionsPanel_Open()
     local f = LiteBagOptions
     if not f.CurrentOptionsPanel then
@@ -76,14 +78,14 @@ end
 
 function LiteBagOptionsPanel_OnShow(self)
     LiteBagOptions.CurrentOptionsPanel = self
-    LiteBag_RegisterOptionsCallback(self, 'refresh')
+    LB.Options:RegisterCallback(self, 'refresh')
 
     LiteBagOptionsPanel_SaveOldOptions(self)
     LiteBagOptionsPanel_Refresh(self)
 end
 
 function LiteBagOptionsPanel_OnHide(self)
-    LiteBag_UnregisterOptionsCallbacks(self)
+    LB.Options:UnregisterAllCallbacks(self)
     LiteBagOptionsPanel_Okay(self)
 end
 

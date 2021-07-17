@@ -9,6 +9,8 @@
 
 ----------------------------------------------------------------------------]]--
 
+local addonName, LB = ...
+
 -- Mostly copied from BackpackTokenFrame_Update in Blizzard_TokenUI.lua
 
 function LiteBagTokensFrame_Update(self)

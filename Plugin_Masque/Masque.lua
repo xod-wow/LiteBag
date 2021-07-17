@@ -9,6 +9,8 @@
 
 ----------------------------------------------------------------------------]]--
 
+local addonName, LB = ...
+
 if LibStub then
     local Masque = LibStub('Masque', true)
 

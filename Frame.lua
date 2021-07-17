@@ -9,7 +9,7 @@
 
 ----------------------------------------------------------------------------]]--
 
-local addonName, addonTable = ...
+local addonName, LB = ...
 
 local function GetSqDistanceFromBackpackDefault(self)
     local defaultX = UIParent:GetRight() - CONTAINER_OFFSET_X
@@ -42,7 +42,7 @@ function LiteBagFrame_StopMoving(self)
         return
     end
 
-    if LiteBag_GetGlobalOption('NoSnapToPosition') then
+    if LB.Options:GetGlobalOption('NoSnapToPosition') then
         return
     end
 
@@ -90,7 +90,7 @@ function LiteBagFrame_OnShow(self)
     LiteBag_Debug("Frame OnShow " .. self:GetName())
 
     self:SetSize(self.currentPanel:GetSize())
-    self:SetScale(LiteBag_GetFrameOption(self, 'scale') or 1.0)
+    self:SetScale(LB.Options:GetFrameOption(self, 'scale') or 1.0)
 
     LiteBagFrame_AttachSearchBox(self)
 

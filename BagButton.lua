@@ -9,6 +9,8 @@
 
 ----------------------------------------------------------------------------]]--
 
+local addonName, LB = ...
+
 local BankContainers = { [BANK_CONTAINER]  = true }
 do
     for i = 1,NUM_BANKBAGSLOTS do

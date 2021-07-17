@@ -9,6 +9,8 @@
 
 ----------------------------------------------------------------------------]]--
 
+local addonName, LB = ...
+
 local INVENTORY_BAG_IDS = { 0, 1, 2, 3, 4 }
 
 local OPEN_EVENTS = {

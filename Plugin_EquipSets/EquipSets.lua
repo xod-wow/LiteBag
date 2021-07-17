@@ -14,6 +14,8 @@
 
 ----------------------------------------------------------------------------]]--
 
+local addonName, LB = ...
+
 -- This is a guess at something I don't really understand, ItemLocations.
 -- On one hand this seems pretty inefficient. On the other hand, the Blizzard
 -- equivalent makes you use strsplit, so frankly this has to be faster.
@@ -101,7 +103,7 @@ local function Update(button)
 
     for i,td in ipairs(texData) do
         local tex = button[td.parentKey]
-        if LiteBag_GetGlobalOption("HideEquipsetIcon") == nil and
+        if LB.Options:GetGlobalOption("HideEquipsetIcon") == nil and
            memberships[i] == true then
             tex:Show()
         else

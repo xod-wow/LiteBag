@@ -9,7 +9,9 @@
 
 ----------------------------------------------------------------------------]]--
 
-local L = LiteBag_Localize
+local addonName, LB = ...
+
+local L = LB.Localize
 
 -- If there's no translation use these icons. No idea what a good icon for
 -- BoE would be though.
@@ -86,7 +88,7 @@ local function Update(button)
         button.LiteBagBindsOnText:SetPoint("TOP", button, "TOP", 0, -2)
     end
 
-    if not LiteBag_GetGlobalOption("ShowBindsOnText") or not button.hasItem then
+    if not LB.Options:GetGlobalOption("ShowBindsOnText") or not button.hasItem then
         button.LiteBagBindsOnText:Hide()
         return
     end

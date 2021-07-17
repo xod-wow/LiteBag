@@ -9,12 +9,14 @@
 
 ----------------------------------------------------------------------------]]--
 
+local addonName, LB = ...
+
 local function Update(self)
     if self.IconBorder:GetTexture() ~= [[Interface\Common\WhiteIconFrame]] then
         return
     end
 
-    local minQuality = tonumber(LiteBag_GetGlobalOption("ThickerIconBorder"))
+    local minQuality = tonumber(LB.Options:GetGlobalOption("ThickerIconBorder"))
     if not minQuality then
         return
     end

@@ -9,6 +9,8 @@
 
 ----------------------------------------------------------------------------]]--
 
+local addonName, LB = ...
+
 function LiteBagItemButton_OnLoad(self)
     self.GetInventorySlot = ButtonInventorySlot
     self.UpdateTooltip = LiteBagItemButton_OnEnter
