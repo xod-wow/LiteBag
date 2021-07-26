@@ -25,6 +25,9 @@ LiteBagBank.xml
 LiteBagInventory.xml
 ReplaceBlizzard.lua
 
+#@debug@
+Plugin_Anima\Anima.xml
+#@end-debug@
 Plugin_BindsOn\BindsOn.xml
 Plugin_EquipSets\EquipSets.xml
 Plugin_IconBorder\IconBorder.xml
