@@ -57,10 +57,10 @@ function LiteBagBagButtonMixin:Update()
     self.isBank = BankContainers[self:GetID()]
 
     if self.bagID == BACKPACK_CONTAINER then
-        self:SetAtlas("hud-backpack", false)
+        SetItemButtonTexture(self, 'Interface\\Buttons\\Button-Backpack-Up')
         return
     elseif self.bagID == BANK_CONTAINER then
-        self:SetAtlas("hud-backpack", false)
+        SetItemButtonTexture(self, 'Interface\\Buttons\\Button-Backpack-Up')
         return
     end
 
