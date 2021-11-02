@@ -45,12 +45,12 @@ function LB.Options:Initialize()
     self.db = LiteBag_OptionsDB
 end
 
-function LB.Options:SetFrameOption(frame, option, value)
+function LB.Options:SetFrameOption(frame, option, value, noTrigger)
     frame = _G[frame] or frame
     local n = 'Frame:' .. frame:GetName()
     self.db[n] = LiteBag_OptionsDB[n] or { }
     self.db[n][option] = value
-    self:Fire()
+    if not noTrigger then self:Fire() end
 end
 
 function LB.Options:GetFrameOption(frame, option)
@@ -60,9 +60,9 @@ function LB.Options:GetFrameOption(frame, option)
     return self.db[n][option]
 end
 
-function LB.Options:SetGlobalOption(option, value)
+function LB.Options:SetGlobalOption(option, value, noTrigger)
     self.db[option] = value
-    self:Fire()
+    if not noTrigger then self:Fire() end
 end
 
 function LB.Options:GetGlobalOption(option)
