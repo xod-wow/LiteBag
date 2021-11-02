@@ -12,7 +12,9 @@
 local addonName, LB = ...
 
 local function Update(self)
-    if self.IconBorder:GetTexture() ~= [[Interface\Common\WhiteIconFrame]] then
+    -- Where did 651080 suddenly come from?
+    if self.IconBorder:GetTexture() ~= [[Interface\Common\WhiteIconFrame]] and
+       self.IconBorder:GetTexture() ~= 651080 then
         return
     end
 
