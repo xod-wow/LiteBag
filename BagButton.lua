@@ -187,7 +187,9 @@ function LiteBagBagButtonMixin:OnClick()
 end
 
 function LiteBagBagButtonFilterDropdown_OnShow(self)
+--[[
     if not self:GetAttribute('initmenu') then
         UIDropDownMenu_Initialize(self, ContainerFrameFilterDropDown_Initialize, "MENU")
     end
+]]
 end
