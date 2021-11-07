@@ -28,3 +28,6 @@ function LB.CallHooks(func, self)
          f(self)
     end
 end
+
+-- Exported interface for other addons
+_G.LiteBag_RegisterHook = LB.RegisterHook
