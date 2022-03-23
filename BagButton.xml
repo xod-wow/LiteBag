@@ -15,13 +15,6 @@
             </Texture>
         </Layer>
     </Layers>
-    <Frames>
-        <Frame name="$parentFilterDropdown" parentKey="FilterDropDown" inherits="UIDropDownMenuTemplate">
-            <Scripts>
-                <OnShow function="LiteBagBagButtonFilterDropdown_OnShow" />
-            </Scripts>
-        </Frame>
-    </Frames>
     <Scripts>
         <OnSizeChanged>
             -- For some reason the NormalTexture is only center anchored

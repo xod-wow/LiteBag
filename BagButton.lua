@@ -11,11 +11,107 @@
 
 local addonName, LB = ...
 
+local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
+
 local BankContainers = { [BANK_CONTAINER]  = true }
 do
     for i = 1,NUM_BANKBAGSLOTS do
         BankContainers[NUM_BAG_SLOTS+i] = true
     end
+end
+
+-- Copied from Interface/FrameXML/ContainerFrame.lua and then replaced with
+-- LibDD calls. I've even left all their horrible ; so I can easily re-paste
+-- it later.
+
+local function FilterDropDown_Initialize(self, level)
+	local frame = self:GetParent();
+	local id = frame:GetID();
+	
+	if (id > NUM_BAG_SLOTS + NUM_BANKBAGSLOTS) then
+		return;
+	end
+
+	local info = LibDD:UIDropDownMenu_CreateInfo();	
+
+	if (id > 0 and not IsInventoryItemProfessionBag("player", ContainerIDToInventoryID(id))) then -- The actual bank has ID -1, backpack has ID 0, we want to make sure we're looking at a regular or bank bag
+		info.text = BAG_FILTER_ASSIGN_TO;
+		info.isTitle = 1;
+		info.notCheckable = 1;
+		LibDD:UIDropDownMenu_AddButton(info);
+
+		info.isTitle = nil;
+		info.notCheckable = nil;
+		info.tooltipWhileDisabled = 1;
+		info.tooltipOnButton = 1;
+
+		for i = LE_BAG_FILTER_FLAG_EQUIPMENT, NUM_LE_BAG_FILTER_FLAGS do
+			if ( i ~= LE_BAG_FILTER_FLAG_JUNK ) then
+				info.text = BAG_FILTER_LABELS[i];
+				info.func = function(_, _, _, value)
+					value = not value;
+					if (id > NUM_BAG_SLOTS) then
+						SetBankBagSlotFlag(id - NUM_BAG_SLOTS, i, value);
+					else
+						SetBagSlotFlag(id, i, value);
+					end
+					if (value) then
+						frame.localFlag = i;
+						frame.FilterIcon.Icon:SetAtlas(BAG_FILTER_ICONS[i]);
+						frame.FilterIcon:Show();
+					else
+						frame.FilterIcon:Hide();
+						frame.localFlag = -1;						
+					end
+				end;
+				if (frame.localFlag) then
+					info.checked = frame.localFlag == i;
+				else
+					if (id > NUM_BAG_SLOTS) then
+						info.checked = GetBankBagSlotFlag(id - NUM_BAG_SLOTS, i);
+					else
+						info.checked = GetBagSlotFlag(id, i);
+					end
+				end
+				info.disabled = nil;
+				info.tooltipTitle = nil;
+				LibDD:UIDropDownMenu_AddButton(info);
+			end
+		end
+	end
+
+	info.text = BAG_FILTER_CLEANUP;
+	info.isTitle = 1;
+	info.notCheckable = 1;
+	LibDD:UIDropDownMenu_AddButton(info);
+
+	info.isTitle = nil;
+	info.notCheckable = nil;
+	info.isNotRadio = true;
+	info.disabled = nil;
+
+	info.text = BAG_FILTER_IGNORE;
+	info.func = function(_, _, _, value)
+		if (id == -1) then
+			SetBankAutosortDisabled(not value);
+		elseif (id == 0) then
+			SetBackpackAutosortDisabled(not value);
+		elseif (id > NUM_BAG_SLOTS) then
+			SetBankBagSlotFlag(id - NUM_BAG_SLOTS, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP, not value);
+		else
+			SetBagSlotFlag(id, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP, not value);
+		end
+	end;
+	if (id == -1) then
+		info.checked = GetBankAutosortDisabled();
+	elseif (id == 0) then
+		info.checked = GetBackpackAutosortDisabled();
+	elseif (id > NUM_BAG_SLOTS) then
+		info.checked = GetBankBagSlotFlag(id - NUM_BAG_SLOTS, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP);
+	else
+		info.checked = GetBagSlotFlag(id, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP);
+	end
+	LibDD:UIDropDownMenu_AddButton(info);
 end
 
 LiteBagBagButtonMixin = {}
@@ -105,6 +201,9 @@ function LiteBagBagButtonMixin:OnLoad()
     -- Blizzard's ContainerFrameFilterDropDown expects the texture
     -- to be attached to a button.  Fake it.
     self.FilterIcon.Icon = self.FilterIcon
+
+    self.FilterDropDown = LibDD:Create_UIDropDownMenu(self:GetName().."FilterDropDown", self)
+    LibDD:UIDropDownMenu_Initialize(self.FilterDropDown, FilterDropDown_Initialize, "MENU")
 end
 
 function LiteBagBagButtonMixin:OnEvent(event, ...)
@@ -183,13 +282,5 @@ function LiteBagBagButtonMixin:OnClick()
     end
 
     PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-    ToggleDropDownMenu(1, nil, self.FilterDropDown, self, 0, 0)
-end
-
-function LiteBagBagButtonFilterDropdown_OnShow(self)
---[[
-    if not self:GetAttribute('initmenu') then
-        UIDropDownMenu_Initialize(self, ContainerFrameFilterDropDown_Initialize, "MENU")
-    end
-]]
+    LibDD:ToggleDropDownMenu(1, nil, self.FilterDropDown, self, 0, 0)
 end
