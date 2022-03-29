@@ -506,7 +506,12 @@ function LiteBagPanel_OnHide(self)
     self:UnregisterAllEvents()
 
     for _, bag in ipairs(self.bagFrames) do
-        UpdateNewItemList(bag)
+        -- This is replacing UpdateNewItemsList
+        local bagID = bag:GetID()
+        for i = 1, GetContainerNumSlots(bagID) do
+            local slotID = bag.itemButtons[i]:GetID()
+            C_NewItems.RemoveNewItem(bagID, slotID)
+        end
         ContainerFrame_CloseTutorial(bag)
     end
 
