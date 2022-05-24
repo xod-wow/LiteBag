@@ -7,6 +7,8 @@
 ## Email: mib@post.com
 ## OptionalDependencies: Masque
 ## SavedVariablesPerCharacter: LiteBag_OptionsDB
+## X-Curse-Project-ID: 50424
+## X-WoWI-ID: 26330
 
 Libs\LibStub.lua
 Libs\LibUIDropDownMenu\LibUIDropDownMenu.xml
