@@ -1,7 +1,7 @@
 # LiteBag World of Warcraft Addon
 
 For the addon, see:
-- https://www.curseforge.com/wow/addons/bag
+- https://www.curseforge.com/wow/addons/litebag
 
 ## For Authors of Bag Icon-Plugin Addons
 
