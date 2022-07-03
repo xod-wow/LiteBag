@@ -168,5 +168,17 @@ end
 -- the bags too, try to hook later than them all.
 
 local replacer = CreateFrame('Frame', UIParent)
-replacer:SetScript('OnEvent', function () ReplaceBlizzard() end)
 replacer:RegisterEvent('PLAYER_LOGIN')
+replacer:RegisterEvent('GUILDBANKFRAME_OPENED')
+replacer:RegisterEvent('GUILDBANKFRAME_CLOSED')
+replacer:RegisterEvent('PLAYER_LOGIN')
+replacer:SetScript('OnEvent',
+    function (self, event, ...)
+        if event == 'GUILDBANKFRAME_OPENED' then
+            OpenAllBags()
+        elseif event == 'GUILDBANKFRAME_CLOSED' then
+            CloseAllBags()
+        elseif event == 'PLAYER_LOGIN' then
+            ReplaceBlizzard()
+        end
+end)
