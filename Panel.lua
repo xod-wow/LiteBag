@@ -461,6 +461,8 @@ function LB.AddUpdateEvent(e)
     PluginUpdateEvents[e] = true
 end
 
+_G.LiteBag_AddUpdateEvent = LB.AddUpdateEvent
+
 function LiteBagPanel_Update(self)
     LiteBagPanel_UpdateBagSlotCounts(self)
     LiteBagPanel_UpdateSizeAndLayout(self)
