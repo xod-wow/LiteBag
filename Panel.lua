@@ -461,8 +461,6 @@ function LB.AddUpdateEvent(e)
     PluginUpdateEvents[e] = true
 end
 
-_G.LiteBag_AddUpdateEvent = LB.AddUpdateEvent
-
 function LiteBagPanel_Update(self)
     LiteBagPanel_UpdateBagSlotCounts(self)
     LiteBagPanel_UpdateSizeAndLayout(self)
@@ -638,3 +636,6 @@ function LiteBagPanel_OnEvent(self, event, ...)
 
     LiteBagPanel_UpdateAllBags(self)
 end
+
+-- Exported interface for other addons
+_G.LiteBag_AddUpdateEvent = LB.AddUpdateEvent
