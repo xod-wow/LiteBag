@@ -29,7 +29,7 @@ function LiteBagBank_Initialize(self)
     LiteBagPanel_Initialize(panel, BANK_BAG_IDS)
     panel.defaultColumns = 16
     panel.canResize = true
-    LiteBagFrame_AddPanel(self, panel, BankFrameTab1:GetText())
+    LiteBagFrame_AddPanel(self, panel, BANK)
 
     -- Attach in the other Blizzard bank panels. Note that we are also
     -- responsible for handling their events!
@@ -115,10 +115,12 @@ function LiteBagBank_OnShow(self)
     SetPortraitTexture(self.portrait, 'npc')
 
     self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
-    self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
     self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
     self:RegisterEvent('ITEM_LOCK_CHANGED')
     self:RegisterEvent('PLAYER_MONEY')
+    if ReagentBankFrame then
+        self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
+    end
 end
 
 function LiteBagBank_OnHide(self)
@@ -126,8 +128,10 @@ function LiteBagBank_OnHide(self)
     -- new BANKFRAME_OPENED event if we interact with the NPC again.
     CloseBankFrame()
     self:UnregisterEvent('PLAYERBANKSLOTS_CHANGED')
-    self:UnregisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
     self:UnregisterEvent('INVENTORY_SEARCH_UPDATE')
     self:UnregisterEvent('ITEM_LOCK_CHANGED')
     self:UnregisterEvent('PLAYER_MONEY')
+    if ReagentBankFrame then
+        self:UnregisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
+    end
 end

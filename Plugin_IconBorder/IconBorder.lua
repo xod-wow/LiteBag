@@ -18,24 +18,22 @@ local function Update(self)
         return
     end
 
-    local minQuality = tonumber(LB.Options:GetGlobalOption("ThickerIconBorder"))
-    if not minQuality then
-        return
-    end
-
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
     local quality = select(4, GetContainerItemInfo(bag, slot))
+    if not quality then return end
 
-    if not quality then
-        return
-    end
+    local minQuality = tonumber(LB.Options:GetGlobalOption("ThickerIconBorder"))
 
-    if quality >= minQuality then
+    if quality and minQuality and quality >= minQuality then
         self.IconBorder:SetTexture([[Interface\Addons\LiteBag\Plugin_IconBorder\IconBorder]])
     end
 
+    if WOW_PROJECT_ID ~= 1 then
+        self.IconBorder:Show()
+        self.IconBorder:SetVertexColor(ITEM_QUALITY_COLORS[quality].color:GetRGB())
+    end
 end
 
 LB.RegisterHook('LiteBagItemButton_Update', Update)

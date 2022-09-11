@@ -16,6 +16,8 @@ local addonName, LB = ...
 LiteBagTokenFrameMixin = {}
 
 function LiteBagTokenFrameMixin:Update()
+    if not C_CurrencyInfo.GetBackpackCurrencyInfo then return end
+
     for i = 1, MAX_WATCHED_TOKENS do
         local watchButton = self.Tokens[i]
         local currencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo(i)

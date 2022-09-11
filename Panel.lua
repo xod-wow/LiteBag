@@ -45,7 +45,24 @@ function LiteBagPanel_Initialize(self, bagIDs)
         self.isBackpack = true
     end
 
-    -- Set up the bag buttons with their bag IDs
+    -- Set up the bag buttons with their bag IDs. Classic doesn't support
+    -- parentArray and appears to not make the buttons at all.
+
+    if not self.bagButtons then
+        self.bagButtons = {}
+        local p
+        for i = 1, 8 do
+            local n = self:GetName() .. "Button" .. i
+            local f = CreateFrame("Button", n, self, "LiteBagBagButtonTemplate")
+            if p then
+                f:SetPoint("LEFT", p, "RIGHT", 4, 0)
+            else
+                f:SetPoint("TOPLEFT", self, "TOPLEFT", 60, -31)
+            end
+            p = f
+            table.insert(self.bagButtons, f)
+        end
+    end
 
     for i, b in ipairs(self.bagButtons) do
         if bagIDs[i] then
@@ -71,6 +88,8 @@ local function GetBagFrame(self, id)
     end
 end
 
+local BUTTONTYPE = WOW_PROJECT_ID == 1 and 'ItemButton' or 'Button'
+
 function LiteBagPanel_UpdateBagSlotCounts(self)
     LB.Debug("Panel UpdateBagSlotCounts " .. self:GetName())
     local size = 0
@@ -87,7 +106,7 @@ function LiteBagPanel_UpdateBagSlotCounts(self)
         for i = 1, GetContainerNumSlots(bagID) do
             if not bag.itemButtons[i] then
                 local name = format('%sItem%d', bag:GetName(), i)
-                bag.itemButtons[i] = CreateFrame('ItemButton', name, nil, 'LiteBagItemButtonTemplate')
+                bag.itemButtons[i] = CreateFrame(BUTTONTYPE, name, nil, 'LiteBagItemButtonTemplate')
                 bag.itemButtons[i]:SetSize(37, 37)
                 LB.CallHooks('LiteBagItemButton_Create', bag.itemButtons[i])
             end
@@ -333,9 +352,14 @@ function LiteBagPanel_UpdateBag(self)
         local tooltipOwner = GameTooltip:GetOwner()
         local baseSize = GetContainerNumSlots(id)
 
-        ContainerFrame_CloseTutorial(self)
+        if ContainerFrame_CloseTutorial then
+            ContainerFrame_CloseTutorial(self)
+        end
 
-        local shouldDoTutorialChecks = ContainerFrame_ShouldDoTutorialChecks()
+        local shouldDoTutorialChecks
+        if ContainerFrame_ShouldDoTutorialChecks then
+            shouldDoTutorialChecks = ContainerFrame_ShouldDoTutorialChecks()
+        end
 
         for i = 1, self.size or 0, 1 do
             itemButton = self.itemButtons[i]
@@ -405,9 +429,10 @@ function LiteBagPanel_UpdateBag(self)
                 itemButton.JunkIcon:SetShown(isJunk)
             end
 
-            itemButton:UpdateItemContextMatching()
-
-            ContainerFrameItemButton_UpdateItemUpgradeIcon(itemButton)
+            if WOW_PROJECT_ID == 1 then
+                itemButton:UpdateItemContextMatching()
+                ContainerFrameItemButton_UpdateItemUpgradeIcon(itemButton)
+            end
 
             if ( texture ) then
                 ContainerFrame_UpdateCooldown(id, itemButton)
@@ -426,11 +451,13 @@ function LiteBagPanel_UpdateBag(self)
                 end
             end
 
-            itemButton:SetMatchesSearch(not isFiltered)
-            if ( not isFiltered ) then
-                if shouldDoTutorialChecks then
-                    if ContainerFrame_CheckItemButtonForTutorials(itemButton, itemID) then
-                        shouldDoTutorialChecks = false;
+            if WOW_PROJECT_ID == 1 then
+                itemButton:SetMatchesSearch(not isFiltered)
+                if ( not isFiltered ) then
+                    if shouldDoTutorialChecks then
+                        if ContainerFrame_CheckItemButtonForTutorials(itemButton, itemID) then
+                            shouldDoTutorialChecks = false
+                        end
                     end
                 end
             end
@@ -438,9 +465,11 @@ function LiteBagPanel_UpdateBag(self)
             LB.CallHooks('LiteBagItemButton_Update', itemButton)
         end
 
-        local bagButton = ContainerFrame_GetBagButton(self)
-        if bagButton then
-            bagButton:UpdateItemContextMatching()
+        if WOW_PROJECT_ID == 1 then
+            local bagButton = ContainerFrame_GetBagButton(self)
+            if bagButton then
+                bagButton:UpdateItemContextMatching()
+            end
         end
 end
 
@@ -483,7 +512,9 @@ function LiteBagPanel_OnShow(self)
     -- From ContainerFrame:OnShow()
     self:RegisterEvent('BAG_UPDATE')
     self:RegisterEvent('UNIT_INVENTORY_CHANGED')
-    self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
+    if WOW_PROJECT_ID == 1 then
+        self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
+    end
     self:RegisterEvent('ITEM_LOCK_CHANGED')
     self:RegisterEvent('BAG_UPDATE_COOLDOWN')
     -- self:RegisterEvent('DISPLAY_SIZE_CHANGED')
@@ -512,7 +543,9 @@ function LiteBagPanel_OnHide(self)
             local slotID = bag.itemButtons[i]:GetID()
             C_NewItems.RemoveNewItem(bagID, slotID)
         end
-        ContainerFrame_CloseTutorial(bag)
+        if ContainerFrame_CloseTutorial then
+            ContainerFrame_CloseTutorial(bag)
+        end
     end
 
 end
@@ -598,11 +631,13 @@ function LiteBagPanel_OnEvent(self, event, ...)
         return
     end
 
-    if event == 'UNIT_INVENTORY_CHANGED' or event == 'PLAYER_SPECIALIZATION_CHANGED' then
-        for _, bag in ipairs(self.bagFrames) do
-            ContainerFrame_UpdateItemUpgradeIcons(bag)
+    if WOW_PROJECT_ID == 1 then
+        if event == 'UNIT_INVENTORY_CHANGED' or event == 'PLAYER_SPECIALIZATION_CHANGED' then
+            for _, bag in ipairs(self.bagFrames) do
+                ContainerFrame_UpdateItemUpgradeIcons(bag)
+            end
+            return
         end
-        return
     end
 
     if event == 'BAG_UPDATE' then

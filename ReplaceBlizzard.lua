@@ -87,18 +87,20 @@ local function ReplaceBlizzardInventory()
     -- highlighted when their particular bag is opened.
     BagSlotButton_UpdateChecked = function () end
 
-    -- Add the confirm text to the sort button mouseover tooltip.
-    BagItemAutoSortButton:HookScript('OnEnter', function (self)
-        if not LB.Options:GetGlobalOption('NoConfirmSort') then
-            GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
-        end
-        GameTooltip:Show()
-        end)
+    if WOW_PROJECT_ID == 1 then
+        -- Add the confirm text to the sort button mouseover tooltip.
+        BagItemAutoSortButton:HookScript('OnEnter', function (self)
+            if not LB.Options:GetGlobalOption('NoConfirmSort') then
+                GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
+            end
+            GameTooltip:Show()
+            end)
 
-    -- Change the sort button to call our confirm function.
-    BagItemAutoSortButton:SetScript('OnClick', function (self)
-            DoOrStaticPopup(BAG_CLEANUP_BAGS, SortBags)
-        end)
+        -- Change the sort button to call our confirm function.
+        BagItemAutoSortButton:SetScript('OnClick', function (self)
+                DoOrStaticPopup(BAG_CLEANUP_BAGS, SortBags)
+            end)
+    end
 
 end
 
@@ -128,23 +130,25 @@ local function ReplaceBlizzardBank()
 
     -- Add the confirm text to the sort button tooltip.
 
-    BankItemAutoSortButton:HookScript('OnEnter', function (self)
-        if not LB.Options:GetGlobalOption('NoConfirmSort') then
-            GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
-        end
-        GameTooltip:Show()
-        end)
-
-    -- Change the sort button to call our confirm function.
-
-    BankItemAutoSortButton:SetScript('OnClick', function (self)
-            local parent = self:GetParent()
-            if (parent.selectedTab == 1) then
-                DoOrStaticPopup(BAG_CLEANUP_BANK, SortBankBags)
-            elseif (parent.selectedTab == 2) then
-                DoOrStaticPopup(BAG_CLEANUP_REAGENT_BANK, SortReagentBankBags)
+    if WOW_PROJECT_ID == 1 then
+        BankItemAutoSortButton:HookScript('OnEnter', function (self)
+            if not LB.Options:GetGlobalOption('NoConfirmSort') then
+                GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
             end
-        end)
+            GameTooltip:Show()
+            end)
+
+        -- Change the sort button to call our confirm function.
+
+        BankItemAutoSortButton:SetScript('OnClick', function (self)
+                local parent = self:GetParent()
+                if (parent.selectedTab == 1) then
+                    DoOrStaticPopup(BAG_CLEANUP_BANK, SortBankBags)
+                elseif (parent.selectedTab == 2) then
+                    DoOrStaticPopup(BAG_CLEANUP_REAGENT_BANK, SortReagentBankBags)
+                end
+            end)
+    end
 end
 
 local function ReplaceBlizzard()

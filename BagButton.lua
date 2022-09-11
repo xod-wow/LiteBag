@@ -196,14 +196,16 @@ function LiteBagBagButtonMixin:OnLoad()
     self:RegisterForDrag('LeftButton')
     self:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
 
-    self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
+    if WOW_PROJECT_ID == 1 then
+        self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
 
-    -- Blizzard's ContainerFrameFilterDropDown expects the texture
-    -- to be attached to a button.  Fake it.
-    self.FilterIcon.Icon = self.FilterIcon
+        -- Blizzard's ContainerFrameFilterDropDown expects the texture
+        -- to be attached to a button.  Fake it.
+        self.FilterIcon.Icon = self.FilterIcon
 
-    self.FilterDropDown = LibDD:Create_UIDropDownMenu(self:GetName().."FilterDropDown", self)
-    LibDD:UIDropDownMenu_Initialize(self.FilterDropDown, FilterDropDown_Initialize, "MENU")
+        self.FilterDropDown = LibDD:Create_UIDropDownMenu(self:GetName().."FilterDropDown", self)
+        LibDD:UIDropDownMenu_Initialize(self.FilterDropDown, FilterDropDown_Initialize, "MENU")
+    end
 end
 
 function LiteBagBagButtonMixin:OnEvent(event, ...)
@@ -281,6 +283,8 @@ function LiteBagBagButtonMixin:OnClick()
         return
     end
 
-    PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-    LibDD:ToggleDropDownMenu(1, nil, self.FilterDropDown, self, 0, 0)
+    if WOW_PROJECT_ID == 1 then
+        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+        LibDD:ToggleDropDownMenu(1, nil, self.FilterDropDown, self, 0, 0)
+    end
 end

@@ -98,17 +98,21 @@ function LiteBagFrame_OnShow(self)
 end
 
 function LiteBagFrame_AttachSearchBox(self)
-    self.searchBox:SetParent(self)
-    self.searchBox:ClearAllPoints()
-    self.searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -38, -35)
-    self.searchBox.anchorBag = self
-    self.searchBox:Show()
+    if self.searchBox then
+        self.searchBox:SetParent(self)
+        self.searchBox:ClearAllPoints()
+        self.searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -38, -35)
+        self.searchBox.anchorBag = self
+        self.searchBox:Show()
+    end
 
-    self.sortButton:SetParent(self)
-    self.sortButton:ClearAllPoints()
-    self.sortButton:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -7, -32)
-    self.sortButton.anchorBag = self
-    self.sortButton:Show()
+    if self.sortButton then
+        self.sortButton:SetParent(self)
+        self.sortButton:ClearAllPoints()
+        self.sortButton:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -7, -32)
+        self.sortButton.anchorBag = self
+        self.sortButton:Show()
+    end
 end
 
 function LiteBagFrame_TabOnClick(tab)

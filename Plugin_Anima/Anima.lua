@@ -12,6 +12,7 @@
 local addonName, LB = ...
 
 local function Update(self)
+    if not C_Item.IsAnimaItemByID then return end
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
