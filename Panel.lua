@@ -26,7 +26,17 @@ local PluginUpdateEvents = { }
 function LiteBagPanel_Initialize(self, bagIDs)
     LB.Debug("Panel Initialize " .. self:GetName())
 
-    Mixin(self, BaseContainerFrameMixin, ContainerFrameTokenWatcherMixin)
+    Mixin(self, BaseContainerFrameMixin)
+
+    -- Can't mixin ContainerFrameTokenWatcherMixin as it mixins the whole
+    -- ContainerFrameMixin for no obvious reason other than to make one
+    -- line a bit shorter.
+
+    self.SetTokenTracker = ContainerFrameTokenWatcherMixin.SetTokenTracker
+    self.UpdateTokenTracker = ContainerFrameTokenWatcherMixin.UpdateTokenTracker
+    self.CalculateExtraHeight = ContainerFrameTokenWatcherMixin.CalculateExtraHeight
+    self.UpdateCurrencyFrames = ContainerFrameTokenWatcherMixin.UpdateCurrencyFrames
+    self.UpdateMoneyFrame = ContainerFrameMixin.UpdateMoneyFrame
 
     -- Create the dummy container frames, so each itembutton can be parented
     -- by one allowing us to use all the Blizzard container frame code
@@ -55,25 +65,7 @@ function LiteBagPanel_Initialize(self, bagIDs)
         ContainerFrameSettingsManager:SetTokenTrackerOwner(self)
     end
 
-    -- Set up the bag buttons with their bag IDs. Classic doesn't support
-    -- parentArray and appears to not make the buttons at all.
-
-    if not self.bagButtons then
-        self.bagButtons = {}
-        local p
-        for i = 1, 8 do
-            local n = self:GetName() .. "Button" .. i
-            local f = CreateFrame("Button", n, self, "LiteBagBagButtonTemplate")
-            if p then
-                f:SetPoint("LEFT", p, "RIGHT", 4, 0)
-            else
-                f:SetPoint("TOPLEFT", self, "TOPLEFT", 60, -31)
-            end
-            p = f
-            table.insert(self.bagButtons, f)
-        end
-    end
-
+    -- Set up the bag buttons with their bag IDs.
     for i, b in ipairs(self.bagButtons) do
         if bagIDs[i] then
             b:SetID(bagIDs[i])
@@ -358,8 +350,6 @@ function LiteBagPanel_ClearNewItems(self)
     end
 end
 
--- This is a modied copy of ContainerFrame_Update from FrameXML/ContainerFrame.lua
-
 function LiteBagPanel_UpdateBag(self)
     ContainerFrameMixin.UpdateItems(self)
     for _, itemButton in self:EnumerateValidItems() do
@@ -427,17 +417,8 @@ function LiteBagPanel_OnHide(self)
     -- LB.Options:UnregisterAllCallbacks(self)
     self:UnregisterAllEvents()
 
-    for _, bag in ipairs(self.bagFrames) do
-        -- This is replacing UpdateNewItemsList
-        local bagID = bag:GetID()
-        for i = 1, GetContainerNumSlots(bagID) do
-            local slotID = bag.Items[i]:GetID()
-            C_NewItems.RemoveNewItem(bagID, slotID)
-        end
-        if ContainerFrame_CloseTutorial then
-            ContainerFrame_CloseTutorial(bag)
-        end
-    end
+    UpdateNewItemList(self)
+    ContainerFrameMixin.CloseTutorial(self)
 
 end
 

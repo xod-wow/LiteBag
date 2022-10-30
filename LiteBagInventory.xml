@@ -4,6 +4,15 @@
 
 <Script file="LiteBagInventory.lua" />
 
+<Frame name="LBI" parent="UIParent" inherits="LiteBagContainerFrameTemplate" hidden="true">
+    <KeyValues>
+        <KeyValue key="FrameType" value="BAG" type="string" />
+    </KeyValues>
+    <Anchors>
+        <Anchor point="RIGHT" />
+    </Anchors>
+</Frame>
+
 <Frame name="LiteBagInventory" parent="UIParent"
        inherits="LiteBagFrameTemplate">
 

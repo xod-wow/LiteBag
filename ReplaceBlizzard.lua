@@ -186,3 +186,5 @@ replacer:SetScript('OnEvent',
             ReplaceBlizzard()
         end
 end)
+
+_G.LB = LB
