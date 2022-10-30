@@ -27,7 +27,7 @@ function LiteBagBank_Initialize(self)
 
     local panel = CreateFrame('Frame', 'LiteBagBankPanel', self, 'LiteBagPanelTemplate')
     LiteBagPanel_Initialize(panel, BANK_BAG_IDS)
-    panel.defaultColumns = 16
+    panel.defaultColumns = 14
     panel.canResize = true
     LiteBagFrame_AddPanel(self, panel, BANK)
 
@@ -54,11 +54,6 @@ function LiteBagBank_Initialize(self)
             BankFrame.activeTabIndex = n
         end
 
-    -- Different inset texture for the bank
-
-    -- self.Inset.Bg:SetTexture("Interface\\BankFrame\\Bank-Background", true, true)
-    -- self.Inset.Bg:SetVertexColor(0.4, 0.4, 0.4, 1)
-
     -- Select the right search box 
     self.searchBox = BankItemSearchBox
     self.sortButton = BankItemAutoSortButton
@@ -82,7 +77,7 @@ function LiteBagBank_OnEvent(self, event, arg1, arg2, ...)
     elseif event == 'BANKFRAME_CLOSED' then
         HideUIPanel(self:GetParent())
     elseif event == 'INVENTORY_SEARCH_UPDATE' then
-        ContainerFrame_UpdateSearchResults(ReagentBankFrame)
+        ContainerFrameMixin.UpdateSearchResults(ReagentBankFrame)
     elseif event == 'ITEM_LOCK_CHANGED' then
         -- bag, slot = arg1, arg2
         if arg1 == REAGENTBANK_CONTAINER then
@@ -112,7 +107,7 @@ end
 function LiteBagBank_OnShow(self)
     LiteBagFrame_OnShow(self)
 
-    SetPortraitTexture(self.portrait, 'npc')
+    self:SetPortraitToUnit('npc')
 
     self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
     self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
