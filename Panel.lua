@@ -422,7 +422,7 @@ end
 function LiteBagPanel_OnHide(self)
     LB.Debug("Panel OnHide " .. self:GetName())
 
-    EventRegistry:RegisterCallback("TokenFrame.OnTokenWatchChanged", LiteBagPanel_UpdateSizeAndLayout, self)
+    EventRegistry:UnregisterCallback("TokenFrame.OnTokenWatchChanged", self)
 
     -- LB.Options:UnregisterAllCallbacks(self)
     self:UnregisterAllEvents()
