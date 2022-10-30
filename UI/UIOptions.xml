@@ -5,73 +5,41 @@
 <Script file="UIOptions.lua" />
 
 <Frame name="LiteBagOptions" hidden="true" inherits="LiteBagOptionsPanelTemplate">
+    <KeyValues>
+        <KeyValue key="name" value="LiteBag" type="string" />
+    </KeyValues>
     <Layers>
         <Layer level="ARTWORK">
-            <FontString name="$parentTitle" inherits="GameFontNormalLarge" parentKey="title">
+            <FontString parentKey="Title" inherits="GameFontHighlightHuge" justifyH="LEFT">
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="16" y="-16" />
+                    <Anchor point="TOPLEFT" x="7" y="-22" />
                 </Anchors>
             </FontString>
+            <Texture atlas="Options_HorizontalDivider" useAtlasSize="true">
+                <Anchors>
+                    <Anchor point="TOP" y="-50"/>
+                </Anchors>
+            </Texture>
         </Layer>
     </Layers>
 
     <Frames>
-        <Frame name="$parentGlobalBox" enableMouse="false" frameStrata="BACKGROUND" inherits="TooltipBackdropTemplate">
-            <KeyValues>
-                <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
-                <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
-                <KeyValue key="backdropBorderColor" value="GRAY_FONT_COLOR" type="global"/>
-            </KeyValues>
-            <Anchors>
-                <Anchor point="TOPLEFT" x="12" y="-48" />
-                <Anchor point="RIGHT" x="-12" />
-                <Anchor point="BOTTOM" relativePoint="CENTER" y="6" />
-            </Anchors>
-        </Frame>
-        <Frame name="$parentBankBox" enableMouse="false" frameStrata="LOW" inherits="TooltipBackdropTemplate">
-            <KeyValues>
-                <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
-                <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
-                <KeyValue key="backdropBorderColor" value="GRAY_FONT_COLOR" type="global"/>
-            </KeyValues>
+        <Frame name="$parentBankBox" enableMouse="false" frameStrata="BACKGROUND" hidden="true">
             <Anchors>
                 <Anchor point="BOTTOMLEFT" x="12" y="12" />
                 <Anchor point="TOPRIGHT" relativePoint="CENTER" x="-6" y="-28" />
             </Anchors>
-            <Layers>
-                <Layer level="OVERLAY">
-                    <FontString inherits="GameFontNormalMed2" text="BANK">
-                        <Anchors>
-                            <Anchor point="BOTTOM" relativePoint="TOP" y="8" />
-                        </Anchors>
-                    </FontString>
-                </Layer>
-            </Layers>
         </Frame>
-        <Frame name="$parentInventoryBox" enableMouse="false" frameStrata="BACKGROUND" inherits="TooltipBackdropTemplate">
-            <KeyValues>
-                <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
-                <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
-                <KeyValue key="backdropBorderColor" value="GRAY_FONT_COLOR" type="global"/>
-            </KeyValues>
+        <Frame name="$parentInventoryBox" enableMouse="false" frameStrata="BACKGROUND" hidden="true">
             <Anchors>
                 <Anchor point="BOTTOMRIGHT" x="-12" y="12" />
                 <Anchor point="TOPLEFT" relativePoint="CENTER" x="6" y="-28" />
             </Anchors>
-            <Layers>
-                <Layer level="OVERLAY">
-                    <FontString inherits="GameFontNormalMed2" text="INVENTORY_TOOLTIP">
-                        <Anchors>
-                            <Anchor point="BOTTOM" relativePoint="TOP" y="8" />
-                        </Anchors>
-                    </FontString>
-                </Layer>
-            </Layers>
         </Frame>
 
         <CheckButton name="$parentConfirmSort" inherits="InterfaceOptionsCheckButtonTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentGlobalBox" relativePoint="TOPLEFT" x="16" y="-16" />
+                <Anchor point="TOPLEFT" x="28" y="-64" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsConfirmSort_OnLoad" />
@@ -289,6 +257,26 @@
             </Layers>
         </Frame>
     </Frames>
+
+    <Layers>
+        <Layer level="OVERLAY">
+            <Texture atlas="Options_HorizontalDivider" useAtlasSize="true">
+                <Anchors>
+                    <Anchor point="TOP" relativePoint="CENTER" y="32" />
+                </Anchors>
+            </Texture>
+            <FontString name="$parentBankLabel" inherits="GameFontNormalMed2" text="BANK">
+                <Anchors>
+                    <Anchor point="BOTTOM" relativePoint="TOP" relativeTo="$parentBankBox" y="8" />
+                </Anchors>
+            </FontString>
+            <FontString name="$parentInventoryLabel" inherits="GameFontNormalMed2" text="INVENTORY_TOOLTIP">
+                <Anchors>
+                    <Anchor point="BOTTOM" relativePoint="TOP" relativeTo="$parentInventoryBox" y="8" />
+                </Anchors>
+            </FontString>
+        </Layer>
+    </Layers>
 
 </Frame>
 

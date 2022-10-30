@@ -7,11 +7,16 @@
 <Frame name="LiteBagOptionsPanelTemplate" hidden="true" virtual="true">
     <Layers>
         <Layer level="ARTWORK">
-            <FontString name="$parentTitle" inherits="GameFontNormalLarge" parentKey="title">
+            <FontString name="$parentTitle" parentKey="Title" inherits="GameFontHighlightHuge" justifyH="LEFT">
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="16" y="-16" />
+                    <Anchor point="TOPLEFT" x="7" y="-22" />
                 </Anchors>
             </FontString>
+            <Texture atlas="Options_HorizontalDivider" useAtlasSize="true">
+                <Anchors>
+                    <Anchor point="TOP" y="-50"/>
+                </Anchors>
+            </Texture>
         </Layer>
     </Layers>
     <Scripts>

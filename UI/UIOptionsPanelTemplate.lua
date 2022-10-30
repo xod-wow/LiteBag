@@ -16,12 +16,8 @@
 local addonName, LB = ...
 
 function LiteBagOptionsPanel_Open()
-    local f = LiteBagOptions
-    if not f.CurrentOptionsPanel then
-        f.CurrentOptionsPanel = LiteBagOptions
-    end
-    InterfaceOptionsFrame:Show()
-    InterfaceOptionsFrame_OpenToCategory(f.CurrentOptionsPanel)
+    SettingsPanel:Show()
+    InterfaceOptionsFrame_OpenToCategory(LiteBagOptions)
 end
 
 function LiteBagOptionsPanel_SaveOldOptions(self)
@@ -91,17 +87,7 @@ end
 
 function LiteBagOptionsPanel_OnLoad(self)
 
-    if self ~= LiteBagOptions then
-        self.parent = LiteBagOptions.name
-        if not self.name then
-            local n = self:GetAttribute('panel-name')
-            self.name = _G[n] or n
-        end
-        self.title:SetText("LiteBag : " .. self.name)
-    else
-        self.name = "LiteBag"
-        self.title:SetText("LiteBag")
-    end
+    self.Title:SetText(self.name)
 
     self.okay = self.okay or LiteBagOptionsPanel_Okay
     self.cancel = self.cancel or LiteBagOptionsPanel_Cancel
