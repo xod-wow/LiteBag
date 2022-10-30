@@ -14,51 +14,57 @@
 
         <ItemButton name="$parentButton2" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentButton1" relativePoint="RIGHT" x="4" />
+                <Anchor point="LEFT" relativeTo="$parentButton1" relativePoint="RIGHT" />
             </Anchors>
         </ItemButton>
 
         <ItemButton name="$parentButton3" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentButton2" relativePoint="RIGHT" x="4" />
+                <Anchor point="LEFT" relativeTo="$parentButton2" relativePoint="RIGHT" />
             </Anchors>
         </ItemButton>
 
         <ItemButton name="$parentButton4" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentButton3" relativePoint="RIGHT" x="4" />
+                <Anchor point="LEFT" relativeTo="$parentButton3" relativePoint="RIGHT" />
             </Anchors>
         </ItemButton>
 
         <ItemButton name="$parentButton5" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentButton4" relativePoint="RIGHT" x="4" />
+                <Anchor point="LEFT" relativeTo="$parentButton4" relativePoint="RIGHT" />
             </Anchors>
         </ItemButton>
 
         <ItemButton name="$parentButton6" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentButton5" relativePoint="RIGHT" x="4" />
+                <Anchor point="LEFT" relativeTo="$parentButton5" relativePoint="RIGHT" />
             </Anchors>
         </ItemButton>
 
         <ItemButton name="$parentButton7" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentButton6" relativePoint="RIGHT" x="4" />
+                <Anchor point="LEFT" relativeTo="$parentButton6" relativePoint="RIGHT" />
             </Anchors>
         </ItemButton>
 
         <ItemButton name="$parentButton8" parentArray="bagButtons" inherits="LiteBagBagButtonTemplate">
             <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentButton7" relativePoint="RIGHT" x="4" />
+                <Anchor point="LEFT" relativeTo="$parentButton7" relativePoint="RIGHT" />
             </Anchors>
         </ItemButton>
+
+        <Frame name="$parentMoneyFrame" parentKey="MoneyFrame" inherits="ContainerMoneyFrameTemplate" />
+
+        <DropDownToggleButton name="$parentPortraitButton" parentKey="PortraitButton" inherits="LiteBagPortraitButtonTemplate" />
+        <Frame name="$parentFilterDropDown" parentKey="FilterDropDown" inherits="LiteBagFilterDropDownTemplate" />
+
     </Frames>
     <Scripts>
-        <OnLoad function="LiteBagPanel_OnLoad" />
-        <OnShow function="LiteBagPanel_OnShow" />
-        <OnHide function="LiteBagPanel_OnHide" />
-        <OnEvent function="LiteBagPanel_OnEvent" />
+        <OnLoad inherit="append" function="LiteBagPanel_OnLoad" />
+        <OnShow inherit="append" function="LiteBagPanel_OnShow" />
+        <OnHide inherit="append" function="LiteBagPanel_OnHide" />
+        <OnEvent inherit="append" function="LiteBagPanel_OnEvent" />
     </Scripts>
 </Frame>
 

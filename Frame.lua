@@ -140,7 +140,13 @@ function LiteBagFrame_AddPanel(self, panel, tabTitle)
     for i = 1, #self.panels do
         self.Tabs[i]:Show()
     end
-    PanelTemplates_SetNumTabs(self, #self.panels)
+    self.numTabs = #self.panels
+    for i = 2, self.numTabs do
+        local lastTab = self.Tabs[i-1]
+        local thisTab = self.Tabs[i]
+        thisTab:SetPoint("TOPLEFT", lastTab, "TOPRIGHT", 3, 0);
+    end
+    -- PanelTemplates_SetNumTabs(self, #self.panels)
 end
 
 function LiteBagFrame_ShowPanel(self, n)

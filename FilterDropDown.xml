@@ -1,0 +1,21 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+
+<!-- Copyright 2013-2020 Mike Battersby -->
+
+<Script file="FilterDropDown.lua"/>
+
+<DropDownToggleButton name="LiteBagPortraitButtonTemplate" inherits="ContainerFramePortraitButtonTemplate" mixin="LiteBagPortraitButtonMixin" virtual="true">
+    <Scripts>
+        <OnMouseDown method="OnMouseDown"/>
+        <OnShow />
+        <OnHide />
+    </Scripts>
+</DropDownToggleButton>
+
+<Frame name="LiteBagFilterDropDownTemplate" mixin="LiteBagFilterDropDownMixin" virtual="true">
+    <Scripts>
+        <OnLoad method="OnLoad" />
+    </Scripts>
+</Frame>
+
+</Ui>

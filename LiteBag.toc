@@ -21,7 +21,7 @@ Hooks.lua
 
 BagButton.xml
 ItemButton.xml
-TokenFrame.xml
+FilterDropDown.xml
 Panel.xml
 Frame.xml
 LiteBagBank.xml

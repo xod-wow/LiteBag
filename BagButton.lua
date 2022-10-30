@@ -11,8 +11,6 @@
 
 local addonName, LB = ...
 
-local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
-
 local BankContainers = { [BANK_CONTAINER]  = true }
 do
     for i = 1,NUM_BANKBAGSLOTS do
@@ -20,132 +18,7 @@ do
     end
 end
 
--- Copied from Interface/FrameXML/ContainerFrame.lua and then replaced with
--- LibDD calls. I've even left all their horrible ; so I can easily re-paste
--- it later.
-
-local function FilterDropDown_Initialize(self, level)
-	local frame = self:GetParent();
-	local id = frame:GetID();
-	
-	if (id > NUM_BAG_SLOTS + NUM_BANKBAGSLOTS) then
-		return;
-	end
-
-	local info = LibDD:UIDropDownMenu_CreateInfo();	
-
-	if (id > 0 and not IsInventoryItemProfessionBag("player", ContainerIDToInventoryID(id))) then -- The actual bank has ID -1, backpack has ID 0, we want to make sure we're looking at a regular or bank bag
-		info.text = BAG_FILTER_ASSIGN_TO;
-		info.isTitle = 1;
-		info.notCheckable = 1;
-		LibDD:UIDropDownMenu_AddButton(info);
-
-		info.isTitle = nil;
-		info.notCheckable = nil;
-		info.tooltipWhileDisabled = 1;
-		info.tooltipOnButton = 1;
-
-		for i = LE_BAG_FILTER_FLAG_EQUIPMENT, NUM_LE_BAG_FILTER_FLAGS do
-			if ( i ~= LE_BAG_FILTER_FLAG_JUNK ) then
-				info.text = BAG_FILTER_LABELS[i];
-				info.func = function(_, _, _, value)
-					value = not value;
-					if (id > NUM_BAG_SLOTS) then
-						SetBankBagSlotFlag(id - NUM_BAG_SLOTS, i, value);
-					else
-						SetBagSlotFlag(id, i, value);
-					end
-					if (value) then
-						frame.localFlag = i;
-						frame.FilterIcon.Icon:SetAtlas(BAG_FILTER_ICONS[i]);
-						frame.FilterIcon:Show();
-					else
-						frame.FilterIcon:Hide();
-						frame.localFlag = -1;						
-					end
-				end;
-				if (frame.localFlag) then
-					info.checked = frame.localFlag == i;
-				else
-					if (id > NUM_BAG_SLOTS) then
-						info.checked = GetBankBagSlotFlag(id - NUM_BAG_SLOTS, i);
-					else
-						info.checked = GetBagSlotFlag(id, i);
-					end
-				end
-				info.disabled = nil;
-				info.tooltipTitle = nil;
-				LibDD:UIDropDownMenu_AddButton(info);
-			end
-		end
-	end
-
-	info.text = BAG_FILTER_CLEANUP;
-	info.isTitle = 1;
-	info.notCheckable = 1;
-	LibDD:UIDropDownMenu_AddButton(info);
-
-	info.isTitle = nil;
-	info.notCheckable = nil;
-	info.isNotRadio = true;
-	info.disabled = nil;
-
-	info.text = BAG_FILTER_IGNORE;
-	info.func = function(_, _, _, value)
-		if (id == -1) then
-			SetBankAutosortDisabled(not value);
-		elseif (id == 0) then
-			SetBackpackAutosortDisabled(not value);
-		elseif (id > NUM_BAG_SLOTS) then
-			SetBankBagSlotFlag(id - NUM_BAG_SLOTS, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP, not value);
-		else
-			SetBagSlotFlag(id, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP, not value);
-		end
-	end;
-	if (id == -1) then
-		info.checked = GetBankAutosortDisabled();
-	elseif (id == 0) then
-		info.checked = GetBackpackAutosortDisabled();
-	elseif (id > NUM_BAG_SLOTS) then
-		info.checked = GetBankBagSlotFlag(id - NUM_BAG_SLOTS, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP);
-	else
-		info.checked = GetBagSlotFlag(id, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP);
-	end
-	LibDD:UIDropDownMenu_AddButton(info);
-end
-
 LiteBagBagButtonMixin = {}
-
-function LiteBagBagButtonMixin:GetFilter()
-
-    if self.bagID == BACKPACK_CONTAINER or self.bagID == BANK_CONTAINER then
-        return
-    end
-
-    if IsInventoryItemProfessionBag('player', self.slotID) then
-        return
-    end
-
-    for i = LE_BAG_FILTER_FLAG_EQUIPMENT, NUM_LE_BAG_FILTER_FLAGS do
-        if self.isBank and GetBankBagSlotFlag(self.bagID - NUM_BAG_SLOTS, i) then
-            return i
-        elseif GetBagSlotFlag(self.bagID, i) then
-            return i
-        end
-    end
-end
-
-function LiteBagBagButtonMixin:SetFilterIcon()
-
-    local i = self:GetFilter()
-    if i then
-        self.FilterIcon:SetAtlas(BAG_FILTER_ICONS[i], true)
-        self.FilterIcon:Show()
-    else
-        self.FilterIcon:Hide()
-    end
-
-end
 
 function LiteBagBagButtonMixin:Update()
 
@@ -161,8 +34,6 @@ function LiteBagBagButtonMixin:Update()
     end
 
     self.slotID = ContainerIDToInventoryID(self:GetID())
-
-    self:SetFilterIcon()
 
     local textureName = GetInventoryItemTexture('player', self.slotID)
 
@@ -198,13 +69,6 @@ function LiteBagBagButtonMixin:OnLoad()
 
     if WOW_PROJECT_ID == 1 then
         self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
-
-        -- Blizzard's ContainerFrameFilterDropDown expects the texture
-        -- to be attached to a button.  Fake it.
-        self.FilterIcon.Icon = self.FilterIcon
-
-        self.FilterDropDown = LibDD:Create_UIDropDownMenu(self:GetName().."FilterDropDown", self)
-        LibDD:UIDropDownMenu_Initialize(self.FilterDropDown, FilterDropDown_Initialize, "MENU")
     end
 end
 
@@ -243,11 +107,6 @@ function LiteBagBagButtonMixin:OnEnter()
             else
                 GameTooltip:SetText(BAGSLOT)
             end
-        else
-            local i = self:GetFilter()
-            if i then
-                GameTooltip:AddLine(BAG_FILTER_ASSIGNED_TO:format(BAG_FILTER_LABELS[i]))
-            end
         end
     end
     GameTooltip:Show()
@@ -260,7 +119,7 @@ function LiteBagBagButtonMixin:OnLeave()
     ResetCursor()
 end
 
-function LiteBagBagButtonMixin:OnDrag()
+function LiteBagBagButtonMixin:OnDragStart()
     if self.bagID ~= BACKPACK_CONTAINER and self.bagID ~= BANK_CONTAINER then
         PickupBagFromSlot(self.slotID)
     end
@@ -273,18 +132,11 @@ function LiteBagBagButtonMixin:OnClick()
         elseif not self.purchaseCost then
             PutItemInBag(self.slotID)
         end
-        return
-    end
-
-    if self.purchaseCost then
+    elseif self.purchaseCost then
         PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
         BankFrame.nextSlotCost = self.purchaseCost
         StaticPopup_Show('CONFIRM_BUY_BANK_SLOT')
-        return
-    end
-
-    if WOW_PROJECT_ID == 1 then
-        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-        LibDD:ToggleDropDownMenu(1, nil, self.FilterDropDown, self, 0, 0)
+    elseif self.bagID ~= BACKPACK_CONTAINER and self.bagID ~= BANK_CONTAINER then
+        PickupBagFromSlot(self.slotID)
     end
 end

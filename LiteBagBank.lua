@@ -45,7 +45,7 @@ function LiteBagBank_Initialize(self)
     self.OnShowPanel = function (self, n)
             -- Use the title text from the Bank Frame itself
             BANK_PANELS[n].SetTitle()
-            self.TitleText:SetText(BankFrameTitleText:GetText())
+            self:SetTitle(BankFrameTitleText:GetText())
             -- The itembuttons use BankFrame.selectedTab to know where
             -- to put something that's clicked.
             BankFrame.selectedTab = n
@@ -56,8 +56,8 @@ function LiteBagBank_Initialize(self)
 
     -- Different inset texture for the bank
 
-    self.Inset.Bg:SetTexture("Interface\\BankFrame\\Bank-Background", true, true)
-    self.Inset.Bg:SetVertexColor(0.4, 0.4, 0.4, 1)
+    -- self.Inset.Bg:SetTexture("Interface\\BankFrame\\Bank-Background", true, true)
+    -- self.Inset.Bg:SetVertexColor(0.4, 0.4, 0.4, 1)
 
     -- Select the right search box 
     self.searchBox = BankItemSearchBox

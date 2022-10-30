@@ -8,7 +8,7 @@
 
     <!-- Note: Can't inherit OnClick/OnDrag scripts because it's secure. -->
     <Scripts>
-        <OnLoad inherit="prepend" method="OnLoad" />
+        <OnLoad method="OnLoad" />
         <OnEnter method="OnEnter" />
     </Scripts>
 

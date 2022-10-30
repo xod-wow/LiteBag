@@ -18,7 +18,7 @@
        enableMouse="true"
        frameStrata="MEDIUM" topLevel="true" hidden="true"
        movable="true" resizable="true" clampedToScreen="true"
-       inherits="ButtonFrameTemplate" virtual="true">
+       inherits="PortraitFrameFlatTemplate" virtual="true">
 
     <Size x="384" y="512" />
 
@@ -26,11 +26,11 @@
         <minResize x="360" y="183" />
     </ResizeBounds>
 
-    <Frames>
+    <Anchors>
+        <Anchor point="TOPLEFT" />
+    </Anchors>
 
-        <Anchors>
-            <Anchor point="TOPLEFT" />
-        </Anchors>
+    <Frames>
 
         <Button name="$parentResizeBottomRight">
             <Size x="16" y="16" />
@@ -51,39 +51,7 @@
             </Scripts>
         </Button>
 
-        <Frame name="$parentMoneyFrameBorder" inherits="ThinGoldEdgeTemplate">
-            <Size x="170" y="21" />
-            <Anchors>
-                <Anchor point="BOTTOMRIGHT" x="-8" y="5" />
-            </Anchors>
-        </Frame>
-
-        <Frame name="$parentMoneyFrame" parentKey="moneyFrame" inherits="SmallMoneyFrameTemplate">
-            <Anchors>
-                <Anchor point="BOTTOMRIGHT" x="-2" y="9" />
-            </Anchors>
-            <Scripts>
-                <OnLoad inherit="prepend">
-                    MoneyFrame_SetType(self, "PLAYER")
-                    MoneyFrame_SetMaxDisplayWidth(self, 168)
-                </OnLoad>
-            </Scripts>
-        </Frame>
-
-        <Frame name="$parentTokenFrameBorder" inherits="LiteBag_ThinGreenEdgeTemplate">
-            <Size x="170" y="21" />
-            <Anchors>
-                <Anchor point="BOTTOMLEFT" x="8" y="5" />
-            </Anchors>
-        </Frame>
-
-        <Frame name="$parentTokenFrame" parentKey="tokenFrame" inherits="LiteBagTokenFrameTemplate">
-            <Anchors>
-                <Anchor point="CENTER" relativeTo="$parentTokenFrameBorder" y="-1" />
-            </Anchors>
-        </Frame>
-
-        <Button name="$parentTab1" inherits="CharacterFrameTabButtonTemplate" parentArray="Tabs" id="1" text="BANK" hidden="true">
+        <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" text="BANK" hidden="true">
             <Anchors>
                 <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="11" y="2" />
             </Anchors>
@@ -92,7 +60,7 @@
             </Scripts>
         </Button>
 
-        <Button name="$parentTab2" inherits="CharacterFrameTabButtonTemplate" parentArray="Tabs" id="2" text="REAGENT_BANK" hidden="true">
+        <Button name="$parentTab2" inherits="PanelTabButtonTemplate" id="2" text="REAGENT_BANK" hidden="true">
             <Anchors>
                 <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-15" y="0" />
             </Anchors>

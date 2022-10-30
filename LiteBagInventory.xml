@@ -16,7 +16,7 @@
             </Anchors>
             <Scripts>
                 <OnLoad>
-                    self:RegisterForClicks("LeftButton")
+                    self:RegisterForClicks("LeftButtonUp")
                 </OnLoad>
                 <OnMouseDown>
                     LiteBagFrame_StartMoving(self:GetParent())
