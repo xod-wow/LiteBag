@@ -20,9 +20,8 @@ function LiteBagItemButtonMixin:OnLoad()
 end
 
 function LiteBagItemButtonMixin:OnEnter(...)
-    local bag = self:GetParent()
-    -- if bag == BANK_CONTAINER then
-    if bag:IsBankBag() then
+    local bag = self:GetParent():GetID()
+    if bag == BANK_CONTAINER then
         BankFrameItemButton_OnEnter(self, ...)
     else
         ContainerFrameItemButtonMixin.OnEnter(self, ...)
