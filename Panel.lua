@@ -536,7 +536,7 @@ function LiteBagPanel_OnEvent(self, event, ...)
 
     -- ContainerFrame handles this event but never registers it?
     if event == 'BANK_BAG_SLOT_FLAGS_UPDATED' then
-        local bag = GetBagFrame(self, arg1 + NUM_BAG_SLOTS)
+        local bag = GetBagFrame(self, arg1 + NUM_TOTAL_EQUIPPED_BAG_SLOTS)
         if bag then
             LiteBagPanel_UpdateBag(bag)
         end

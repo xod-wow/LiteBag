@@ -11,7 +11,7 @@
 
 local addonName, LB = ...
 
-local BANK_BAG_IDS = { -1, 5, 6, 7, 8, 9, 10, 11 }
+local BANK_BAG_IDS = { -1, 6, 7, 8, 9, 10, 11, 12 }
 
 function LiteBagBank_OnLoad(self)
     LiteBagFrame_OnLoad(self)

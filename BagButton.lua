@@ -14,7 +14,7 @@ local addonName, LB = ...
 local BankContainers = { [BANK_CONTAINER]  = true }
 do
     for i = 1,NUM_BANKBAGSLOTS do
-        BankContainers[NUM_BAG_SLOTS+i] = true
+        BankContainers[NUM_TOTAL_EQUIPPED_BAG_SLOTS+i] = true
     end
 end
 
