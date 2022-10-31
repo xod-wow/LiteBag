@@ -89,10 +89,10 @@ function LiteBagBagButtonMixin:OnEnter()
 
     GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
 
-    if self.bagID == BACKPACK_CONTAINER then
+    if self:GetID() == BACKPACK_CONTAINER then
         GameTooltip:SetText(BACKPACK_TOOLTIP)
-    elseif self.bagID == BANK_CONTAINER then
-        GameTooltip:SetText(BANK_BAG)
+    elseif self:GetID() == BANK_CONTAINER then
+        GameTooltip:SetText(BANK)
     else
         local hasItem = GameTooltip:SetInventoryItem('player', self.slotID)
         if not hasItem then
