@@ -164,7 +164,7 @@ end
 
 local function PanelOrder_Initialize(self, level)
     if level == 1 then
-        local info = UILibDD:DropDownMenu_CreateInfo()
+        local info = LibDD:UIDropDownMenu_CreateInfo()
         local current = LB.Options:GetFrameOption(self.panel, 'order')
 
         info.func =
