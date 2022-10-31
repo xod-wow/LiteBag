@@ -2,48 +2,26 @@
 
 <!-- Copyright 2013-2020 Mike Battersby -->
 
-<Script file="LiteBagInventory.lua" />
-
-<Frame name="LBI" parent="UIParent" inherits="LiteBagContainerFrameTemplate" hidden="true">
+<Frame name="LiteBagInventory" parent="UIParent" inherits="LiteBagFrameTemplate">
     <KeyValues>
-        <KeyValue key="FrameType" value="BAG" type="string" />
+        <KeyValue key="ResizingAllowed" value="true" type="boolean" />
+        <KeyValue key="MovingAllowed" value="true" type="boolean" />
     </KeyValues>
-    <Anchors>
-        <Anchor point="RIGHT" />
-    </Anchors>
-</Frame>
-
-<Frame name="LiteBagInventory" parent="UIParent"
-       inherits="LiteBagFrameTemplate">
-
     <Frames>
-        <Button name="$parentDragButton">
-            <Size x="0" y="20"/>
-            <Anchors>
-                <Anchor point="TOPLEFT"/>
-                <Anchor point="TOPRIGHT"/>
-            </Anchors>
-            <Scripts>
-                <OnLoad>
-                    self:RegisterForClicks("LeftButtonUp")
-                </OnLoad>
-                <OnMouseDown>
-                    LiteBagFrame_StartMoving(self:GetParent())
-                </OnMouseDown>
-                <OnMouseUp>
-                    LiteBagFrame_StopMoving(self:GetParent())
-                </OnMouseUp>
-            </Scripts>
-        </Button>
+        <Frame name="LiteBagInventoryPanel" parentArray="panels" inherits="LiteBagContainerFrameTemplate">
+            <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
+            <KeyValues>
+                <KeyValue key="FrameType" value="BAGS" type="string" />
+            </KeyValues>
+        </Frame>
     </Frames>
-
     <Scripts>
-        <OnLoad function="LiteBagInventory_OnLoad" />
-        <OnShow function="LiteBagInventory_OnShow" />
-        <OnHide function="LiteBagInventory_OnHide" />
-        <OnEvent function="LiteBagInventory_OnEvent" />
+        <OnShow inherit="append">
+            if not self:IsUserPlaced() then
+                self:SetSnapPosition()
+            end
+        </OnShow>
     </Scripts>
-
 </Frame>
 
 </Ui>

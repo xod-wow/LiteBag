@@ -4,21 +4,12 @@
 
 <Script file="Frame.lua" />
 
-<Frame name="LiteBag_ThinGreenEdgeTemplate" inherits="ThinGoldEdgeTemplate" virtual="true">
-    <Scripts>
-        <OnLoad>
-            for _, tex in ipairs({ self:GetRegions() }) do
-                tex:SetVertexColor(0.0, 1.0, 1.0, 1.0)
-            end
-        </OnLoad>
-    </Scripts>
-</Frame>
-
 <Frame name="LiteBagFrameTemplate"
        enableMouse="true"
        frameStrata="MEDIUM" topLevel="true" hidden="true"
        movable="true" resizable="true" clampedToScreen="true"
-       inherits="PortraitFrameFlatTemplate" virtual="true">
+       inherits="PortraitFrameFlatTemplate" mixin="LiteBagFrameMixin"
+       virtual="true">
 
     <Size x="384" y="512" />
 
@@ -31,6 +22,26 @@
     </Anchors>
 
     <Frames>
+        <Button name="$parentDragButton">
+            <Size x="0" y="20"/>
+            <Anchors>
+                <Anchor point="TOPLEFT"/>
+                <Anchor point="TOPRIGHT"/>
+            </Anchors>
+            <Scripts>
+                <OnMouseDown>
+                    local parent = self:GetParent()
+                    if parent.MovingAllowed then
+                        self:GetParent():StartMoving()
+                    end
+                </OnMouseDown>
+                <OnMouseUp>
+                    local parent = self:GetParent()
+                    parent:StopMovingOrSizing()
+                    parent:CheckSnapPosition()
+                </OnMouseUp>
+            </Scripts>
+        </Button>
 
         <Button name="$parentResizeBottomRight">
             <Size x="16" y="16" />
@@ -42,11 +53,16 @@
                 <OnLoad function="RaiseFrameLevel" />
                 <OnMouseDown>
                     local parent = self:GetParent()
-                    LiteBagFrame_StartSizing(parent, "BOTTOMRIGHT")
+                    if parent.ResizingAllowed then
+                        parent.sizing = true
+                        parent:StartSizing("BOTTOMRIGHT")
+                    end
                 </OnMouseDown>
                 <OnMouseUp>
                     local parent = self:GetParent()
-                    LiteBagFrame_StopSizing(parent)
+                    parent:StopMovingOrSizing()
+                    parent.sizing = false
+                    parent:ResizeToPanel()
                 </OnMouseUp>
             </Scripts>
         </Button>
@@ -56,7 +72,7 @@
                 <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="11" y="2" />
             </Anchors>
             <Scripts>
-                <OnClick function="LiteBagFrame_TabOnClick" />
+                <OnClick> self:GetParent():SetTab(self:GetID()) </OnClick>
             </Scripts>
         </Button>
 
@@ -65,17 +81,17 @@
                 <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-15" y="0" />
             </Anchors>
             <Scripts>
-                <OnClick function="LiteBagFrame_TabOnClick" />
+                <OnClick> self:GetParent():SetTab(self:GetID()) </OnClick>
             </Scripts>
         </Button>
 
     </Frames>
 
     <Scripts>
-        <OnLoad function="LiteBagFrame_OnLoad" />
-        <OnHide function="LiteBagFrame_OnHide" />
-        <OnShow function="LiteBagFrame_OnShow" />
-        <OnSizeChanged function="LiteBagFrame_OnSizeChanged" />
+        <OnLoad method="OnLoad" />
+        <OnHide method="OnHide" />
+        <OnShow method="OnShow" />
+        <OnSizeChanged method="OnSizeChanged" />
     </Scripts>
 </Frame>
 

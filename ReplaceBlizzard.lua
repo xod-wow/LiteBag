@@ -38,28 +38,36 @@ end
 local TOOLTIP_NOCONFIRM_TEXT = format(L["%s: No confirmation"], SHIFT_KEY)
 
 local hiddenBagParent = CreateFrame('Frame')
+hiddenBagParent:Hide()
+
+local FRAME_THAT_OPENED_BAGS = nil
 
 local function ReplaceBlizzardInventory()
     local hideFunc =
-        function (caller)
+        function (frame)
+            if frame and frame:GetName() ~= FRAME_THAT_OPENED_BAGS then
+                return false
+            end
+            FRAME_THAT_OPENED_BAGS = nil
             LiteBagInventory:Hide()
+            EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags");
         end
-    local showFunc = function (caller)
+    local showFunc =
+        function (frame)
+            if frame and not FRAME_THAT_OPENED_BAGS then
+                FRAME_THAT_OPENED_BAGS = frame:GetName()
+            end
+            LiteBagInventory:Show()
+            EventRegistry:TriggerEvent("ContainerFrame.OpenAllBags");
+        end
+    local toggleFunc =
+        function ()
             if LiteBagInventory:IsShown() then
-                LiteBagFrame_Update(LiteBagInventory)
+                hideFunc()
             else
-                LiteBagInventory:Show()
+                showFunc()
             end
         end
-    local toggleFunc = function (caller)
-            if LiteBagInventory:IsShown() then
-                LiteBagInventory:Hide()
-            else
-                LiteBagInventory:Show()
-            end
-        end
-
-    hiddenBagParent:Hide()
 
     -- Turn the Blizzard frames off
     for i=1, NUM_CONTAINER_FRAMES do
@@ -70,38 +78,30 @@ local function ReplaceBlizzardInventory()
                 
     -- Override or hook various Blizzard UI functions to operate on our
     -- frame instead.
+    OpenBag = showFunc
     OpenBackpack = showFunc
     OpenAllBags = showFunc
 
     ToggleBag = toggleFunc
+    ToggleBackpage = toggleFunc
     ToggleAllBags = toggleFunc
 
-    hooksecurefunc('CloseBackpack', hideFunc)
-    hooksecurefunc('CloseAllBags', hideFunc)
+    CloseBackpack = hideFunc
+    CloseBag = hideFunc
+    CloseAllBags = hideFunc
 
-    -- This one is called when you click on a loot popup and you have
-    -- one of those items in your bag already.
-    OpenBag = showFunc
+    -- Add the confirm text to the sort button mouseover tooltip.
+    BagItemAutoSortButton:HookScript('OnEnter', function (self)
+        if not LB.Options:GetGlobalOption('NoConfirmSort') then
+            GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
+        end
+        GameTooltip:Show()
+        end)
 
-    -- These are the bag buttons in the menu bar at the bottom which are
-    -- highlighted when their particular bag is opened.
-    BagSlotButton_UpdateChecked = function () end
-
-    if WOW_PROJECT_ID == 1 then
-        -- Add the confirm text to the sort button mouseover tooltip.
-        BagItemAutoSortButton:HookScript('OnEnter', function (self)
-            if not LB.Options:GetGlobalOption('NoConfirmSort') then
-                GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
-            end
-            GameTooltip:Show()
-            end)
-
-        -- Change the sort button to call our confirm function.
-        BagItemAutoSortButton:SetScript('OnClick', function (self)
-                DoOrStaticPopup(BAG_CLEANUP_BAGS, SortBags)
-            end)
-    end
-
+    -- Change the sort button to call our confirm function.
+    BagItemAutoSortButton:SetScript('OnClick', function (self)
+            DoOrStaticPopup(BAG_CLEANUP_BAGS, SortBags)
+        end)
 end
 
 local hiddenBankParent = CreateFrame('Frame')
@@ -130,58 +130,50 @@ local function ReplaceBlizzardBank()
 
     -- Add the confirm text to the sort button tooltip.
 
-    if WOW_PROJECT_ID == 1 then
-        BankItemAutoSortButton:HookScript('OnEnter', function (self)
-            if not LB.Options:GetGlobalOption('NoConfirmSort') then
-                GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
+    BankItemAutoSortButton:HookScript('OnEnter', function (self)
+        if not LB.Options:GetGlobalOption('NoConfirmSort') then
+            GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
+        end
+        GameTooltip:Show()
+        end)
+
+    -- Change the sort button to call our confirm function.
+
+    BankItemAutoSortButton:SetScript('OnClick', function ()
+            local self = BankFrame
+            if (self.activeTabIndex == 1) then
+                DoOrStaticPopup(BAG_CLEANUP_BANK, SortBankBags)
+            elseif (self.activeTabIndex == 2) then
+                DoOrStaticPopup(BAG_CLEANUP_REAGENT_BANK, SortReagentBankBags)
             end
-            GameTooltip:Show()
-            end)
-
-        -- Change the sort button to call our confirm function.
-
-        BankItemAutoSortButton:SetScript('OnClick', function (self)
-                local parent = self:GetParent()
-                if (parent.selectedTab == 1) then
-                    DoOrStaticPopup(BAG_CLEANUP_BANK, SortBankBags)
-                elseif (parent.selectedTab == 2) then
-                    DoOrStaticPopup(BAG_CLEANUP_REAGENT_BANK, SortReagentBankBags)
-                end
-            end)
-    end
+        end)
 end
 
 local function ReplaceBlizzard()
     ReplaceBlizzardInventory()
     ReplaceBlizzardBank()
-
-    -- Some other addons either replace the open functions themselves after
-    -- us and cause the bag frames to show.
-    for i=1, NUM_CONTAINER_FRAMES do
-        local f = _G['ContainerFrame'..i]
-        f:SetScript('OnShow', function (self)
-                self:Hide()
-                LiteBagInventory:Show()
-                ReplaceBlizzardInventory()
-            end)
-        f:SetScript('OnHide', nil)
-    end
 end
 
 -- This is a bit of an arms race with other addon authors who want to hook
 -- the bags too, try to hook later than them all.
+-- Also register here some other open/close events I liked.
 
 local replacer = CreateFrame('Frame', UIParent)
 replacer:RegisterEvent('PLAYER_LOGIN')
-replacer:RegisterEvent('GUILDBANKFRAME_OPENED')
-replacer:RegisterEvent('GUILDBANKFRAME_CLOSED')
-replacer:RegisterEvent('PLAYER_LOGIN')
+replacer:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
+replacer:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
 replacer:SetScript('OnEvent',
     function (self, event, ...)
-        if event == 'GUILDBANKFRAME_OPENED' then
-            OpenAllBags()
-        elseif event == 'GUILDBANKFRAME_CLOSED' then
-            CloseAllBags()
+        if event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
+            local type = ...
+            if type == Enum.PlayerInteractionType.GuildBanker then
+                OpenAllBags()
+            end
+        elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_HIDE' then
+            local type = ...
+            if type == Enum.PlayerInteractionType.GuildBanker then
+                CloseAllBags()
+            end
         elseif event == 'PLAYER_LOGIN' then
             ReplaceBlizzard()
         end

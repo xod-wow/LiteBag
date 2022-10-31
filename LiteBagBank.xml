@@ -22,9 +22,6 @@
 
 <Frame name="LiteBagBankPlacer" parent="UIParent" hidden="true">
 
-    <Anchors>
-    </Anchors>
-
     <Size x="384" y="512" />
 
     <Attributes>
@@ -45,33 +42,29 @@
     -->
 </Frame>
 
-<Frame name="LiteBagBank" parent="LiteBagBankPlacer" inherits="LiteBagFrameTemplate" hidden="false">
-
+<Frame name="LiteBagBank" parent="LiteBagBankPlacer" inherits="LiteBagFrameTemplate" mixin="LiteBagBankMixin" hidden="false">
     <Size x="384" y="512" />
+    <KeyValues>
+        <KeyValue key="ResizingAllowed" value="true" type="boolean" />
+        <KeyValue key="MovingAllowed" value="false" type="boolean" />
+    </KeyValues>
+    <Frames>
+        <Frame name="LiteBagBankPanel" parentArray="panels" inherits="LiteBagContainerFrameTemplate" hidden="true">
+            <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
+            <KeyValues>
+                <KeyValue key="FrameType" value="BANK" type="string" />
+            </KeyValues>
+        </Frame>
+    </Frames>
 
     <Anchors>
         <Anchor point="TOPLEFT" />
     </Anchors>
 
     <Scripts>
-        <OnLoad function="LiteBagBank_OnLoad" />
-        <OnShow function="LiteBagBank_OnShow" />
-        <OnHide function="LiteBagBank_OnHide" />
-        <OnEvent function="LiteBagBank_OnEvent" />
-        <OnSizeChanged>
-            LiteBagFrame_OnSizeChanged(self, w, h)
-
-            local placer = self:GetParent()
-            local s = self:GetScale()
-            placer:SetSize(w*s, h*s)
-            if placer:IsShown() then
-                UpdateUIPanelPositions(placer)
-            end
-
-            self:ClearAllPoints()
-            self:SetPoint("TOPLEFT", placer, "TOPLEFT")
-
-        </OnSizeChanged>
+        <OnSizeChanged method="OnSizeChanged" />
+        <OnLoad method="OnLoad" />
+        <OnEvent method="OnEvent" />
     </Scripts>
 
 </Frame>

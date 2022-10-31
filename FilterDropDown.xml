@@ -4,11 +4,12 @@
 
 <Script file="FilterDropDown.lua"/>
 
-<DropDownToggleButton name="LiteBagPortraitButtonTemplate" inherits="ContainerFramePortraitButtonTemplate" mixin="LiteBagPortraitButtonMixin" virtual="true">
+<DropDownToggleButton name="LiteBagPortraitButtonTemplate" mixin="LiteBagPortraitButtonMixin" virtual="true">
+    <Size x="40" y="40" />
     <Scripts>
         <OnMouseDown method="OnMouseDown"/>
-        <OnShow />
-        <OnHide />
+        <OnEnter method="OnEnter" />
+        <OnLeave method="OnLeave" />
     </Scripts>
 </DropDownToggleButton>
 

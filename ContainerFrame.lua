@@ -13,7 +13,7 @@ local addonName, LB = ...
 
 
 local BagInfoByType = {
-    BAG = {
+    BAGS = {
         bagIDs = { 0, 1, 2, 3, 4 },
         defaultColumns = 10,
     },
@@ -27,6 +27,8 @@ local BagInfoByType = {
     },
 }
 
+-- This is as small as you can go
+local MIN_COLUMNS = 8
 
 -- These are the gaps between the buttons
 local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
@@ -49,11 +51,19 @@ function LiteBagContainerFrameMixin:OnLoad()
     -- button parents was stupid. In 2022 Blizzard are more or less doing it.
     self.bagFrames = {}
     for i, id in ipairs(self.bagIDs) do
-        local name = format('%sContainer%d', self:GetName(), i)
+        local name = format('%sBag%d', self:GetName(), i)
         local bagFrame = CreateFrame('Frame', name, self)
         bagFrame:SetID(id)
         bagFrame.Items = { }
         tinsert(self.bagFrames, bagFrame)
+    end
+
+    self.bagButtons = {}
+    for i, id in ipairs(self.bagIDs) do
+        local name = format("%sBag%dSlot", self:GetName(), i)
+        local bagButton = CreateFrame('ItemButton', name, self, "LiteBagBagButtonTemplate")
+        bagButton:SetID(id)
+        table.insert(self.bagButtons, bagButton)
     end
 
     -- from ContainerFrame:OnLoad
@@ -64,7 +74,7 @@ function LiteBagContainerFrameMixin:OnLoad()
 
     -- from ContainerFrameCombinedBags:OnLoad
     self:RegisterEvent("BAG_CONTAINER_UPDATE")
-    -- self.PortraitButton:SetPoint("CENTER", self:GetParent():GetPortrait(), "CENTER", 3, -3)
+    self.PortraitButton:SetPoint("CENTER", self:GetParent():GetPortrait(), "CENTER", 3, -3)
 end
 
 function LiteBagContainerFrameMixin:GetBagFrameByID(id)
@@ -73,6 +83,21 @@ function LiteBagContainerFrameMixin:GetBagFrameByID(id)
             return bag
         end
     end
+end
+
+-- The Blizzard code doesn't handle the 28 base bank slots because they fire
+-- a different event, so we register and translate it.
+
+function LiteBagContainerFrameMixin:OnShow()
+    ContainerFrameCombinedBagsMixin.OnShow(self)
+    if self:MatchesBagID(BANK_CONTAINER) then
+        self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
+    end
+end
+
+function LiteBagContainerFrameMixin:OnHide()
+    ContainerFrameCombinedBagsMixin.OnHide(self)
+    self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
 end
 
 -- We need to pre-handle some problematic events before ContainerFrame_OnEvent
@@ -90,6 +115,10 @@ function LiteBagContainerFrameMixin:OnEvent(event, ...)
         end
     elseif event == "DISPLAY_SIZE_CHANGED" then
         -- We aren't doing any crazy reflowing stuff so do nothing
+    elseif event == "PLAYERBANKSLOTS_CHANGED" then
+        -- The bank actually gives you the slot, unlike the bags, but
+        -- there's nothing we can send through to make it efficient.
+        ContainerFrame_OnEvent(self, "BAG_UPDATE", BANK_CONTAINER)
     else
         ContainerFrame_OnEvent(self, event, ...)
     end
@@ -100,6 +129,8 @@ end
 -- wasn't for their naming this would be called :Open()
 
 function LiteBagContainerFrameMixin:GenerateFrame()
+    LB.Debug("ContainerFrame GenerateFrame " .. self:GetName())
+
     -- Should check if dirty, probably.
     self:SetUpBags()
     self:Show()
@@ -110,7 +141,6 @@ function LiteBagContainerFrameMixin:GenerateFrame()
     self:UpdateFrameSize()
     self:Update()
     self:CheckUpdateDynamicContents()
-
 end
 
 -- for the combined bag frame SetUpBags is done in
@@ -134,9 +164,6 @@ local function GetBagItemButton(bag, i)
     return bag.Items[i]
 end
 
-function LiteBagContainerFrameMixin:SetTitle(title) end
-function LiteBagContainerFrameMixin:SetPortraitToAsset(title) end
-
 function LiteBagContainerFrameMixin:SetUpBags()
     LB.Debug("ContainerFrame SetUpBags " .. self:GetName())
 
@@ -153,6 +180,14 @@ function LiteBagContainerFrameMixin:SetUpBags()
             b:SetShown(i <= bag.size)
         end
     end
+
+    if self:MatchesBagID(BACKPACK_CONTAINER) then
+        -- Warning, this messes with the MoneyFrame too. If you
+        -- call it on multiple frames they will steal each other's
+        -- .MoneyFrame as well as the token tracker.
+        ContainerFrameSettingsManager:SetTokenTrackerOwner(self)
+    end
+
     self.size = #self.Items
 end
 
@@ -181,21 +216,33 @@ function LiteBagContainerFrameMixin:GetContainedBagIDs(outContainedBagIDs)
     Mixin(outContainedBagIDs, self.bagIDs)
 end
 
-function LiteBagContainerFrameMixin:UpdateMiscellaneousFrames()
-    self:SetPortraitToAsset("Interface/Icons/Inv_misc_bag_08");
-    self:UpdateCurrencyFrames();
+function LiteBagContainerFrameMixin:UpdateBagButtons()
+    for _, bagButton in ipairs(self.bagButtons) do
+        bagButton:Update()
+        bagButton:Show()
+    end
 end
 
-function ContainerFrameCombinedBagsMixin:CalculateWidth()
+function LiteBagContainerFrameMixin:UpdateMiscellaneousFrames()
+    if self:MatchesBagID(BANK_CONTAINER) then
+        self:GetParent():SetPortraitToUnit('npc')
+    else
+        self:GetParent():SetPortraitToAsset("Interface/Icons/Inv_misc_bag_08");
+    end
+    self:UpdateCurrencyFrames();
+    self:UpdateBagButtons()
+end
+
+function LiteBagContainerFrameMixin:CalculateWidth()
     return self.width
 end
 
 
-function ContainerFrameCombinedBagsMixin:CalculateHeight()
+function LiteBagContainerFrameMixin:CalculateHeight()
     return self.height
 end
 
-function ContainerFrameCombinedBagsMixin:OnTokenWatchChanged()
+function LiteBagContainerFrameMixin:OnTokenWatchChanged()
     self:UpdateTokenTracker()
 
     -- WARNING! These are in the reverse order from the superclass because
@@ -203,6 +250,11 @@ function ContainerFrameCombinedBagsMixin:OnTokenWatchChanged()
     -- layouts than do it all twice.
     self:UpdateItemLayout()
     self:UpdateFrameSize()
+end
+
+function LiteBagContainerFrameMixin:SetTokenTracker(tokenFrame)
+        tokenFrame:SetParent(self);
+        tokenFrame:SetIsCombinedInventory(true)
 end
 
 local function inDiffBag(a, b)
@@ -319,6 +371,40 @@ LAYOUTS.bag =
         return grid
     end
 
+local function GetLayoutNColsForWidth(self, width)
+    local layout = LB.Options:GetFrameOption(self, 'layout')
+    if not layout or not LAYOUTS[layout] then layout = 'default' end
+
+    local ncols
+    local currentCols = LB.Options:GetFrameOption(self, 'columns') or
+                            self.defaultColumns or
+                            MIN_COLUMNS
+
+    -- The BUTTONORDER doesn't matter for sizing so don't bother calling it.
+    -- Search up or down from our current column size, for speed.
+
+    if width < self:GetWidth() then
+        ncols = MIN_COLUMNS
+        for i = currentCols, MIN_COLUMNS, -1 do
+            local layoutGrid = LAYOUTS[layout](self, self.Items, i)
+            if layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET <= width then
+                ncols = i
+                break
+            end
+        end
+    else
+        ncols = self.size
+        for i = currentCols+1, self.size+1, 1 do
+            local layoutGrid = LAYOUTS[layout](self, self.Items, i)
+            if layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET > width then
+                ncols = i-1
+                break
+            end
+        end
+    end
+    return ncols
+end
+
 local function GetLayoutGridForFrame(self)
     local ncols = LB.Options:GetFrameOption(self, 'columns') or self.defaultColumns
     local layout = LB.Options:GetFrameOption(self, 'layout')
@@ -337,7 +423,8 @@ function LiteBagContainerFrameMixin:UpdateItemLayout()
 
     local anchor, m, xOff, yOff
 
-    local adjustedBottomOffset = BOTTOM_OFFSET + self.MoneyFrame:GetHeight() + self:CalculateExtraHeight()
+    -- Combined frame adds 10 for search bar but we already accounted for it
+    local adjustedBottomOffset = BOTTOM_OFFSET + self:CalculateExtraHeight() - 10
 
     if layoutGrid.reverseDirection then
         anchor, m, xOff, yOff = 'BOTTOMRIGHT', -1, -RIGHT_OFFSET, -adjustedBottomOffset
@@ -356,11 +443,66 @@ function LiteBagContainerFrameMixin:UpdateItemLayout()
         n = n + 1
     end
 
+    for i = 1, #self.bagButtons do
+        local this = self.bagButtons[i]
+        local last = self.bagButtons[i-1]
+        this:ClearAllPoints()
+        if last then
+            this:SetPoint("LEFT", last, "RIGHT", 0, 0)
+        else
+            this:SetPoint("TOPLEFT", self, "TOPLEFT", 60, -31)
+        end
+        this:Show()
+    end
+
     self.width = layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET
     self.height = layoutGrid.totalHeight + TOP_OFFSET + adjustedBottomOffset
 end
 
-function ContainerFrameCombinedBagsMixin:UpdateFrameSize()
+function LiteBagContainerFrameMixin:UpdateFrameSize()
     LB.Debug(format("ContainerFrame UpdateFrameSize %s %d,%d", self:GetName(), self.width, self.height))
     self:SetSize(self.width, self.height)
+    EventRegistry:TriggerEvent("LiteBag.FrameSize", self)
+end
+
+function LiteBagContainerFrameMixin:ResizeToWidth(width)
+    LB.Debug(format("ContainerFrame ResizeToWidth %s %d", self:GetName(), width))
+    local ncols = GetLayoutNColsForWidth(self, width)
+    LB.Options:SetFrameOption(self, 'columns', ncols)
+    self:UpdateItemLayout()
+    self:UpdateFrameSize()
+end
+
+function LiteBagContainerFrameMixin:UpdateSearchBox()
+
+    local searchBox, autoSortButton
+
+    if self:MatchesBagID(BANK_CONTAINER) then
+        searchBox = BankItemSearchBox
+        autoSortButton = BankItemAutoSortButton
+    else
+        searchBox = BagItemSearchBox
+        autoSortButton = BagItemAutoSortButton
+    end
+
+    autoSortButton.anchorBag = self
+    autoSortButton:SetParent(self)
+    autoSortButton:ClearAllPoints()
+    autoSortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -7, -33)
+    autoSortButton:Show()
+
+    local lastBag = self.bagButtons[#self.bagButtons]
+    searchBox:SetParent(self)
+    searchBox:ClearAllPoints()
+    searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -38, -37)
+    searchBox:SetPoint('LEFT', lastBag, 'RIGHT', 8, 0)
+    searchBox:Show()
+end
+
+function LiteBagContainerFrameMixin:UpdateName()
+    if self:MatchesBagID(BANK_CONTAINER) then
+        self:GetParent():SetTitle(addonName .. " : " .. BANK)
+    else
+        self:GetParent():SetTitle(addonName .. " : " .. BAG_NAME_BACKPACK)
+    end
 end

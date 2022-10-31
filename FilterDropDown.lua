@@ -129,3 +129,20 @@ function LiteBagPortraitButtonMixin:OnMouseDown()
     PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
     LibDD:ToggleDropDownMenu(1, nil, self:GetParent().FilterDropDown, self, 0, 0)
 end
+
+function LiteBagPortraitButtonMixin:OnEnter()
+    GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+    if self:GetParent():MatchesBagID(BACKPACK_CONTAINER) then
+        GameTooltip:SetText(BACKPACK_TOOLTIP, 1.0, 1.0, 1.0)
+        GameTooltip:AddLine(CLICK_BAG_SETTINGS)
+        GameTooltip:Show()
+    elseif self:GetParent():MatchesBagID(BANK_CONTAINER) then
+        GameTooltip:SetText(BANK, 1.0, 1.0, 1.0)
+        GameTooltip:AddLine(CLICK_BAG_SETTINGS)
+        GameTooltip:Show()
+    end
+end
+
+function LiteBagPortraitButtonMixin:OnLeave()
+    GameTooltip_Hide()
+end

@@ -11,6 +11,7 @@
         <Frame name="$parentFilterDropDown" parentKey="FilterDropDown" inherits="LiteBagFilterDropDownTemplate" />
     </Frames>
     <Scripts>
+        <!-- These are all of the same events from ContainerFrameCombinedBags -->
         <OnLoad method="OnLoad" />
         <OnShow method="OnShow" />
         <OnHide method="OnHide" />

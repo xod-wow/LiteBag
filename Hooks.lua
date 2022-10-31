@@ -29,5 +29,14 @@ function LB.CallHooks(func, self)
     end
 end
 
+local PluginUpdateEvents = { }
+
+-- XXX FIXME XXX unimplemented
+function LB.RegisterUpdateEvent(e)
+    if e == 'PLAYER_LOGIN' then return end
+    PluginUpdateEvents[e] = true
+end
+
 -- Exported interface for other addons
+_G.LiteBag_RegisterUpdateEvent = LB.RegisterUpdateEvent
 _G.LiteBag_RegisterHook = LB.RegisterHook

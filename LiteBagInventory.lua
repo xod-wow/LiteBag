@@ -11,8 +11,6 @@
 
 local addonName, LB = ...
 
-local INVENTORY_BAG_IDS = { 0, 1, 2, 3, 4 }
-
 local OPEN_EVENTS = {
     'BAG_OPEN',
     'BANKFRAME_OPENED',
@@ -25,25 +23,6 @@ local OPEN_EVENTS = {
 local CLOSE_EVENTS = {
     'BANKFRAME_CLOSED',
 }
-
--- This updates the highlights for the bag open/closed buttons that are
--- part of the MainMenuBar at the bottom in the default Blizzard interface.
-
-local function SetMainMenuBarButtons(checked)
-    if WOW_PROJECT_ID == 1 then
-        MainMenuBarBackpackButton.SlotHighlightTexture:SetShown(checked)
-        CharacterBag0Slot.SlotHighlightTexture:SetShown(checked)
-        CharacterBag1Slot.SlotHighlightTexture:SetShown(checked)
-        CharacterBag2Slot.SlotHighlightTexture:SetShown(checked)
-        CharacterBag3Slot.SlotHighlightTexture:SetShown(checked)
-    else
-        MainMenuBarBackpackButton:SetChecked(checked)
-        CharacterBag0Slot:SetChecked(checked)
-        CharacterBag1Slot:SetChecked(checked)
-        CharacterBag2Slot:SetChecked(checked)
-        CharacterBag3Slot:SetChecked(checked)
-    end
-end
 
 function LiteBagInventory_OnLoad(self)
     LiteBagFrame_OnLoad(self)

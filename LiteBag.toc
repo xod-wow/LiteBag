@@ -23,7 +23,6 @@ BagButton.xml
 ItemButton.xml
 FilterDropDown.xml
 ContainerFrame.xml
-Panel.xml
 Frame.xml
 LiteBagBank.xml
 LiteBagInventory.xml
