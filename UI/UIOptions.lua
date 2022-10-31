@@ -10,6 +10,8 @@ local addonName, LB = ...
 
 local L = LB.Localize
 
+local LibDD = LibStub("LibUIDropDownMenu-4.0")
+
 local MenuTextMapping  = {
     ['bag'] = L['Bags'],
     ['reverse'] = L['Reverse'],
@@ -103,7 +105,7 @@ end
 
 local function IconBorder_Initialize(self, level)
     if level == 1 then
-        local info = UIDropDownMenu_CreateInfo()
+        local info = LibDD:UIDropDownMenu_CreateInfo()
         local current = LB.Options:GetGlobalOption('ThickerIconBorder')
 
         info.func =
@@ -115,20 +117,21 @@ local function IconBorder_Initialize(self, level)
         info.text = GetQualityText(nil)
         info.checked = ( current == nil )
         info.arg1 = nil
-        UIDropDownMenu_AddButton(info)
+        LibDD:UIDropDownMenu_AddButton(info)
 
-        UIDropDownMenu_AddSeparator()
+        LibDD:UIDropDownMenu_AddSeparator()
 
         for i = Enum.ItemQualityMeta.NumValues-1, 0, -1 do
             info.text = GetQualityText(i)
             info.checked = ( current == i )
             info.arg1 = i
-            UIDropDownMenu_AddButton(info)
+            LibDD:UIDropDownMenu_AddButton(info)
         end
     end
 end
 
 function LiteBagOptionsIconBorder_OnLoad(self)
+    LibDD:Create_UIDropDownMenu(self)
     self.SetOption =
         function (self, setting)
             LB.Options:SetGlobalOption('ThickerIconBorder', setting)
@@ -148,20 +151,20 @@ function LiteBagOptionsIconBorder_OnLoad(self)
     self.SetControl =
         function (self, v)
             self.value = v
-            UIDropDownMenu_SetText(self, GetQualityText(v))
+            LibDD:UIDropDownMenu_SetText(self, GetQualityText(v))
         end
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsIconBorder_OnShow(self)
     if not self:GetAttribute('initmenu') then
-        UIDropDownMenu_Initialize(self, IconBorder_Initialize)
+        LibDD:UIDropDownMenu_Initialize(self, IconBorder_Initialize)
     end
 end
 
 local function PanelOrder_Initialize(self, level)
     if level == 1 then
-        local info = UIDropDownMenu_CreateInfo()
+        local info = UILibDD:DropDownMenu_CreateInfo()
         local current = LB.Options:GetFrameOption(self.panel, 'order')
 
         info.func =
@@ -174,23 +177,24 @@ local function PanelOrder_Initialize(self, level)
         info.checked = ( current == nil )
         info.arg1 = nil
         info.arg2 = info.text
-        UIDropDownMenu_AddButton(info)
+        LibDD:UIDropDownMenu_AddButton(info)
 
         info.text = MenuTextMapping['blizzard']
         info.checked = ( current == 'blizzard' )
         info.arg1 = 'blizzard'
         info.arg2 = info.text
-        UIDropDownMenu_AddButton(info)
+        LibDD:UIDropDownMenu_AddButton(info)
 
         info.text = MenuTextMapping['reverse']
         info.checked = ( current == 'reverse' )
         info.arg1 = 'reverse'
         info.arg2 = info.text
-        UIDropDownMenu_AddButton(info)
+        LibDD:UIDropDownMenu_AddButton(info)
     end
 end
 
 local function PanelOrder_OnLoad(self, panel)
+    LibDD:Create_UIDropDownMenu(self)
     self.SetOption =
         function (self, setting)
             LB.Options:SetFrameOption(panel, 'order', setting)
@@ -211,9 +215,9 @@ local function PanelOrder_OnLoad(self, panel)
         function (self, v)
             self.value = v
             if v then
-                UIDropDownMenu_SetText(self, MenuTextMapping[v])
+                LibDD:UIDropDownMenu_SetText(self, MenuTextMapping[v])
             else
-                UIDropDownMenu_SetText(self, DEFAULT)
+                LibDD:UIDropDownMenu_SetText(self, DEFAULT)
             end
         end
     self.panel = panel
@@ -222,13 +226,13 @@ end
 
 function LiteBagOptionsPanelOrder_OnShow(self)
     if not self:GetAttribute('initmenu') then
-        UIDropDownMenu_Initialize(self, PanelOrder_Initialize)
+        LibDD:UIDropDownMenu_Initialize(self, PanelOrder_Initialize)
     end
 end
 
 local function PanelLayout_Initialize(self, level)
     if level == 1 then
-        local info = UIDropDownMenu_CreateInfo()
+        local info = LibDD:UIDropDownMenu_CreateInfo()
         local current = LB.Options:GetFrameOption(self.panel, 'layout')
 
         info.func =
@@ -241,23 +245,24 @@ local function PanelLayout_Initialize(self, level)
         info.checked = ( current == nil )
         info.arg1 = nil
         info.arg2 = info.text
-        UIDropDownMenu_AddButton(info)
+        LibDD:UIDropDownMenu_AddButton(info)
 
         info.text = MenuTextMapping['bag']
         info.checked = ( current == 'bag' )
         info.arg1 = 'bag'
         info.arg2 = info.text
-        UIDropDownMenu_AddButton(info)
+        LibDD:UIDropDownMenu_AddButton(info)
 
         info.text = MenuTextMapping['reverse']
         info.checked = ( current == 'reverse' )
         info.arg1 = 'reverse'
         info.arg2 = info.text
-        UIDropDownMenu_AddButton(info)
+        LibDD:UIDropDownMenu_AddButton(info)
     end
 end
 
 local function PanelLayout_OnLoad(self, panel)
+    LibDD:Create_UIDropDownMenu(self)
     self.SetOption =
         function (self, setting)
             LB.Options:SetFrameOption(panel, 'layout', setting)
@@ -278,9 +283,9 @@ local function PanelLayout_OnLoad(self, panel)
         function (self, v)
             self.value = v
             if v then
-                UIDropDownMenu_SetText(self, MenuTextMapping[v])
+                LibDD:UIDropDownMenu_SetText(self, MenuTextMapping[v])
             else
-                UIDropDownMenu_SetText(self, DEFAULT)
+                LibDD:UIDropDownMenu_SetText(self, DEFAULT)
             end
         end
     self.panel = panel
@@ -289,7 +294,7 @@ end
 
 function LiteBagOptionsPanelLayout_OnShow(self)
     if not self:GetAttribute('initmenu') then
-        UIDropDownMenu_Initialize(self, PanelLayout_Initialize)
+        LibDD:UIDropDownMenu_Initialize(self, PanelLayout_Initialize)
     end
 end
 

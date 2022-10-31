@@ -73,7 +73,7 @@
                 <OnClick function="LiteBagOptionsControl_OnChanged" />
             </Scripts>
         </CheckButton>
-        <Frame name="$parentIconBorder" inherits="UIDropDownMenuTemplate">
+        <Frame name="$parentIconBorder">
             <Size x="93" y="22" />
             <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="$parentSnapToPosition" relativePoint="BOTTOMLEFT" x="30" y="-24" />
@@ -137,7 +137,7 @@
                 <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
-        <Frame name="$parentInventoryOrder" inherits="UIDropDownMenuTemplate">
+        <Frame name="$parentInventoryOrder">
             <Anchors>
                 <Anchor point="TOP" relativeTo="$parentInventoryXBreak" relativePoint="BOTTOM" x="0" y="-36" />
                 <Anchor point="RIGHT" relativeTo="$parentInventoryBox" x="-144" />
@@ -156,7 +156,7 @@
                 </Layer>
             </Layers>
         </Frame>
-        <Frame name="$parentInventoryLayout" inherits="UIDropDownMenuTemplate">
+        <Frame name="$parentInventoryLayout">
             <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="$parentInventoryOrder" relativePoint="BOTTOMLEFT" y="-8" />
             </Anchors>
@@ -219,7 +219,7 @@
                 <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
-        <Frame name="$parentBankOrder" inherits="UIDropDownMenuTemplate">
+        <Frame name="$parentBankOrder">
             <Anchors>
                 <Anchor point="TOP" relativeTo="$parentBankXBreak" relativePoint="BOTTOM" y="-36" />
                 <Anchor point="RIGHT" relativeTo="$parentBankBox" x="-144" />
@@ -238,7 +238,7 @@
                 </Layer>
             </Layers>
         </Frame>
-        <Frame name="$parentBankLayout" inherits="UIDropDownMenuTemplate">
+        <Frame name="$parentBankLayout">
             <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="$parentBankOrder" relativePoint="BOTTOMLEFT" y="-8" />
             </Anchors>
