@@ -15,7 +15,7 @@ LiteBagItemButtonMixin = {}
 
 function LiteBagItemButtonMixin:OnLoad()
     ContainerFrameItemButtonMixin.OnLoad(self)
-    self.UpdateTooltip = self.OnUpdate
+    self.UpdateTooltip = self.OnEnter
     -- This is for BankFrameItemButton_OnEnter
     self.GetInventorySlot = ButtonInventorySlot
 end
