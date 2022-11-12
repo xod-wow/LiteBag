@@ -508,3 +508,12 @@ function LiteBagContainerFrameMixin:UpdateName()
         self:GetParent():SetTitle(addonName .. " : " .. BAG_NAME_BACKPACK)
     end
 end
+
+
+function LiteBagContainerFrameMixin:UpdateItems()
+    LB.Debug("ContainerFrame UpdateItems " .. self:GetName())
+    ContainerFrameMixin.UpdateItems(self)
+    for _, itemButton in self:EnumerateValidItems() do
+        LB.CallHooks('LiteBagItemButton_Update', itemButton)
+    end
+end
