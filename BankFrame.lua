@@ -47,13 +47,6 @@ function LiteBagBankMixin:OnLoad()
     -- Bank frame specific events
     self:RegisterEvent('BANKFRAME_OPENED')
     self:RegisterEvent('BANKFRAME_CLOSED')
-
-    -- For the reagent bank
-    self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
-    self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
-
-    -- Maybe we grew the bank?
-    self:RegisterEvent('PLAYER_MONEY')
 end
 
 function LiteBagBankMixin:OnEvent(event, ...)
@@ -98,10 +91,15 @@ function LiteBagBankMixin:OnShow()
 
     self:RegisterEvent('ITEM_LOCK_CHANGED')
     self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
-    self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
     self:RegisterEvent('PLAYERBANKBAGSLOTS_CHANGED')
-    self:RegisterEvent('PLAYER_MONEY')
     self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
+
+    -- How to detect if we moved bags in/out of the slots?
+    self:RegisterEvent('PLAYER_MONEY')
+
+    -- For the reagent bank
+    self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
+    self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
 
     OpenAllBags(self)
 end

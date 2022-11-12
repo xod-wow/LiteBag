@@ -30,6 +30,11 @@
         <Attribute name="UIPanelLayout-pushable" type="number" value="6" />
     </Attributes>
 
+    <Scripts>
+        <OnShow> self.BankFrame:Show() </OnShow>
+        <OnHide> self.BankFrame:Hide() </OnHide>
+    </Scripts>
+
     <!-- XXX FIXME XXX DELETE THIS BEFORE GO LIVE, YELLOW UNDERLAY -->
     <!--
     <Layers>
@@ -42,7 +47,12 @@
     -->
 </Frame>
 
-<Frame name="LiteBagBank" parent="LiteBagBankPlacer" inherits="LiteBagFrameTemplate" mixin="LiteBagBankMixin" hidden="false">
+<Frame
+        name="LiteBagBank"
+        parent="LiteBagBankPlacer"
+        parentKey="BankFrame"
+        inherits="LiteBagFrameTemplate"
+        mixin="LiteBagBankMixin">
     <Size x="384" y="512" />
     <KeyValues>
         <KeyValue key="ResizingAllowed" value="true" type="boolean" />
