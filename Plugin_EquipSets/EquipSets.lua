@@ -2,7 +2,7 @@
 
   LiteBag/Plugin_Equipsets/EquipSets.lua
 
-  Copyright 2013-2016 Mike Battersby
+  Copyright 2013 Mike Battersby
 
   Released under the terms of the GNU General Public License version 2 (GPLv2).
   See the file LICENSE.txt.

@@ -4,7 +4,7 @@
 
   LiteBag translations into other languages.
 
-  Copyright 2013-2020 Mike Battersby
+  Copyright 2013 Mike Battersby
 
 ----------------------------------------------------------------------------]]--
 
