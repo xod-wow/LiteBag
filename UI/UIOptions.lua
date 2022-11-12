@@ -13,6 +13,7 @@ local L = LB.Localize
 local LibDD = LibStub("LibUIDropDownMenu-4.0")
 
 local MenuTextMapping  = {
+    ['default'] = DEFAULT,
     ['bag'] = L['Bags'],
     ['reverse'] = L['Reverse'],
     ['blizzard'] = 'Blizzard'
@@ -80,14 +81,14 @@ function LiteBagOptionsSnapToPosition_OnLoad(self)
     self.SetOption =
         function (self, setting)
             if not setting or setting == '0' then
-                LB.Options:SetGlobalOption('NoSnapToPosition', true)
+                LB.Options:SetFrameOption('BAGS', 'nosnap', true)
             else
-                LB.Options:SetGlobalOption('NoSnapToPosition', false)
+                LB.Options:SetFrameOption('BAGS', 'nosnap', false)
             end
         end
     self.GetOption =
         function (self)
-            return not LB.Options:GetGlobalOption('NoSnapToPosition')
+            return not LB.Options:GetFrameOption('BAGS', 'nosnap')
         end
     self.GetOptionDefault =
         function (self) return false end
@@ -174,8 +175,8 @@ local function PanelOrder_Initialize(self, level)
             end
 
         info.text = DEFAULT
-        info.checked = ( current == nil )
-        info.arg1 = nil
+        info.checked = ( current == "default" )
+        info.arg1 = 'default'
         info.arg2 = info.text
         LibDD:UIDropDownMenu_AddButton(info)
 
@@ -242,8 +243,8 @@ local function PanelLayout_Initialize(self, level)
             end
 
         info.text = DEFAULT
-        info.checked = ( current == nil )
-        info.arg1 = nil
+        info.checked = ( current == "default" )
+        info.arg1 = 'default'
         info.arg2 = info.text
         LibDD:UIDropDownMenu_AddButton(info)
 
@@ -352,7 +353,7 @@ local function SetupBreakControl(self, frame, varname)
 end
 
 function LiteBagOptionsInventoryColumns_OnLoad(self)
-    SetupColumnsControl(self, 'LiteBagInventoryPanel', 8)
+    SetupColumnsControl(self, 'BAGS', 10)
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -363,7 +364,7 @@ function LiteBagOptionsInventoryColumns_OnValueChanged(self)
 end
 
 function LiteBagOptionsInventoryScale_OnLoad(self)
-    SetupScaleControl(self, 'LiteBagInventory')
+    SetupScaleControl(self, 'BAGS')
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -374,7 +375,7 @@ function LiteBagOptionsInventoryScale_OnValueChanged(self)
 end
 
 function LiteBagOptionsBankColumns_OnLoad(self)
-    SetupColumnsControl(self, 'LiteBagBankPanel', 14)
+    SetupColumnsControl(self, 'BANK', 14)
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -385,7 +386,7 @@ function LiteBagOptionsBankColumns_OnValueChanged(self)
 end
 
 function LiteBagOptionsBankScale_OnLoad(self)
-    SetupScaleControl(self, 'LiteBagBank')
+    SetupScaleControl(self, 'BANK')
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -418,39 +419,39 @@ function LiteBagOptionsYBreak_OnValueChanged(self)
 end
 
 function LiteBagOptionsInventoryXBreak_OnLoad(self)
-    SetupBreakControl(self, 'LiteBagInventoryPanel', 'xbreak')
+    SetupBreakControl(self, 'BAGS', 'xbreak')
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsInventoryYBreak_OnLoad(self)
-    SetupBreakControl(self, 'LiteBagInventoryPanel', 'ybreak')
+    SetupBreakControl(self, 'BAGS', 'ybreak')
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsBankXBreak_OnLoad(self)
-    SetupBreakControl(self, 'LiteBagBankPanel', 'xbreak')
+    SetupBreakControl(self, 'BANK', 'xbreak')
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsBankYBreak_OnLoad(self)
-    SetupBreakControl(self, 'LiteBagBankPanel', 'ybreak')
+    SetupBreakControl(self, 'BANK', 'ybreak')
     LiteBagOptionsControl_OnLoad(self)
 end
 
 
 function LiteBagOptionsBankOrder_OnLoad(self)
-    PanelOrder_OnLoad(self, 'LiteBagBankPanel')
+    PanelOrder_OnLoad(self, 'BANK')
 end
 
 function LiteBagOptionsBankLayout_OnLoad(self)
-    PanelLayout_OnLoad(self, 'LiteBagBankPanel')
+    PanelLayout_OnLoad(self, 'BANK')
 end
 
 function LiteBagOptionsInventoryOrder_OnLoad(self)
-    PanelOrder_OnLoad(self, 'LiteBagInventoryPanel')
+    PanelOrder_OnLoad(self, 'BAGS')
 end
 
 function LiteBagOptionsInventoryLayout_OnLoad(self)
-    PanelLayout_OnLoad(self, 'LiteBagInventoryPanel')
+    PanelLayout_OnLoad(self, 'BAGS')
 end
 

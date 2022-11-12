@@ -13,60 +13,58 @@ local addonName, LB = ...
 
 local L = LB.Localize
 
+defaults = {
+    profile = {
+        BAGS = {
+            columns = 10,
+            xbreak = nil,
+            ybreak = nil,
+            layout = 'default',
+            order = 'default',
+            nosnap = false,
+        },
+        BANK = {
+            columns = 14,
+            xbreak = nil,
+            ybreak = nil,
+            layout = 'default',
+            order = 'default',
+        },
+        debug = nil,
+        eventDebug = nil,
+        eventFilter = { },
+    }
+}
+
 LB.Options = CreateFrame('Frame')
-LB.Options.callbacks = {}
 
-function LB.Options:RegisterCallback(f, method, ...)
-    LB.Debug('Register on ' .. f:GetName())
-    self.callbacks[f] = self.callbacks[f] or { }
-    if type(method) == 'function' then
-        table.insert(self.callbacks[f], { method, f, ... })
-    else
-        table.insert(self.callbacks[f], { f[method], f, ... })
+local function Initialize()
+    LiteBagDB = LiteBagDB or { }
+    LB.db = LibStub("AceDB-3.0"):New("LiteBagDB", defaults, true)
+end
+
+function LB.Options:SetFrameOption(key, option, value, noTrigger)
+    if type(key) == 'table' then
+        key = key.FrameType
     end
+    LB.db.profile[key][option] = value
+    if not noTrigger then LB.db.callbacks:Fire('OnOptionsModified') end
 end
 
-function LB.Options:UnregisterAllCallbacks(f)
-    self.callbacks[f] = nil
-end
-
-function LB.Options:Fire()
-    for f, callbacks in pairs(self.callbacks) do
-        LB.Debug('Firing on ' .. f:GetName())
-        for _,t in ipairs(callbacks) do
-            local method = t[1]
-            method(select(2, unpack(t)))
-        end
+function LB.Options:GetFrameOption(key, option)
+    if type(key) == 'table' then
+        key = key.FrameType
     end
-end
-
-function LB.Options:Initialize()
-    LiteBag_OptionsDB = LiteBag_OptionsDB or { }
-    self.db = LiteBag_OptionsDB
-end
-
-function LB.Options:SetFrameOption(frame, option, value, noTrigger)
-    frame = _G[frame] or frame
-    local n = 'Frame:' .. frame:GetName()
-    self.db[n] = LiteBag_OptionsDB[n] or { }
-    self.db[n][option] = value
-    if not noTrigger then self:Fire() end
-end
-
-function LB.Options:GetFrameOption(frame, option)
-    frame = _G[frame] or frame
-    local n = 'Frame:' .. frame:GetName()
-    self.db[n] = self.db[n] or { }
-    return self.db[n][option]
+    return LB.db.profile[key][option]
 end
 
 function LB.Options:SetGlobalOption(option, value, noTrigger)
-    self.db[option] = value
-    if not noTrigger then self:Fire() end
+    LB.db.profile[option] = value
+    if not noTrigger then LB.db.callbacks:Fire('OnOptionsModified') end
 end
 
 function LB.Options:GetGlobalOption(option)
-    return self.db[option]
+    return LB.db.profile[option]
 end
 
 
@@ -110,22 +108,28 @@ local function SlashFunc(argstr)
         return
     end
 
+    if cmd == 'eventdebug' then
+        LB.Options:SetGlobalOption('EventDebugEnabled', onOff)
+        LB.Print(L["Event Debugging:"].." "..tostring(onOff))
+        return
+    end
+
     if cmd == 'inventory.snap' then
-        LB.Options:SetFrameOption(LiteBagInventoryPanel, 'NoSnapToPosition', onOff)
+        LB.Options:SetFrameOption('BAGS', 'nosnap', not onOff)
         LB.Print(L["Inventory snap to default position:"].." "..tostring(onOff))
         return
     end
 
     if cmd == 'inventory.layout' then
         if arg1 == 'default' then arg1 = nil end
-        LB.Options:SetFrameOption(LiteBagInventoryPanel, 'layout', arg1)
+        LB.Options:SetFrameOption('BAGS', 'layout', arg1)
         LB.Print(L["Inventory button layout set to:"].." "..tostring(arg1))
         return
     end
 
     if cmd == 'inventory.order' then
         if arg1 == 'default' then arg1 = nil end
-        LB.Options:SetFrameOption(LiteBagInventoryPanel, 'order', arg1)
+        LB.Options:SetFrameOption('BAGS', 'order', arg1)
         LB.Print(L["Inventory button order set to:"].." "..tostring(arg1))
         return
     end
@@ -133,7 +137,7 @@ local function SlashFunc(argstr)
     if cmd == 'inventory.columns' then
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
-            LB.Options:SetFrameOption(LiteBagInventoryPanel, 'columns', arg1)
+            LB.Options:SetFrameOption('BAGS', 'columns', arg1)
             LB.Print(L["Inventory columns set to:"].." "..arg1)
         else
             LB.Print(L["Can't set number of columns to less than 8."])
@@ -146,8 +150,8 @@ local function SlashFunc(argstr)
         local y = tonumber(arg2)
         if x == 0 then x = nil end
         if y == 0 then y = nil end
-        LB.Options:SetFrameOption(LiteBagInventoryPanel, 'xbreak', x)
-        LB.Options:SetFrameOption(LiteBagInventoryPanel, 'ybreak', y)
+        LB.Options:SetFrameOption('BAGS', 'xbreak', x)
+        LB.Options:SetFrameOption('BAGS', 'ybreak', y)
         LB.Print(format(L["Inventory gaps set to: %s %s"], tostring(x), tostring(y)))
         return
     end
@@ -155,7 +159,7 @@ local function SlashFunc(argstr)
     if cmd == 'inventory.scale' then
         arg1 = tonumber(arg1)
         if arg1 > 0 and arg1 <= 2 then
-            LB.Options:SetFrameOption(LiteBagInventory, 'scale', arg1)
+            LB.Options:SetFrameOption('BAGS', 'scale', arg1)
             LB.Print(format(L["Inventory scale set to: %0.2f"], arg1))
         else
             LB.Print(L["Scale must be between 0 and 2."])
@@ -223,7 +227,7 @@ end
 
 function LB.Options:OnEvent(event, arg1, ...)
     if event == 'ADDON_LOADED' and arg1 == addonName then
-        self:Initialize()
+        Initialize()
         SlashCmdList['LiteBag'] = SlashFunc
         SLASH_LiteBag1 = '/litebag'
         SLASH_LiteBag2 = '/lbg'

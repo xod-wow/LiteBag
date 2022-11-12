@@ -89,6 +89,7 @@ end
 -- a different event, so we register and translate it.
 
 function LiteBagContainerFrameMixin:OnShow()
+    LB.Debug("ContainerFrame OnShow " .. self:GetName())
     ContainerFrameCombinedBagsMixin.OnShow(self)
     if self:MatchesBagID(BANK_CONTAINER) then
         self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
@@ -96,6 +97,7 @@ function LiteBagContainerFrameMixin:OnShow()
 end
 
 function LiteBagContainerFrameMixin:OnHide()
+    LB.Debug("ContainerFrame OnHide " .. self:GetName())
     ContainerFrameCombinedBagsMixin.OnHide(self)
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
 end
@@ -104,7 +106,7 @@ end
 -- gets to them and does something we don't like inside the default bags.
 
 function LiteBagContainerFrameMixin:OnEvent(event, ...)
-    LB.Debug("ContainerFrame OnEvent " .. tostring(event))
+    LB.EventDebug(self, event, ...)
     if event == "BAG_CONTAINER_UPDATE" then
         self:SetUpBags()
     elseif event == "ITEM_LOCK_CHANGED" then

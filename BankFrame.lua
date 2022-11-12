@@ -57,8 +57,7 @@ function LiteBagBankMixin:OnLoad()
 end
 
 function LiteBagBankMixin:OnEvent(event, ...)
-
-    LB.Debug(format("Bank OnEvent %s %s %s", event, tostring(arg1), tostring(arg2)))
+    LB.EventDebug(self, event, ...)
     if event == 'BANKFRAME_OPENED' then
         self:ShowPanel(1)
         ShowUIPanel(self:GetParent())

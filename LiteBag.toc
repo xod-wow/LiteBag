@@ -10,8 +10,7 @@
 ## X-Curse-Project-ID: 50424
 ## X-WoWI-ID: 26330
 
-Libs\LibStub.lua
-Libs\LibUIDropDownMenu\LibUIDropDownMenu.xml
+Libs\embeds.xml
 
 Localization.lua
 
@@ -24,8 +23,8 @@ ItemButton.xml
 FilterDropDown.xml
 ContainerFrame.xml
 Frame.xml
-LiteBagBank.xml
-LiteBagInventory.xml
+BankFrame.xml
+BackpackFrame.xml
 ReplaceBlizzard.lua
 
 #@debug@

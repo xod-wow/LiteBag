@@ -27,3 +27,13 @@ function LB.Debug(...)
         DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00LiteBag:|r ' .. format(...))
     end
 end
+
+function LB.EventDebug(frame, event, ...)
+    if LB.db.profile.eventFilter[event] then return end
+    if LB.Options:GetGlobalOption('EventDebugEnabled') then
+        -- Outputs into the first chat tab instead of LiteBag_Print. Even I
+        -- find the spam too much.
+        local msg = frame:GetName() .. " " .. string.join(' ', event, ...)
+        DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00LiteBag:|r ' .. msg)
+    end
+end

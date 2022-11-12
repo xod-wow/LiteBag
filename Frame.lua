@@ -33,7 +33,7 @@ function LiteBagFrameMixin:SetSnapPosition()
 end
 
 function LiteBagFrameMixin:CheckSnapPosition()
-    if LB.Options:GetGlobalOption('NoSnapToPosition') then
+    if LB.Options:GetFrameOption(self:GetCurrentPanel(), 'nosnap') then
         return
     end
 
@@ -66,7 +66,7 @@ function LiteBagFrameMixin:OnShow()
     self:ShowPanel(self.selectedTab)
     local currentPanel = self:GetCurrentPanel()
     self:SetSize(currentPanel:GetSize())
-    self:SetScale(LB.Options:GetFrameOption(self, 'scale') or 1.0)
+    self:SetScale(LB.Options:GetFrameOption(currentPanel, 'scale') or 1.0)
 
     EventRegistry:RegisterCallback('LiteBag.FrameSize', self.ResizeToPanel, self)
 

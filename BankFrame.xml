@@ -2,7 +2,7 @@
 
 <!-- Copyright 2013-2020 Mike Battersby -->
 
-<Script file="LiteBagBank.lua" />
+<Script file="BankFrame.lua" />
 
 <!--
     The reason we need the "placer" is so we can scale the bank frame and

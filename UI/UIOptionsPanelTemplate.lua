@@ -74,14 +74,14 @@ end
 
 function LiteBagOptionsPanel_OnShow(self)
     LiteBagOptions.CurrentOptionsPanel = self
-    LB.Options:RegisterCallback(self, 'refresh')
+    LB.db.RegisterCallback(self, 'OnOptionsModified', 'refresh')
 
     LiteBagOptionsPanel_SaveOldOptions(self)
     LiteBagOptionsPanel_Refresh(self)
 end
 
 function LiteBagOptionsPanel_OnHide(self)
-    LB.Options:UnregisterAllCallbacks(self)
+    LB.db.UnregisterAllCallbacks(self)
     LiteBagOptionsPanel_Okay(self)
 end
 
