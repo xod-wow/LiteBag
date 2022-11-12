@@ -23,8 +23,11 @@
         <OnClick method="OnClick" />
         <OnEnter method="OnEnter" />
         <OnLeave method="OnLeave" />
+        <OnShow method="OnShow" />
+        <OnHide method="OnHide" />
         <OnDragStart method="OnDragStart" />
         <OnReceiveDrag method="OnClick" />
+        <OnEvent method="OnEvent" />
     </Scripts>
 </ItemButton>
 

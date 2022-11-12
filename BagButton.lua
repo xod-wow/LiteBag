@@ -66,10 +66,16 @@ end
 function LiteBagBagButtonMixin:OnLoad()
     self:RegisterForDrag('LeftButton')
     self:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
+end
 
-    if WOW_PROJECT_ID == 1 then
-        self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
-    end
+function LiteBagBagButtonMixin:OnShow()
+    self:RegisterEvent('BAG_UPDATE_DELAYED')
+    self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
+end
+
+function LiteBagBagButtonMixin:OnHide()
+    self:UnregisterEvent('BAG_UPDATE_DELAYED')
+    self:UnregisterEvent('INVENTORY_SEARCH_UPDATE')
 end
 
 function LiteBagBagButtonMixin:OnEvent(event, ...)
@@ -79,6 +85,8 @@ function LiteBagBagButtonMixin:OnEvent(event, ...)
         else
             self.searchOverlay:Hide()
         end
+    elseif event == 'BAG_UPDATE_DELAYED' then
+        self:Update()
     end
 end
 

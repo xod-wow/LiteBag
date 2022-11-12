@@ -32,11 +32,27 @@ end
 local PluginUpdateEvents = { }
 
 -- XXX FIXME XXX unimplemented
-function LB.RegisterUpdateEvent(e)
+function LB.AddUpdateEvent(e)
     if e == 'PLAYER_LOGIN' then return end
     PluginUpdateEvents[e] = true
 end
 
+function LB.RegisterPluginEvents(frame)
+    for e in pairs(PluginUpdateEvents) do
+        frame:RegisterEvent(e)
+    end
+end
+
+function LB.IsPluginEvent(e)
+    return PluginUpdateEvents[e]
+end
+
+function LB.UnregisterPluginEvents(frame)
+    for e in pairs(PluginUpdateEvents) do
+        frame:UnregisterEvent(e)
+    end
+end
+
 -- Exported interface for other addons
-_G.LiteBag_RegisterUpdateEvent = LB.RegisterUpdateEvent
+_G.LiteBag_AddUpdateEvent = LB.AddUpdateEvent
 _G.LiteBag_RegisterHook = LB.RegisterHook

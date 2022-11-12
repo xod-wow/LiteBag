@@ -94,12 +94,14 @@ function LiteBagContainerFrameMixin:OnShow()
     if self:MatchesBagID(BANK_CONTAINER) then
         self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     end
+    LB.RegisterPluginEvents(self)
 end
 
 function LiteBagContainerFrameMixin:OnHide()
     LB.Debug("ContainerFrame OnHide " .. self:GetName())
     ContainerFrameCombinedBagsMixin.OnHide(self)
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
+    LB.UnregisterPluginEvents(self)
 end
 
 -- We need to pre-handle some problematic events before ContainerFrame_OnEvent
@@ -108,7 +110,10 @@ end
 function LiteBagContainerFrameMixin:OnEvent(event, ...)
     LB.EventDebug(self, event, ...)
     if event == "BAG_CONTAINER_UPDATE" then
-        self:SetUpBags()
+        self:GenerateFrame()
+    elseif event == "BAG_CLOSED" then
+        -- Nothing, don't close single bags because this fires when you
+        -- move a bag from slot to slot.
     elseif event == "ITEM_LOCK_CHANGED" then
         local bag = self:GetBagFrameByID(arg1)
         if arg2 and bag then
@@ -121,6 +126,8 @@ function LiteBagContainerFrameMixin:OnEvent(event, ...)
         -- The bank actually gives you the slot, unlike the bags, but
         -- there's nothing we can send through to make it efficient.
         ContainerFrame_OnEvent(self, "BAG_UPDATE", BANK_CONTAINER)
+    elseif LB.IsPluginEvent(e) then
+        self:Update()
     else
         ContainerFrame_OnEvent(self, event, ...)
     end

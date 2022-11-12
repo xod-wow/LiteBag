@@ -13,6 +13,28 @@ local addonName, LB = ...
 
 LiteBagBankMixin = {}
 
+function LiteBagBankMixin:OnShowReagentBank()
+    -- Use the title text from the Bank Frame itself
+    BANK_PANELS[2].SetTitle()
+    self:SetTitle(addonName .. ' : ' .. BankFrameTitleText:GetText())
+
+    -- Reagent bank doesn't manage its own search box. It's not really clear
+    -- if it would be better to just have the frame handle the search box
+    -- for both.
+
+    BankItemAutoSortButton.anchorBag = self
+    BankItemAutoSortButton:SetParent(self)
+    BankItemAutoSortButton:ClearAllPoints()
+    BankItemAutoSortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -7, -33)
+    BankItemAutoSortButton:Show()
+    BankItemSearchBox:SetParent(self)
+    BankItemSearchBox:ClearAllPoints()
+    BankItemSearchBox:SetPoint("TOPRIGHT", self, "TOPRIGHT", -38, -37)
+    BankItemSearchBox:SetWidth(256)
+    BankItemSearchBox:Show()
+end
+
+
 function LiteBagBankMixin:OnLoad()
     LiteBagFrameMixin.OnLoad(self)
     local placer = self:GetParent()
@@ -32,9 +54,7 @@ function LiteBagBankMixin:OnLoad()
     self.OnShowPanel =
         function (self, n)
             if n == 2 then
-                -- Use the title text from the Bank Frame itself
-                BANK_PANELS[n].SetTitle()
-                self:SetTitle(addonName .. ' : ' .. BankFrameTitleText:GetText())
+                self:OnShowReagentBank()
             end
             -- The itembuttons use BankFrame.selectedTab to know where
             -- to put something that's clicked.
@@ -76,10 +96,6 @@ function LiteBagBankMixin:OnEvent(event, ...)
                 BankFrameItemButton_Update(button)
             end
         end
-    elseif event == 'PLAYER_MONEY' then
-        if self.selectedTab == 1 then
-            self:GenerateFrame()
-        end
     end
 end
 
@@ -93,9 +109,6 @@ function LiteBagBankMixin:OnShow()
     self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
     self:RegisterEvent('PLAYERBANKBAGSLOTS_CHANGED')
     self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
-
-    -- How to detect if we moved bags in/out of the slots?
-    self:RegisterEvent('PLAYER_MONEY')
 
     -- For the reagent bank
     self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
@@ -112,7 +125,6 @@ function LiteBagBankMixin:OnHide()
     self:UnregisterEvent('PLAYERBANKSLOTS_CHANGED')
     self:UnregisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
     self:UnregisterEvent('PLAYERBANKBAGSLOTS_CHANGED')
-    self:UnregisterEvent('PLAYER_MONEY')
     self:UnregisterEvent('INVENTORY_SEARCH_UPDATE')
 
     CloseAllBags(self)

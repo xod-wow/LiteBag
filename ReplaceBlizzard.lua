@@ -40,23 +40,14 @@ local TOOLTIP_NOCONFIRM_TEXT = format(L["%s: No confirmation"], SHIFT_KEY)
 local hiddenBagParent = CreateFrame('Frame')
 hiddenBagParent:Hide()
 
-local FRAME_THAT_OPENED_BAGS = nil
-
 local function ReplaceBlizzardInventory()
     local hideFunc =
         function (frame)
-            if frame and frame:GetName() ~= FRAME_THAT_OPENED_BAGS then
-                return false
-            end
-            FRAME_THAT_OPENED_BAGS = nil
             LiteBagInventory:Hide()
             EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags");
         end
     local showFunc =
         function (frame)
-            if frame and not FRAME_THAT_OPENED_BAGS then
-                FRAME_THAT_OPENED_BAGS = frame:GetName()
-            end
             LiteBagInventory:Show()
             EventRegistry:TriggerEvent("ContainerFrame.OpenAllBags");
         end
@@ -68,6 +59,7 @@ local function ReplaceBlizzardInventory()
                 showFunc()
             end
         end
+    local nopFunc = function () end
 
     -- Turn the Blizzard frames off
     for i=1, NUM_CONTAINER_FRAMES do
@@ -87,7 +79,7 @@ local function ReplaceBlizzardInventory()
     ToggleAllBags = toggleFunc
 
     CloseBackpack = hideFunc
-    CloseBag = hideFunc
+    CloseBag = nopFunc
     CloseAllBags = hideFunc
 
     -- Add the confirm text to the sort button mouseover tooltip.

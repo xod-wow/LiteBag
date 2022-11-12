@@ -31,6 +31,10 @@ local function GetEquipmentSetMemberships(bag, slot)
                 lbag = -1
                 lslot = lslot - BankButtonIDToInvSlotID(1) + 1
             end
+            -- Blizzard bug
+            if lbank == true and lbags == true then
+                lbag = lbag - ITEM_INVENTORY_BANK_BAG_OFFSET + NUM_TOTAL_EQUIPPED_BAG_SLOTS 
+            end
             if slot == lslot and bag == lbag then
                 ids[i] = true
             end
@@ -112,5 +116,8 @@ local function Update(button)
     end
 end
 
+-- XXX fixme XXX this is crazy slow and runs a full equipset scan
+-- for every itembutton which is ridiculous
+
 LB.RegisterHook('LiteBagItemButton_Update', Update)
-LB.RegisterUpdateEvent("EQUIPMENT_SETS_CHANGED")
+LB.AddUpdateEvent("EQUIPMENT_SETS_CHANGED")
