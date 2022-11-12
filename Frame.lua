@@ -116,9 +116,17 @@ end
 
 function LiteBagFrameMixin:ShowPanel(n)
     LB.Debug(format("Frame ShowPanel %s %d", self:GetName(), n))
-    for i,panel in ipairs(self.panels) do
+
+    if #self.panels > 1 then
+        PanelTemplates_SetTab(self, n)
+    end
+    self.selectedTab = n
+
+    for i, panel in ipairs(self.panels) do
         panel:SetShown(i == n)
     end
+
+    self:SetSize(self.panels[n]:GetSize())
 
     if self.panels[n].GenerateFrame then
         self.panels[n]:GenerateFrame()
@@ -127,13 +135,6 @@ function LiteBagFrameMixin:ShowPanel(n)
     if self.OnShowPanel then
         self:OnShowPanel(n)
     end
-
-    self:SetSize(self.panels[n]:GetSize())
-
-    if #self.panels > 1 then
-        PanelTemplates_SetTab(self, n)
-    end
-    self.selectedTab = n
 end
 
 function LiteBagFrameMixin:OnLoad()
