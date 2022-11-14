@@ -15,15 +15,15 @@ local addonName, LB = ...
 local BagInfoByType = {
     BAGS = {
         bagIDs = { 0, 1, 2, 3, 4 },
-        defaultColumns = 10,
+        tokenTracker = true,
     },
     BANK = {
         bagIDs = { -1, 6, 7, 8, 9, 10, 11, 12 },
-        defaultColumns = 14,
+        tokenTracker = true
     },
     REAGENTBAG = {
         bagIDs = { 5 },
-        defaultColumns = 10,
+        tokenTracker = true
     },
 }
 
@@ -44,13 +44,27 @@ LiteBagContainerFrameMixin = CreateFromMixins(ContainerFrameCombinedBagsMixin)
 
 function LiteBagContainerFrameMixin:OnLoad()
     local info = BagInfoByType[self.FrameType]
-    self.bagIDs = info.bagIDs
-    self.defaultColumns = info.defaultColumns
+
+    if info.tokenTracker then
+        local name = self:GetName() .. "TokenFrame"
+        self.TokenTracker = CreateFrame("Frame", name, self, "BackpackTokenFrameTemplate")
+        self.TokenTracker:SetHeight(16)
+        -- The Blizzard token tracker is hard coded to be a single tracker which is updated
+        -- by direct call from the TokenFrame UI
+        hooksecurefunc('TokenFrame_SetTokenWatched', function () self.TokenTracker:Update() end)
+    end
+
+    self.Items = { }
+
+    self.containsBags = { }
+    for _, id in ipairs(info.bagIDs) do self.containsBags[id] = true end
 
     -- In 2013 I thought making my owner dummy container frames to be the
     -- button parents was stupid. In 2022 Blizzard are more or less doing it.
+    -- It would be nicer (for debugging at least) if these were named for the
+    -- id instead of the index, but the bank is -1.
     self.bagFrames = {}
-    for i, id in ipairs(self.bagIDs) do
+    for i, id in ipairs(info.bagIDs) do
         local name = format('%sBag%d', self:GetName(), i)
         local bagFrame = CreateFrame('Frame', name, self)
         bagFrame:SetID(id)
@@ -59,7 +73,7 @@ function LiteBagContainerFrameMixin:OnLoad()
     end
 
     self.bagButtons = {}
-    for i, id in ipairs(self.bagIDs) do
+    for i, id in ipairs(info.bagIDs) do
         local name = format("%sBag%dSlot", self:GetName(), i)
         local bagButton = CreateFrame('ItemButton', name, self, "LiteBagBagButtonTemplate")
         bagButton:SetID(id)
@@ -69,11 +83,7 @@ function LiteBagContainerFrameMixin:OnLoad()
     -- from ContainerFrame:OnLoad
     self:RegisterEvent("BAG_OPEN")
     self:RegisterEvent("BAG_CLOSED")
-    self:RegisterEvent("QUEST_ACCEPTED")
-    self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
 
-    -- from ContainerFrameCombinedBags:OnLoad
-    self:RegisterEvent("BAG_CONTAINER_UPDATE")
     self.PortraitButton:SetPoint("CENTER", self:GetParent():GetPortrait(), "CENTER", 3, -3)
 end
 
@@ -86,21 +96,40 @@ function LiteBagContainerFrameMixin:GetBagFrameByID(id)
 end
 
 -- The Blizzard code doesn't handle the 28 base bank slots because they fire
--- a different event, so we register and translate it.
+-- a different event (PLAYERBANKSLOTS_CHNAGED), so we register and translate
+-- it in our event handler before it reaches the Blizzard code.
 
 function LiteBagContainerFrameMixin:OnShow()
     LB.Debug("ContainerFrame OnShow " .. self:GetName())
+
+    self:GenerateFrame()
+
     ContainerFrameCombinedBagsMixin.OnShow(self)
+
     if self:MatchesBagID(BANK_CONTAINER) then
         self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     end
+
+    -- Blizzard does these in OnLoad for no good reason at all, because they check if
+    -- the frame is shown in the event handler anyway. Derp?
+    self:RegisterEvent("QUEST_ACCEPTED")
+    self:RegisterEvent("UNIT_QUEST_LOG_CHANGED")
+    self:RegisterEvent("BAG_CONTAINER_UPDATE")
+
     LB.RegisterPluginEvents(self)
 end
 
 function LiteBagContainerFrameMixin:OnHide()
     LB.Debug("ContainerFrame OnHide " .. self:GetName())
+
     ContainerFrameCombinedBagsMixin.OnHide(self)
+
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
+
+    self:UnregisterEvent("QUEST_ACCEPTED")
+    self:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
+    self:UnregisterEvent("BAG_CONTAINER_UPDATE")
+
     LB.UnregisterPluginEvents(self)
 end
 
@@ -152,6 +181,13 @@ function LiteBagContainerFrameMixin:GenerateFrame()
     self:CheckUpdateDynamicContents()
 end
 
+function LiteBagContainerFrameMixin:CheckUpdateDynamicContents()
+    LB.Debug("ContainerFrame CheckUpdateDynamicContents " .. self:GetName())
+    if self.TokenTracker then
+        self.TokenTracker:Update()
+    end
+end
+
 -- for the combined bag frame SetUpBags is done in
 --  ContainerFrameSettingsManager:SetUpBagsGeneric
 -- but we can't use it because it's pulling the ItemButtons out of the bag
@@ -176,53 +212,36 @@ end
 function LiteBagContainerFrameMixin:SetUpBags()
     LB.Debug("ContainerFrame SetUpBags " .. self:GetName())
 
-    self:HideItems()
-    self:ClearItems()
+    table.wipe(self.Items)
 
     for _, bag in ipairs(self.bagFrames) do
         bag.size = GetContainerNumSlots(bag:GetID())
         for i = 1, bag.size do
             local b = GetBagItemButton(bag, i)
-            self:AddItem(b)
+            table.insert(self.Items, b)
         end
         for i,b in ipairs(bag.Items) do
             b:SetShown(i <= bag.size)
         end
     end
 
-    if self:MatchesBagID(BACKPACK_CONTAINER) then
-        -- Warning, this messes with the MoneyFrame too. If you
-        -- call it on multiple frames they will steal each other's
-        -- .MoneyFrame as well as the token tracker.
-        ContainerFrameSettingsManager:SetTokenTrackerOwner(self)
-    end
-
     self.size = #self.Items
 end
 
 function LiteBagContainerFrameMixin:IsBagOpen(id)
-    if self:IsShown() and tContains(self.bagIDs, id) then
-        return true
-    end
+    return self:IsShown() and self.containsBags[id]
 end
     
-function LiteBagContainerFrameMixin:SetBagSize()
-    self.size = 0
-    for _, id in ipairs(self.bagIDs) do
-        self.size = self.size + GetContainerNumSlots(id)
-    end
-end
-
 function LiteBagContainerFrameMixin:SetBagID(id)
     return
 end
 
 function LiteBagContainerFrameMixin:MatchesBagID(id)
-    return tContains(self.bagIDs, id)
+    return self.containsBags[id]
 end
 
 function LiteBagContainerFrameMixin:GetContainedBagIDs(outContainedBagIDs)
-    Mixin(outContainedBagIDs, self.bagIDs)
+    ERROR()
 end
 
 function LiteBagContainerFrameMixin:UpdateBagButtons()
@@ -232,26 +251,54 @@ function LiteBagContainerFrameMixin:UpdateBagButtons()
     end
 end
 
+function LiteBagContainerFrameMixin:UpdateTokenTracker()
+    LB.Debug("ContainerFrame UpdateTokenTracker " .. self:GetName())
+    if self.TokenTracker and self.TokenTracker:ShouldShow() then
+        self.TokenTracker:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 8, 8)
+        self.TokenTracker:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -8, 8)
+        self.TokenTracker:Show()
+        self.MoneyFrame:SetPoint("BOTTOMLEFT", self.TokenTracker, "TOPLEFT", 0, 3)
+        self.MoneyFrame:SetPoint("BOTTOMRIGHT", self.TokenTracker, "TOPRIGHT", 0, 3)
+        self.MoneyFrame:Show()
+    else
+        if self.TokenTracker then
+            self.TokenTracker:Hide()
+        end
+        self.MoneyFrame:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 8, 8)
+        self.MoneyFrame:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -8, 8)
+        self.MoneyFrame:Show()
+    end
+end
+
+function LiteBagContainerFrameMixin:CalculateExtraHeight()
+    if self.TokenTracker and self.TokenTracker:ShouldShow() then
+        -- I think Blizzard are missing this 3!
+        return self.MoneyFrame:GetHeight() + self.TokenTracker:GetHeight() + 3
+    else
+        return self.MoneyFrame:GetHeight()
+    end
+end
+
 function LiteBagContainerFrameMixin:UpdateMiscellaneousFrames()
     if self:MatchesBagID(BANK_CONTAINER) then
         self:GetParent():SetPortraitToUnit('npc')
     else
         self:GetParent():SetPortraitToAsset("Interface/Icons/Inv_misc_bag_08");
     end
-    self:UpdateCurrencyFrames();
     self:UpdateBagButtons()
 end
 
 function LiteBagContainerFrameMixin:CalculateWidth()
-    return self.width
+    ERROR()
 end
 
-
 function LiteBagContainerFrameMixin:CalculateHeight()
-    return self.height
+    ERROR()
 end
 
 function LiteBagContainerFrameMixin:OnTokenWatchChanged()
+    LB.Debug("ContainerFrame OnTokenWatchChanged " .. self:GetName())
+
     self:UpdateTokenTracker()
 
     -- WARNING! These are in the reverse order from the superclass because
@@ -262,8 +309,8 @@ function LiteBagContainerFrameMixin:OnTokenWatchChanged()
 end
 
 function LiteBagContainerFrameMixin:SetTokenTracker(tokenFrame)
-        tokenFrame:SetParent(self);
-        tokenFrame:SetIsCombinedInventory(true)
+        -- tokenFrame:SetParent(self);
+        -- tokenFrame:SetIsCombinedInventory(true)
 end
 
 local function inDiffBag(a, b)
@@ -385,9 +432,7 @@ local function GetLayoutNColsForWidth(self, width)
     if not layout or not LAYOUTS[layout] then layout = 'default' end
 
     local ncols
-    local currentCols = LB.Options:GetFrameOption(self, 'columns') or
-                            self.defaultColumns or
-                            MIN_COLUMNS
+    local currentCols = LB.Options:GetFrameOption(self, 'columns') or MIN_COLUMNS
 
     -- The BUTTONORDER doesn't matter for sizing so don't bother calling it.
     -- Search up or down from our current column size, for speed.
@@ -415,7 +460,7 @@ local function GetLayoutNColsForWidth(self, width)
 end
 
 local function GetLayoutGridForFrame(self)
-    local ncols = LB.Options:GetFrameOption(self, 'columns') or self.defaultColumns
+    local ncols = LB.Options:GetFrameOption(self, 'columns')
     local layout = LB.Options:GetFrameOption(self, 'layout')
     local order = LB.Options:GetFrameOption(self, 'order')
 
@@ -432,8 +477,7 @@ function LiteBagContainerFrameMixin:UpdateItemLayout()
 
     local anchor, m, xOff, yOff
 
-    -- Combined frame adds 10 for search bar but we already accounted for it
-    local adjustedBottomOffset = BOTTOM_OFFSET + self:CalculateExtraHeight() - 10
+    local adjustedBottomOffset = BOTTOM_OFFSET + self:CalculateExtraHeight()
 
     if layoutGrid.reverseDirection then
         anchor, m, xOff, yOff = 'BOTTOMRIGHT', -1, -RIGHT_OFFSET, -adjustedBottomOffset
@@ -471,7 +515,6 @@ end
 function LiteBagContainerFrameMixin:UpdateFrameSize()
     LB.Debug(format("ContainerFrame UpdateFrameSize %s %d,%d", self:GetName(), self.width, self.height))
     self:SetSize(self.width, self.height)
-    EventRegistry:TriggerEvent("LiteBag.FrameSize", self)
 end
 
 function LiteBagContainerFrameMixin:ResizeToWidth(width)
@@ -515,7 +558,6 @@ function LiteBagContainerFrameMixin:UpdateName()
         self:GetParent():SetTitle(addonName .. " : " .. BAG_NAME_BACKPACK)
     end
 end
-
 
 function LiteBagContainerFrameMixin:UpdateItems()
     LB.Debug("ContainerFrame UpdateItems " .. self:GetName())

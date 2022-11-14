@@ -17,6 +17,7 @@ defaults = {
     profile = {
         BAGS = {
             columns = 10,
+            scale = 1.0,
             xbreak = nil,
             ybreak = nil,
             layout = 'default',
@@ -25,6 +26,7 @@ defaults = {
         },
         BANK = {
             columns = 14,
+            scale = 1.0,
             xbreak = nil,
             ybreak = nil,
             layout = 'default',

@@ -43,7 +43,7 @@
             </Scripts>
         </Button>
 
-        <Button name="$parentResizeBottomRight">
+        <Button name="$parentResizeBottomRight" parentKey="ResizeBottomRight">
             <Size x="16" y="16" />
             <Anchors>
                 <Anchor point="BOTTOMRIGHT" x="-2" y="2" />
@@ -53,7 +53,7 @@
                 <OnLoad function="RaiseFrameLevel" />
                 <OnMouseDown>
                     local parent = self:GetParent()
-                    if parent.ResizingAllowed then
+                    if parent:ResizeAllowed() then
                         parent.sizing = true
                         parent:StartSizing("BOTTOMRIGHT")
                     end
@@ -72,7 +72,7 @@
                 <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="11" y="2" />
             </Anchors>
             <Scripts>
-                <OnClick> self:GetParent():SetTab(self:GetID()) </OnClick>
+                <OnClick> self:GetParent():ShowPanel(self:GetID()) </OnClick>
             </Scripts>
         </Button>
 
@@ -81,7 +81,7 @@
                 <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-15" y="0" />
             </Anchors>
             <Scripts>
-                <OnClick> self:GetParent():SetTab(self:GetID()) </OnClick>
+                <OnClick> self:GetParent():ShowPanel(self:GetID()) </OnClick>
             </Scripts>
         </Button>
 

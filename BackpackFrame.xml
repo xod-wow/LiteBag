@@ -2,13 +2,13 @@
 
 <!-- Copyright 2013 Mike Battersby -->
 
-<Frame name="LiteBagInventory" parent="UIParent" inherits="LiteBagFrameTemplate">
+<Frame name="LiteBagBackpack" parent="UIParent" inherits="LiteBagFrameTemplate">
     <KeyValues>
-        <KeyValue key="ResizingAllowed" value="true" type="boolean" />
+        <KeyValue key="FrameType" value="BAGS" type="string" />
         <KeyValue key="MovingAllowed" value="true" type="boolean" />
     </KeyValues>
     <Frames>
-        <Frame name="LiteBagInventoryPanel" parentArray="panels" inherits="LiteBagContainerFrameTemplate">
+        <Frame name="LiteBagBackpackPanel" parentArray="panels" inherits="LiteBagContainerFrameTemplate">
             <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
             <KeyValues>
                 <KeyValue key="FrameType" value="BAGS" type="string" />
@@ -20,7 +20,22 @@
             if not self:IsUserPlaced() then
                 self:SetSnapPosition()
             end
+            MainMenuBarBackpackButton.SlotHighlightTexture:SetShown(true)
+            CharacterBag0Slot.SlotHighlightTexture:SetShown(true)
+            CharacterBag1Slot.SlotHighlightTexture:SetShown(true)
+            CharacterBag2Slot.SlotHighlightTexture:SetShown(true)
+            CharacterBag3Slot.SlotHighlightTexture:SetShown(true)
         </OnShow>
+        <OnHide inherit="append">
+            if not self:IsUserPlaced() then
+                self:SetSnapPosition()
+            end
+            MainMenuBarBackpackButton.SlotHighlightTexture:SetShown(false)
+            CharacterBag0Slot.SlotHighlightTexture:SetShown(false)
+            CharacterBag1Slot.SlotHighlightTexture:SetShown(false)
+            CharacterBag2Slot.SlotHighlightTexture:SetShown(false)
+            CharacterBag3Slot.SlotHighlightTexture:SetShown(false)
+        </OnHide>
     </Scripts>
 </Frame>
 

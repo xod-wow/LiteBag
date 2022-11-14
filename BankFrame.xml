@@ -55,7 +55,7 @@
         mixin="LiteBagBankMixin">
     <Size x="384" y="512" />
     <KeyValues>
-        <KeyValue key="ResizingAllowed" value="true" type="boolean" />
+        <KeyValue key="FrameType" value="BANK" type="string" />
         <KeyValue key="MovingAllowed" value="false" type="boolean" />
     </KeyValues>
     <Frames>

@@ -64,25 +64,13 @@ end
 function LiteBagFrameMixin:OnShow()
     LB.Debug("Frame OnShow " .. self:GetName())
     self:ShowPanel(self.selectedTab)
-    local currentPanel = self:GetCurrentPanel()
-    self:SetSize(currentPanel:GetSize())
-    self:SetScale(LB.Options:GetFrameOption(currentPanel, 'scale') or 1.0)
-
-    EventRegistry:RegisterCallback('LiteBag.FrameSize', self.ResizeToPanel, self)
 
     PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 end
 
 function LiteBagFrameMixin:OnHide()
     LB.Debug("Frame OnHide " .. self:GetName())
-    EventRegistry:UnregisterCallback('LiteBag.FrameSize', self)
     PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
-end
-
-function LiteBagFrameMixin:SetTab(id)
-    LB.Debug("Frame SetTab " .. id)
-    PanelTemplates_SetTab(self, id)
-    self:ShowPanel(id)
 end
 
 function LiteBagFrameMixin:GetCurrentPanel()
@@ -114,8 +102,18 @@ function LiteBagFrameMixin:AddPanel(panel, tabTitle)
     -- PanelTemplates_SetNumTabs(self, #self.panels)
 end
 
+function LiteBagFrameMixin:ResizeAllowed()
+    local panel = self:GetCurrentPanel()
+    if panel.ResizeToWidth then
+        return true
+    else
+        return false
+    end
+end
+
 function LiteBagFrameMixin:ShowPanel(n)
     LB.Debug(format("Frame ShowPanel %s %d", self:GetName(), n))
+
 
     if #self.panels > 1 then
         PanelTemplates_SetTab(self, n)
@@ -126,11 +124,12 @@ function LiteBagFrameMixin:ShowPanel(n)
         panel:SetShown(i == n)
     end
 
-    self:SetSize(self.panels[n]:GetSize())
+    local currentPanel = self:GetCurrentPanel()
+    self:SetSize(currentPanel:GetSize())
 
-    if self.panels[n].GenerateFrame then
-        self.panels[n]:GenerateFrame()
-    end
+    self:SetScale(LB.Options:GetFrameOption(self, 'scale') or 1.0)
+
+    self.ResizeBottomRight:SetShown(self:ResizeAllowed())
 
     if self.OnShowPanel then
         self:OnShowPanel(n)

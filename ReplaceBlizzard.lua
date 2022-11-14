@@ -40,20 +40,20 @@ local TOOLTIP_NOCONFIRM_TEXT = format(L["%s: No confirmation"], SHIFT_KEY)
 local hiddenBagParent = CreateFrame('Frame')
 hiddenBagParent:Hide()
 
-local function ReplaceBlizzardInventory()
+local function ReplaceBlizzardBackpack()
     local hideFunc =
         function (frame)
-            LiteBagInventory:Hide()
+            LiteBagBackpack:Hide()
             EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags");
         end
     local showFunc =
         function (frame)
-            LiteBagInventory:Show()
+            LiteBagBackpack:Show()
             EventRegistry:TriggerEvent("ContainerFrame.OpenAllBags");
         end
     local toggleFunc =
         function ()
-            if LiteBagInventory:IsShown() then
+            if LiteBagBackpack:IsShown() then
                 hideFunc()
             else
                 showFunc()
@@ -142,7 +142,7 @@ local function ReplaceBlizzardBank()
 end
 
 local function ReplaceBlizzard()
-    ReplaceBlizzardInventory()
+    ReplaceBlizzardBackpack()
     ReplaceBlizzardBank()
 end
 
