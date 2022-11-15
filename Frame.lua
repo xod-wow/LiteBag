@@ -45,7 +45,9 @@ end
 function LiteBagFrameMixin:ResizeToPanel()
     local panel = self:GetCurrentPanel()
     LB.Debug(format("Frame ResizeToPanel %s %s", self:GetName(), panel:GetName()))
-    self:SetSize(panel:GetSize())
+    local w, h = panel:GetSize()
+    self:SetSize(w, h)
+    return w, h
 end
 
 function LiteBagFrameMixin:OnShow()
@@ -100,6 +102,7 @@ function LiteBagFrameMixin:ShowPanel(n)
 end
 
 function LiteBagFrameMixin:OnLoad()
+    self.Tabs[1]:SetText(self.panels[1].Title)
     PanelTemplates_SetNumTabs(self, 1)
     PanelTemplates_SetTab(self, 1)
     self.needsLayout = true

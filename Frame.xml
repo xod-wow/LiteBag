@@ -43,7 +43,7 @@
             </Scripts>
         </Button>
 
-        <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" text="BANK" hidden="true">
+        <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" hidden="true">
             <Anchors>
                 <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="11" y="2" />
             </Anchors>
@@ -52,10 +52,7 @@
             </Scripts>
         </Button>
 
-        <Button name="$parentTab2" inherits="PanelTabButtonTemplate" id="2" text="REAGENT_BANK" hidden="true">
-            <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-15" y="0" />
-            </Anchors>
+        <Button name="$parentTab2" inherits="PanelTabButtonTemplate" id="2" hidden="true">
             <Scripts>
                 <OnClick> self:GetParent():ShowPanel(self:GetID()) </OnClick>
             </Scripts>

@@ -37,7 +37,7 @@
 
     <!-- YELLOW OVERLAY FOR DEBUGGING -->
     <Layers>
-        <Layer level="OVERLAY">
+        <Layer level="ARTWORK">
             <Texture name="$parentTexture" setAllPoints="true">
                 <Color r="1.00" g="1.00" b="0.00" a="1"/>
             </Texture>
@@ -45,16 +45,17 @@
     </Layers>
 </Frame>
 
-<Frame name="LiteBagBank" parent="UIParent" inherits="LiteBagFrameTemplate" mixin="LiteBagBankMixin">
+<Frame name="LiteBagBank" parent="LiteBagBankPlacer" parentKey="BankFrame" inherits="LiteBagFrameTemplate" mixin="LiteBagBankMixin">
     <KeyValues>
         <KeyValue key="FrameType" value="BANK" type="string" />
-        <KeyValue key="MovingAllowed" value="true" type="boolean" />
+        <KeyValue key="MovingAllowed" value="false" type="boolean" />
     </KeyValues>
     <Frames>
         <Frame name="LiteBagBankPanel" parentArray="panels" inherits="LiteBagContainerFrameTemplate" hidden="true">
             <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
             <KeyValues>
                 <KeyValue key="FrameType" value="BANK" type="string" />
+                <KeyValue key="Title" value="BANK" type="global" />
             </KeyValues>
         </Frame>
     </Frames>
@@ -64,7 +65,6 @@
     </Anchors>
 
     <Scripts>
-<!--    <OnSizeChanged method="OnSizeChanged" /> -->
         <OnLoad method="OnLoad" />
         <OnEvent method="OnEvent" />
     </Scripts>

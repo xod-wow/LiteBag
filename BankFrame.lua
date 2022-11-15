@@ -50,8 +50,8 @@ end
 
 function LiteBagBankMixin:OnLoad()
     LiteBagFrameMixin.OnLoad(self)
-    -- local placer = self:GetParent()
-    -- self.CloseButton:SetScript('OnClick', function () HideUIPanel(placer) end)
+    local placer = self:GetParent()
+    self.CloseButton:SetScript('OnClick', function () HideUIPanel(placer) end)
 
     -- Attach in the other Blizzard bank panels. Note that we are also
     -- responsible for handling their events!
@@ -72,8 +72,8 @@ end
 function LiteBagBankMixin:OnEvent(event, ...)
     LB.EventDebug(self, event, ...)
     if event == 'BANKFRAME_OPENED' then
-        self:Show()
-        -- ShowUIPanel(self:GetParent())
+        local placer = self:GetParent()
+        ShowUIPanel(placer)
     elseif event == 'BANKFRAME_CLOSED' then
         HideUIPanel(self:GetParent())
     elseif event == 'INVENTORY_SEARCH_UPDATE' then
@@ -105,9 +105,9 @@ end
 function LiteBagBankMixin:OnShow()
     LiteBagFrameMixin.OnShow(self)
 
-    -- local placer = self:GetParent()
-    -- self:ClearAllPoints()
-    -- self:SetPoint("TOPLEFT", placer, "TOPLEFT")
+   local placer = self:GetParent()
+    self:ClearAllPoints()
+    self:SetPoint("TOPLEFT", placer, "TOPLEFT")
 
     self:RegisterEvent('ITEM_LOCK_CHANGED')
     self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
@@ -138,15 +138,12 @@ function LiteBagBankMixin:OnHide()
     CloseBankFrame()
 end
 
-function LiteBagBankMixin:OnSizeChanged(w, h)
-    LB.Debug(format("LiteBagBank OnSizeChanged %s %d,%d",self:GetName(), w, h))
-    LiteBagFrameMixin.OnSizeChanged(self, w, h)
---[[
+function LiteBagBankMixin:ResizeToPanel()
+    local w, h = LiteBagFrameMixin.ResizeToPanel(self)
     local placer = self:GetParent()
     local s = self:GetScale()
     placer:SetSize(w*s, h*s)
     if placer:IsShown() then
         UpdateUIPanelPositions(placer)
     end
-]]
 end

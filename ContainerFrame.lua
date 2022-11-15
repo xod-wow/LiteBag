@@ -144,13 +144,15 @@ function LiteBagContainerFrameMixin:OnEvent(event, ...)
         -- Nothing, don't close single bags because this fires when you
         -- move a bag from slot to slot.
     elseif event == "ITEM_LOCK_CHANGED" then
+        -- The way Blizzard does uses all kinds of ContainerFrameUtil stuff
+        -- that won't work for us.
         local bag = self:GetBagFrameByID(arg1)
         if arg2 and bag then
             local _, _, locked = GetContainerItemInfo(bag:GetID(), arg2)
             SetItemButtonDesaturated(bag.Items[arg2], locked)
         end
     elseif event == "DISPLAY_SIZE_CHANGED" then
-        -- We aren't doing any crazy reflowing stuff so do nothing
+        -- We aren't doing any multi-frame reflowing stuff so do nothing
     elseif event == "PLAYERBANKSLOTS_CHANGED" then
         -- The bank actually gives you the slot, unlike the bags, but
         -- there's nothing we can send through to make it efficient.
@@ -515,6 +517,7 @@ end
 function LiteBagContainerFrameMixin:UpdateFrameSize()
     LB.Debug(format("ContainerFrame UpdateFrameSize %s %d,%d", self:GetName(), self.width, self.height))
     self:SetSize(self.width, self.height)
+    self:GetParent().needsLayout = true
 end
 
 function LiteBagContainerFrameMixin:ResizeToWidth(width)
@@ -522,7 +525,7 @@ function LiteBagContainerFrameMixin:ResizeToWidth(width)
     local ncols = GetLayoutNColsForWidth(self, width)
     LB.Options:SetFrameOption(self, 'columns', ncols)
     self:UpdateItemLayout()
-    -- self:UpdateFrameSize()
+    self:UpdateFrameSize()
 end
 
 function LiteBagContainerFrameMixin:UpdateSearchBox()
