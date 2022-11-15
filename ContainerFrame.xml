@@ -4,7 +4,8 @@
 
 <Script file="ContainerFrame.lua" />
 
-<Frame name="LiteBagContainerFrameTemplate" mixin="LiteBagContainerFrameMixin" virtual="true">
+<Frame
+    name="LiteBagContainerFrameTemplate" mixin="LiteBagContainerFrameMixin" hidden="true" virtual="true">
     <Frames>
         <Frame name="$parentMoneyFrame" parentKey="MoneyFrame" inherits="ContainerMoneyFrameTemplate" />
         <DropDownToggleButton name="$parentPortraitButton" parentKey="PortraitButton" inherits="LiteBagPortraitButtonTemplate" />

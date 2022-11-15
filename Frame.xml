@@ -6,8 +6,8 @@
 
 <Frame name="LiteBagFrameTemplate"
        enableMouse="true"
-       frameStrata="MEDIUM" topLevel="true" hidden="true"
        movable="true" resizable="true" clampedToScreen="true"
+       frameStrata="MEDIUM" topLevel="true" hidden="true"
        inherits="PortraitFrameFlatTemplate" mixin="LiteBagFrameMixin"
        virtual="true">
 
@@ -43,30 +43,6 @@
             </Scripts>
         </Button>
 
-        <Button name="$parentResizeBottomRight" parentKey="ResizeBottomRight">
-            <Size x="16" y="16" />
-            <Anchors>
-                <Anchor point="BOTTOMRIGHT" x="-2" y="2" />
-            </Anchors>
-            <NormalTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up" setAllPoints="true" />
-            <Scripts>
-                <OnLoad function="RaiseFrameLevel" />
-                <OnMouseDown>
-                    local parent = self:GetParent()
-                    if parent:ResizeAllowed() then
-                        parent.sizing = true
-                        parent:StartSizing("BOTTOMRIGHT")
-                    end
-                </OnMouseDown>
-                <OnMouseUp>
-                    local parent = self:GetParent()
-                    parent:StopMovingOrSizing()
-                    parent.sizing = false
-                    parent:ResizeToPanel()
-                </OnMouseUp>
-            </Scripts>
-        </Button>
-
         <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" text="BANK" hidden="true">
             <Anchors>
                 <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="11" y="2" />
@@ -91,7 +67,7 @@
         <OnLoad method="OnLoad" />
         <OnHide method="OnHide" />
         <OnShow method="OnShow" />
-        <OnSizeChanged method="OnSizeChanged" />
+        <OnUpdate method="OnUpdate" />
     </Scripts>
 </Frame>
 

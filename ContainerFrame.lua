@@ -19,11 +19,11 @@ local BagInfoByType = {
     },
     BANK = {
         bagIDs = { -1, 6, 7, 8, 9, 10, 11, 12 },
-        tokenTracker = true
+        tokenTracker = false,
     },
     REAGENTBAG = {
         bagIDs = { 5 },
-        tokenTracker = true
+        tokenTracker = false,
     },
 }
 
@@ -522,7 +522,7 @@ function LiteBagContainerFrameMixin:ResizeToWidth(width)
     local ncols = GetLayoutNColsForWidth(self, width)
     LB.Options:SetFrameOption(self, 'columns', ncols)
     self:UpdateItemLayout()
-    self:UpdateFrameSize()
+    -- self:UpdateFrameSize()
 end
 
 function LiteBagContainerFrameMixin:UpdateSearchBox()
