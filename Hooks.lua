@@ -29,30 +29,29 @@ function LB.CallHooks(func, self)
     end
 end
 
-local PluginUpdateEvents = { }
+local PluginEvents = { }
 
--- XXX FIXME XXX unimplemented
-function LB.AddUpdateEvent(e)
+function LB.AddPluginEvent(e)
     if e == 'PLAYER_LOGIN' then return end
-    PluginUpdateEvents[e] = true
+    PluginEvents[e] = true
 end
 
 function LB.RegisterPluginEvents(frame)
-    for e in pairs(PluginUpdateEvents) do
+    for e in pairs(PluginEvents) do
         frame:RegisterEvent(e)
     end
 end
 
 function LB.IsPluginEvent(e)
-    return PluginUpdateEvents[e]
+    return PluginEvents[e]
 end
 
 function LB.UnregisterPluginEvents(frame)
-    for e in pairs(PluginUpdateEvents) do
+    for e in pairs(PluginEvents) do
         frame:UnregisterEvent(e)
     end
 end
 
 -- Exported interface for other addons
-_G.LiteBag_AddUpdateEvent = LB.AddUpdateEvent
+_G.LiteBag_AddPluginEvent = LB.AddPluginEvent
 _G.LiteBag_RegisterHook = LB.RegisterHook

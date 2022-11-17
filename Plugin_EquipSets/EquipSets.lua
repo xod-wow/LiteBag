@@ -120,4 +120,4 @@ end
 -- for every itembutton which is ridiculous
 
 LB.RegisterHook('LiteBagItemButton_Update', Update)
-LB.AddUpdateEvent("EQUIPMENT_SETS_CHANGED")
+LB.AddPluginEvent("EQUIPMENT_SETS_CHANGED")
