@@ -23,38 +23,42 @@ do
         ContainerFrameSettingsManager:SetFilterFlag(bagID, filterID, value)
     end
 
-    local function AddButtons_BagCleanup(id, level)
-        local info = UIDropDownMenu_CreateInfo()
+    local function AddButtons_BagCleanup(bagID, level)
+        local info = LibDD:UIDropDownMenu_CreateInfo()
 
         info.text = BAG_FILTER_CLEANUP
         info.isTitle = 1
         info.notCheckable = 1
         LibDD:UIDropDownMenu_AddButton(info, level)
 
-        info = UIDropDownMenu_CreateInfo()
+        info = LibDD:UIDropDownMenu_CreateInfo()
         info.text = BAG_FILTER_IGNORE
         info.func = function(_, _, _, value)
-            if id == Enum.BagIndex.Bank then
+            if bagID == Enum.BagIndex.Bank then
                 C_Container.SetBankAutosortDisabled(not value)
-            elseif id == Enum.BagIndex.Backpack then
+            elseif bagID == Enum.BagIndex.Backpack then
                 C_Container.SetBackpackAutosortDisabled(not value)
             else
-                C_Container.SetBagSlotFlag(id, Enum.BagSlotFlags.DisableAutoSort, not value)
+                C_Container.SetBagSlotFlag(bagID, Enum.BagSlotFlags.DisableAutoSort, not value)
             end
         end
 
-        if id == Enum.BagIndex.Bank then
+        if bagID == Enum.BagIndex.Bank then
             info.checked = C_Container.GetBankAutosortDisabled()
-        elseif id == Enum.BagIndex.Backpack then
+        elseif bagID == Enum.BagIndex.Backpack then
             info.checked = C_Container.GetBackpackAutosortDisabled()
         else
-            info.checked = C_Container.GetBagSlotFlag(id, Enum.BagSlotFlags.DisableAutoSort)
+            info.checked = C_Container.GetBagSlotFlag(bagID, Enum.BagSlotFlags.DisableAutoSort)
         end
 
         LibDD:UIDropDownMenu_AddButton(info, level)
     end
 
     local function AddButtons_BagFilters(bagID, level)
+        if not ContainerFrame_CanContainerUseFilterMenu(bagID) then
+            return
+        end
+
         local info = LibDD:UIDropDownMenu_CreateInfo()
         info.text = BAG_FILTER_ASSIGN_TO
         info.isTitle = 1
@@ -83,6 +87,7 @@ do
         [2] = BAG_NAME_BAG_2,
         [3] = BAG_NAME_BAG_3,
         [4] = BAG_NAME_BAG_4,
+        [5] = "Reagent Bag",
     }
 
     local function bankName(i)
