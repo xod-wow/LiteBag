@@ -52,7 +52,7 @@ local function ReplaceBlizzardBackpack()
             EventRegistry:TriggerEvent("ContainerFrame.OpenAllBags");
         end
     local toggleFunc =
-        function ()
+        function (bagID)
             if LiteBagBackpack:IsShown() then
                 hideFunc()
             else
@@ -92,7 +92,7 @@ local function ReplaceBlizzardBackpack()
 
     -- Change the sort button to call our confirm function.
     BagItemAutoSortButton:SetScript('OnClick', function (self)
-            DoOrStaticPopup(BAG_CLEANUP_BAGS, SortBags)
+            DoOrStaticPopup(BAG_CLEANUP_BAGS, C_Container.SortBags)
         end)
 end
 
@@ -134,9 +134,9 @@ local function ReplaceBlizzardBank()
     BankItemAutoSortButton:SetScript('OnClick', function ()
             local self = BankFrame
             if (self.activeTabIndex == 1) then
-                DoOrStaticPopup(BAG_CLEANUP_BANK, SortBankBags)
+                DoOrStaticPopup(BAG_CLEANUP_BANK, C_Container.SortBankBags)
             elseif (self.activeTabIndex == 2) then
-                DoOrStaticPopup(BAG_CLEANUP_REAGENT_BANK, SortReagentBankBags)
+                DoOrStaticPopup(BAG_CLEANUP_REAGENT_BANK, C_Container.SortReagentBankBags)
             end
         end)
 end
