@@ -44,10 +44,10 @@ local lineQuery = { Enum.TooltipDataLineType.ItemBinding }
 local function GetBindText(bag, slot)
     local _, info
 
-    if bag == BANK_CONTAINER then
+    if bag == Enum.BagIndex.Bank then
         local id = BankButtonIDToInvSlotID(slot)
         info = C_TooltipInfo.GetInventoryItem('player', id)
-    elseif bag == REAGENTBANK_CONTAINER then
+    elseif bag == Enum.BagIndex.ReagentBank then
         local id = ReagentBankButtonIDToInvSlotID(slot)
         info = C_TooltipInfo.GetInventoryItem('player', id)
     else

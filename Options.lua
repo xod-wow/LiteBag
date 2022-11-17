@@ -24,6 +24,15 @@ defaults = {
             order = 'default',
             nosnap = false,
         },
+        REAGENTBAG = {
+            columns = 10,
+            scale = 1.0,
+            xbreak = nil,
+            ybreak = nil,
+            layout = 'default',
+            order = 'default',
+            nosnap = false,
+        },
         BANK = {
             columns = 14,
             scale = 1.0,

@@ -71,7 +71,7 @@ end
 
 function LiteBagItemButtonMixin:OnEnter(...)
     local bag = self:GetBagID()
-    if bag == BANK_CONTAINER then
+    if bag == Enum.BagIndex.Bank then
         BankFrameItemButton_OnEnter(self, ...)
     else
         ContainerFrameItemButtonMixin.OnEnter(self, ...)

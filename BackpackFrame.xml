@@ -15,6 +15,13 @@
                 <KeyValue key="FrameType" value="BACKPACK" type="string" />
             </KeyValues>
         </Frame>
+        <Frame name="LiteBagReagentBagPanel" parentArray="panels" inherits="LiteBagContainerFrameTemplate">
+            <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
+            <KeyValues>
+                <KeyValue key="Title" value="MINIMAP_TRACKING_VENDOR_REAGENT" type="global" />
+                <KeyValue key="FrameType" value="REAGENTBAG" type="string" />
+            </KeyValues>
+        </Frame>
     </Frames>
     <Scripts>
         <OnShow inherit="append">

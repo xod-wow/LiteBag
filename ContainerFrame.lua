@@ -106,7 +106,7 @@ function LiteBagContainerFrameMixin:OnShow()
 
     ContainerFrameCombinedBagsMixin.OnShow(self)
 
-    if self:MatchesBagID(BANK_CONTAINER) then
+    if self:MatchesBagID(Enum.BagIndex.Bank) then
         self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
     end
 
@@ -156,7 +156,7 @@ function LiteBagContainerFrameMixin:OnEvent(event, ...)
     elseif event == "PLAYERBANKSLOTS_CHANGED" then
         -- The bank actually gives you the slot, unlike the bags, but
         -- there's nothing we can send through to make it efficient.
-        ContainerFrame_OnEvent(self, "BAG_UPDATE", BANK_CONTAINER)
+        ContainerFrame_OnEvent(self, "BAG_UPDATE", Enum.BagIndex.Bank)
     elseif LB.IsPluginEvent(e) then
         self:Update()
     else
@@ -281,7 +281,7 @@ function LiteBagContainerFrameMixin:CalculateExtraHeight()
 end
 
 function LiteBagContainerFrameMixin:UpdateMiscellaneousFrames()
-    if self:MatchesBagID(BANK_CONTAINER) then
+    if self:MatchesBagID(Enum.BagIndex.Bank) then
         self:GetParent():SetPortraitToUnit('npc')
     else
         self:GetParent():SetPortraitToAsset("Interface/Icons/Inv_misc_bag_08");
@@ -531,7 +531,7 @@ function LiteBagContainerFrameMixin:UpdateSearchBox()
 
     local searchBox, autoSortButton
 
-    if self:MatchesBagID(BANK_CONTAINER) then
+    if self:MatchesBagID(Enum.BagIndex.Bank) then
         searchBox = BankItemSearchBox
         autoSortButton = BankItemAutoSortButton
     else

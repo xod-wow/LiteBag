@@ -11,7 +11,7 @@
 
 local addonName, LB = ...
 
-local BankContainers = { [BANK_CONTAINER]  = true }
+local BankContainers = { [Enum.BagIndex.Bank]  = true }
 do
     for i = 1,NUM_BANKBAGSLOTS do
         BankContainers[NUM_TOTAL_EQUIPPED_BAG_SLOTS+i] = true
@@ -25,10 +25,10 @@ function LiteBagBagButtonMixin:Update()
     self.bagID = self:GetID()
     self.isBank = BankContainers[self:GetID()]
 
-    if self.bagID == BACKPACK_CONTAINER then
+    if self.bagID == Enum.BagIndex.Backpack then
         SetItemButtonTexture(self, 'Interface\\Buttons\\Button-Backpack-Up')
         return
-    elseif self.bagID == BANK_CONTAINER then
+    elseif self.bagID == Enum.BagIndex.Bank then
         SetItemButtonTexture(self, 'Interface\\Buttons\\Button-Backpack-Up')
         return
     end
@@ -97,9 +97,9 @@ function LiteBagBagButtonMixin:OnEnter()
 
     GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
 
-    if self:GetID() == BACKPACK_CONTAINER then
+    if self:GetID() == Enum.BagIndex.Backpack then
         GameTooltip:SetText(BACKPACK_TOOLTIP)
-    elseif self:GetID() == BANK_CONTAINER then
+    elseif self:GetID() == Enum.BagIndex.Bank then
         GameTooltip:SetText(BANK)
     else
         local hasItem = GameTooltip:SetInventoryItem('player', self.slotID)
@@ -128,14 +128,14 @@ function LiteBagBagButtonMixin:OnLeave()
 end
 
 function LiteBagBagButtonMixin:OnDragStart()
-    if self.bagID ~= BACKPACK_CONTAINER and self.bagID ~= BANK_CONTAINER then
+    if self.bagID ~= Enum.BagIndex.Backpack and self.bagID ~= Enum.BagIndex.Bank then
         PickupBagFromSlot(self.slotID)
     end
 end
 
 function LiteBagBagButtonMixin:OnClick()
     if CursorHasItem() then
-        if self.bagID == BACKPACK_CONTAINER then
+        if self.bagID == Enum.BagIndex.Backpack then
             PutItemInBackpack()
         elseif not self.purchaseCost then
             PutItemInBag(self.slotID)
@@ -144,7 +144,7 @@ function LiteBagBagButtonMixin:OnClick()
         PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
         BankFrame.nextSlotCost = self.purchaseCost
         StaticPopup_Show('CONFIRM_BUY_BANK_SLOT')
-    elseif self.bagID ~= BACKPACK_CONTAINER and self.bagID ~= BANK_CONTAINER then
+    elseif self.bagID ~= Enum.BagIndex.Backpack and self.bagID ~= Enum.BagIndex.Bank then
         PickupBagFromSlot(self.slotID)
     end
 end

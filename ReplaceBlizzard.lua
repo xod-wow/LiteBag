@@ -120,8 +120,6 @@ local function ReplaceBlizzardBank()
     LiteBagBank:HookScript('OnShow', function () BankFrame:Show() end)
     LiteBagBank:HookScript('OnHide', function () BankFrame:Hide() end)
 
-    hooksecurefunc('BankFrame_Open', function () print('open') ShowUIPanel(LiteBagBankPlacer) end)
-
     -- Add the confirm text to the sort button tooltip.
 
     BankItemAutoSortButton:HookScript('OnEnter', function (self)

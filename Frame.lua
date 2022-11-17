@@ -67,6 +67,20 @@ function LiteBagFrameMixin:GetCurrentPanel()
     return self.panels[n]
 end
 
+function LiteBagFrameMixin:SetUpPanels()
+    local n = #self.panels
+
+    for i, panel in ipairs(self.panels) do
+        self.Tabs[i]:SetText(panel.Title)
+        if n >= 2 then
+            PanelTemplates_ShowTab(self, i)
+        end
+    end
+
+    PanelTemplates_SetNumTabs(self, n)
+
+end
+
 function LiteBagFrameMixin:AddPanel(panel)
     panel:SetParent(self)
     panel:ClearAllPoints()
@@ -74,17 +88,7 @@ function LiteBagFrameMixin:AddPanel(panel)
     panel:Hide()
 
     tinsert(self.panels, panel)
-    local n = #self.panels
-
-    self.Tabs[n]:SetText(panel.Title)
-    PanelTemplates_SetNumTabs(self, n)
-
-    if n >= 2 then
-        for i = 1, n do
-            PanelTemplates_ShowTab(self, i)
-        end
-    end
-
+    self:SetUpPanels()
 end
 
 function LiteBagFrameMixin:ShowPanel(n)
@@ -107,6 +111,7 @@ function LiteBagFrameMixin:OnLoad()
     self.Tabs[1]:SetText(self.panels[1].Title)
     PanelTemplates_SetNumTabs(self, 1)
     PanelTemplates_SetTab(self, 1)
+    self:SetUpPanels()
     self.needsLayout = true
 end
 

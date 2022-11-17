@@ -58,7 +58,7 @@ function LiteBagReagentBankMixin:OnEvent(event, ...)
         ContainerFrameMixin.UpdateSearchResults(ReagentBankFrame)
     elseif event == 'ITEM_LOCK_CHANGED' then
         local bag, slot = ...
-        if bag == REAGENTBANK_CONTAINER then
+        if bag == Enum.BagIndex.ReagentBank then
             local button = ReagentBankFrame['Item'..slot]
             if button then
                 BankFrameItemButton_UpdateLocked(button)

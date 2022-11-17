@@ -34,18 +34,18 @@ do
         info = UIDropDownMenu_CreateInfo()
         info.text = BAG_FILTER_IGNORE
         info.func = function(_, _, _, value)
-            if id == BANK_CONTAINER then
+            if id == Enum.BagIndex.Bank then
                 C_Container.SetBankAutosortDisabled(not value)
-            elseif id == BACKPACK_CONTAINER then
+            elseif id == Enum.BagIndex.Backpack then
                 C_Container.SetBackpackAutosortDisabled(not value)
             else
                 C_Container.SetBagSlotFlag(id, Enum.BagSlotFlags.DisableAutoSort, not value)
             end
         end
 
-        if id == BANK_CONTAINER then
+        if id == Enum.BagIndex.Bank then
             info.checked = C_Container.GetBankAutosortDisabled()
-        elseif id == BACKPACK_CONTAINER then
+        elseif id == Enum.BagIndex.Backpack then
             info.checked = C_Container.GetBackpackAutosortDisabled()
         else
             info.checked = C_Container.GetBagSlotFlag(id, Enum.BagSlotFlags.DisableAutoSort)
@@ -86,7 +86,7 @@ do
     }
 
     local function bankName(i)
-        return BANK .. " " .. BAG_NAME_BAG_1:gsub('1', i-NUM_BAG_FRAMES)
+        return BANK .. " " .. BAG_NAME_BAG_1:gsub('1', i-NUM_TOTAL_BAG_FRAMES)
     end
 
     setmetatable(bagNames, { __index=function(t, k) return bankName(k) end })
@@ -107,7 +107,7 @@ do
                 LibDD:UIDropDownMenu_AddButton(info, level)
             end
         elseif level == 2 then
-            if L_UIDROPDOWNMENU_MENU_VALUE ~= BANK_CONTAINER then
+            if L_UIDROPDOWNMENU_MENU_VALUE ~= Enum.BagIndex.Bank then
                 AddButtons_BagFilters(L_UIDROPDOWNMENU_MENU_VALUE, level)
             end
             AddButtons_BagCleanup(L_UIDROPDOWNMENU_MENU_VALUE, level)
@@ -132,11 +132,11 @@ end
 
 function LiteBagPortraitButtonMixin:OnEnter()
     GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-    if self:GetParent():MatchesBagID(BACKPACK_CONTAINER) then
+    if self:GetParent():MatchesBagID(Enum.BagIndex.Backpack) then
         GameTooltip:SetText(BACKPACK_TOOLTIP, 1.0, 1.0, 1.0)
         GameTooltip:AddLine(CLICK_BAG_SETTINGS)
         GameTooltip:Show()
-    elseif self:GetParent():MatchesBagID(BANK_CONTAINER) then
+    elseif self:GetParent():MatchesBagID(Enum.BagIndex.Bank) then
         GameTooltip:SetText(BANK, 1.0, 1.0, 1.0)
         GameTooltip:AddLine(CLICK_BAG_SETTINGS)
         GameTooltip:Show()
