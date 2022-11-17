@@ -36,6 +36,7 @@
     </Scripts>
 
     <!-- YELLOW OVERLAY FOR DEBUGGING -->
+    <!--
     <Layers>
         <Layer level="ARTWORK">
             <Texture name="$parentTexture" setAllPoints="true">
@@ -43,6 +44,7 @@
             </Texture>
         </Layer>
     </Layers>
+    -->
 </Frame>
 
 <Frame name="LiteBagBank" parent="LiteBagBankPlacer" parentKey="BankFrame" inherits="LiteBagFrameTemplate" mixin="LiteBagBankMixin">
@@ -59,6 +61,21 @@
             </KeyValues>
         </Frame>
     </Frames>
+
+    <!-- This is the background the bank frame uses, but darkened a bit because it looks
+         super weird unless the slots are made lighter. -->
+    <Layers>
+        <Layer level="BACKGROUND">
+            <Texture file="Interface\BankFrame\Bank-Background" horizTile="true" vertTile="true">
+                <Color r="0.6" g="0.6" b="0.6" />
+                <Size x="256" y="256"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="-20"/>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+            </Texture>
+        </Layer>
+    </Layers>
 
     <Anchors>
         <Anchor point="TOPLEFT" />

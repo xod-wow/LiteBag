@@ -4,14 +4,15 @@
 
 <Frame name="LiteBagBackpack" parent="UIParent" inherits="LiteBagFrameTemplate">
     <KeyValues>
-        <KeyValue key="FrameType" value="BAGS" type="string" />
+        <KeyValue key="FrameType" value="BACKPACK" type="string" />
         <KeyValue key="MovingAllowed" value="true" type="boolean" />
     </KeyValues>
     <Frames>
         <Frame name="LiteBagBackpackPanel" parentArray="panels" inherits="LiteBagContainerFrameTemplate">
             <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
             <KeyValues>
-                <KeyValue key="FrameType" value="BAGS" type="string" />
+                <KeyValue key="Title" value="BAG_NAME_BACKPACK" type="global" />
+                <KeyValue key="FrameType" value="BACKPACK" type="string" />
             </KeyValues>
         </Frame>
     </Frames>

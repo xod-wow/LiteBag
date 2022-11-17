@@ -38,37 +38,19 @@ function LiteBagItemButtonMixin:OnUpdate(...)
                 self.newitemglowAnim:Stop();
         end
 
-        local showSell = nil;
-        local hasCooldown, repairCost, speciesID, level, breedQuality, maxHealth, power, speed, name = GameTooltip:SetBagItem(self:GetBagID(), self:GetID());
-        if ( speciesID and speciesID > 0 ) then
-                ContainerFrameItemButton_CalculateItemTooltipAnchors(self, GameTooltip); -- Battle pet tooltip uses the GameTooltip's anchor
-                BattlePetToolTip_Show(speciesID, level, breedQuality, maxHealth, power, speed, name);
-                return;
-        else
-                if ( BattlePetTooltip ) then
-                        BattlePetTooltip:Hide();
-                end
-        end
-
         ContainerFrameItemButton_CalculateItemTooltipAnchors(self, GameTooltip);
 
-        if ( IsModifiedClick("COMPAREITEMS") or GetCVarBool("alwaysCompareItems") ) then
-                GameTooltip_ShowCompareItem(GameTooltip);
-        end
+        GameTooltip:SetBagItem(self:GetBagID(), self:GetID());
 
-        if ( InRepairMode() and (repairCost and repairCost > 0) ) then
-                GameTooltip:AddLine(REPAIR_COST, nil, nil, nil, true);
-                SetTooltipMoney(GameTooltip, repairCost);
-                GameTooltip:Show();
-        elseif ( MerchantFrame:IsShown() and MerchantFrame.selectedTab == 1 ) then
-                showSell = 1;
+        if TooltipUtil.ShouldDoItemComparison() then
+                GameTooltip_ShowCompareItem(GameTooltip);
         end
 
         if ( not SpellIsTargeting() ) then
                 if ( IsModifiedClick("DRESSUP") and self:HasItem() ) then
                         ShowInspectCursor();
-                elseif ( showSell ) then
-                        ShowContainerSellCursor(self:GetBagID(), self:GetID());
+                elseif ( MerchantFrame:IsShown() and MerchantFrame.selectedTab == 1 ) then
+                        C_Container.ShowContainerSellCursor(self:GetBagID(), self:GetID());
                 elseif ( self:IsReadable() ) then
                         ShowInspectCursor();
                 else
@@ -88,7 +70,7 @@ function LiteBagItemButtonMixin:OnUpdate(...)
 end
 
 function LiteBagItemButtonMixin:OnEnter(...)
-    local bag = self:GetParent():GetID()
+    local bag = self:GetBagID()
     if bag == BANK_CONTAINER then
         BankFrameItemButton_OnEnter(self, ...)
     else

@@ -13,7 +13,7 @@ local addonName, LB = ...
 
 
 local BagInfoByType = {
-    BAGS = {
+    BACKPACK = {
         bagIDs = { 0, 1, 2, 3, 4 },
         tokenTracker = true,
     },
@@ -175,7 +175,6 @@ function LiteBagContainerFrameMixin:GenerateFrame()
     self:SetUpBags()
     self:Show()
     self:Raise()
-    self:UpdateName()
     self:UpdateMiscellaneousFrames()
     self:UpdateItemLayout()
     self:UpdateFrameSize()
@@ -217,7 +216,7 @@ function LiteBagContainerFrameMixin:SetUpBags()
     table.wipe(self.Items)
 
     for _, bag in ipairs(self.bagFrames) do
-        bag.size = GetContainerNumSlots(bag:GetID())
+        bag.size = C_Container.GetContainerNumSlots(bag:GetID())
         for i = 1, bag.size do
             local b = GetBagItemButton(bag, i)
             table.insert(self.Items, b)
@@ -552,14 +551,6 @@ function LiteBagContainerFrameMixin:UpdateSearchBox()
     searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -38, -37)
     searchBox:SetPoint('LEFT', lastBag, 'RIGHT', 8, 0)
     searchBox:Show()
-end
-
-function LiteBagContainerFrameMixin:UpdateName()
-    if self:MatchesBagID(BANK_CONTAINER) then
-        self:GetParent():SetTitle(addonName .. " : " .. BANK)
-    else
-        self:GetParent():SetTitle(addonName .. " : " .. BAG_NAME_BACKPACK)
-    end
 end
 
 function LiteBagContainerFrameMixin:UpdateItems()

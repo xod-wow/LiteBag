@@ -1,4 +1,4 @@
-## Interface: 100000
+## Interface: 100002
 ## Title: LiteBag
 ## Notes: A minimal one-bag solution for inventory and bank.|nType |cff00ff00/litebag|r in chat for options.
 ## Notes-frFR: Regroupe tous les sacs en un seul (pour l'inventaire et la banque).|nAccédez aux réglages d'interface avec la commande |cff00ff00/litebag|r
@@ -23,6 +23,7 @@ ItemButton.xml
 FilterDropDown.xml
 ContainerFrame.xml
 Frame.xml
+ReagentBankFrame.xml
 BankFrame.xml
 BackpackFrame.xml
 ReplaceBlizzard.lua

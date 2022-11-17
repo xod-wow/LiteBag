@@ -81,14 +81,14 @@ function LiteBagOptionsSnapToPosition_OnLoad(self)
     self.SetOption =
         function (self, setting)
             if not setting or setting == '0' then
-                LB.Options:SetFrameOption('BAGS', 'nosnap', true)
+                LB.Options:SetFrameOption('BACKPACK', 'nosnap', true)
             else
-                LB.Options:SetFrameOption('BAGS', 'nosnap', false)
+                LB.Options:SetFrameOption('BACKPACK', 'nosnap', false)
             end
         end
     self.GetOption =
         function (self)
-            return not LB.Options:GetFrameOption('BAGS', 'nosnap')
+            return not LB.Options:GetFrameOption('BACKPACK', 'nosnap')
         end
     self.GetOptionDefault =
         function (self) return false end
@@ -353,7 +353,7 @@ local function SetupBreakControl(self, frame, varname)
 end
 
 function LiteBagOptionsInventoryColumns_OnLoad(self)
-    SetupColumnsControl(self, 'BAGS', 10)
+    SetupColumnsControl(self, 'BACKPACK', 10)
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -364,7 +364,7 @@ function LiteBagOptionsInventoryColumns_OnValueChanged(self)
 end
 
 function LiteBagOptionsInventoryScale_OnLoad(self)
-    SetupScaleControl(self, 'BAGS')
+    SetupScaleControl(self, 'BACKPACK')
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -419,12 +419,12 @@ function LiteBagOptionsYBreak_OnValueChanged(self)
 end
 
 function LiteBagOptionsInventoryXBreak_OnLoad(self)
-    SetupBreakControl(self, 'BAGS', 'xbreak')
+    SetupBreakControl(self, 'BACKPACK', 'xbreak')
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsInventoryYBreak_OnLoad(self)
-    SetupBreakControl(self, 'BAGS', 'ybreak')
+    SetupBreakControl(self, 'BACKPACK', 'ybreak')
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -448,10 +448,10 @@ function LiteBagOptionsBankLayout_OnLoad(self)
 end
 
 function LiteBagOptionsInventoryOrder_OnLoad(self)
-    PanelOrder_OnLoad(self, 'BAGS')
+    PanelOrder_OnLoad(self, 'BACKPACK')
 end
 
 function LiteBagOptionsInventoryLayout_OnLoad(self)
-    PanelLayout_OnLoad(self, 'BAGS')
+    PanelLayout_OnLoad(self, 'BACKPACK')
 end
 

@@ -33,7 +33,7 @@ function LiteBagBagButtonMixin:Update()
         return
     end
 
-    self.slotID = ContainerIDToInventoryID(self:GetID())
+    self.slotID = C_Container.ContainerIDToInventoryID(self:GetID())
 
     local textureName = GetInventoryItemTexture('player', self.slotID)
 
@@ -80,7 +80,7 @@ end
 
 function LiteBagBagButtonMixin:OnEvent(event, ...)
     if event == 'INVENTORY_SEARCH_UPDATE' then
-        if IsContainerFiltered(self.bagID) then
+        if C_Container.IsContainerFiltered(self.bagID) then
             self.searchOverlay:Show()
         else
             self.searchOverlay:Hide()

@@ -35,18 +35,18 @@ do
         info.text = BAG_FILTER_IGNORE
         info.func = function(_, _, _, value)
             if id == BANK_CONTAINER then
-                SetBankAutosortDisabled(not value)
+                C_Container.SetBankAutosortDisabled(not value)
             elseif id == BACKPACK_CONTAINER then
-                SetBackpackAutosortDisabled(not value)
+                C_Container.SetBackpackAutosortDisabled(not value)
             else
                 C_Container.SetBagSlotFlag(id, Enum.BagSlotFlags.DisableAutoSort, not value)
             end
         end
 
         if id == BANK_CONTAINER then
-            info.checked = GetBankAutosortDisabled()
+            info.checked = C_Container.GetBankAutosortDisabled()
         elseif id == BACKPACK_CONTAINER then
-            info.checked = GetBackpackAutosortDisabled()
+            info.checked = C_Container.GetBackpackAutosortDisabled()
         else
             info.checked = C_Container.GetBagSlotFlag(id, Enum.BagSlotFlags.DisableAutoSort)
         end
