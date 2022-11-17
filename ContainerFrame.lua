@@ -157,7 +157,7 @@ function LiteBagContainerFrameMixin:OnEvent(event, ...)
         -- The bank actually gives you the slot, unlike the bags, but
         -- there's nothing we can send through to make it efficient.
         ContainerFrame_OnEvent(self, "BAG_UPDATE", Enum.BagIndex.Bank)
-    elseif LB.IsPluginEvent(e) then
+    elseif LB.IsPluginEvent(event) then
         self:Update()
     else
         ContainerFrame_OnEvent(self, event, ...)
