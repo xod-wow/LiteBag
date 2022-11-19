@@ -16,32 +16,56 @@
 
 local addonName, LB = ...
 
--- This is a guess at something I don't really understand, ItemLocations.
--- On one hand this seems pretty inefficient. On the other hand, the Blizzard
--- equivalent makes you use strsplit, so frankly this has to be faster.
+local EquipSetState = CreateFrame('Frame')
 
-local function GetEquipmentSetMemberships(bag, slot)
-    local ids = { }
+-- A partial opposite of EquipmentManager_UnpackLocation that only handles
+-- bags and bank.
 
-    for i, id in ipairs(C_EquipmentSet.GetEquipmentSetIDs()) do
-        local locations = C_EquipmentSet.GetItemLocations(id) or {}
-        for _, l in pairs(locations) do
-            local lplayer, lbank, lbags, lvoid, lslot, lbag = EquipmentManager_UnpackLocation(l)
-            if lbank == true and lbags == false then
-                lbag = -1
-                lslot = lslot - BankButtonIDToInvSlotID(1) + 1
-            end
-            -- Blizzard bug
-            if lbank == true and lbags == true then
-                lbag = lbag - ITEM_INVENTORY_BANK_BAG_OFFSET + NUM_TOTAL_EQUIPPED_BAG_SLOTS 
-            end
-            if slot == lslot and bag == lbag then
-                ids[i] = true
-            end
+function EquipSetState.PackContainerItemLocation(bag, slot)
+    local location = ITEM_INVENTORY_LOCATION_PLAYER
+
+    if bag == Enum.BagIndex.Bank then
+        return location + ITEM_INVENTORY_LOCATION_BANK + slot
+    elseif bag > NUM_TOTAL_BAG_FRAMES then -- Bank Bag
+        location = location + ITEM_INVENTORY_LOCATION_BANK + ITEM_INVENTORY_LOCATION_BAGS
+        bag = bag - NUM_TOTAL_BAG_FRAMES
+    else
+        location = location + ITEM_INVENTORY_LOCATION_BAGS
+    end
+    location = location + bit.lshift(bag, ITEM_INVENTORY_BAG_BIT_OFFSET) + slot
+    return location
+end
+
+function EquipSetState:GetEquipmentSetMemberships(bag, slot)
+    local l = self.PackContainerItemLocation(bag, slot)
+    return self.state[l]
+end
+
+function EquipSetState:UpdateSet(n, id)
+    local locations = C_EquipmentSet.GetItemLocations(id) or {}
+    for _, l in pairs(locations) do
+        if bit.band(l, ITEM_INVENTORY_LOCATION_BANK+ITEM_INVENTORY_LOCATION_BAGS) ~= 0 then
+            self.state[l] = self.state[l] or {}
+            self.state[l][n] = true
         end
     end
-    return ids
 end
+
+function EquipSetState:Update()
+    self.state = {}
+    for i, id in ipairs(C_EquipmentSet.GetEquipmentSetIDs()) do
+        if i < 4 then
+            self:UpdateSet(i, id)
+        end
+    end
+end
+
+EquipSetState:SetScript('OnEvent', EquipSetState.Update)
+EquipSetState:RegisterEvent('PLAYER_LOGIN')
+EquipSetState:RegisterEvent('BAG_UPDATE_DELAYED')
+EquipSetState:RegisterEvent('BANKFRAME_OPENED')
+EquipSetState:RegisterEvent('BANKFRAME_CLOSED')
+EquipSetState:RegisterEvent('EQUIPMENT_SETS_CHANGED')
 
 local texData = {
     [1] = {
@@ -103,12 +127,12 @@ local function Update(button)
         AddTextures(button)
     end
 
-    local memberships = GetEquipmentSetMemberships(bag, slot)
+    local memberships = EquipSetState:GetEquipmentSetMemberships(bag, slot)
 
     for i,td in ipairs(texData) do
         local tex = button[td.parentKey]
         if LB.Options:GetGlobalOption("HideEquipsetIcon") == nil and
-           memberships[i] == true then
+           memberships and memberships[i] == true then
             tex:Show()
         else
             tex:Hide()
@@ -116,8 +140,13 @@ local function Update(button)
     end
 end
 
--- XXX fixme XXX this is crazy slow and runs a full equipset scan
--- for every itembutton which is ridiculous
+-- This is assuming the EQUIPMENT_SETS_CHNAGED for the state manager above
+-- runs before the itembutton hooks. It does because we know they add and
+-- remove OnShow/OnHide and this is therefore first, but I don't think
+-- Blizzard guarantee that behavior.
+
+-- Hopefully someday C_Container.GetContainerItemEquipmentSetInfo will work
+-- and all of this state handling crap can be removed.
 
 LB.RegisterHook('LiteBagItemButton_Update', Update)
 LB.AddPluginEvent("EQUIPMENT_SETS_CHANGED")
