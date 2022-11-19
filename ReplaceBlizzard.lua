@@ -115,7 +115,6 @@ local REPLACEMENT_GLOBALS = {
 
 local function ReplaceGlobals()
     for n, f in pairs(REPLACEMENT_GLOBALS) do
-        print(n)
         _G[n] = f
     end
 end
@@ -206,6 +205,7 @@ function LiteBagManager:ManageBlizzardBagButtons()
     local show = not LB.Options:GetGlobalOption('HideBlizzardBagButtons')
     for _, bagButton in MainMenuBarBagManager:EnumerateBagButtons() do
         bagButton:SetShown(show)
+        bagButton:SetParent(show and MicroButtonAndBagsBar or hiddenParent)
     end
     BagBarExpandToggle:SetShown(show)
 end
