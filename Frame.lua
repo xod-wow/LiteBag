@@ -52,7 +52,7 @@ end
 function LiteBagFrameMixin:OnShow()
     LB.Debug("Frame OnShow " .. self:GetName())
     local n = PanelTemplates_GetSelectedTab(self)
-    self:ShowPanel(n)
+    self.needsUpdate = true
     PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 end
 
@@ -111,11 +111,7 @@ function LiteBagFrameMixin:ShowPanel(n)
         PanelTemplates_SetTab(self, n)
     end
 
-    for i, panel in ipairs(self.panels) do
-        panel:SetShown(i == n)
-    end
-
-    self.needsLayout = true
+    self.needsUpdate = true
 end
 
 function LiteBagFrameMixin:OnLoad()
@@ -123,13 +119,18 @@ function LiteBagFrameMixin:OnLoad()
     PanelTemplates_SetNumTabs(self, 1)
     PanelTemplates_SetTab(self, 1)
     self:SetUpPanels()
-    self.needsLayout = true
+    self.needsUpdate = true
 end
 
 function LiteBagFrameMixin:OnUpdate()
-    if self.needsLayout then
+    if self.needsUpdate then
+        local currentPanel = self:GetCurrentPanel()
+        for i, panel in ipairs(self.panels) do
+            panel:SetShown(panel==currentPanel)
+        end
+
         self:SetScale(LB.Options:GetTypeOption(self.FrameType, 'scale') or 1.0)
         self:ResizeToPanel()
-        self.needsLayout = nil
+        self.needsUpdate = nil
     end
 end

@@ -528,7 +528,7 @@ end
 function LiteBagContainerFrameMixin:UpdateFrameSize()
     LB.Debug(format("ContainerFrame UpdateFrameSize %s %d,%d", self:GetName(), self.width, self.height))
     self:SetSize(self.width, self.height)
-    self:GetParent().needsLayout = true
+    self:GetParent().needsUpdate = true
 end
 
 function LiteBagContainerFrameMixin:ResizeToWidth(width)
