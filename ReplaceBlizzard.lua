@@ -89,6 +89,16 @@ local REPLACEMENT_GLOBALS = {
     OpenAllBags =
         function (frame, forceUpdate)
             if not ContainerFrame_AllowedToOpenBags() then return end
+            if LiteBagBackpack:IsShown() or LiteBagBank:IsShown() then
+                if forceUpdate then
+                    local panel
+                    panel = LiteBagBackpack:GetCurrentPanel()
+                    if panel.Update then panel:UpdateIfShown() end
+                    panel = LiteBagBank:GetCurrentPanel()
+                    if panel.Update then panel:UpdateIfShown() end
+                end
+                return
+            end
             if LiteBagBackpack:IsShown() then
                 return
             end
