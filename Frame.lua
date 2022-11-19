@@ -104,13 +104,7 @@ end
 
 function LiteBagFrameMixin:ShowPanel(n)
     LB.Debug(format("Frame ShowPanel %s %d", self:GetName(), n))
-
-    self:SetTitle(format('%s : %s', addonName, self.panels[n].Title))
-
-    if #self.panels > 1 then
-        PanelTemplates_SetTab(self, n)
-    end
-
+    PanelTemplates_SetTab(self, n)
     self.needsUpdate = true
 end
 
@@ -128,6 +122,8 @@ function LiteBagFrameMixin:OnUpdate()
         for i, panel in ipairs(self.panels) do
             panel:SetShown(panel==currentPanel)
         end
+
+        self:SetTitle(format('%s : %s', addonName, currentPanel.Title))
 
         self:SetScale(LB.Options:GetTypeOption(self.FrameType, 'scale') or 1.0)
         self:ResizeToPanel()
