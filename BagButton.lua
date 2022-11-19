@@ -90,30 +90,36 @@ function LiteBagBagButtonMixin:OnEvent(event, ...)
     end
 end
 
-function LiteBagBagButtonMixin:OnEnter()
+-- Used for the callback that does the highlighting
+function LiteBagBagButtonMixin:GetIsBarExpanded()
+    return true
+end
 
-    local frame = self:GetParent()
-    frame:SetItemsMatchingBagHighlighted(self:GetID(), true)
+function LiteBagBagButtonMixin:OnEnter()
+    EventRegistry:TriggerEvent("BagSlot.OnEnter", self)
 
     GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
 
     if self:GetID() == Enum.BagIndex.Backpack then
-        GameTooltip:SetText(BACKPACK_TOOLTIP)
+        GameTooltip_SetTitle(GameTooltip, BACKPACK_TOOLTIP)
     elseif self:GetID() == Enum.BagIndex.Bank then
-        GameTooltip:SetText(BANK)
+        GameTooltip_SetTitle(GameTooltip, BANK)
     else
         local hasItem = GameTooltip:SetInventoryItem('player', self.slotID)
         if not hasItem then
+            GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
             if self.purchaseCost then
                 GameTooltip:ClearLines()
-                GameTooltip:AddLine(BANK_BAG_PURCHASE)
+                GameTooltip_SetTitle(GameTooltip, BANK_BAG_PURCHASE)
                 GameTooltip:AddDoubleLine(COSTS_LABEL, GetCoinTextureString(self.purchaseCost))
+            elseif self:GetID() == Enum.BagIndex.ReagentBag then
+                GameTooltip_SetTitle(GameTooltip, EQUIP_CONTAINER_REAGENT)
             elseif self.isBank and self.bagID > GetNumBankSlots() + 4 then
-                GameTooltip:SetText(BANK_BAG_PURCHASE)
+                GameTooltip_SetTitle(GameTooltip, BANK_BAG_PURCHASE)
             elseif self.isBank then
-                GameTooltip:SetText(BANK_BAG)
+                GameTooltip_SetTitle(GameTooltip, BANK_BAG)
             else
-                GameTooltip:SetText(BAGSLOT)
+                GameTooltip_SetTitle(GameTooltip, EQUIP_CONTAINER)
             end
         end
     end
