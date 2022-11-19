@@ -40,26 +40,87 @@ local TOOLTIP_NOCONFIRM_TEXT = format(L["%s: No confirmation"], SHIFT_KEY)
 local hiddenParent = CreateFrame('Frame')
 hiddenParent:Hide()
 
-local function ReplaceBlizzardBags()
-    local hideFunc =
-        function (frame)
-            LiteBagBackpack:Hide()
-            EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags");
+local REPLACEMENT_GLOBALS = {
+
+    OpenBag =
+        function (id)
+        if LiteBagBackpack:MatchesBagID(id) then
+            LiteBagBackpack:Show()
         end
-    local showFunc =
-        function (frame)
+    end,
+
+    CloseBag =
+        function (id)
+        end,
+
+    ToggleBag =
+        function (id)
+        end,
+
+    OpenAllBags =
+        function ()
             LiteBagBackpack:Show()
             EventRegistry:TriggerEvent("ContainerFrame.OpenAllBags");
-        end
-    local toggleFunc =
-        function (bagID)
+        end,
+
+    CloseAllBags =
+        function ()
+            LiteBagBackpack:Hide()
+            EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags");
+        end,
+
+    ToggleAllBags =
+        function ()
             if LiteBagBackpack:IsShown() then
-                hideFunc()
+                CloseAllBags()
             else
-                showFunc()
+                OpenAllBags()
             end
-        end
-    local nopFunc = function () end
+        end,
+
+    OpenBackpack =
+         function ()
+            LiteBagBackpack:Show()
+        end,
+
+    CloseBackpack =
+        function ()
+            LiteBagBackpack:Hide()
+        end,
+
+    ToggleBackpack =
+        function ()
+            LiteBagBackpack:SetShown(not LiteBagBackpack:IsShown())
+        end,
+
+    IsBagOpen =
+        function (id)
+            if LiteBagBackpack:IsShown() then
+                return LiteBagBackpack:GetCurrentPanel():MatchesBagID(id)
+            elseif LiteBagBank:IsShown() then
+                return LiteBagBank:GetCurrentPanel():MatchesBagID(id)
+            end
+        end,
+
+    -- The ReagentBag and Professions tutorials need this.
+    -- I don't feel good about this at all. I see taint on the horizon.
+
+    ContainerFrameUtil_GetShownFrameForID =
+        function (id)
+            if LiteBagBackpackPanel:IsShown() and LiteBagBackpackPanel:MatchesBagID(id) then
+                return LiteBagBackpackPanel, 1
+            end
+        end,
+}
+
+local function ReplaceGlobals()
+    for n, f in pairs(REPLACEMENT_GLOBALS) do
+        print(n)
+        _G[n] = f
+    end
+end
+
+local function HideBlizzardBags()
 
     -- Turn the Blizzard frames off
     for i=1, NUM_CONTAINER_FRAMES do
@@ -69,54 +130,9 @@ local function ReplaceBlizzardBags()
     end
     ContainerFrameCombinedBags:SetParent(hiddenParent)
     ContainerFrameCombinedBags:UnregisterAllEvents()
-                
-    -- Override or hook various Blizzard UI functions to operate on our
-    -- frame instead.
-    OpenBag = showFunc
-    OpenBackpack = showFunc
-    OpenAllBags = showFunc
-
-    ToggleBag = toggleFunc
-    ToggleBackpage = toggleFunc
-    ToggleAllBags = toggleFunc
-
-    CloseBackpack = hideFunc
-    CloseBag = nopFunc
-    CloseAllBags = hideFunc
-
-    IsBagOpen =
-        function (id)
-            if LiteBagBackpack:IsShown() then
-                return LiteBagBackpack:GetCurrentPanel():MatchesBagID(id)
-            elseif LiteBagBank:IsShown() then
-                return LiteBagBank:GetCurrentPanel():MatchesBagID(id)
-            end
-        end
-
-    -- The ReagentBag and Professions tutorials need this.
-    -- I don't feel good about this at all. I see taint on the horizon.
-    ContainerFrameUtil_GetShownFrameForID =
-        function (id)
-            if LiteBagBackpackPanel:IsShown() and LiteBagBackpackPanel:MatchesBagID(id) then
-                return LiteBagBackpackPanel, 1
-            end
-        end
-
-    -- Add the confirm text to the sort button mouseover tooltip.
-    BagItemAutoSortButton:HookScript('OnEnter', function (self)
-        if not LB.Options:GetGlobalOption('NoConfirmSort') then
-            GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
-        end
-        GameTooltip:Show()
-        end)
-
-    -- Change the sort button to call our confirm function.
-    BagItemAutoSortButton:SetScript('OnClick', function (self)
-            DoOrStaticPopup(BAG_CLEANUP_BAGS, C_Container.SortBags)
-        end)
 end
 
-local function ReplaceBlizzardBank()
+local function HideBlizzardBank()
 
     -- The reagent bank in WoW 6.0 changed UseContainerItem() to have a
     -- fourth argument which is true/false 'should we put this thing into
@@ -136,7 +152,22 @@ local function ReplaceBlizzardBank()
 
     LiteBagBank:HookScript('OnShow', function () BankFrame:Show() end)
     LiteBagBank:HookScript('OnHide', function () BankFrame:Hide() end)
+end
 
+local function AddSortConfirmations()
+
+    -- Add the confirm text to the sort button mouseover tooltip.
+    BagItemAutoSortButton:HookScript('OnEnter', function (self)
+        if not LB.Options:GetGlobalOption('NoConfirmSort') then
+            GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
+        end
+        GameTooltip:Show()
+        end)
+
+    -- Change the sort button to call our confirm function.
+    BagItemAutoSortButton:SetScript('OnClick', function (self)
+            DoOrStaticPopup(BAG_CLEANUP_BAGS, C_Container.SortBags)
+        end)
     -- Add the confirm text to the sort button tooltip.
 
     BankItemAutoSortButton:HookScript('OnEnter', function (self)
@@ -165,8 +196,10 @@ end
 local LiteBagManager = CreateFrame('Frame', 'LiteBagManager', UIParent)
 
 function LiteBagManager:ReplaceBlizzard()
-    ReplaceBlizzardBags()
-    ReplaceBlizzardBank()
+    HideBlizzardBags()
+    HideBlizzardBank()
+    ReplaceGlobals()
+    AddSortConfirmations()
 end
 
 function LiteBagManager:ManageBlizzardBagButtons()

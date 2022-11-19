@@ -73,10 +73,19 @@
                 <OnClick function="LiteBagOptionsControl_OnChanged" />
             </Scripts>
         </CheckButton>
+        <CheckButton name="$parentHideBlizzardBagButtons" inherits="InterfaceOptionsCheckButtonTemplate">
+            <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="$parentSnapToPosition" relativePoint="BOTTOMLEFT" x="0" y="0" />
+            </Anchors>
+            <Scripts>
+                <OnLoad function="LiteBagOptionsHideBlizzardBagButtons_OnLoad" />
+                <OnClick function="LiteBagOptionsControl_OnChanged" />
+            </Scripts>
+        </CheckButton>
         <Frame name="$parentIconBorder">
             <Size x="93" y="22" />
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentSnapToPosition" relativePoint="BOTTOMLEFT" x="30" y="-24" />
+                <Anchor point="TOPLEFT" relativeTo="$parentHideBlizzardBagButtons" relativePoint="BOTTOMLEFT" x="30" y="-24" />
             </Anchors>
             <Scripts>
                 <OnLoad function="LiteBagOptionsIconBorder_OnLoad" />

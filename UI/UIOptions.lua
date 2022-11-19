@@ -19,6 +19,25 @@ local MenuTextMapping  = {
     ['blizzard'] = 'Blizzard'
 }
 
+function LiteBagOptionsHideBlizzardBagButtons_OnLoad(self)
+    self.Text:SetText(L["Hide Blizzard Bag Buttons."])
+    self.SetOption =
+        function (self, setting)
+            if not setting or setting == '0' then
+                LB.Options:SetGlobalOption('HideBlizzardBagButtons', nil)
+            else
+                LB.Options:SetGlobalOption('HideBlizzardBagButtons', true)
+            end
+        end
+    self.GetOption =
+        function (self)
+            return LB.Options:GetGlobalOption('HideBlizzardBagButtons')
+        end
+    self.GetOptionDefault =
+        function (self) return false end
+    LiteBagOptionsControl_OnLoad(self)
+end
+
 function LiteBagOptionsConfirmSort_OnLoad(self)
     self.Text:SetText(L["Confirm before sorting."])
     self.SetOption =

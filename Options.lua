@@ -44,7 +44,7 @@ LB.Options = CreateFrame('Frame')
 function LB.Options:Initialize()
     LiteBagDB = LiteBagDB or { }
     LB.db = LibStub("AceDB-3.0"):New("LiteBagDB", defaults, true)
-    SlashCmdList['LiteBag'] = SlashFunc
+    SlashCmdList['LiteBag'] = function (...) self:SlashFunc(...) end
     SLASH_LiteBag1 = '/litebag'
 end
 
@@ -79,7 +79,7 @@ local function CheckOnOff(arg)
     end
 end
 
-local function SlashFunc(argstr)
+function LB.Options:SlashFunc(argstr)
 
     local cmd, arg1, arg2 = strsplit(' ', strlower(argstr))
     local onOff = CheckOnOff(arg1)
