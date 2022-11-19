@@ -14,15 +14,11 @@ local addonName, LB = ...
 
 local BagInfoByType = {
     BACKPACK = {
-        bagIDs = { 0, 1, 2, 3, 4 },
+        bagIDs = { 0, 1, 2, 3, 4, 5 },
         tokenTracker = true,
     },
     BANK = {
         bagIDs = { -1, 6, 7, 8, 9, 10, 11, 12 },
-        tokenTracker = false,
-    },
-    REAGENTBAG = {
-        bagIDs = { 5 },
         tokenTracker = false,
     },
 }
@@ -241,10 +237,6 @@ function LiteBagContainerFrameMixin:MatchesBagID(id)
     return self.containsBags[id]
 end
 
-function LiteBagContainerFrameMixin:GetContainedBagIDs(outContainedBagIDs)
-    ERROR()
-end
-
 function LiteBagContainerFrameMixin:UpdateBagButtons()
     for _, bagButton in ipairs(self.bagButtons) do
         bagButton:Update()
@@ -287,14 +279,6 @@ function LiteBagContainerFrameMixin:UpdateMiscellaneousFrames()
         self:GetParent():SetPortraitToAsset("Interface/Icons/Inv_misc_bag_08");
     end
     self:UpdateBagButtons()
-end
-
-function LiteBagContainerFrameMixin:CalculateWidth()
-    ERROR()
-end
-
-function LiteBagContainerFrameMixin:CalculateHeight()
-    ERROR()
 end
 
 function LiteBagContainerFrameMixin:OnTokenWatchChanged()

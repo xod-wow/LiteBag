@@ -15,34 +15,17 @@
                 <KeyValue key="FrameType" value="BACKPACK" type="string" />
             </KeyValues>
         </Frame>
-        <Frame name="LiteBagReagentBagPanel" parentArray="panels" inherits="LiteBagContainerFrameTemplate">
-            <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
-            <KeyValues>
-                <KeyValue key="Title" value="MINIMAP_TRACKING_VENDOR_REAGENT" type="global" />
-                <KeyValue key="FrameType" value="REAGENTBAG" type="string" />
-            </KeyValues>
-        </Frame>
     </Frames>
     <Scripts>
         <OnShow inherit="append">
             if not self:IsUserPlaced() then
                 self:SetSnapPosition()
             end
-            MainMenuBarBackpackButton.SlotHighlightTexture:SetShown(true)
-            CharacterBag0Slot.SlotHighlightTexture:SetShown(true)
-            CharacterBag1Slot.SlotHighlightTexture:SetShown(true)
-            CharacterBag2Slot.SlotHighlightTexture:SetShown(true)
-            CharacterBag3Slot.SlotHighlightTexture:SetShown(true)
         </OnShow>
         <OnHide inherit="append">
             if not self:IsUserPlaced() then
                 self:SetSnapPosition()
             end
-            MainMenuBarBackpackButton.SlotHighlightTexture:SetShown(false)
-            CharacterBag0Slot.SlotHighlightTexture:SetShown(false)
-            CharacterBag1Slot.SlotHighlightTexture:SetShown(false)
-            CharacterBag2Slot.SlotHighlightTexture:SetShown(false)
-            CharacterBag3Slot.SlotHighlightTexture:SetShown(false)
         </OnHide>
     </Scripts>
 </Frame>
