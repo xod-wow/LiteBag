@@ -13,6 +13,8 @@ local addonName, LB = ...
 
 local L = LB.Localize
 
+local FRAME_THAT_OPENED_BAGS = nil
+
 -- A popup dialog for confirming the bag sort.
 StaticPopupDialogs['LB_CONFIRM_SORT'] = {
     preferredIndex = STATICPOPUP_NUMDIALOGS,
@@ -44,53 +46,80 @@ local REPLACEMENT_GLOBALS = {
 
     OpenBag =
         function (id)
-        if LiteBagBackpack:MatchesBagID(id) then
-            LiteBagBackpack:Show()
-        end
-    end,
+            if not ContainerFrame_AllowedToOpenBags() then return end
+            if LiteBagBackpack:MatchesBagID(id) then
+                LiteBagBackpack:Show()
+            end
+        end,
 
     CloseBag =
         function (id)
+            return CloseBackpack()
         end,
 
     ToggleBag =
         function (id)
-        end,
-
-    OpenAllBags =
-        function ()
-            LiteBagBackpack:Show()
-            EventRegistry:TriggerEvent("ContainerFrame.OpenAllBags");
-        end,
-
-    CloseAllBags =
-        function ()
-            LiteBagBackpack:Hide()
-            EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags");
-        end,
-
-    ToggleAllBags =
-        function ()
-            if LiteBagBackpack:IsShown() then
-                CloseAllBags()
-            else
-                OpenAllBags()
-            end
+            if not ContainerFrame_AllowedToOpenBags() then return end
+            ToggleBackpack()
         end,
 
     OpenBackpack =
          function ()
+            if not ContainerFrame_AllowedToOpenBags() then return end
             LiteBagBackpack:Show()
         end,
 
     CloseBackpack =
         function ()
+            local wasShown = LiteBagBackpack:IsShown()
             LiteBagBackpack:Hide()
+            return wasShown
         end,
 
     ToggleBackpack =
         function ()
-            LiteBagBackpack:SetShown(not LiteBagBackpack:IsShown())
+            if not ContainerFrame_AllowedToOpenBags() then return end
+            if LiteBagBackpack:IsShown() then
+                CloseAllBags()
+            else
+                OpenBackpack()
+            end
+        end,
+
+    OpenAllBags =
+        function (frame, forceUpdate)
+            if not ContainerFrame_AllowedToOpenBags() then return end
+            if LiteBagBackpack:IsShown() then
+                return
+            end
+            if frame and not FRAME_THAT_OPENED_BAGS then
+                FRAME_THAT_OPENED_BAGS = frame:GetName()
+            end
+
+            OpenBackpack()
+            EventRegistry:TriggerEvent("ContainerFrame.OpenAllBags");
+        end,
+
+    CloseAllBags =
+        function (frame, forceUpdate)
+            if frame and frame:GetName() ~= FRAME_THAT_OPENED_BAGS then
+                return false
+            end
+            FRAME_THAT_OPENED_BAGS = nil
+
+            local wasShown = CloseBackpack()
+            EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags");
+            return wasShown
+        end,
+
+    ToggleAllBags =
+        function ()
+            if not ContainerFrame_AllowedToOpenBags() then return end
+            if LiteBagBackpack:IsShown() then
+                CloseAllBags()
+            else
+                OpenAllBags()
+            end
         end,
 
     IsBagOpen =
