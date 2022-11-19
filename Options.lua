@@ -41,9 +41,11 @@ defaults = {
 
 LB.Options = CreateFrame('Frame')
 
-local function Initialize()
+function LB.Options:Initialize()
     LiteBagDB = LiteBagDB or { }
     LB.db = LibStub("AceDB-3.0"):New("LiteBagDB", defaults, true)
+    SlashCmdList['LiteBag'] = SlashFunc
+    SLASH_LiteBag1 = '/litebag'
 end
 
 function LB.Options:SetTypeOption(key, option, value, noTrigger)
@@ -224,13 +226,11 @@ end
 ----------------------------------------------------------------------------]]--
 
 function LB.Options:OnEvent(event, arg1, ...)
-    if event == 'PLAYER_LOGIN' then
-        Initialize()
-        SlashCmdList['LiteBag'] = SlashFunc
-        SLASH_LiteBag1 = '/litebag'
-        self:UnregisterEvent('PLAYER_LOGIN')
+    if event == 'VARIABLES_LOADED' then
+        self:Initialize()
+        self:UnregisterEvent('VARIABLES_LOADED')
     end
 end
 
 LB.Options:SetScript('OnEvent', LB.Options.OnEvent)
-LB.Options:RegisterEvent('PLAYER_LOGIN')
+LB.Options:RegisterEvent('VARIABLES_LOADED')

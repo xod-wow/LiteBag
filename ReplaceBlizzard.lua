@@ -127,7 +127,6 @@ local function ReplaceBlizzardBank()
     -- via the parent, and set its selectedTab and hide/show manually in sync
     -- with ours.
 
-    hiddenParent:Hide()
     BankFrame:SetParent(hiddenParent)
     BankFrame:ClearAllPoints()
     BankFrame:SetPoint('TOPLEFT', UIParent, 'TOPLEFT', 0, 0)
@@ -159,34 +158,47 @@ local function ReplaceBlizzardBank()
         end)
 end
 
-local function ReplaceBlizzard()
-    ReplaceBlizzardBags()
-    ReplaceBlizzardBank()
-end
-
 -- This is a bit of an arms race with other addon authors who want to hook
 -- the bags too, try to hook later than them all.
 -- Also register here some other open/close events I liked.
 
-local replacer = CreateFrame('Frame', UIParent)
-replacer:RegisterEvent('PLAYER_LOGIN')
-replacer:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
-replacer:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
-replacer:SetScript('OnEvent',
-    function (self, event, ...)
-        if event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
-            local type = ...
-            if type == Enum.PlayerInteractionType.GuildBanker then
-                OpenAllBags()
-            end
-        elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_HIDE' then
-            local type = ...
-            if type == Enum.PlayerInteractionType.GuildBanker then
-                CloseAllBags()
-            end
-        elseif event == 'PLAYER_LOGIN' then
-            ReplaceBlizzard()
+local LiteBagManager = CreateFrame('Frame', 'LiteBagManager', UIParent)
+
+function LiteBagManager:ReplaceBlizzard()
+    ReplaceBlizzardBags()
+    ReplaceBlizzardBank()
+end
+
+function LiteBagManager:ManageBlizzardBagButtons()
+    local show = not LB.Options:GetGlobalOption('HideBlizzardBagButtons')
+    for _, bagButton in MainMenuBarBagManager:EnumerateBagButtons() do
+        bagButton:SetShown(show)
+    end
+    BagBarExpandToggle:SetShown(show)
+end
+
+function LiteBagManager:OnEvent(event, ...)
+    -- As far as I can tell this doesn't work. Why?
+    if event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
+        local type = ...
+        if type == Enum.PlayerInteractionType.GuildBanker then
+            OpenAllBags()
         end
-end)
+    elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_HIDE' then
+        local type = ...
+        if type == Enum.PlayerInteractionType.GuildBanker then
+            CloseAllBags()
+        end
+    elseif event == 'PLAYER_LOGIN' then
+        self:ReplaceBlizzard()
+        self:ManageBlizzardBagButtons()
+        self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
+        self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
+        LB.db.RegisterCallback(self, 'OnOptionsModified', self.ManageBlizzardBagButtons)
+    end
+end
+
+LiteBagManager:RegisterEvent('PLAYER_LOGIN')
+LiteBagManager:SetScript('OnEvent', LiteBagManager.OnEvent)
 
 _G.LB = LB
