@@ -81,14 +81,14 @@ function LiteBagOptionsSnapToPosition_OnLoad(self)
     self.SetOption =
         function (self, setting)
             if not setting or setting == '0' then
-                LB.Options:SetFrameOption('BACKPACK', 'nosnap', true)
+                LB.Options:SetTypeOption('BACKPACK', 'nosnap', true)
             else
-                LB.Options:SetFrameOption('BACKPACK', 'nosnap', false)
+                LB.Options:SetTypeOption('BACKPACK', 'nosnap', false)
             end
         end
     self.GetOption =
         function (self)
-            return not LB.Options:GetFrameOption('BACKPACK', 'nosnap')
+            return not LB.Options:GetTypeOption('BACKPACK', 'nosnap')
         end
     self.GetOptionDefault =
         function (self) return false end
@@ -166,7 +166,7 @@ end
 local function PanelOrder_Initialize(self, level)
     if level == 1 then
         local info = LibDD:UIDropDownMenu_CreateInfo()
-        local current = LB.Options:GetFrameOption(self.panel, 'order')
+        local current = LB.Options:GetTypeOption(self.FrameType, 'order')
 
         info.func =
             function (button, arg1, arg2, checked)
@@ -194,15 +194,15 @@ local function PanelOrder_Initialize(self, level)
     end
 end
 
-local function PanelOrder_OnLoad(self, panel)
+local function PanelOrder_OnLoad(self, FrameType)
     LibDD:Create_UIDropDownMenu(self)
     self.SetOption =
         function (self, setting)
-            LB.Options:SetFrameOption(panel, 'order', setting)
+            LB.Options:SetTypeOption(FrameType, 'order', setting)
         end
     self.GetOption =
         function (self)
-            return LB.Options:GetFrameOption(panel, 'order')
+            return LB.Options:GetTypeOption(FrameType, 'order')
         end
     self.GetOptionDefault =
         function (self)
@@ -221,20 +221,18 @@ local function PanelOrder_OnLoad(self, panel)
                 LibDD:UIDropDownMenu_SetText(self, DEFAULT)
             end
         end
-    self.panel = panel
+    self.FrameType = FrameType
     LiteBagOptionsControl_OnLoad(self)
 end
 
 function LiteBagOptionsPanelOrder_OnShow(self)
-    if not self:GetAttribute('initmenu') then
-        LibDD:UIDropDownMenu_Initialize(self, PanelOrder_Initialize)
-    end
+    LibDD:UIDropDownMenu_Initialize(self, PanelOrder_Initialize)
 end
 
 local function PanelLayout_Initialize(self, level)
     if level == 1 then
         local info = LibDD:UIDropDownMenu_CreateInfo()
-        local current = LB.Options:GetFrameOption(self.panel, 'layout')
+        local current = LB.Options:GetTypeOption(self.FrameType, 'layout')
 
         info.func =
             function (button, arg1, arg2, checked)
@@ -262,15 +260,15 @@ local function PanelLayout_Initialize(self, level)
     end
 end
 
-local function PanelLayout_OnLoad(self, panel)
+local function PanelLayout_OnLoad(self, FrameType)
     LibDD:Create_UIDropDownMenu(self)
     self.SetOption =
         function (self, setting)
-            LB.Options:SetFrameOption(panel, 'layout', setting)
+            LB.Options:SetTypeOption(FrameType, 'layout', setting)
         end
     self.GetOption =
         function (self)
-            return LB.Options:GetFrameOption(panel, 'layout')
+            return LB.Options:GetTypeOption(FrameType, 'layout')
         end
     self.GetOptionDefault =
         function (self)
@@ -289,7 +287,7 @@ local function PanelLayout_OnLoad(self, panel)
                 LibDD:UIDropDownMenu_SetText(self, DEFAULT)
             end
         end
-    self.panel = panel
+    self.FrameType = FrameType
     LiteBagOptionsControl_OnLoad(self)
 end
 
@@ -299,54 +297,54 @@ function LiteBagOptionsPanelLayout_OnShow(self)
     end
 end
 
-local function SetupColumnsControl(self, panel, default)
+local function SetupColumnsControl(self, FrameType, default)
     local n = self:GetName()
 
     _G[n..'Low']:SetText('8')
     _G[n..'High']:SetText('24')
     self.SetOption =
             function (self, v)
-            LB.Options:SetFrameOption(panel, 'columns', v)
+            LB.Options:SetTypeOption(FrameType, 'columns', v)
         end
     self.GetOption =
         function (self)
-            return LB.Options:GetFrameOption(panel, 'columns') or default
+            return LB.Options:GetTypeOption(FrameType, 'columns') or default
         end
     self.GetOptionDefault =
             function (self) return default end
 end
 
-local function SetupScaleControl(self, frame)
+local function SetupScaleControl(self, FrameType)
     local n = self:GetName()
     _G[n..'Low']:SetText(0.75)
     _G[n..'High']:SetText(1.25)
     self.SetOption =
             function (self, v)
-            LB.Options:SetFrameOption(frame, 'scale', v)
+            LB.Options:SetTypeOption(FrameType, 'scale', v)
         end
     self.GetOption =
             function (self)
-            return LB.Options:GetFrameOption(frame, 'scale') or 1.0
+            return LB.Options:GetTypeOption(FrameType, 'scale') or 1.0
         end
     self.GetOptionDefault =
             function (self) return 1.0 end
 end
 
-local function SetupBreakControl(self, frame, varname)
+local function SetupBreakControl(self, FrameType, varname)
     local n = self:GetName()
     _G[n..'Low']:SetText(0)
     _G[n..'High']:SetText(24)
     self.SetOption =
             function (self, v)
             if v == 0 then
-                LB.Options:SetFrameOption(frame, varname, nil)
+                LB.Options:SetTypeOption(FrameType, varname, nil)
             else
-                LB.Options:SetFrameOption(frame, varname, v)
+                LB.Options:SetTypeOption(FrameType, varname, v)
             end
         end
     self.GetOption =
             function (self)
-            return LB.Options:GetFrameOption(frame, varname) or 0
+            return LB.Options:GetTypeOption(FrameType, varname) or 0
         end
     self.GetOptionDefault =
             function (self) return 0 end
