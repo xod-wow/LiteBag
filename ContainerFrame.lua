@@ -560,7 +560,7 @@ function LiteBagContainerFrameMixin:UpdateSearchBox()
     searchBox:SetParent(self)
     searchBox:ClearAllPoints()
     searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -48, -SEARCHBOX_OFFSET)
-    searchBox:SetPoint('LEFT', self, 'LEFT', 68, 0)
+    searchBox:SetPoint('LEFT', self, 'LEFT', 48, 0)
     searchBox:Show()
 end
 
