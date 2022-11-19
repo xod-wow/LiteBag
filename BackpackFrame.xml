@@ -22,11 +22,6 @@
                 self:SetSnapPosition()
             end
         </OnShow>
-        <OnHide inherit="append">
-            if not self:IsUserPlaced() then
-                self:SetSnapPosition()
-            end
-        </OnHide>
     </Scripts>
 </Frame>
 
