@@ -6,8 +6,8 @@
 
 <Frame name="LiteBagFrameTemplate"
        enableMouse="true"
-       movable="true" resizable="true" clampedToScreen="true"
        frameStrata="MEDIUM" topLevel="true" hidden="true"
+       movable="true" resizable="true" clampedToScreen="true"
        inherits="PortraitFrameFlatTemplate" mixin="LiteBagFrameMixin"
        virtual="true">
 
@@ -61,9 +61,9 @@
     </Frames>
 
     <Scripts>
-        <OnLoad method="OnLoad" />
-        <OnHide method="OnHide" />
-        <OnShow method="OnShow" />
+        <OnLoad method="OnLoad" inherit="append" />
+        <OnHide method="OnHide" inherit="append" />
+        <OnShow method="OnShow" inherit="append" />
         <OnUpdate method="OnUpdate" />
     </Scripts>
 </Frame>

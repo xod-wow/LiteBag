@@ -66,7 +66,9 @@ function LiteBagFrameMixin:OnHide()
     -- for calling the OnHide for panel and not having them register their own.
     local panel = self:GetCurrentPanel()
     panel:Hide()
-    EventRegistry:TriggerEvent("ContainerFrame.CloseBag", panel)
+    if panel.GetBagID then
+        EventRegistry:TriggerEvent("ContainerFrame.CloseBag", panel)
+    end
 
     PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
 end
