@@ -46,6 +46,7 @@ local REPLACEMENT_GLOBALS = {
 
     OpenBag =
         function (id)
+            LB.Debug('OpenBag %d', id)
             if not ContainerFrame_AllowedToOpenBags() then return end
             if LiteBagBackpack:MatchesBagID(id) then
                 LiteBagBackpack:Show()
@@ -54,23 +55,27 @@ local REPLACEMENT_GLOBALS = {
 
     CloseBag =
         function (id)
+            LB.Debug('CloseBag %d', id)
             return CloseBackpack()
         end,
 
     ToggleBag =
         function (id)
+            LB.Debug('ToggleBag %d', id)
             if not ContainerFrame_AllowedToOpenBags() then return end
             ToggleBackpack()
         end,
 
     OpenBackpack =
          function ()
+            LB.Debug('OpenBackpack')
             if not ContainerFrame_AllowedToOpenBags() then return end
             LiteBagBackpack:Show()
         end,
 
     CloseBackpack =
         function ()
+            LB.Debug('CloseBackpack')
             local wasShown = LiteBagBackpack:IsShown()
             LiteBagBackpack:Hide()
             return wasShown
@@ -78,6 +83,7 @@ local REPLACEMENT_GLOBALS = {
 
     ToggleBackpack =
         function ()
+            LB.Debug('ToggleBackpack')
             if not ContainerFrame_AllowedToOpenBags() then return end
             if LiteBagBackpack:IsShown() then
                 CloseAllBags()
@@ -88,13 +94,11 @@ local REPLACEMENT_GLOBALS = {
 
     OpenAllBags =
         function (frame, forceUpdate)
+            LB.Debug('OpenAllBags %s', frame and frame:GetName() or "NONE")
             if not ContainerFrame_AllowedToOpenBags() then return end
-            if LiteBagBackpack:IsShown() or LiteBagBank:IsShown() then
+            if LiteBagBackpack:IsShown() then
                 if forceUpdate then
-                    local panel
-                    panel = LiteBagBackpack:GetCurrentPanel()
-                    if panel.Update then panel:UpdateIfShown() end
-                    panel = LiteBagBank:GetCurrentPanel()
+                    local panel = LiteBagBackpack:GetCurrentPanel()
                     if panel.Update then panel:UpdateIfShown() end
                 end
                 return
@@ -112,6 +116,7 @@ local REPLACEMENT_GLOBALS = {
 
     CloseAllBags =
         function (frame, forceUpdate)
+            LB.Debug('CloseAllBags %s', frame and frame:GetName() or "NONE")
             if frame and frame:GetName() ~= FRAME_THAT_OPENED_BAGS then
                 return false
             end
@@ -124,6 +129,7 @@ local REPLACEMENT_GLOBALS = {
 
     ToggleAllBags =
         function ()
+            LB.Debug('ToggleAllBags')
             if not ContainerFrame_AllowedToOpenBags() then return end
             if LiteBagBackpack:IsShown() then
                 CloseAllBags()
