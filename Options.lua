@@ -55,18 +55,12 @@ local function Initialize()
     LB.db = LibStub("AceDB-3.0"):New("LiteBagDB", defaults, true)
 end
 
-function LB.Options:SetFrameOption(key, option, value, noTrigger)
-    if type(key) == 'table' then
-        key = key.FrameType
-    end
+function LB.Options:SetTypeOption(key, option, value, noTrigger)
     LB.db.profile[key][option] = value
     if not noTrigger then LB.db.callbacks:Fire('OnOptionsModified') end
 end
 
-function LB.Options:GetFrameOption(key, option)
-    if type(key) == 'table' then
-        key = key.FrameType
-    end
+function LB.Options:GetTypeOption(key, option)
     return LB.db.profile[key][option]
 end
 
@@ -127,21 +121,21 @@ local function SlashFunc(argstr)
     end
 
     if cmd == 'inventory.snap' then
-        LB.Options:SetFrameOption('BACKPACK', 'nosnap', not onOff)
+        LB.Options:SetTypeOption('BACKPACK', 'nosnap', not onOff)
         LB.Print(L["Backpack snap to default position:"].." "..tostring(onOff))
         return
     end
 
     if cmd == 'inventory.layout' then
         if arg1 == 'default' then arg1 = nil end
-        LB.Options:SetFrameOption('BACKPACK', 'layout', arg1)
+        LB.Options:SetTypeOption('BACKPACK', 'layout', arg1)
         LB.Print(L["Backpack button layout set to:"].." "..tostring(arg1))
         return
     end
 
     if cmd == 'inventory.order' then
         if arg1 == 'default' then arg1 = nil end
-        LB.Options:SetFrameOption('BACKPACK', 'order', arg1)
+        LB.Options:SetTypeOption('BACKPACK', 'order', arg1)
         LB.Print(L["Backpack button order set to:"].." "..tostring(arg1))
         return
     end
@@ -149,7 +143,7 @@ local function SlashFunc(argstr)
     if cmd == 'inventory.columns' then
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
-            LB.Options:SetFrameOption('BACKPACK', 'columns', arg1)
+            LB.Options:SetTypeOption('BACKPACK', 'columns', arg1)
             LB.Print(L["Backpack columns set to:"].." "..arg1)
         else
             LB.Print(L["Can't set number of columns to less than 8."])
@@ -162,8 +156,8 @@ local function SlashFunc(argstr)
         local y = tonumber(arg2)
         if x == 0 then x = nil end
         if y == 0 then y = nil end
-        LB.Options:SetFrameOption('BACKPACK', 'xbreak', x)
-        LB.Options:SetFrameOption('BACKPACK', 'ybreak', y)
+        LB.Options:SetTypeOption('BACKPACK', 'xbreak', x)
+        LB.Options:SetTypeOption('BACKPACK', 'ybreak', y)
         LB.Print(format(L["Backpack gaps set to: %s %s"], tostring(x), tostring(y)))
         return
     end
@@ -171,7 +165,7 @@ local function SlashFunc(argstr)
     if cmd == 'inventory.scale' then
         arg1 = tonumber(arg1)
         if arg1 > 0 and arg1 <= 2 then
-            LB.Options:SetFrameOption('BACKPACK', 'scale', arg1)
+            LB.Options:SetTypeOption('BACKPACK', 'scale', arg1)
             LB.Print(format(L["Backpack scale set to: %0.2f"], arg1))
         else
             LB.Print(L["Scale must be between 0 and 2."])
@@ -181,14 +175,14 @@ local function SlashFunc(argstr)
 
     if cmd == 'bank.layout' then
         if arg1 == 'default' or arg1 == DEFAULT then arg1 = nil end
-        LB.Options:SetFrameOption(LiteBagBankPanel, 'layout', arg1)
+        LB.Options:SetTypeOption(LiteBagBankPanel, 'layout', arg1)
         LB.Print(L["Bank button layout set to:"].." "..tostring(arg1))
         return
     end
 
     if cmd == 'bank.order' then
         if arg1 == 'default' then arg1 = nil end
-        LB.Options:SetFrameOption(LiteBagBankPanel, 'order', arg1)
+        LB.Options:SetTypeOption(LiteBagBankPanel, 'order', arg1)
         LB.Print(L["Bank button order set to:"].." "..tostring(arg1))
         return
     end
@@ -196,7 +190,7 @@ local function SlashFunc(argstr)
     if cmd == 'bank.columns' then
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
-            LB.Options:SetFrameOption(LiteBagBankPanel, 'columns', arg1)
+            LB.Options:SetTypeOption(LiteBagBankPanel, 'columns', arg1)
             LB.Print(L["Bank columns set to:"].." "..arg1)
         else
             LB.Print("Can't set number of columns to less than 8.")
@@ -207,7 +201,7 @@ local function SlashFunc(argstr)
     if cmd == 'bank.scale' then
         arg1 = tonumber(arg1)
         if arg1 > 0 and arg1 <= 2 then
-            LB.Options:SetFrameOption(LiteBagBank, 'scale', arg1)
+            LB.Options:SetTypeOption(LiteBagBank, 'scale', arg1)
             LB.Print(format(L["Bank scale set to: %0.2f"], arg1))
         else
             LB.Print(L["Scale must be between 0 and 2."])

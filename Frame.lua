@@ -33,10 +33,9 @@ function LiteBagFrameMixin:SetSnapPosition()
 end
 
 function LiteBagFrameMixin:CheckSnapPosition()
-    if LB.Options:GetFrameOption(self:GetCurrentPanel(), 'nosnap') then
+    if LB.Options:GetTypeOption(self.FrameType, 'nosnap') then
         return
     end
-
     if GetSqDistanceFromBackpackDefault(self) < 64^2 then
         self:SetSnapPosition()
     end
@@ -59,6 +58,16 @@ end
 
 function LiteBagFrameMixin:OnHide()
     LB.Debug("Frame OnHide " .. self:GetName())
+
+    -- Current panel OnHide was called before this due to parenting so won't
+    -- get called again. When it was called it returned IsShown() as true, and
+    -- the main menu bar bag buttons used that to decide wheter to highlight,
+    -- We manually retrigger them. An alternative would be to be responsible
+    -- for calling the OnHide for panel and not having them register their own.
+    local panel = self:GetCurrentPanel()
+    panel:Hide()
+    EventRegistry:TriggerEvent("ContainerFrame.CloseBag", panel)
+
     PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
 end
 
@@ -117,7 +126,7 @@ end
 
 function LiteBagFrameMixin:OnUpdate()
     if self.needsLayout then
-        self:SetScale(LB.Options:GetFrameOption(self, 'scale') or 1.0)
+        self:SetScale(LB.Options:GetTypeOption(self.FrameType, 'scale') or 1.0)
         self:ResizeToPanel()
         self.needsLayout = nil
     end

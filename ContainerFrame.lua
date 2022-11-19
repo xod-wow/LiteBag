@@ -31,9 +31,18 @@ local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
 
 -- This is some gnarly magic to position the item buttons in a pleasing and
 -- appropriate place inside the PortraitFrame. The big gap at the top is where
--- we put the bag buttons (plus the title bar).
-local LEFT_OFFSET, TOP_OFFSET = 15, 70
-local RIGHT_OFFSET, BOTTOM_OFFSET = 14, 16
+-- we put the bag buttons and search bar (plus the title bar).
+
+local TITLEBAR_HEIGHT = 22
+local BAGBUTTON_HEIGHT = 33
+local SEARCHBOX_HEIGHT = 18
+local TOPELEMENT_GAP = 7
+local BAGBUTTON_OFFSET = TITLEBAR_HEIGHT + TOPELEMENT_GAP
+local SEARCHBOX_OFFSET = TITLEBAR_HEIGHT + BAGBUTTON_HEIGHT + TOPELEMENT_GAP * 2
+local LEFT_OFFSET = 15
+local TOP_OFFSET = TITLEBAR_HEIGHT + BAGBUTTON_HEIGHT + SEARCHBOX_HEIGHT + TOPELEMENT_GAP * 3
+local RIGHT_OFFSET = 14
+local BOTTOM_OFFSET = 16
 
 
 LiteBagContainerFrameMixin = CreateFromMixins(ContainerFrameCombinedBagsMixin)
@@ -113,10 +122,14 @@ function LiteBagContainerFrameMixin:OnShow()
     self:RegisterEvent("BAG_CONTAINER_UPDATE")
 
     LB.RegisterPluginEvents(self)
+
+    LB.db.RegisterCallback(self, 'OnOptionsModified', function () self:GenerateFrame() end)
 end
 
 function LiteBagContainerFrameMixin:OnHide()
     LB.Debug("ContainerFrame OnHide " .. self:GetName())
+
+    LB.db.UnregisterAllCallbacks(self)
 
     ContainerFrameCombinedBagsMixin.OnHide(self)
 
@@ -302,6 +315,18 @@ local function inDiffBag(a, b)
     return a:GetParent():GetID() ~= b:GetParent():GetID()
 end
 
+local function isReagentBagDivide(a, b)
+    if not a then
+        return false
+    end
+    local aID, bID = a:GetBagID(), b:GetBagID()
+    if aID == bID then
+        return false
+    else
+        return aID == Enum.BagIndex.ReagentBag or bID == Enum.BagIndex.ReagentBag
+    end
+end
+
 local BUTTONORDERS = { }
 
 BUTTONORDERS.default =
@@ -338,17 +363,20 @@ LAYOUTS.default =
 
         local w, h = Items[1]:GetSize()
 
-        local xBreak = LB.Options:GetFrameOption(self, 'xbreak')
-        local yBreak = LB.Options:GetFrameOption(self, 'ybreak')
+        local xBreak = LB.Options:GetTypeOption(self.FrameType, 'xbreak')
+        local yBreak = LB.Options:GetTypeOption(self.FrameType, 'ybreak')
 
         local row, col, maxCol, maxXGap = 0, 0, 0, 0
 
-        local xGap, yGap = 0, 0
+        local xGap, yGap, yGapCounter = 0, 0, 0
 
         for i = 1, self.size do
-            if col > 0 and col % ncols == 0 then
+            if isReagentBagDivide(Items[i-1], Items[i]) then
                 xGap, col, row = 0, 0, row + 1
-                if yBreak and row % yBreak == 0 then
+                yGap, yGapCounter = yGap + h/3, 0
+            elseif col > 0 and col % ncols == 0 then
+                xGap, col, row, yGapCounter = 0, 0, row + 1, yGapCounter + 1
+                if yBreak and yGapCounter % yBreak == 0 then
                     yGap = yGap + h/3
                 end
             elseif xBreak and col > 0 and col % xBreak == 0 then
@@ -413,11 +441,11 @@ LAYOUTS.bag =
     end
 
 local function GetLayoutNColsForWidth(self, width)
-    local layout = LB.Options:GetFrameOption(self, 'layout')
+    local layout = LB.Options:GetTypeOption(self.FrameType, 'layout')
     if not layout or not LAYOUTS[layout] then layout = 'default' end
 
     local ncols
-    local currentCols = LB.Options:GetFrameOption(self, 'columns') or MIN_COLUMNS
+    local currentCols = LB.Options:GetTypeOption(self.FrameType, 'columns') or MIN_COLUMNS
 
     -- The BUTTONORDER doesn't matter for sizing so don't bother calling it.
     -- Search up or down from our current column size, for speed.
@@ -445,9 +473,9 @@ local function GetLayoutNColsForWidth(self, width)
 end
 
 local function GetLayoutGridForFrame(self)
-    local ncols = LB.Options:GetFrameOption(self, 'columns')
-    local layout = LB.Options:GetFrameOption(self, 'layout')
-    local order = LB.Options:GetFrameOption(self, 'order')
+    local ncols = LB.Options:GetTypeOption(self.FrameType, 'columns')
+    local layout = LB.Options:GetTypeOption(self.FrameType, 'layout')
+    local order = LB.Options:GetTypeOption(self.FrameType, 'order')
 
     if not layout or not LAYOUTS[layout] then layout = 'default' end
     if not order or not BUTTONORDERS[order] then order = 'default' end
@@ -488,7 +516,7 @@ function LiteBagContainerFrameMixin:UpdateItemLayout()
         if last then
             this:SetPoint("LEFT", last, "RIGHT", 0, 0)
         else
-            this:SetPoint("TOPLEFT", self, "TOPLEFT", 60, -31)
+            this:SetPoint("TOPLEFT", self, "TOPLEFT", 60, -BAGBUTTON_OFFSET)
         end
         this:Show()
     end
@@ -526,14 +554,13 @@ function LiteBagContainerFrameMixin:UpdateSearchBox()
     autoSortButton.anchorBag = self
     autoSortButton:SetParent(self)
     autoSortButton:ClearAllPoints()
-    autoSortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -7, -33)
+    autoSortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -14, -SEARCHBOX_OFFSET + 4)
     autoSortButton:Show()
 
-    local lastBag = self.bagButtons[#self.bagButtons]
     searchBox:SetParent(self)
     searchBox:ClearAllPoints()
-    searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -38, -37)
-    searchBox:SetPoint('LEFT', lastBag, 'RIGHT', 8, 0)
+    searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -48, -SEARCHBOX_OFFSET)
+    searchBox:SetPoint('LEFT', self, 'LEFT', 68, 0)
     searchBox:Show()
 end
 
