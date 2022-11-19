@@ -77,7 +77,7 @@ function LiteBagOptionsBindsOnDisplay_OnLoad(self)
 end
 
 function LiteBagOptionsSnapToPosition_OnLoad(self)
-    self.Text:SetText(L["Snap inventory frame to default backpack position."])
+    self.Text:SetText(L["Snap backpack frame to default backpack position."])
     self.SetOption =
         function (self, setting)
             if not setting or setting == '0' then
@@ -350,23 +350,23 @@ local function SetupBreakControl(self, FrameType, varname)
             function (self) return 0 end
 end
 
-function LiteBagOptionsInventoryColumns_OnLoad(self)
+function LiteBagOptionsBackpackColumns_OnLoad(self)
     SetupColumnsControl(self, 'BACKPACK', 10)
     LiteBagOptionsControl_OnLoad(self)
 end
 
-function LiteBagOptionsInventoryColumns_OnValueChanged(self)
+function LiteBagOptionsBackpackColumns_OnValueChanged(self)
     local n = self:GetName()
     _G[n..'Text']:SetText(format(L["Columns: %d"], self:GetValue()))
     LiteBagOptionsControl_OnChanged(self)
 end
 
-function LiteBagOptionsInventoryScale_OnLoad(self)
+function LiteBagOptionsBackpackScale_OnLoad(self)
     SetupScaleControl(self, 'BACKPACK')
     LiteBagOptionsControl_OnLoad(self)
 end
 
-function LiteBagOptionsInventoryScale_OnValueChanged(self)
+function LiteBagOptionsBackpackScale_OnValueChanged(self)
     local n = self:GetName()
     _G[n..'Text']:SetText(format(L["Scale: %0.2f"], self:GetValue()))
     LiteBagOptionsControl_OnChanged(self)
@@ -416,12 +416,12 @@ function LiteBagOptionsYBreak_OnValueChanged(self)
     LiteBagOptionsControl_OnChanged(self)
 end
 
-function LiteBagOptionsInventoryXBreak_OnLoad(self)
+function LiteBagOptionsBackpackXBreak_OnLoad(self)
     SetupBreakControl(self, 'BACKPACK', 'xbreak')
     LiteBagOptionsControl_OnLoad(self)
 end
 
-function LiteBagOptionsInventoryYBreak_OnLoad(self)
+function LiteBagOptionsBackpackYBreak_OnLoad(self)
     SetupBreakControl(self, 'BACKPACK', 'ybreak')
     LiteBagOptionsControl_OnLoad(self)
 end
@@ -445,11 +445,11 @@ function LiteBagOptionsBankLayout_OnLoad(self)
     PanelLayout_OnLoad(self, 'BANK')
 end
 
-function LiteBagOptionsInventoryOrder_OnLoad(self)
+function LiteBagOptionsBackpackOrder_OnLoad(self)
     PanelOrder_OnLoad(self, 'BACKPACK')
 end
 
-function LiteBagOptionsInventoryLayout_OnLoad(self)
+function LiteBagOptionsBackpackLayout_OnLoad(self)
     PanelLayout_OnLoad(self, 'BACKPACK')
 end
 

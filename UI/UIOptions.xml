@@ -30,7 +30,7 @@
                 <Anchor point="TOPRIGHT" relativePoint="CENTER" x="-6" y="-28" />
             </Anchors>
         </Frame>
-        <Frame name="$parentInventoryBox" enableMouse="false" frameStrata="BACKGROUND" hidden="true">
+        <Frame name="$parentBackpackBox" enableMouse="false" frameStrata="BACKGROUND" hidden="true">
             <Anchors>
                 <Anchor point="BOTTOMRIGHT" x="-12" y="12" />
                 <Anchor point="TOPLEFT" relativePoint="CENTER" x="6" y="-28" />
@@ -93,57 +93,57 @@
             </Layers>
         </Frame>
 
-        <Slider name="$parentInventoryColumns" minValue="8" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
+        <Slider name="$parentBackpackColumns" minValue="8" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="8" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryBox" x="20" y="-32" />
-                <Anchor point="RIGHT" relativeTo="$parentInventoryBox" relativePoint="CENTER" x="-8" />
+                <Anchor point="TOPLEFT" relativeTo="$parentBackpackBox" x="20" y="-32" />
+                <Anchor point="RIGHT" relativeTo="$parentBackpackBox" relativePoint="CENTER" x="-8" />
             </Anchors>
             <Scripts>
-                <OnLoad inherit="append" function="LiteBagOptionsInventoryColumns_OnLoad" />
-                <OnValueChanged function="LiteBagOptionsInventoryColumns_OnValueChanged" />
+                <OnLoad inherit="append" function="LiteBagOptionsBackpackColumns_OnLoad" />
+                <OnValueChanged function="LiteBagOptionsBackpackColumns_OnValueChanged" />
                 <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
-        <Slider name="$parentInventoryScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
+        <Slider name="$parentBackpackScale" minValue="0.75" maxValue="1.25" valueStep="0.05" obeyStepOnDrag="true" defaultValue="1.0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPRIGHT" relativeTo="$parentInventoryBox" x="-20" y="-32" />
-                <Anchor point="LEFT" relativeTo="$parentInventoryBox" relativePoint="CENTER" x="8" />
+                <Anchor point="TOPRIGHT" relativeTo="$parentBackpackBox" x="-20" y="-32" />
+                <Anchor point="LEFT" relativeTo="$parentBackpackBox" relativePoint="CENTER" x="8" />
             </Anchors>
             <Scripts>
-                <OnLoad inherit="append" function="LiteBagOptionsInventoryScale_OnLoad" />
-                <OnValueChanged function="LiteBagOptionsInventoryScale_OnValueChanged" />
+                <OnLoad inherit="append" function="LiteBagOptionsBackpackScale_OnLoad" />
+                <OnValueChanged function="LiteBagOptionsBackpackScale_OnValueChanged" />
                 <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
-        <Slider name="$parentInventoryXBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
+        <Slider name="$parentBackpackXBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryColumns" relativePoint="BOTTOMLEFT" y="-48" />
-                <Anchor point="RIGHT" relativeTo="$parentInventoryColumns" />
+                <Anchor point="TOPLEFT" relativeTo="$parentBackpackColumns" relativePoint="BOTTOMLEFT" y="-48" />
+                <Anchor point="RIGHT" relativeTo="$parentBackpackColumns" />
             </Anchors>
             <Scripts>
-                <OnLoad inherit="append" function="LiteBagOptionsInventoryXBreak_OnLoad" />
+                <OnLoad inherit="append" function="LiteBagOptionsBackpackXBreak_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsXBreak_OnValueChanged" />
                 <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
-        <Slider name="$parentInventoryYBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
+        <Slider name="$parentBackpackYBreak" minValue="0" maxValue="24" valueStep="1" obeyStepOnDrag="true" defaultValue="0" inherits="OptionsSliderTemplate">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryScale" relativePoint="BOTTOMLEFT" y="-48" />
-                <Anchor point="RIGHT" relativeTo="$parentInventoryScale" />
+                <Anchor point="TOPLEFT" relativeTo="$parentBackpackScale" relativePoint="BOTTOMLEFT" y="-48" />
+                <Anchor point="RIGHT" relativeTo="$parentBackpackScale" />
             </Anchors>
             <Scripts>
-                <OnLoad inherit="append" function="LiteBagOptionsInventoryYBreak_OnLoad" />
+                <OnLoad inherit="append" function="LiteBagOptionsBackpackYBreak_OnLoad" />
                 <OnValueChanged function="LiteBagOptionsYBreak_OnValueChanged" />
                 <OnMouseWheel function="LiteBagOptionsSlider_OnMouseWheel" />
             </Scripts>
         </Slider>
-        <Frame name="$parentInventoryOrder">
+        <Frame name="$parentBackpackOrder">
             <Anchors>
-                <Anchor point="TOP" relativeTo="$parentInventoryXBreak" relativePoint="BOTTOM" x="0" y="-36" />
-                <Anchor point="RIGHT" relativeTo="$parentInventoryBox" x="-144" />
+                <Anchor point="TOP" relativeTo="$parentBackpackXBreak" relativePoint="BOTTOM" x="0" y="-36" />
+                <Anchor point="RIGHT" relativeTo="$parentBackpackBox" x="-144" />
             </Anchors>
             <Scripts>
-                <OnLoad function="LiteBagOptionsInventoryOrder_OnLoad" />
+                <OnLoad function="LiteBagOptionsBackpackOrder_OnLoad" />
                 <OnShow function="LiteBagOptionsPanelOrder_OnShow" />
             </Scripts>
             <Layers>
@@ -156,12 +156,12 @@
                 </Layer>
             </Layers>
         </Frame>
-        <Frame name="$parentInventoryLayout">
+        <Frame name="$parentBackpackLayout">
             <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parentInventoryOrder" relativePoint="BOTTOMLEFT" y="-8" />
+                <Anchor point="TOPLEFT" relativeTo="$parentBackpackOrder" relativePoint="BOTTOMLEFT" y="-8" />
             </Anchors>
             <Scripts>
-                <OnLoad function="LiteBagOptionsInventoryLayout_OnLoad" />
+                <OnLoad function="LiteBagOptionsBackpackLayout_OnLoad" />
                 <OnShow function="LiteBagOptionsPanelLayout_OnShow" />
             </Scripts>
             <Layers>
@@ -270,9 +270,9 @@
                     <Anchor point="BOTTOM" relativePoint="TOP" relativeTo="$parentBankBox" y="8" />
                 </Anchors>
             </FontString>
-            <FontString name="$parentInventoryLabel" inherits="GameFontNormalMed2" text="INVENTORY_TOOLTIP">
+            <FontString name="$parentBackpackLabel" inherits="GameFontNormalMed2" text="BACKPACK_TOOLTIP">
                 <Anchors>
-                    <Anchor point="BOTTOM" relativePoint="TOP" relativeTo="$parentInventoryBox" y="8" />
+                    <Anchor point="BOTTOM" relativePoint="TOP" relativeTo="$parentBackpackBox" y="8" />
                 </Anchors>
             </FontString>
         </Layer>

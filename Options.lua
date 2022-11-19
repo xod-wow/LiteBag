@@ -24,15 +24,6 @@ defaults = {
             order = 'default',
             nosnap = false,
         },
-        REAGENTBAG = {
-            columns = 10,
-            scale = 1.0,
-            xbreak = nil,
-            ybreak = nil,
-            layout = 'default',
-            order = 'default',
-            nosnap = false,
-        },
         BANK = {
             columns = 14,
             scale = 1.0,
@@ -120,27 +111,27 @@ local function SlashFunc(argstr)
         return
     end
 
-    if cmd == 'inventory.snap' then
+    if cmd == 'backpack.snap' then
         LB.Options:SetTypeOption('BACKPACK', 'nosnap', not onOff)
         LB.Print(L["Backpack snap to default position:"].." "..tostring(onOff))
         return
     end
 
-    if cmd == 'inventory.layout' then
+    if cmd == 'backpack.layout' then
         if arg1 == 'default' then arg1 = nil end
         LB.Options:SetTypeOption('BACKPACK', 'layout', arg1)
         LB.Print(L["Backpack button layout set to:"].." "..tostring(arg1))
         return
     end
 
-    if cmd == 'inventory.order' then
+    if cmd == 'backpack.order' then
         if arg1 == 'default' then arg1 = nil end
         LB.Options:SetTypeOption('BACKPACK', 'order', arg1)
         LB.Print(L["Backpack button order set to:"].." "..tostring(arg1))
         return
     end
 
-    if cmd == 'inventory.columns' then
+    if cmd == 'backpack.columns' then
         arg1 = tonumber(arg1)
         if arg1 and arg1 >= 8 then
             LB.Options:SetTypeOption('BACKPACK', 'columns', arg1)
@@ -151,7 +142,7 @@ local function SlashFunc(argstr)
         return
     end
 
-    if cmd == 'inventory.gaps' then
+    if cmd == 'backpack.gaps' then
         local x = tonumber(arg1)
         local y = tonumber(arg2)
         if x == 0 then x = nil end
@@ -162,7 +153,7 @@ local function SlashFunc(argstr)
         return
     end
 
-    if cmd == 'inventory.scale' then
+    if cmd == 'backpack.scale' then
         arg1 = tonumber(arg1)
         if arg1 > 0 and arg1 <= 2 then
             LB.Options:SetTypeOption('BACKPACK', 'scale', arg1)
@@ -215,16 +206,17 @@ local function SlashFunc(argstr)
     LB.Print('  /litebag bank.layout <default | bag | reverse>')
     LB.Print('  /litebag bank.order <default | blizzard | reverse>')
     LB.Print('  /litebag bank.scale <s>')
-    LB.Print('  /litebag inventory.columns <n>')
-    LB.Print('  /litebag inventory.gaps <x> <y>')
-    LB.Print('  /litebag inventory.layout <default | bag | reverse>')
-    LB.Print('  /litebag inventory.order <default | blizzard | reverse>')
-    LB.Print('  /litebag inventory.scale <s>')
-    LB.Print('  /litebag inventory.snap <on | off>')
+    LB.Print('  /litebag backpack.columns <n>')
+    LB.Print('  /litebag backpack.gaps <x> <y>')
+    LB.Print('  /litebag backpack.layout <default | bag | reverse>')
+    LB.Print('  /litebag backpack.order <default | blizzard | reverse>')
+    LB.Print('  /litebag backpack.scale <s>')
+    LB.Print('  /litebag backpack.snap <on | off>')
     LB.Print('  /litebag confirmsort <on | off>')
     LB.Print('  /litebag equipset <on | off>')
     LB.Print('  /litebag iconborder <minquality>')
     LB.Print('  /litebag debug <on | off>')
+    LB.Print('  /litebag eventdebug <on | off>')
 end
 
 --[[----------------------------------------------------------------------------
@@ -232,14 +224,13 @@ end
 ----------------------------------------------------------------------------]]--
 
 function LB.Options:OnEvent(event, arg1, ...)
-    if event == 'ADDON_LOADED' and arg1 == addonName then
+    if event == 'PLAYER_LOGIN' then
         Initialize()
         SlashCmdList['LiteBag'] = SlashFunc
         SLASH_LiteBag1 = '/litebag'
-        SLASH_LiteBag2 = '/lbg'
-        self:UnregisterEvent('ADDON_LOADED')
+        self:UnregisterEvent('PLAYER_LOGIN')
     end
 end
 
 LB.Options:SetScript('OnEvent', LB.Options.OnEvent)
-LB.Options:RegisterEvent('ADDON_LOADED')
+LB.Options:RegisterEvent('PLAYER_LOGIN')
