@@ -37,10 +37,10 @@ end
 -- Added to the bag sort tooltip.  Would be nice if it were localized.
 local TOOLTIP_NOCONFIRM_TEXT = format(L["%s: No confirmation"], SHIFT_KEY)
 
-local hiddenBagParent = CreateFrame('Frame')
-hiddenBagParent:Hide()
+local hiddenParent = CreateFrame('Frame')
+hiddenParent:Hide()
 
-local function ReplaceBlizzardBackpack()
+local function ReplaceBlizzardBags()
     local hideFunc =
         function (frame)
             LiteBagBackpack:Hide()
@@ -64,9 +64,11 @@ local function ReplaceBlizzardBackpack()
     -- Turn the Blizzard frames off
     for i=1, NUM_CONTAINER_FRAMES do
         local f = _G['ContainerFrame'..i]
-        f:SetParent(hiddenBagParent)
+        f:SetParent(hiddenParent)
         f:UnregisterAllEvents()
     end
+    ContainerFrameCombinedBags:SetParent(hiddenParent)
+    ContainerFrameCombinedBags:UnregisterAllEvents()
                 
     -- Override or hook various Blizzard UI functions to operate on our
     -- frame instead.
@@ -82,6 +84,24 @@ local function ReplaceBlizzardBackpack()
     CloseBag = nopFunc
     CloseAllBags = hideFunc
 
+    IsBagOpen =
+        function (id)
+            if LiteBagBackpack:IsShown() then
+                return LiteBagBackpack:GetCurrentPanel():MatchesBagID(id)
+            elseif LiteBagBank:IsShown() then
+                return LiteBagBank:GetCurrentPanel():MatchesBagID(id)
+            end
+        end
+
+    -- The ReagentBag and Professions tutorials need this.
+    -- I don't feel good about this at all. I see taint on the horizon.
+    ContainerFrameUtil_GetShownFrameForID =
+        function (id)
+            if LiteBagBackpackPanel:IsShown() and LiteBagBackpackPanel:MatchesBagID(id) then
+                return LiteBagBackpackPanel, 1
+            end
+        end
+
     -- Add the confirm text to the sort button mouseover tooltip.
     BagItemAutoSortButton:HookScript('OnEnter', function (self)
         if not LB.Options:GetGlobalOption('NoConfirmSort') then
@@ -96,8 +116,6 @@ local function ReplaceBlizzardBackpack()
         end)
 end
 
-local hiddenBankParent = CreateFrame('Frame')
-
 local function ReplaceBlizzardBank()
 
     -- The reagent bank in WoW 6.0 changed UseContainerItem() to have a
@@ -109,8 +127,8 @@ local function ReplaceBlizzardBank()
     -- via the parent, and set its selectedTab and hide/show manually in sync
     -- with ours.
 
-    hiddenBankParent:Hide()
-    BankFrame:SetParent(hiddenBankParent)
+    hiddenParent:Hide()
+    BankFrame:SetParent(hiddenParent)
     BankFrame:ClearAllPoints()
     BankFrame:SetPoint('TOPLEFT', UIParent, 'TOPLEFT', 0, 0)
     BankFrame:UnregisterAllEvents()
@@ -142,7 +160,7 @@ local function ReplaceBlizzardBank()
 end
 
 local function ReplaceBlizzard()
-    ReplaceBlizzardBackpack()
+    ReplaceBlizzardBags()
     ReplaceBlizzardBank()
 end
 
