@@ -52,21 +52,15 @@ end
 function LiteBagBankMixin:OnShow()
     LiteBagFrameMixin.OnShow(self)
 
-   local placer = self:GetParent()
+    local placer = self:GetParent()
     self:ClearAllPoints()
     self:SetPoint("TOPLEFT", placer, "TOPLEFT")
-
-    self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
-    self:RegisterEvent('PLAYERBANKBAGSLOTS_CHANGED')
 
     OpenAllBags(self)
 end
 
 function LiteBagBankMixin:OnHide()
     LiteBagFrameMixin.OnHide(self)
-
-    self:UnregisterEvent('PLAYERBANKSLOTS_CHANGED')
-    self:UnregisterEvent('PLAYERBANKBAGSLOTS_CHANGED')
 
     CloseAllBags(self)
 
