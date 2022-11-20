@@ -7,7 +7,6 @@
 <Frame
     name="LiteBagContainerFrameTemplate" mixin="LiteBagContainerFrameMixin" hidden="true" virtual="true">
     <Frames>
-        <Frame name="$parentMoneyFrame" parentKey="MoneyFrame" inherits="ContainerMoneyFrameTemplate" />
         <DropDownToggleButton name="$parentPortraitButton" parentKey="PortraitButton" inherits="LiteBagPortraitButtonTemplate" />
         <Frame name="$parentFilterDropDown" parentKey="FilterDropDown" inherits="LiteBagFilterDropDownTemplate" />
     </Frames>

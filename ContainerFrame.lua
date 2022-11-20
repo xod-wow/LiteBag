@@ -11,15 +11,27 @@
 
 local addonName, LB = ...
 
-
 local BagInfoByType = {
     BACKPACK = {
         bagIDs = { 0, 1, 2, 3, 4, 5 },
-        tokenTracker = true,
+        showTokenTracker = true,
+        showMoneyFrame = true,
+        showBagButtons = true,
+        showSearchBox = true,
     },
     BANK = {
         bagIDs = { -1, 6, 7, 8, 9, 10, 11, 12 },
-        tokenTracker = false,
+        showTokenTracker = false,
+        showMoneyFrame = true,
+        showBagButtons = true,
+        showSearchBox = true,
+    },
+    REAGENTBAG = {
+        bagIDs = { 5 },
+        showTokenTracker = false,
+        showMoneyFrame = false,
+        showBagButtons = false,
+        showSearchBox = false,
     },
 }
 
@@ -38,19 +50,19 @@ local BAGBUTTON_HEIGHT = 33
 local SEARCHBOX_HEIGHT = 18
 local TOPELEMENT_GAP = 7
 local BAGBUTTON_OFFSET = TITLEBAR_HEIGHT + TOPELEMENT_GAP
-local SEARCHBOX_OFFSET = TITLEBAR_HEIGHT + BAGBUTTON_HEIGHT + TOPELEMENT_GAP * 2
-local LEFT_OFFSET = 15
-local TOP_OFFSET = TITLEBAR_HEIGHT + BAGBUTTON_HEIGHT + SEARCHBOX_HEIGHT + TOPELEMENT_GAP * 3
-local RIGHT_OFFSET = 14
-local BOTTOM_OFFSET = 16
+local LEFT_OFFSET = 8
+local RIGHT_OFFSET = 8
+local MINIMUM_TOP_OFFSET = TITLEBAR_HEIGHT + 21
+local BOTTOM_OFFSET = 8
 
 
 LiteBagContainerFrameMixin = CreateFromMixins(ContainerFrameCombinedBagsMixin)
 
 function LiteBagContainerFrameMixin:OnLoad()
-    local info = BagInfoByType[self.FrameType]
 
-    if info.tokenTracker then
+    Mixin(self, BagInfoByType[self.FrameType])
+
+    if self.showTokenTracker then
         local name = self:GetName() .. "TokenFrame"
         self.TokenTracker = CreateFrame("Frame", name, self, "BackpackTokenFrameTemplate")
         self.TokenTracker:SetHeight(16)
@@ -59,17 +71,22 @@ function LiteBagContainerFrameMixin:OnLoad()
         hooksecurefunc('TokenFrame_SetTokenWatched', function () self.TokenTracker:Update() end)
     end
 
+    if self.showMoneyFrame then
+        local name = self:GetName() .. "MoneyFrame"
+        self.MoneyFrame = CreateFrame("Frame", name, self, "ContainerMoneyFrameTemplate")
+    end
+
     self.Items = { }
 
     self.containsBags = { }
-    for _, id in ipairs(info.bagIDs) do self.containsBags[id] = true end
+    for _, id in ipairs(self.bagIDs) do self.containsBags[id] = true end
 
     -- In 2013 I thought making my owner dummy container frames to be the
     -- button parents was stupid. In 2022 Blizzard are more or less doing it.
     -- It would be nicer (for debugging at least) if these were named for the
     -- id instead of the index, but the bank is -1.
     self.bagFrames = {}
-    for i, id in ipairs(info.bagIDs) do
+    for i, id in ipairs(self.bagIDs) do
         local name = format('%sBag%d', self:GetName(), i)
         local bagFrame = CreateFrame('Frame', name, self)
         bagFrame:SetID(id)
@@ -78,7 +95,7 @@ function LiteBagContainerFrameMixin:OnLoad()
     end
 
     self.bagButtons = {}
-    for i, id in ipairs(info.bagIDs) do
+    for i, id in ipairs(self.bagIDs) do
         local name = format("%sBag%dSlot", self:GetName(), i)
         local bagButton = CreateFrame('ItemButton', name, self, "LiteBagBagButtonTemplate")
         bagButton:SetID(id)
@@ -269,26 +286,53 @@ function LiteBagContainerFrameMixin:UpdateTokenTracker()
         self.TokenTracker:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 8, 8)
         self.TokenTracker:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -8, 8)
         self.TokenTracker:Show()
-        self.MoneyFrame:SetPoint("BOTTOMLEFT", self.TokenTracker, "TOPLEFT", 0, 3)
-        self.MoneyFrame:SetPoint("BOTTOMRIGHT", self.TokenTracker, "TOPRIGHT", 0, 3)
-        self.MoneyFrame:Show()
-    else
-        if self.TokenTracker then
-            self.TokenTracker:Hide()
+        if self.MoneyFrame then
+            self.MoneyFrame:SetPoint("BOTTOMLEFT", self.TokenTracker, "TOPLEFT", 0, 3)
+            self.MoneyFrame:SetPoint("BOTTOMRIGHT", self.TokenTracker, "TOPRIGHT", 0, 3)
+            self.MoneyFrame:Show()
         end
+    elseif self.MoneyFrame then
         self.MoneyFrame:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 8, 8)
         self.MoneyFrame:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -8, 8)
         self.MoneyFrame:Show()
     end
 end
 
-function LiteBagContainerFrameMixin:CalculateExtraHeight()
-    if self.TokenTracker and self.TokenTracker:ShouldShow() then
-        -- I think Blizzard are missing this 3!
-        return self.MoneyFrame:GetHeight() + self.TokenTracker:GetHeight() + 3
-    else
-        return self.MoneyFrame:GetHeight()
+function LiteBagContainerFrameMixin:CalculateSearchBoxOffset()
+    local searchBoxOffset = TITLEBAR_HEIGHT + TOPELEMENT_GAP
+    if self.showBagButtons then
+        searchBoxOffset = searchBoxOffset + BAGBUTTON_HEIGHT + TOPELEMENT_GAP
     end
+    return searchBoxOffset
+end
+
+function LiteBagContainerFrameMixin:CalculateTopOffset()
+    local topOffset = TITLEBAR_HEIGHT + TOPELEMENT_GAP
+    if self.showBagButtons then
+        topOffset = topOffset + BAGBUTTON_HEIGHT + TOPELEMENT_GAP
+    end
+    if self.showSearchBox then
+        topOffset = topOffset + SEARCHBOX_HEIGHT + TOPELEMENT_GAP
+    end
+    return math.max(topOffset, MINIMUM_TOP_OFFSET)
+end
+
+-- This accounts for the position gaps of the bottom elements
+function LiteBagContainerFrameMixin:CalculateExtraHeight()
+    local extraHeight = 0
+    if self.MoneyFrame then
+        extraHeight = extraHeight + self.MoneyFrame:GetHeight()
+    end
+    if self.TokenTracker and self.TokenTracker:ShouldShow() then
+        extraHeight = extraHeight + self.TokenTracker:GetHeight()
+    end
+    if self.MoneyFrame and self.TokenTracker then
+        extraHeight = extraHeight + 3
+    end
+    if self.MoneyFrame or self.TokenTraker then
+        extraHeight = extraHeight + 6
+    end
+    return extraHeight
 end
 
 function LiteBagContainerFrameMixin:UpdateMiscellaneousFrames()
@@ -497,11 +541,12 @@ function LiteBagContainerFrameMixin:UpdateItemLayout()
     local anchor, m, xOff, yOff
 
     local adjustedBottomOffset = BOTTOM_OFFSET + self:CalculateExtraHeight()
+    local adjustedTopOffset = self:CalculateTopOffset()
 
     if layoutGrid.reverseDirection then
         anchor, m, xOff, yOff = 'BOTTOMRIGHT', -1, -RIGHT_OFFSET, -adjustedBottomOffset
     else
-        anchor, m, xOff, yOff = 'TOPLEFT', 1, LEFT_OFFSET, TOP_OFFSET
+        anchor, m, xOff, yOff = 'TOPLEFT', 1, LEFT_OFFSET, adjustedTopOffset
     end
 
     local n = 1
@@ -519,16 +564,20 @@ function LiteBagContainerFrameMixin:UpdateItemLayout()
         local this = self.bagButtons[i]
         local last = self.bagButtons[i-1]
         this:ClearAllPoints()
-        if last then
-            this:SetPoint("LEFT", last, "RIGHT", 0, 0)
+        if not self.showBagButtons then
+            this:Hide()
         else
-            this:SetPoint("TOPLEFT", self, "TOPLEFT", 60, -BAGBUTTON_OFFSET)
+            if last then
+                this:SetPoint("LEFT", last, "RIGHT", 0, 0)
+            else
+                this:SetPoint("TOPLEFT", self, "TOPLEFT", 32, -BAGBUTTON_OFFSET)
+            end
+            this:Show()
         end
-        this:Show()
     end
 
     self.width = layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET
-    self.height = layoutGrid.totalHeight + TOP_OFFSET + adjustedBottomOffset
+    self.height = layoutGrid.totalHeight + adjustedTopOffset + adjustedBottomOffset
 end
 
 function LiteBagContainerFrameMixin:UpdateFrameSize()
@@ -546,6 +595,7 @@ function LiteBagContainerFrameMixin:ResizeToWidth(width)
 end
 
 function LiteBagContainerFrameMixin:UpdateSearchBox()
+    if not self.showSearchBox then return end
 
     local searchBox, autoSortButton
 
@@ -557,15 +607,17 @@ function LiteBagContainerFrameMixin:UpdateSearchBox()
         autoSortButton = BagItemAutoSortButton
     end
 
+    local searchBoxOffset = self:CalculateSearchBoxOffset()
+
     autoSortButton.anchorBag = self
     autoSortButton:SetParent(self)
     autoSortButton:ClearAllPoints()
-    autoSortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -14, -SEARCHBOX_OFFSET + 4)
+    autoSortButton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -14, -searchBoxOffset + 4)
     autoSortButton:Show()
 
     searchBox:SetParent(self)
     searchBox:ClearAllPoints()
-    searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -48, -SEARCHBOX_OFFSET)
+    searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -48, -searchBoxOffset)
     searchBox:SetPoint('LEFT', self, 'LEFT', 48, 0)
     searchBox:Show()
 end
