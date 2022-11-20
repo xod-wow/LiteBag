@@ -88,8 +88,9 @@ function LiteBagFrameMixin:SetUpPanels()
         end
     end
 
+    local i = PanelTemplates_GetSelectedTab(self)
     PanelTemplates_SetNumTabs(self, n)
-
+    PanelTemplates_SetTab(self, i)
 end
 
 function LiteBagFrameMixin:AddPanel(panel)
