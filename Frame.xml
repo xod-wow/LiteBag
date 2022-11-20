@@ -11,6 +11,11 @@
        inherits="PortraitFrameFlatTemplate" mixin="LiteBagFrameMixin"
        virtual="true">
 
+    <KeyValues>
+        <!-- A NineSlice layout that makes the portrait button small -->
+        <KeyValue key="layoutType" value="HeldBagLayout" type="string"/>
+    </KeyValues>
+
     <Size x="384" y="512" />
 
     <ResizeBounds>
@@ -61,9 +66,9 @@
     </Frames>
 
     <Scripts>
-        <OnLoad method="OnLoad" inherit="append" />
-        <OnHide method="OnHide" inherit="append" />
-        <OnShow method="OnShow" inherit="append" />
+        <OnLoad method="OnLoad" />
+        <OnHide method="OnHide" />
+        <OnShow method="OnShow" />
         <OnUpdate method="OnUpdate" />
     </Scripts>
 </Frame>
