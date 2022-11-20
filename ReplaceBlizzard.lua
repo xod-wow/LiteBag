@@ -47,7 +47,7 @@ local REPLACEMENT_GLOBALS = {
     OpenBag =
         function (id)
             LB.Debug('OpenBag %d', id)
-            if not ContainerFrame_AllowedToOpenBags() then return end
+            -- if not ContainerFrame_AllowedToOpenBags() then return end
             if LiteBagBackpack:MatchesBagID(id) then
                 LiteBagBackpack:Show()
             end
@@ -62,14 +62,14 @@ local REPLACEMENT_GLOBALS = {
     ToggleBag =
         function (id)
             LB.Debug('ToggleBag %d', id)
-            if not ContainerFrame_AllowedToOpenBags() then return end
+            -- if not ContainerFrame_AllowedToOpenBags() then return end
             ToggleBackpack()
         end,
 
     OpenBackpack =
          function ()
             LB.Debug('OpenBackpack')
-            if not ContainerFrame_AllowedToOpenBags() then return end
+            -- if not ContainerFrame_AllowedToOpenBags() then return end
             LiteBagBackpack:Show()
         end,
 
@@ -84,7 +84,7 @@ local REPLACEMENT_GLOBALS = {
     ToggleBackpack =
         function ()
             LB.Debug('ToggleBackpack')
-            if not ContainerFrame_AllowedToOpenBags() then return end
+            -- if not ContainerFrame_AllowedToOpenBags() then return end
             if LiteBagBackpack:IsShown() then
                 CloseAllBags()
             else
@@ -95,7 +95,7 @@ local REPLACEMENT_GLOBALS = {
     OpenAllBags =
         function (frame, forceUpdate)
             LB.Debug('OpenAllBags %s', frame and frame:GetName() or "NONE")
-            if not ContainerFrame_AllowedToOpenBags() then return end
+            -- if not ContainerFrame_AllowedToOpenBags() then return end
             if LiteBagBackpack:IsShown() then
                 if forceUpdate then
                     local panel = LiteBagBackpack:GetCurrentPanel()
@@ -130,7 +130,7 @@ local REPLACEMENT_GLOBALS = {
     ToggleAllBags =
         function ()
             LB.Debug('ToggleAllBags')
-            if not ContainerFrame_AllowedToOpenBags() then return end
+            -- if not ContainerFrame_AllowedToOpenBags() then return end
             if LiteBagBackpack:IsShown() then
                 CloseAllBags()
             else
