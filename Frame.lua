@@ -73,6 +73,24 @@ function LiteBagFrameMixin:OnHide()
     PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
 end
 
+function LiteBagFrameMixin:AnyPanelMatchesBagID(id)
+    for _,panel in ipairs(self.panels) do
+        if panel.MatchesBagID and panel:MatchesBagID(id) then
+            return true
+        end
+    end
+end
+
+function LiteBagFrameMixin:OpenToBag(id)
+    for i,panel in ipairs(self.panels) do
+        if panel.MatchesBagID and panel:MatchesBagID(id) then
+            self:ShowPanel(i)
+            self:Show()
+            return true
+        end
+    end
+end
+
 function LiteBagFrameMixin:GetCurrentPanel()
     local n = PanelTemplates_GetSelectedTab(self)
     return self.panels[n]

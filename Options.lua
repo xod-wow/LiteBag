@@ -39,7 +39,7 @@ defaults = {
     }
 }
 
-LB.Options = CreateFrame('Frame')
+LB.Options = { }
 
 function LB.Options:Initialize()
     LiteBagDB = LiteBagDB or { }
@@ -220,17 +220,3 @@ function LB.Options:SlashFunc(argstr)
     LB.Print('  /litebag debug <on | off>')
     LB.Print('  /litebag eventdebug <on | off>')
 end
-
---[[----------------------------------------------------------------------------
-    Initialization.
-----------------------------------------------------------------------------]]--
-
-function LB.Options:OnEvent(event, arg1, ...)
-    if event == 'VARIABLES_LOADED' then
-        self:Initialize()
-        self:UnregisterEvent('VARIABLES_LOADED')
-    end
-end
-
-LB.Options:SetScript('OnEvent', LB.Options.OnEvent)
-LB.Options:RegisterEvent('VARIABLES_LOADED')

@@ -1,6 +1,6 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/ReplaceBlizzard.lua
+  LiteBag/Core.lua
 
   Copyright 2013 Mike Battersby
 
@@ -48,8 +48,8 @@ local REPLACEMENT_GLOBALS = {
         function (id)
             LB.Debug('OpenBag %d', id)
             -- if not ContainerFrame_AllowedToOpenBags() then return end
-            if LiteBagBackpack:MatchesBagID(id) then
-                LiteBagBackpack:Show()
+            if LiteBagBackpack:OpenToBag(id) then
+                return
             end
         end,
 
@@ -268,6 +268,7 @@ function LiteBagManager:OnEvent(event, ...)
             CloseAllBags()
         end
     elseif event == 'PLAYER_LOGIN' then
+        LB.Options:Initialize()
         self:ReplaceBlizzard()
         self:ManageBlizzardBagButtons()
         self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
@@ -279,4 +280,6 @@ end
 LiteBagManager:RegisterEvent('PLAYER_LOGIN')
 LiteBagManager:SetScript('OnEvent', LiteBagManager.OnEvent)
 
+--@debug@
 _G.LB = LB
+--@end-debug@

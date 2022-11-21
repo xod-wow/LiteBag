@@ -26,7 +26,7 @@ Frame.xml
 ReagentBankFrame.xml
 BankFrame.xml
 BackpackFrame.xml
-ReplaceBlizzard.lua
+Core.lua
 
 #@debug@
 Plugin_Anima\Anima.xml
