@@ -131,7 +131,7 @@ local function Update(button)
 
     for i,td in ipairs(texData) do
         local tex = button[td.parentKey]
-        if LB.Options:GetGlobalOption("HideEquipsetIcon") == nil and
+        if LB.GetGlobalOption("HideEquipsetIcon") == nil and
            memberships and memberships[i] == true then
             tex:Show()
         else

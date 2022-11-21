@@ -413,8 +413,8 @@ LAYOUTS.default =
 
         local w, h = Items[1]:GetSize()
 
-        local xBreak = LB.Options:GetTypeOption(self.FrameType, 'xbreak')
-        local yBreak = LB.Options:GetTypeOption(self.FrameType, 'ybreak')
+        local xBreak = LB.GetTypeOption(self.FrameType, 'xbreak')
+        local yBreak = LB.GetTypeOption(self.FrameType, 'ybreak')
 
         local row, col, maxCol, maxXGap = 0, 0, 0, 0
 
@@ -491,11 +491,11 @@ LAYOUTS.bag =
     end
 
 local function GetLayoutNColsForWidth(self, width)
-    local layout = LB.Options:GetTypeOption(self.FrameType, 'layout')
+    local layout = LB.GetTypeOption(self.FrameType, 'layout')
     if not layout or not LAYOUTS[layout] then layout = 'default' end
 
     local ncols
-    local currentCols = LB.Options:GetTypeOption(self.FrameType, 'columns') or MIN_COLUMNS
+    local currentCols = LB.GetTypeOption(self.FrameType, 'columns') or MIN_COLUMNS
 
     -- The BUTTONORDER doesn't matter for sizing so don't bother calling it.
     -- Search up or down from our current column size, for speed.
@@ -523,9 +523,9 @@ local function GetLayoutNColsForWidth(self, width)
 end
 
 local function GetLayoutGridForFrame(self)
-    local ncols = LB.Options:GetTypeOption(self.FrameType, 'columns')
-    local layout = LB.Options:GetTypeOption(self.FrameType, 'layout')
-    local order = LB.Options:GetTypeOption(self.FrameType, 'order')
+    local ncols = LB.GetTypeOption(self.FrameType, 'columns')
+    local layout = LB.GetTypeOption(self.FrameType, 'layout')
+    local order = LB.GetTypeOption(self.FrameType, 'order')
 
     if not layout or not LAYOUTS[layout] then layout = 'default' end
     if not order or not BUTTONORDERS[order] then order = 'default' end
@@ -589,7 +589,7 @@ end
 function LiteBagContainerFrameMixin:ResizeToWidth(width)
     LB.Debug(format("ContainerFrame ResizeToWidth %s %d", self:GetName(), width))
     local ncols = GetLayoutNColsForWidth(self, width)
-    LB.Options:SetFrameOption(self, 'columns', ncols)
+    LB.SetFrameOption(self, 'columns', ncols)
     self:UpdateItemLayout()
     self:UpdateFrameSize()
 end

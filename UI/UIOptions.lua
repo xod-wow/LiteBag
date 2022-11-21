@@ -24,14 +24,14 @@ function LiteBagOptionsHideBlizzardBagButtons_OnLoad(self)
     self.SetOption =
         function (self, setting)
             if not setting or setting == '0' then
-                LB.Options:SetGlobalOption('HideBlizzardBagButtons', nil)
+                LB.SetGlobalOption('HideBlizzardBagButtons', nil)
             else
-                LB.Options:SetGlobalOption('HideBlizzardBagButtons', true)
+                LB.SetGlobalOption('HideBlizzardBagButtons', true)
             end
         end
     self.GetOption =
         function (self)
-            return LB.Options:GetGlobalOption('HideBlizzardBagButtons')
+            return LB.GetGlobalOption('HideBlizzardBagButtons')
         end
     self.GetOptionDefault =
         function (self) return false end
@@ -43,14 +43,14 @@ function LiteBagOptionsConfirmSort_OnLoad(self)
     self.SetOption =
         function (self, setting)
             if not setting or setting == '0' then
-                LB.Options:SetGlobalOption('NoConfirmSort', true)
+                LB.SetGlobalOption('NoConfirmSort', true)
             else
-                LB.Options:SetGlobalOption('NoConfirmSort', nil)
+                LB.SetGlobalOption('NoConfirmSort', nil)
             end
         end
     self.GetOption =
         function (self)
-            return not LB.Options:GetGlobalOption('NoConfirmSort')
+            return not LB.GetGlobalOption('NoConfirmSort')
         end
     self.GetOptionDefault =
         function (self) return true end
@@ -62,14 +62,14 @@ function LiteBagOptionsEquipsetDisplay_OnLoad(self)
     self.SetOption =
         function (self, setting)
             if not setting or setting == '0' then
-                LB.Options:SetGlobalOption('HideEquipsetIcon', true)
+                LB.SetGlobalOption('HideEquipsetIcon', true)
             else
-                LB.Options:SetGlobalOption('HideEquipsetIcon', nil)
+                LB.SetGlobalOption('HideEquipsetIcon', nil)
             end
         end
     self.GetOption =
         function (self)
-            return not LB.Options:GetGlobalOption('HideEquipsetIcon')
+            return not LB.GetGlobalOption('HideEquipsetIcon')
         end
     self.GetOptionDefault =
         function (self) return true end
@@ -81,14 +81,14 @@ function LiteBagOptionsBindsOnDisplay_OnLoad(self)
     self.SetOption =
         function (self, setting)
             if not setting or setting == '0' then
-                LB.Options:SetGlobalOption('ShowBindsOnText', nil)
+                LB.SetGlobalOption('ShowBindsOnText', nil)
             else
-                LB.Options:SetGlobalOption('ShowBindsOnText', true)
+                LB.SetGlobalOption('ShowBindsOnText', true)
             end
         end
     self.GetOption =
         function (self)
-            return LB.Options:GetGlobalOption('ShowBindsOnText')
+            return LB.GetGlobalOption('ShowBindsOnText')
         end
     self.GetOptionDefault =
         function (self) return false end
@@ -100,14 +100,14 @@ function LiteBagOptionsSnapToPosition_OnLoad(self)
     self.SetOption =
         function (self, setting)
             if not setting or setting == '0' then
-                LB.Options:SetTypeOption('BACKPACK', 'nosnap', true)
+                LB.SetTypeOption('BACKPACK', 'nosnap', true)
             else
-                LB.Options:SetTypeOption('BACKPACK', 'nosnap', false)
+                LB.SetTypeOption('BACKPACK', 'nosnap', false)
             end
         end
     self.GetOption =
         function (self)
-            return not LB.Options:GetTypeOption('BACKPACK', 'nosnap')
+            return not LB.GetTypeOption('BACKPACK', 'nosnap')
         end
     self.GetOptionDefault =
         function (self) return false end
@@ -126,7 +126,7 @@ end
 local function IconBorder_Initialize(self, level)
     if level == 1 then
         local info = LibDD:UIDropDownMenu_CreateInfo()
-        local current = LB.Options:GetGlobalOption('ThickerIconBorder')
+        local current = LB.GetGlobalOption('ThickerIconBorder')
 
         info.func =
              function (button, arg1, arg2, checked)
@@ -154,11 +154,11 @@ function LiteBagOptionsIconBorder_OnLoad(self)
     LibDD:Create_UIDropDownMenu(self)
     self.SetOption =
         function (self, setting)
-            LB.Options:SetGlobalOption('ThickerIconBorder', setting)
+            LB.SetGlobalOption('ThickerIconBorder', setting)
         end
     self.GetOption =
         function (self)
-            return LB.Options:GetGlobalOption('ThickerIconBorder')
+            return LB.GetGlobalOption('ThickerIconBorder')
         end
     self.GetOptionDefault =
         function (self)
@@ -185,7 +185,7 @@ end
 local function PanelOrder_Initialize(self, level)
     if level == 1 then
         local info = LibDD:UIDropDownMenu_CreateInfo()
-        local current = LB.Options:GetTypeOption(self.FrameType, 'order')
+        local current = LB.GetTypeOption(self.FrameType, 'order')
 
         info.func =
             function (button, arg1, arg2, checked)
@@ -217,11 +217,11 @@ local function PanelOrder_OnLoad(self, FrameType)
     LibDD:Create_UIDropDownMenu(self)
     self.SetOption =
         function (self, setting)
-            LB.Options:SetTypeOption(FrameType, 'order', setting)
+            LB.SetTypeOption(FrameType, 'order', setting)
         end
     self.GetOption =
         function (self)
-            return LB.Options:GetTypeOption(FrameType, 'order')
+            return LB.GetTypeOption(FrameType, 'order')
         end
     self.GetOptionDefault =
         function (self)
@@ -251,7 +251,7 @@ end
 local function PanelLayout_Initialize(self, level)
     if level == 1 then
         local info = LibDD:UIDropDownMenu_CreateInfo()
-        local current = LB.Options:GetTypeOption(self.FrameType, 'layout')
+        local current = LB.GetTypeOption(self.FrameType, 'layout')
 
         info.func =
             function (button, arg1, arg2, checked)
@@ -283,11 +283,11 @@ local function PanelLayout_OnLoad(self, FrameType)
     LibDD:Create_UIDropDownMenu(self)
     self.SetOption =
         function (self, setting)
-            LB.Options:SetTypeOption(FrameType, 'layout', setting)
+            LB.SetTypeOption(FrameType, 'layout', setting)
         end
     self.GetOption =
         function (self)
-            return LB.Options:GetTypeOption(FrameType, 'layout')
+            return LB.GetTypeOption(FrameType, 'layout')
         end
     self.GetOptionDefault =
         function (self)
@@ -323,11 +323,11 @@ local function SetupColumnsControl(self, FrameType, default)
     _G[n..'High']:SetText('24')
     self.SetOption =
             function (self, v)
-            LB.Options:SetTypeOption(FrameType, 'columns', v)
+            LB.SetTypeOption(FrameType, 'columns', v)
         end
     self.GetOption =
         function (self)
-            return LB.Options:GetTypeOption(FrameType, 'columns') or default
+            return LB.GetTypeOption(FrameType, 'columns') or default
         end
     self.GetOptionDefault =
             function (self) return default end
@@ -339,11 +339,11 @@ local function SetupScaleControl(self, FrameType)
     _G[n..'High']:SetText(1.25)
     self.SetOption =
             function (self, v)
-            LB.Options:SetTypeOption(FrameType, 'scale', v)
+            LB.SetTypeOption(FrameType, 'scale', v)
         end
     self.GetOption =
             function (self)
-            return LB.Options:GetTypeOption(FrameType, 'scale') or 1.0
+            return LB.GetTypeOption(FrameType, 'scale') or 1.0
         end
     self.GetOptionDefault =
             function (self) return 1.0 end
@@ -356,14 +356,14 @@ local function SetupBreakControl(self, FrameType, varname)
     self.SetOption =
             function (self, v)
             if v == 0 then
-                LB.Options:SetTypeOption(FrameType, varname, nil)
+                LB.SetTypeOption(FrameType, varname, nil)
             else
-                LB.Options:SetTypeOption(FrameType, varname, v)
+                LB.SetTypeOption(FrameType, varname, v)
             end
         end
     self.GetOption =
             function (self)
-            return LB.Options:GetTypeOption(FrameType, varname) or 0
+            return LB.GetTypeOption(FrameType, varname) or 0
         end
     self.GetOptionDefault =
             function (self) return 0 end

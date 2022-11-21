@@ -33,7 +33,7 @@ function LiteBagFrameMixin:SetSnapPosition()
 end
 
 function LiteBagFrameMixin:CheckSnapPosition()
-    if LB.Options:GetTypeOption(self.FrameType, 'nosnap') then
+    if LB.GetTypeOption(self.FrameType, 'nosnap') then
         return
     end
     if GetSqDistanceFromBackpackDefault(self) < 64^2 then
@@ -146,7 +146,7 @@ function LiteBagFrameMixin:OnUpdate()
 
         self:SetTitle(format('%s : %s', addonName, currentPanel.Title))
 
-        self:SetScale(LB.Options:GetTypeOption(self.FrameType, 'scale') or 1.0)
+        self:SetScale(LB.GetTypeOption(self.FrameType, 'scale') or 1.0)
         self:ResizeToPanel()
         self.needsUpdate = nil
     end

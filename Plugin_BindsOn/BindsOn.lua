@@ -77,7 +77,7 @@ local function Update(button)
         button.LiteBagBindsOnText:SetPoint("TOP", button, "TOP", 0, -2)
     end
 
-    if not LB.Options:GetGlobalOption("ShowBindsOnText") or not button.hasItem then
+    if not LB.GetGlobalOption("ShowBindsOnText") or not button.hasItem then
         button.LiteBagBindsOnText:Hide()
         return
     end
