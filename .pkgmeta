@@ -9,6 +9,3 @@ externals:
   Libs/LibUIDropDownMenu: https://repos.wowace.com/wow/libuidropdownmenu/trunk/LibUIDropDownMenu
 
 enable-nolib-creation: no
-
-ignore:
-  Libs/*
