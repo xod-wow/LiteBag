@@ -29,7 +29,7 @@ StaticPopupDialogs['LB_CONFIRM_SORT'] = {
 
 -- Don't show the confirm popup if the shift key is held.
 local function DoOrStaticPopup(text, func)
-    if IsShiftKeyDown() or LB.GetGlobalOption('NoConfirmSort') then
+    if IsShiftKeyDown() or not LB.GetGlobalOption('confirmSort') then
         func()
     else
         StaticPopup_Show('LB_CONFIRM_SORT', text, nil, func)
@@ -202,7 +202,7 @@ local function AddSortConfirmations()
 
     -- Add the confirm text to the sort button mouseover tooltip.
     BagItemAutoSortButton:HookScript('OnEnter', function (self)
-        if not LB.GetGlobalOption('NoConfirmSort') then
+        if LB.GetGlobalOption('confirmSort') then
             GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
         end
         GameTooltip:Show()
@@ -215,7 +215,7 @@ local function AddSortConfirmations()
     -- Add the confirm text to the sort button tooltip.
 
     BankItemAutoSortButton:HookScript('OnEnter', function (self)
-        if not LB.GetGlobalOption('NoConfirmSort') then
+        if LB.GetGlobalOption('confirmSort') then
             GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
         end
         GameTooltip:Show()
@@ -247,7 +247,7 @@ function LiteBagManager:ReplaceBlizzard()
 end
 
 function LiteBagManager:ManageBlizzardBagButtons()
-    local show = not LB.GetGlobalOption('HideBlizzardBagButtons')
+    local show = not LB.GetGlobalOption('hideBlizzardBagButtons')
     for _, bagButton in MainMenuBarBagManager:EnumerateBagButtons() do
         bagButton:SetShown(show)
         bagButton:SetParent(show and MicroButtonAndBagsBar or hiddenParent)
@@ -269,6 +269,7 @@ function LiteBagManager:OnEvent(event, ...)
         end
     elseif event == 'PLAYER_LOGIN' then
         LB.InitializeOptions()
+        LB.InitializeGUIOptions()
         self:ReplaceBlizzard()
         self:ManageBlizzardBagButtons()
         self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')

@@ -48,8 +48,14 @@
             </Scripts>
         </Button>
 
-        <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" hidden="true">
+        <Button name="$parentInfoButton" parentKey="InfoButton" inherits="UIPanelInfoButton">
             <Anchors>
+                <Anchor point="RIGHT" relativeKey="$parent.CloseButton" relativePoint="LEFT" x="-4" />
+            </Anchors>
+        </Button>
+
+        <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" hidden="true">
+            <Anchors>Blizzard_CompactRaidFrameManager.xml
                 <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="11" y="2" />
             </Anchors>
             <Scripts>

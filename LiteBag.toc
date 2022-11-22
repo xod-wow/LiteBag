@@ -10,7 +10,7 @@
 ## X-Curse-Project-ID: 50424
 ## X-WoWI-ID: 26330
 
-Libs\embeds.xml
+embeds.xml
 
 Localization.lua
 
@@ -35,5 +35,6 @@ Plugin_BindsOn\BindsOn.xml
 Plugin_EquipSets\EquipSets.xml
 Plugin_IconBorder\IconBorder.xml
 
-UI\UIOptionsPanelTemplate.xml
-UI\UIOptions.xml
+#UI\UIOptionsPanelTemplate.xml
+#UI\UIOptions.xml
+UI\Options.lua

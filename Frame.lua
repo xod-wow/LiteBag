@@ -33,11 +33,10 @@ function LiteBagFrameMixin:SetSnapPosition()
 end
 
 function LiteBagFrameMixin:CheckSnapPosition()
-    if LB.GetTypeOption(self.FrameType, 'nosnap') then
-        return
-    end
-    if GetSqDistanceFromBackpackDefault(self) < 64^2 then
-        self:SetSnapPosition()
+    if LB.GetTypeOption(self.FrameType, 'snap') then
+        if GetSqDistanceFromBackpackDefault(self) < 64^2 then
+            self:SetSnapPosition()
+        end
     end
 end
 
@@ -134,6 +133,14 @@ function LiteBagFrameMixin:OnLoad()
     PanelTemplates_SetNumTabs(self, 1)
     PanelTemplates_SetTab(self, 1)
     self:SetUpPanels()
+
+    self.InfoButton:SetFrameLevel(self.CloseButton:GetFrameLevel())
+    self.InfoButton:SetScript('OnClick',
+        function ()
+            LB.OpenOptions()
+            self:Show()
+        end)
+
     self.needsUpdate = true
 end
 

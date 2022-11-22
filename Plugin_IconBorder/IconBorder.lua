@@ -24,7 +24,7 @@ local function Update(self)
     local info = C_Container.GetContainerItemInfo(bag, slot)
     if not info or not info.quality then return end
 
-    local minQuality = tonumber(LB.GetGlobalOption("ThickerIconBorder"))
+    local minQuality = tonumber(LB.GetGlobalOption("thickerIconBorder"))
 
     if minQuality and info.quality >= minQuality then
         self.IconBorder:SetTexture([[Interface\Addons\LiteBag\Plugin_IconBorder\IconBorder]])

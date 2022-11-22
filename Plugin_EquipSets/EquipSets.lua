@@ -51,6 +51,9 @@ function EquipSetState:UpdateSet(n, id)
     end
 end
 
+-- This is a fair bit of work to run every BAG_UPDATE_DELAYED, it would be
+-- nicer to turn off the events if we aren't enabled.
+
 function EquipSetState:Update()
     self.state = {}
     for i, id in ipairs(C_EquipmentSet.GetEquipmentSetIDs()) do
@@ -131,8 +134,7 @@ local function Update(button)
 
     for i,td in ipairs(texData) do
         local tex = button[td.parentKey]
-        if LB.GetGlobalOption("HideEquipsetIcon") == nil and
-           memberships and memberships[i] == true then
+        if LB.GetGlobalOption("showEquipmentSets") and memberships and memberships[i] == true then
             tex:Show()
         else
             tex:Hide()

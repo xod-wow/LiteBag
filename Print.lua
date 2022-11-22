@@ -21,7 +21,7 @@ function LB.Print(...)
 end
 
 function LB.Debug(...)
-    if LB.GetGlobalOption('DebugEnabled') then
+    if LB.GetGlobalOption('debug') then
         -- Outputs into the first chat tab instead of selected. Even I
         -- find the spam too much.
         DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00LiteBag:|r ' .. format(...))
@@ -30,7 +30,7 @@ end
 
 function LB.EventDebug(frame, event, ...)
     if LB.db.profile.eventFilter[event] then return end
-    if LB.GetGlobalOption('EventDebugEnabled') then
+    if LB.GetGlobalOption('eventDebug') then
         local msg = frame:GetName() .. " " .. event
         for i = 1, select('#', ...) do
             msg = msg .. " " .. tostring(select(i, ...))
