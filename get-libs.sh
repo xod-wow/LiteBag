@@ -34,6 +34,6 @@ get_libs | while read repo dir; do
         (cd $dir && svn up) 2>&1 | indent
     else
         echo "Cloning $repo into $dir"
-        svn clone $repo $dir 2>&1 | indent
+        svn co $repo $dir 2>&1 | indent
     fi
 done
