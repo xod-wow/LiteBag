@@ -356,10 +356,6 @@ function LB.InitializeGUIOptions()
 --  local profileOptions = AceDBOptions:GetOptionsTable(LB.db)
 --  AceConfig:RegisterOptionsTable(addonName.."Profiles", profileOptions)
 --  AceConfigDialog:AddToBlizOptions(addonName.."Profiles", "Profiles", addonName)
---
-    LB.db:RegisterCallback('OnOptionsModified',
-            function () AceConfigRegistry:NotifyChange("LiteBag") end
-        )
 end
 
 function LB.OpenOptions()
