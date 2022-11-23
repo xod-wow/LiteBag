@@ -109,14 +109,6 @@ local options = {
             name = GENERAL,
             order = order(),
         },
-        confirmSort = {
-            type = "toggle",
-            name = L["Confirm before sorting."],
-            order = order(),
-            width = "full",
-            get = GlobalGetter,
-            set = GlobalSetter,
-        },
         showBindsOn = {
             type = "toggle",
             name = L["Display text for BoA and BoE items."],

@@ -33,7 +33,6 @@ defaults = {
             order = 'default',
         },
         REAGENTBANK = { },
-        confirmSort = true,
         showEquipmentSets = false,
         showBindsOn = false,
         hideBlizzardBagButtons = false,

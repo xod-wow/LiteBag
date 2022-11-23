@@ -15,30 +15,6 @@ local L = LB.Localize
 
 local FRAME_THAT_OPENED_BAGS = nil
 
--- A popup dialog for confirming the bag sort.
-StaticPopupDialogs['LB_CONFIRM_SORT'] = {
-    preferredIndex = STATICPOPUP_NUMDIALOGS,
-    text = '%s\n'..CONFIRM_CONTINUE,
-    button1 = YES,
-    button2 = NO,
-    -- sound = 'UI_BagSorting_01',
-    OnAccept = function (self, func) func() end,
-    hideOnEscape = 1,
-    timeout = 0,
-}
-
--- Don't show the confirm popup if the shift key is held.
-local function DoOrStaticPopup(text, func)
-    if IsShiftKeyDown() or not LB.GetGlobalOption('confirmSort') then
-        func()
-    else
-        StaticPopup_Show('LB_CONFIRM_SORT', text, nil, func)
-    end
-end
-
--- Added to the bag sort tooltip.  Would be nice if it were localized.
-local TOOLTIP_NOCONFIRM_TEXT = format(L["%s: No confirmation"], SHIFT_KEY)
-
 local hiddenParent = CreateFrame('Frame')
 hiddenParent:Hide()
 
@@ -198,41 +174,6 @@ local function HideBlizzardBank()
     LiteBagBank:HookScript('OnHide', function () BankFrame:Hide() end)
 end
 
-local function AddSortConfirmations()
-
-    -- Add the confirm text to the sort button mouseover tooltip.
-    BagItemAutoSortButton:HookScript('OnEnter', function (self)
-        if LB.GetGlobalOption('confirmSort') then
-            GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
-        end
-        GameTooltip:Show()
-        end)
-
-    -- Change the sort button to call our confirm function.
-    BagItemAutoSortButton:SetScript('OnClick', function (self)
-            DoOrStaticPopup(BAG_CLEANUP_BAGS, C_Container.SortBags)
-        end)
-    -- Add the confirm text to the sort button tooltip.
-
-    BankItemAutoSortButton:HookScript('OnEnter', function (self)
-        if LB.GetGlobalOption('confirmSort') then
-            GameTooltip:AddLine(TOOLTIP_NOCONFIRM_TEXT, 1, 1, 1)
-        end
-        GameTooltip:Show()
-        end)
-
-    -- Change the sort button to call our confirm function.
-
-    BankItemAutoSortButton:SetScript('OnClick', function ()
-            local self = BankFrame
-            if (self.activeTabIndex == 1) then
-                DoOrStaticPopup(BAG_CLEANUP_BANK, C_Container.SortBankBags)
-            elseif (self.activeTabIndex == 2) then
-                DoOrStaticPopup(BAG_CLEANUP_REAGENT_BANK, C_Container.SortReagentBankBags)
-            end
-        end)
-end
-
 -- This is a bit of an arms race with other addon authors who want to hook
 -- the bags too, try to hook later than them all.
 -- Also register here some other open/close events I liked.
@@ -243,7 +184,6 @@ function LiteBagManager:ReplaceBlizzard()
     HideBlizzardBags()
     HideBlizzardBank()
     ReplaceGlobals()
-    AddSortConfirmations()
 end
 
 function LiteBagManager:ManageBlizzardBagButtons()
