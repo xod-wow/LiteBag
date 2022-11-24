@@ -133,6 +133,11 @@ local options = {
             get = GlobalGetter,
             set = GlobalSetter,
         },
+        iconBorderPreGap = {
+            type = "description",
+            name = "",
+            order = order(),
+        },
         thickerIconBorder = {
             type = "select",
             style = "dropdown",
@@ -145,7 +150,7 @@ local options = {
         },
         FrameHeaderPreGap = {
             type = "description",
-            name = "",
+            name = "\n",
             order = order(),
         },
         FrameHeader = {
@@ -155,7 +160,7 @@ local options = {
         },
         FrameHeaderPostGap = {
             type = "description",
-            name = "",
+            name = "\n",
             order = order(),
         },
         BACKPACK = {
@@ -170,6 +175,11 @@ local options = {
                     width = "full",
                     get = TypeGetter,
                     set = TypeSetter,
+                },
+                snapPostGap = {
+                    type = "description",
+                    name = "",
+                    order = order(),
                 },
                 columns = {
                     type = "range",
@@ -213,7 +223,7 @@ local options = {
                 },
                 __break1 = {
                     type = "description",
-                    name = "",
+                    name = "\n",
                     width = "full",
                     order = order(),
                 },
@@ -229,7 +239,7 @@ local options = {
                 },
                 __break2 = {
                     type = "description",
-                    name = "",
+                    name = "\n",
                     width = "full",
                     order = order(),
                 },
@@ -292,7 +302,7 @@ local options = {
                 },
                 __break1 = {
                     type = "description",
-                    name = "",
+                    name = "\n",
                     width = "full",
                     order = order(),
                 },
@@ -308,7 +318,7 @@ local options = {
                 },
                 __break2 = {
                     type = "description",
-                    name = "",
+                    name = "\n",
                     width = "full",
                     order = order(),
                 },
