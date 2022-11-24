@@ -18,6 +18,7 @@ local BagInfoByType = {
         showMoneyFrame = true,
         showBagButtons = true,
         showSearchBox = true,
+        showInfoButton = true,
     },
     BANK = {
         bagIDs = { -1, 6, 7, 8, 9, 10, 11, 12 },
@@ -25,6 +26,7 @@ local BagInfoByType = {
         showMoneyFrame = true,
         showBagButtons = true,
         showSearchBox = true,
+        showInfoButton = true,
     },
     REAGENTBAG = {
         bagIDs = { 5 },
@@ -74,6 +76,10 @@ function LiteBagContainerFrameMixin:OnLoad()
     if self.showMoneyFrame then
         local name = self:GetName() .. "MoneyFrame"
         self.MoneyFrame = CreateFrame("Frame", name, self, "ContainerMoneyFrameTemplate")
+    end
+
+    if self.showInfoButton then
+        self.InfoButton:Show()
     end
 
     self.Items = { }

@@ -9,6 +9,16 @@
     <Frames>
         <DropDownToggleButton name="$parentPortraitButton" parentKey="PortraitButton" inherits="LiteBagPortraitButtonTemplate" />
         <Frame name="$parentFilterDropDown" parentKey="FilterDropDown" inherits="LiteBagFilterDropDownTemplate" />
+        <Button name="$parentInfoButton" parentKey="InfoButton" inherits="UIPanelInfoButton" frameStrata="HIGH" hidden="true">
+            <Anchors>
+                <Anchor point="TOPRIGHT" x="-28" y="-4" />
+            </Anchors>
+            <Scripts>
+                <OnClick>
+                    LB.OpenOptions()
+                </OnClick>
+            </Scripts>
+        </Button>
     </Frames>
     <Scripts>
         <!-- These are all of the same events from ContainerFrameCombinedBags -->
