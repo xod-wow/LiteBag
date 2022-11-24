@@ -241,7 +241,6 @@ local function GetBagItemButton(bag, i)
     if not bag.Items[i] then
         local name = format('%sItem%d', bag:GetName(), i)
         bag.Items[i] = CreateFrame("ItemButton", name, nil, 'LiteBagItemButtonTemplate')
-        bag.Items[i]:SetSize(37, 37)
         bag.Items[i]:SetID(i)
         bag.Items[i]:SetParent(bag)
         LB.CallHooks('LiteBagItemButton_Create', bag.Items[i])
@@ -412,13 +411,15 @@ BUTTONORDERS.reverse =
         return Items
     end
 
+local ItemButtonTemplateInfo = C_XMLUtil.GetTemplateInfo('LiteBagItemButtonTemplate')
+
 local LAYOUTS = { }
 
 LAYOUTS.default =
     function (self, Items, ncols)
         local grid = { }
 
-        local w, h = Items[1]:GetSize()
+        local w, h = ItemButtonTemplateInfo.width, ItemButtonTemplateInfo.height
 
         local xBreak = LB.GetTypeOption(self.FrameType, 'xbreak')
         local yBreak = LB.GetTypeOption(self.FrameType, 'ybreak')
