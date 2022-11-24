@@ -10,8 +10,7 @@
 ## X-Curse-Project-ID: 50424
 ## X-WoWI-ID: 26330
 
-Libs\LibStub.lua
-Libs\LibUIDropDownMenu\LibUIDropDownMenu.xml
+embeds.xml
 
 Localization.lua
 
@@ -28,9 +27,6 @@ LiteBagBank.xml
 LiteBagInventory.xml
 ReplaceBlizzard.lua
 
-#@debug@
-Plugin_Anima\Anima.xml
-#@end-debug@
 Plugin_BindsOn\BindsOn.xml
 Plugin_EquipSets\EquipSets.xml
 Plugin_IconBorder\IconBorder.xml

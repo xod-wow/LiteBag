@@ -1,0 +1,5 @@
+externals:
+  Libs/LibStub: https://repos.curseforge.com/wow/libstub/trunk
+  Libs/LibUIDropDownMenu: https://repos.wowace.com/wow/libuidropdownmenu/trunk/LibUIDropDownMenu
+
+enable-nolib-creation: no
