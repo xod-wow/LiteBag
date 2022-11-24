@@ -11,8 +11,6 @@
 
 local addonName, LB = ...
 
-local L = LB.Localize
-
 local defaults = {
     profile = {
         BACKPACK = {

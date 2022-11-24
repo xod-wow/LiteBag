@@ -100,8 +100,6 @@ do
         if level == 1 then
             local parent = self:GetParent()
 
-            local info = LibDD:UIDropDownMenu_CreateInfo()
-
             for _, bag in ipairs(parent.bagFrames) do
                 local i = bag:GetID()
                 local info = LibDD:UIDropDownMenu_CreateInfo()

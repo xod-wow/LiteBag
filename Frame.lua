@@ -50,7 +50,6 @@ end
 
 function LiteBagFrameMixin:OnShow()
     LB.Debug("Frame OnShow " .. self:GetName())
-    local n = PanelTemplates_GetSelectedTab(self)
     self.needsUpdate = true
     PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 end

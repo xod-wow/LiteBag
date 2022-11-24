@@ -37,7 +37,7 @@ function LiteBagBagButtonMixin:Update()
 
     local textureName = GetInventoryItemTexture('player', self.slotID)
 
-    local numBankSlots, bankFull = GetNumBankSlots()
+    local numBankSlots = GetNumBankSlots()
     local buyBankSlot = numBankSlots + NUM_TOTAL_EQUIPPED_BAG_SLOTS + 1
 
     if self.bagID == buyBankSlot then
@@ -129,7 +129,6 @@ function LiteBagBagButtonMixin:OnEnter()
 end
 
 function LiteBagBagButtonMixin:OnLeave()
-    local frame = self:GetParent()
     GameTooltip:Hide()
     ResetCursor()
     EventRegistry:TriggerEvent("BagSlot.OnLeave", self)

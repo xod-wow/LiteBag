@@ -234,7 +234,7 @@ end
 -- but we can't use it because it's pulling the ItemButtons out of the bag
 -- frames (UIParent.ContainerFrames).
 --
--- If I had been redoing this I would have stopped requiring 
+-- If I had been redoing this I would have stopped requiring
 --      bagID = itemButton:GetParent():GetID()
 -- because then everything is so much simpler.
 
@@ -271,7 +271,7 @@ end
 function LiteBagContainerPanelMixin:IsBagOpen(id)
     return self:IsShown() and self.containsBags[id]
 end
-    
+
 function LiteBagContainerPanelMixin:SetBagID(id)
     return
 end
