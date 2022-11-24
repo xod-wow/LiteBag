@@ -130,9 +130,9 @@ end
 
 function LiteBagBagButtonMixin:OnLeave()
     local frame = self:GetParent()
-    frame:SetItemsMatchingBagHighlighted(self:GetID(), false)
     GameTooltip:Hide()
     ResetCursor()
+    EventRegistry:TriggerEvent("BagSlot.OnLeave", self)
 end
 
 function LiteBagBagButtonMixin:OnDragStart()
