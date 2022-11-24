@@ -26,6 +26,9 @@ Frame.xml
 ReagentBankFrame.xml
 BankFrame.xml
 BackpackFrame.xml
+#@debug@
+ReagentBagFrame.xml
+#@end-debug@
 Core.lua
 
 #@debug@
