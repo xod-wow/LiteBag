@@ -13,7 +13,7 @@ local addonName, LB = ...
 
 local L = LB.Localize
 
-defaults = {
+local defaults = {
     profile = {
         BACKPACK = {
             columns = 10,
