@@ -178,24 +178,33 @@ end
 -- the bags too, try to hook later than them all.
 -- Also register here some other open/close events I liked.
 
-local LiteBagManager = CreateFrame('Frame', 'LiteBagManager', UIParent)
+LB.Manager = CreateFrame('Frame', nil, UIParent)
 
-function LiteBagManager:ReplaceBlizzard()
+function LB.Manager:ReplaceBlizzard()
     HideBlizzardBags()
     HideBlizzardBank()
     ReplaceGlobals()
 end
 
-function LiteBagManager:ManageBlizzardBagButtons()
-    local show = not LB.GetGlobalOption('hideBlizzardBagButtons')
-    for _, bagButton in MainMenuBarBagManager:EnumerateBagButtons() do
-        bagButton:SetShown(show)
-        bagButton:SetParent(show and MicroButtonAndBagsBar or hiddenParent)
-    end
-    BagBarExpandToggle:SetShown(show)
+function LB.Manager:CanManageBagButtons()
+    return BagBarExpandToggle:GetParent() == MicroButtonAndBagsBar
+        or BagBarExpandToggle:GetParent() == hiddenParent
 end
 
-function LiteBagManager:OnEvent(event, ...)
+function LB.Manager:ManageBlizzardBagButtons()
+    if self:CanManageBagButtons() then
+        local show = not LB.GetGlobalOption('hideBlizzardBagButtons')
+        local newparent = show and MicroButtonAndBagsBar or hiddenParent
+        for _, bagButton in MainMenuBarBagManager:EnumerateBagButtons() do
+            bagButton:SetShown(show)
+            bagButton:SetParent(newParent)
+        end
+        BagBarExpandToggle:SetShown(show)
+        BagBarExpandToggle:SetParent(newParent)
+    end
+end
+
+function LB.Manager:OnEvent(event, ...)
     -- As far as I can tell this doesn't work. Why?
     if event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
         local type = ...
@@ -214,12 +223,12 @@ function LiteBagManager:OnEvent(event, ...)
         self:ManageBlizzardBagButtons()
         self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
         self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
-        LB.db.RegisterCallback(self, 'OnOptionsModified', self.ManageBlizzardBagButtons)
+        LB.db:RegisterCallback('OnOptionsModified', self.ManageBlizzardBagButtons, self)
     end
 end
 
-LiteBagManager:RegisterEvent('PLAYER_LOGIN')
-LiteBagManager:SetScript('OnEvent', LiteBagManager.OnEvent)
+LB.Manager:RegisterEvent('PLAYER_LOGIN')
+LB.Manager:SetScript('OnEvent', LB.Manager.OnEvent)
 
 --@debug@
 _G.LB = LB

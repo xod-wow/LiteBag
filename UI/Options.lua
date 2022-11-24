@@ -127,9 +127,17 @@ local options = {
         },
         hideBlizzardBagButtons = {
             type = "toggle",
-            name = L["Hide Blizzard Bag Buttons."],
+            name = L["Hide Blizzard bag buttons."],
             order = order(),
             width = "full",
+            disabled = function () return not LB.Manager:CanManageBagButtons() end,
+            desc = function ()
+                if not LB.Manager:CanManageBagButtons() then
+                    local c = RED_FONT_COLOR
+                    return c:WrapTextInColorCode(L["Another addon is managing the Blizzard bag buttons."])
+                end
+            end,
+            descStyle = "inline",
             get = GlobalGetter,
             set = GlobalSetter,
         },
