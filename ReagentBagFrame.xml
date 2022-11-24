@@ -20,9 +20,14 @@
             self:SetParent(LiteBagBackpack)
             self:ClearAllPoints()
             self:SetPoint("BOTTOMRIGHT", LiteBagBackpack, "BOTTOMLEFT", -16, 0)
-            self.panels[1]:Show()
-            self:Show()
             self.CloseButton:Hide()
+
+            -- This is the only thing I could find to hook in OnUpdate
+            hooksecurefunc(LiteBagBackpack, 'ResizeToPanel',
+                function ()
+                    local shown = C_Container.GetContainerNumSlots(5) > 0
+                    self:SetShown(shown)
+                end)
         </OnLoad>
     </Scripts>
 </Frame>
