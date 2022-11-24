@@ -16,6 +16,9 @@
             <Scripts>
                 <OnClick>
                     LB.OpenOptions()
+                    -- Blizzard options hides all frame, re-show this one
+                    local frame = self:GetParent():GetParent()
+                    frame:Show()
                 </OnClick>
             </Scripts>
         </Button>

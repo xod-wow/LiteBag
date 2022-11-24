@@ -34,6 +34,7 @@ local BagInfoByType = {
         showMoneyFrame = false,
         showBagButtons = false,
         showSearchBox = false,
+        showInfoButton = false,
     },
 }
 
@@ -47,14 +48,14 @@ local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
 -- appropriate place inside the PortraitFrame. The big gap at the top is where
 -- we put the bag buttons and search bar (plus the title bar).
 
-local TITLEBAR_HEIGHT = 22
-local BAGBUTTON_HEIGHT = 33
-local SEARCHBOX_HEIGHT = 18
-local TOPELEMENT_GAP = 7
+local TITLEBAR_HEIGHT = 25
+local BAGBUTTON_HEIGHT = C_XMLUtil.GetTemplateInfo('LiteBagBagButtonTemplate').height
+local SEARCHBOX_HEIGHT = BagItemSearchBox:GetHeight()
+local TOPELEMENT_GAP = 4
 local BAGBUTTON_OFFSET = TITLEBAR_HEIGHT + TOPELEMENT_GAP
 local LEFT_OFFSET = 8
 local RIGHT_OFFSET = 8
-local MINIMUM_TOP_OFFSET = TITLEBAR_HEIGHT + 21
+local MINIMUM_TOP_OFFSET = TITLEBAR_HEIGHT + 18
 local BOTTOM_OFFSET = 8
 
 
@@ -313,7 +314,7 @@ function LiteBagContainerFrameMixin:CalculateSearchBoxOffset()
 end
 
 function LiteBagContainerFrameMixin:CalculateTopOffset()
-    local topOffset = TITLEBAR_HEIGHT + TOPELEMENT_GAP
+    local topOffset = TITLEBAR_HEIGHT + TOPELEMENT_GAP * 2
     if self.showBagButtons then
         topOffset = topOffset + BAGBUTTON_HEIGHT + TOPELEMENT_GAP
     end
