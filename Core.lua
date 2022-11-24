@@ -194,7 +194,7 @@ end
 function LB.Manager:ManageBlizzardBagButtons()
     if self:CanManageBagButtons() then
         local show = not LB.GetGlobalOption('hideBlizzardBagButtons')
-        local newparent = show and MicroButtonAndBagsBar or hiddenParent
+        local newParent = show and MicroButtonAndBagsBar or hiddenParent
         for _, bagButton in MainMenuBarBagManager:EnumerateBagButtons() do
             bagButton:SetShown(show)
             bagButton:SetParent(newParent)
