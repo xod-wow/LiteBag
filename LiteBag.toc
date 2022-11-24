@@ -21,9 +21,9 @@ Hooks.lua
 BagButton.xml
 ItemButton.xml
 FilterDropDown.xml
-ContainerFrame.xml
+ContainerPanel.xml
+ReagentBankPanel.xml
 Frame.xml
-ReagentBankFrame.xml
 BankFrame.xml
 BackpackFrame.xml
 #@debug@

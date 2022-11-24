@@ -2,10 +2,10 @@
 
 <!-- Copyright 2022 Mike Battersby -->
 
-<Script file="ContainerFrame.lua" />
+<Script file="ContainerPanel.lua" />
 
 <Frame
-    name="LiteBagContainerFrameTemplate" mixin="LiteBagContainerFrameMixin" hidden="true" virtual="true">
+    name="LiteBagContainerPanelTemplate" mixin="LiteBagContainerPanelMixin" hidden="true" virtual="true">
     <Frames>
         <DropDownToggleButton name="$parentPortraitButton" parentKey="PortraitButton" inherits="LiteBagPortraitButtonTemplate" />
         <Frame name="$parentFilterDropDown" parentKey="FilterDropDown" inherits="LiteBagFilterDropDownTemplate" />

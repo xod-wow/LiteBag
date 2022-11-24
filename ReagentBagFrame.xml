@@ -7,7 +7,7 @@
         <KeyValue key="FrameType" value="REAGENTBAG" type="string" />
     </KeyValues>
     <Frames>
-        <Frame name="LiteBagReagentBagPanel" parentArray="panels" inherits="LiteBagContainerFrameTemplate">
+        <Frame name="LiteBagReagentBagPanel" parentArray="panels" inherits="LiteBagContainerPanelTemplate">
             <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
             <KeyValues>
                 <KeyValue key="Title" value="Reagent Bag" type="string" />

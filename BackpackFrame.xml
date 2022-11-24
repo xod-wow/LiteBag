@@ -8,7 +8,7 @@
         <KeyValue key="MovingAllowed" value="true" type="boolean" />
     </KeyValues>
     <Frames>
-        <Frame name="LiteBagBackpackPanel" parentArray="panels" inherits="LiteBagContainerFrameTemplate">
+        <Frame name="LiteBagBackpackPanel" parentArray="panels" inherits="LiteBagContainerPanelTemplate">
             <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
             <KeyValues>
                 <KeyValue key="Title" value="BAG_NAME_BACKPACK" type="global" />

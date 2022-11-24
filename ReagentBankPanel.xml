@@ -7,7 +7,7 @@
      get the search and sort buttons attached, store the title, etc.
 -->
 
-<Script file="ReagentBankFrame.lua" />
+<Script file="ReagentBankPanel.lua" />
 
 <Frame name="LiteBagReagentBank" hidden="true" mixin="LiteBagReagentBankMixin">
     <KeyValues>

@@ -12,8 +12,8 @@
     Their code was largely rewritten for Dragonflight (10.0) and introduced
     the combined bags frame, but unfortunately not a combined bank frame.
 
-    Unfortunately the code is made way too complicated by handling both the
-    individual bag frames and the combined frame. For simplicity they have
+    I feel like their code is made way too complicated by handling both the
+    individual bag frames and the combined frame. For commonality they have
     a separate ContainerFrameSettingsManager that is called from a lot of
     the bag code, and a separate BagUpdaterFrame that's responsible for
     refreshing the layouts etc of frames if they change.
@@ -37,7 +37,7 @@
         LiteBagBagButtonTemplate is a button to hold the actual bag iself,
         where you drag a new bag on when you buy one.
 
-        LiteBagContainerFrameTemplate is a panel of ContainerFrameItemButton
+        LiteBagContainerPanelTemplate is a panel of ContainerFrameItemButton
         buttons and the code for arranging them according to various settings.
         It's assigned some bag IDs, listens for the bag events, and does all
         the updating of its ItemButtons.
@@ -47,11 +47,14 @@
         to the relevant events to open and close itself. It also supports
         tabbing to do the reagent bank.
 
+        ReagentBankPanel is a wrapper for the Blizzard Reagent Bank, to handle
+        its events, which are normally done by the Blizzard BankFrame.
+
         LiteBagBank and LiteBagBackpack define the bank and backpack/bags
         frames respectively.
 
-        In ReplaceBlizzard.lua are the various functions to replace the
-        Blizzard standard bag and bank UI with ours.
+        In Core.lua are the various functions to replace the Blizzard standard
+        bag and bank UI with ours.
 
 
 ------------------------------------------------------------------------------
@@ -160,54 +163,3 @@
 
     /dump MyDebugFrame.eventList
 
-
-------------------------------------------------------------------------------
-* Interface Options Panels
-
-    Look inside FrameXML/OptionsPanelTemplates.{xml,lua}
-
-    Making the base frame(s).
-
-    <Script file="MyOptionsPanel.lua" />
-    <Frame name="MyOptionsPanel" hidden="true">
-        <Scripts>
-            <OnLoad>
-                self.name = "NameForLeftMenu"
-                BlizzardOptionsPanel_OnLoad(self)
-                InterfaceOptionsFrame_AddCategory(self)
-                -- or for a sub-options frame
-                -- InterfaceOptionsFrame_AddCategory(self, parentPanel)
-            </OnLoad>
-        </Scripts>
-    </Frame>
-
-    These frames inherently have "Okay", "Cancel" and "Default" buttons. These
-    by default these loop over all the UI elements inserted into the
-    MyOptionsPanel.controls table and call their okay, cancel and default
-    methods.
-
-    The theory is that you twiddle the controls which stores the updated values
-    inside the control itself (in a .value attribute) and then (for example)
-    OK loops over them and actually sets it outside the GUI.
-
-    There are defaults for the okay/cancel/default functions but remembering
-    how they work is way more effort than doing your own every time.
-
-    Putting controls in it.
-
-    <CheckButton name="$parentMySetting1" inherits="OptionsCheckButtonTemplate">
-        <Scripts>
-            <OnLoad>
-                self.text:SetText("abcdef")
-                self.refresh = function (self)
-                    end
-                self.okay = function (self)
-                    end
-                self.cancel = function (self)
-                    end
-                self.default = function (self)
-                    end
-                BlizzardOptionsPanel_RegisterControl(self, self:GetParent())
-            </OnLoad>
-        </Scripts>
-    </CheckButton>

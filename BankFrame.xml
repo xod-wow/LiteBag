@@ -53,7 +53,7 @@
         <KeyValue key="MovingAllowed" value="false" type="boolean" />
     </KeyValues>
     <Frames>
-        <Frame name="LiteBagBankPanel" parentArray="panels" inherits="LiteBagContainerFrameTemplate" hidden="true">
+        <Frame name="LiteBagBankPanel" parentArray="panels" inherits="LiteBagContainerPanelTemplate" hidden="true">
             <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
             <KeyValues>
                 <KeyValue key="FrameType" value="BANK" type="string" />

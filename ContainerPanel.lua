@@ -1,6 +1,6 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/ContainerFrame.lua
+  LiteBag/ContainerPanel.lua
 
   Copyright 2022 Mike Battersby
 
@@ -59,9 +59,9 @@ local MINIMUM_TOP_OFFSET = TITLEBAR_HEIGHT + 18
 local BOTTOM_OFFSET = 8
 
 
-LiteBagContainerFrameMixin = CreateFromMixins(ContainerFrameCombinedBagsMixin)
+LiteBagContainerPanelMixin = CreateFromMixins(ContainerFrameCombinedBagsMixin)
 
-function LiteBagContainerFrameMixin:OnLoad()
+function LiteBagContainerPanelMixin:OnLoad()
 
     Mixin(self, BagInfoByType[self.FrameType])
 
@@ -117,7 +117,7 @@ function LiteBagContainerFrameMixin:OnLoad()
     self.PortraitButton:SetPoint("CENTER", self:GetParent():GetPortrait(), "CENTER", 3, -3)
 end
 
-function LiteBagContainerFrameMixin:GetBagFrameByID(id)
+function LiteBagContainerPanelMixin:GetBagFrameByID(id)
     for _, bag in ipairs(self.bagFrames) do
         if bag:GetID() == id then
             return bag
@@ -129,7 +129,7 @@ end
 -- a different event (PLAYERBANKSLOTS_CHNAGED), so we register and translate
 -- it in our event handler before it reaches the Blizzard code.
 
-function LiteBagContainerFrameMixin:OnShow()
+function LiteBagContainerPanelMixin:OnShow()
     LB.Debug("ContainerFrame OnShow " .. self:GetName())
 
     self:GenerateFrame()
@@ -152,7 +152,7 @@ function LiteBagContainerFrameMixin:OnShow()
     LB.db.RegisterCallback(self, 'OnOptionsModified', function () self:GenerateFrame() end)
 end
 
-function LiteBagContainerFrameMixin:OnHide()
+function LiteBagContainerPanelMixin:OnHide()
     LB.Debug("ContainerFrame OnHide " .. self:GetName())
 
     LB.db.UnregisterAllCallbacks(self)
@@ -172,7 +172,7 @@ end
 -- We need to pre-handle some problematic events before ContainerFrame_OnEvent
 -- gets to them and does something we don't like inside the default bags.
 
-function LiteBagContainerFrameMixin:OnEvent(event, ...)
+function LiteBagContainerPanelMixin:OnEvent(event, ...)
     LB.EventDebug(self, event, ...)
     if event == "BAG_CONTAINER_UPDATE" then
         self:GenerateFrame()
@@ -208,7 +208,7 @@ end
 -- Essentially ContainerFrame_GenerateFrame without the bad stuff. If it
 -- wasn't for their naming this would be called :Open()
 
-function LiteBagContainerFrameMixin:GenerateFrame()
+function LiteBagContainerPanelMixin:GenerateFrame()
     LB.Debug("ContainerFrame GenerateFrame " .. self:GetName())
 
     -- Should check if dirty, probably.
@@ -222,7 +222,7 @@ function LiteBagContainerFrameMixin:GenerateFrame()
     self:CheckUpdateDynamicContents()
 end
 
-function LiteBagContainerFrameMixin:CheckUpdateDynamicContents()
+function LiteBagContainerPanelMixin:CheckUpdateDynamicContents()
     LB.Debug("ContainerFrame CheckUpdateDynamicContents " .. self:GetName())
     if self.TokenTracker then
         self.TokenTracker:Update()
@@ -249,7 +249,7 @@ local function GetBagItemButton(bag, i)
     return bag.Items[i]
 end
 
-function LiteBagContainerFrameMixin:SetUpBags()
+function LiteBagContainerPanelMixin:SetUpBags()
     LB.Debug("ContainerFrame SetUpBags " .. self:GetName())
 
     table.wipe(self.Items)
@@ -268,26 +268,26 @@ function LiteBagContainerFrameMixin:SetUpBags()
     self.size = #self.Items
 end
 
-function LiteBagContainerFrameMixin:IsBagOpen(id)
+function LiteBagContainerPanelMixin:IsBagOpen(id)
     return self:IsShown() and self.containsBags[id]
 end
     
-function LiteBagContainerFrameMixin:SetBagID(id)
+function LiteBagContainerPanelMixin:SetBagID(id)
     return
 end
 
-function LiteBagContainerFrameMixin:MatchesBagID(id)
+function LiteBagContainerPanelMixin:MatchesBagID(id)
     return self.containsBags[id]
 end
 
-function LiteBagContainerFrameMixin:UpdateBagButtons()
+function LiteBagContainerPanelMixin:UpdateBagButtons()
     for _, bagButton in ipairs(self.bagButtons) do
         bagButton:Update()
         bagButton:Show()
     end
 end
 
-function LiteBagContainerFrameMixin:UpdateTokenTracker()
+function LiteBagContainerPanelMixin:UpdateTokenTracker()
     LB.Debug("ContainerFrame UpdateTokenTracker " .. self:GetName())
     if self.TokenTracker and self.TokenTracker:ShouldShow() then
         self.TokenTracker:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 8, 8)
@@ -305,7 +305,7 @@ function LiteBagContainerFrameMixin:UpdateTokenTracker()
     end
 end
 
-function LiteBagContainerFrameMixin:CalculateSearchBoxOffset()
+function LiteBagContainerPanelMixin:CalculateSearchBoxOffset()
     local searchBoxOffset = TITLEBAR_HEIGHT + TOPELEMENT_GAP
     if self.showBagButtons then
         searchBoxOffset = searchBoxOffset + BAGBUTTON_HEIGHT + TOPELEMENT_GAP
@@ -313,7 +313,7 @@ function LiteBagContainerFrameMixin:CalculateSearchBoxOffset()
     return searchBoxOffset
 end
 
-function LiteBagContainerFrameMixin:CalculateTopOffset()
+function LiteBagContainerPanelMixin:CalculateTopOffset()
     local topOffset = TITLEBAR_HEIGHT + TOPELEMENT_GAP * 2
     if self.showBagButtons then
         topOffset = topOffset + BAGBUTTON_HEIGHT + TOPELEMENT_GAP
@@ -325,7 +325,7 @@ function LiteBagContainerFrameMixin:CalculateTopOffset()
 end
 
 -- This accounts for the position gaps of the bottom elements
-function LiteBagContainerFrameMixin:CalculateExtraHeight()
+function LiteBagContainerPanelMixin:CalculateExtraHeight()
     local extraHeight = 0
     if self.MoneyFrame then
         extraHeight = extraHeight + self.MoneyFrame:GetHeight()
@@ -342,7 +342,7 @@ function LiteBagContainerFrameMixin:CalculateExtraHeight()
     return extraHeight
 end
 
-function LiteBagContainerFrameMixin:UpdateMiscellaneousFrames()
+function LiteBagContainerPanelMixin:UpdateMiscellaneousFrames()
     if self:MatchesBagID(Enum.BagIndex.Bank) then
         self:GetParent():SetPortraitToUnit('npc')
     else
@@ -351,7 +351,7 @@ function LiteBagContainerFrameMixin:UpdateMiscellaneousFrames()
     self:UpdateBagButtons()
 end
 
-function LiteBagContainerFrameMixin:OnTokenWatchChanged()
+function LiteBagContainerPanelMixin:OnTokenWatchChanged()
     LB.Debug("ContainerFrame OnTokenWatchChanged " .. self:GetName())
 
     self:UpdateTokenTracker()
@@ -363,7 +363,7 @@ function LiteBagContainerFrameMixin:OnTokenWatchChanged()
     self:UpdateFrameSize()
 end
 
-function LiteBagContainerFrameMixin:SetTokenTracker(tokenFrame)
+function LiteBagContainerPanelMixin:SetTokenTracker(tokenFrame)
         -- tokenFrame:SetParent(self);
         -- tokenFrame:SetIsCombinedInventory(true)
 end
@@ -543,7 +543,7 @@ local function GetLayoutGridForFrame(self)
     return LAYOUTS[layout](self, Items, ncols)
 end
 
-function LiteBagContainerFrameMixin:UpdateItemLayout()
+function LiteBagContainerPanelMixin:UpdateItemLayout()
     LB.Debug("ContainerFrame UpdateItemLayout " .. self:GetName())
     local layoutGrid = GetLayoutGridForFrame(self)
 
@@ -589,13 +589,13 @@ function LiteBagContainerFrameMixin:UpdateItemLayout()
     self.height = layoutGrid.totalHeight + adjustedTopOffset + adjustedBottomOffset
 end
 
-function LiteBagContainerFrameMixin:UpdateFrameSize()
+function LiteBagContainerPanelMixin:UpdateFrameSize()
     LB.Debug(format("ContainerFrame UpdateFrameSize %s %d,%d", self:GetName(), self.width, self.height))
     self:SetSize(self.width, self.height)
     self:GetParent().needsUpdate = true
 end
 
-function LiteBagContainerFrameMixin:ResizeToWidth(width)
+function LiteBagContainerPanelMixin:ResizeToWidth(width)
     LB.Debug(format("ContainerFrame ResizeToWidth %s %d", self:GetName(), width))
     local ncols = GetLayoutNColsForWidth(self, width)
     LB.SetFrameOption(self, 'columns', ncols)
@@ -603,7 +603,7 @@ function LiteBagContainerFrameMixin:ResizeToWidth(width)
     self:UpdateFrameSize()
 end
 
-function LiteBagContainerFrameMixin:UpdateSearchBox()
+function LiteBagContainerPanelMixin:UpdateSearchBox()
     if not self.showSearchBox then return end
 
     local searchBox, autoSortButton
@@ -631,7 +631,7 @@ function LiteBagContainerFrameMixin:UpdateSearchBox()
     searchBox:Show()
 end
 
-function LiteBagContainerFrameMixin:UpdateItems()
+function LiteBagContainerPanelMixin:UpdateItems()
     LB.Debug("ContainerFrame UpdateItems " .. self:GetName())
     ContainerFrameMixin.UpdateItems(self)
     for _, itemButton in self:EnumerateValidItems() do
