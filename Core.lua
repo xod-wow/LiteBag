@@ -170,15 +170,20 @@ local function HideBlizzardBank()
     BankFrame:SetScript('OnShow', function () end)
     BankFrame:SetScript('OnHide', function () end)
 
-    LiteBagBank:HookScript('OnShow', function () BankFrame:Show() end)
-    LiteBagBank:HookScript('OnHide', function () BankFrame:Hide() end)
+    -- PlayerInteractionManager has somehow copied BankFrame_Open such that
+    -- hooking it doesn't work, so get creative.
+
+    LiteBagBank:HookScript('OnShow',
+        function () HideUIPanel(BankFrame) BankFrame:Show() end)
+    LiteBagBank:HookScript('OnHide',
+        function () BankFrame:Hide() end)
 end
 
 -- This is a bit of an arms race with other addon authors who want to hook
 -- the bags too, try to hook later than them all.
 -- Also register here some other open/close events I liked.
 
-LB.Manager = CreateFrame('Frame', nil, UIParent)
+LB.Manager = CreateFrame('Frame', "LiteBagManager", UIParent)
 
 function LB.Manager:ReplaceBlizzard()
     HideBlizzardBags()
