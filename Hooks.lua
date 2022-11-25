@@ -2,7 +2,7 @@
 
   LiteBag/Hooks.lua
 
-  Copyright 2013-2020 Mike Battersby
+  Copyright 2013 Mike Battersby
 
   Released under the terms of the GNU General Public License version 2 (GPLv2).
   See the file LICENSE.txt.
@@ -29,5 +29,29 @@ function LB.CallHooks(func, self)
     end
 end
 
+local PluginEvents = { }
+
+function LB.AddPluginEvent(e)
+    if e == 'PLAYER_LOGIN' then return end
+    PluginEvents[e] = true
+end
+
+function LB.RegisterPluginEvents(frame)
+    for e in pairs(PluginEvents) do
+        frame:RegisterEvent(e)
+    end
+end
+
+function LB.IsPluginEvent(e)
+    return PluginEvents[e]
+end
+
+function LB.UnregisterPluginEvents(frame)
+    for e in pairs(PluginEvents) do
+        frame:UnregisterEvent(e)
+    end
+end
+
 -- Exported interface for other addons
+_G.LiteBag_AddPluginEvent = LB.AddPluginEvent
 _G.LiteBag_RegisterHook = LB.RegisterHook

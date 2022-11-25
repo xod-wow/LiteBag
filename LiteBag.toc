@@ -1,4 +1,4 @@
-## Interface: 90207
+## Interface: 100002
 ## Title: LiteBag
 ## Notes: A minimal one-bag solution for inventory and bank.|nType |cff00ff00/litebag|r in chat for options.
 ## Notes-frFR: Regroupe tous les sacs en un seul (pour l'inventaire et la banque).|nAccédez aux réglages d'interface avec la commande |cff00ff00/litebag|r
@@ -6,12 +6,11 @@
 ## Author: Xodiv-Nagrand
 ## Email: mib@post.com
 ## OptionalDependencies: Masque
-## SavedVariablesPerCharacter: LiteBag_OptionsDB
+## SavedVariables: LiteBagDB
 ## X-Curse-Project-ID: 50424
 ## X-WoWI-ID: 26330
 
-Libs\LibStub.lua
-Libs\LibUIDropDownMenu\LibUIDropDownMenu.xml
+embeds.xml
 
 Localization.lua
 
@@ -21,12 +20,16 @@ Hooks.lua
 
 BagButton.xml
 ItemButton.xml
-TokenFrame.xml
-Panel.xml
+FilterDropDown.xml
+ContainerPanel.xml
+ReagentBankPanel.xml
 Frame.xml
-LiteBagBank.xml
-LiteBagInventory.xml
-ReplaceBlizzard.lua
+BankFrame.xml
+BackpackFrame.xml
+#@debug@
+ReagentBagFrame.xml
+#@end-debug@
+Core.lua
 
 #@debug@
 Plugin_Anima\Anima.xml
@@ -35,5 +38,4 @@ Plugin_BindsOn\BindsOn.xml
 Plugin_EquipSets\EquipSets.xml
 Plugin_IconBorder\IconBorder.xml
 
-UI\UIOptionsPanelTemplate.xml
-UI\UIOptions.xml
+UI\Options.lua

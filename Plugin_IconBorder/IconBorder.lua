@@ -2,7 +2,7 @@
 
   LiteBag/Plugin_IconBorder/IconBorder.lua
 
-  Copyright 2013-2020 Mike Battersby
+  Copyright 2013 Mike Battersby
 
   Released under the terms of the GNU General Public License version 2 (GPLv2).
   See the file LICENSE.txt.
@@ -21,18 +21,18 @@ local function Update(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
-    local quality = select(4, GetContainerItemInfo(bag, slot))
-    if not quality then return end
+    local info = C_Container.GetContainerItemInfo(bag, slot)
+    if not info or not info.quality then return end
 
-    local minQuality = tonumber(LB.Options:GetGlobalOption("ThickerIconBorder"))
+    local minQuality = tonumber(LB.GetGlobalOption("thickerIconBorder"))
 
-    if quality and minQuality and quality >= minQuality then
+    if minQuality and info.quality >= minQuality then
         self.IconBorder:SetTexture([[Interface\Addons\LiteBag\Plugin_IconBorder\IconBorder]])
     end
 
     if WOW_PROJECT_ID ~= 1 then
         self.IconBorder:Show()
-        self.IconBorder:SetVertexColor(ITEM_QUALITY_COLORS[quality].color:GetRGB())
+        self.IconBorder:SetVertexColor(ITEM_QUALITY_COLORS[info.quality].color:GetRGB())
     end
 end
 

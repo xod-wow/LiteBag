@@ -1,11 +1,14 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 
-<!-- Copyright 2013-2020 Mike Battersby -->
+<!-- Copyright 2013 Mike Battersby -->
 
 <Script file="BagButton.lua"/>
 
-<ItemButton name="LiteBagBagButtonTemplate" hidden="true" virtual="true" mixin="LiteBagBagButtonMixin">
-    <Size x="26" y="26" />
+<ItemButton name="LiteBagBagButtonTemplate" virtual="true" inherits="CircularItemButtonTemplate" mixin="LiteBagBagButtonMixin">
+    <Size x="30" y="30" />
+    <NormalTexture atlas="bag-border" />
+    <PushedTexture atlas="bag-border" />
+    <HighlightTexture atlas="bag-border-highlight" />
     <Layers>
         <Layer level="OVERLAY">
             <Texture parentKey="FilterIcon" atlas="bags-icon-consumables" useAtlasSize="true" hidden="true">
@@ -16,18 +19,13 @@
         </Layer>
     </Layers>
     <Scripts>
-        <OnSizeChanged>
-            -- For some reason the NormalTexture is only center anchored
-            -- which means it doesn't scale when the button does.
-            local tex = _G[self:GetName().."NormalTexture"]
-            tex:SetWidth(64 *  w / 37)
-            tex:SetHeight(64 * h / 37)
-        </OnSizeChanged>
         <OnLoad method="OnLoad" />
         <OnClick method="OnClick" />
         <OnEnter method="OnEnter" />
         <OnLeave method="OnLeave" />
-        <OnDragStart method="OnDrag" />
+        <OnShow method="OnShow" />
+        <OnHide method="OnHide" />
+        <OnDragStart method="OnDragStart" />
         <OnReceiveDrag method="OnClick" />
         <OnEvent method="OnEvent" />
     </Scripts>

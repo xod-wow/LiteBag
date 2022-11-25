@@ -1,0 +1,35 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+
+<!-- Copyright 2022 Mike Battersby -->
+
+<Script file="ContainerPanel.lua" />
+
+<Frame
+    name="LiteBagContainerPanelTemplate" mixin="LiteBagContainerPanelMixin" hidden="true" virtual="true">
+    <Frames>
+        <DropDownToggleButton name="$parentPortraitButton" parentKey="PortraitButton" inherits="LiteBagPortraitButtonTemplate" />
+        <Frame name="$parentFilterDropDown" parentKey="FilterDropDown" inherits="LiteBagFilterDropDownTemplate" />
+        <Button name="$parentInfoButton" parentKey="InfoButton" inherits="UIPanelInfoButton" frameStrata="HIGH" hidden="true">
+            <Anchors>
+                <Anchor point="TOPRIGHT" x="-28" y="-4" />
+            </Anchors>
+            <Scripts>
+                <OnClick>
+                    LB.OpenOptions()
+                    -- Blizzard options hides all frame, re-show this one
+                    local frame = self:GetParent():GetParent()
+                    frame:Show()
+                </OnClick>
+            </Scripts>
+        </Button>
+    </Frames>
+    <Scripts>
+        <!-- These are all of the same events from ContainerFrameCombinedBags -->
+        <OnLoad method="OnLoad" />
+        <OnShow method="OnShow" />
+        <OnHide method="OnHide" />
+        <OnEvent method="OnEvent" />
+    </Scripts>
+</Frame>
+
+</Ui>

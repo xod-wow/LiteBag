@@ -1,24 +1,20 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 
-<!-- Copyright 2013-2020 Mike Battersby -->
+<!-- Copyright 2013 Mike Battersby -->
 
 <Script file="Frame.lua" />
-
-<Frame name="LiteBag_ThinGreenEdgeTemplate" inherits="ThinGoldEdgeTemplate" virtual="true">
-    <Scripts>
-        <OnLoad>
-            for _, tex in ipairs({ self:GetRegions() }) do
-                tex:SetVertexColor(0.0, 1.0, 1.0, 1.0)
-            end
-        </OnLoad>
-    </Scripts>
-</Frame>
 
 <Frame name="LiteBagFrameTemplate"
        enableMouse="true"
        frameStrata="MEDIUM" topLevel="true" hidden="true"
        movable="true" resizable="true" clampedToScreen="true"
-       inherits="ButtonFrameTemplate" virtual="true">
+       inherits="PortraitFrameFlatTemplate" mixin="LiteBagFrameMixin"
+       virtual="true">
+
+    <KeyValues>
+        <!-- A NineSlice layout that makes the portrait button small -->
+        <KeyValue key="layoutType" value="HeldBagLayout" type="string"/>
+    </KeyValues>
 
     <Size x="384" y="512" />
 
@@ -26,88 +22,54 @@
         <minResize x="360" y="183" />
     </ResizeBounds>
 
+    <Anchors>
+        <Anchor point="TOPLEFT" />
+    </Anchors>
+
     <Frames>
-
-        <Anchors>
-            <Anchor point="TOPLEFT" />
-        </Anchors>
-
-        <Button name="$parentResizeBottomRight">
-            <Size x="16" y="16" />
+        <Button name="$parentDragButton">
+            <Size x="0" y="20"/>
             <Anchors>
-                <Anchor point="BOTTOMRIGHT" x="-2" y="2" />
+                <Anchor point="TOPLEFT"/>
+                <Anchor point="TOPRIGHT"/>
             </Anchors>
-            <NormalTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up" setAllPoints="true" />
             <Scripts>
-                <OnLoad function="RaiseFrameLevel" />
                 <OnMouseDown>
                     local parent = self:GetParent()
-                    LiteBagFrame_StartSizing(parent, "BOTTOMRIGHT")
+                    if parent.MovingAllowed then
+                        self:GetParent():StartMoving()
+                    end
                 </OnMouseDown>
                 <OnMouseUp>
                     local parent = self:GetParent()
-                    LiteBagFrame_StopSizing(parent)
+                    parent:StopMovingOrSizing()
+                    parent:CheckSnapPosition()
                 </OnMouseUp>
             </Scripts>
         </Button>
 
-        <Frame name="$parentMoneyFrameBorder" inherits="ThinGoldEdgeTemplate">
-            <Size x="170" y="21" />
-            <Anchors>
-                <Anchor point="BOTTOMRIGHT" x="-8" y="5" />
-            </Anchors>
-        </Frame>
-
-        <Frame name="$parentMoneyFrame" parentKey="moneyFrame" inherits="SmallMoneyFrameTemplate">
-            <Anchors>
-                <Anchor point="BOTTOMRIGHT" x="-2" y="9" />
-            </Anchors>
-            <Scripts>
-                <OnLoad inherit="prepend">
-                    MoneyFrame_SetType(self, "PLAYER")
-                    MoneyFrame_SetMaxDisplayWidth(self, 168)
-                </OnLoad>
-            </Scripts>
-        </Frame>
-
-        <Frame name="$parentTokenFrameBorder" inherits="LiteBag_ThinGreenEdgeTemplate">
-            <Size x="170" y="21" />
-            <Anchors>
-                <Anchor point="BOTTOMLEFT" x="8" y="5" />
-            </Anchors>
-        </Frame>
-
-        <Frame name="$parentTokenFrame" parentKey="tokenFrame" inherits="LiteBagTokenFrameTemplate">
-            <Anchors>
-                <Anchor point="CENTER" relativeTo="$parentTokenFrameBorder" y="-1" />
-            </Anchors>
-        </Frame>
-
-        <Button name="$parentTab1" inherits="CharacterFrameTabButtonTemplate" parentArray="Tabs" id="1" text="BANK" hidden="true">
-            <Anchors>
+        <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" hidden="true">
+            <Anchors>Blizzard_CompactRaidFrameManager.xml
                 <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="11" y="2" />
             </Anchors>
             <Scripts>
-                <OnClick function="LiteBagFrame_TabOnClick" />
+                <OnClick> self:GetParent():ShowPanel(self:GetID()) </OnClick>
             </Scripts>
         </Button>
 
-        <Button name="$parentTab2" inherits="CharacterFrameTabButtonTemplate" parentArray="Tabs" id="2" text="REAGENT_BANK" hidden="true">
-            <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-15" y="0" />
-            </Anchors>
+        <Button name="$parentTab2" inherits="PanelTabButtonTemplate" id="2" hidden="true">
             <Scripts>
-                <OnClick function="LiteBagFrame_TabOnClick" />
+                <OnClick> self:GetParent():ShowPanel(self:GetID()) </OnClick>
             </Scripts>
         </Button>
 
     </Frames>
 
     <Scripts>
-        <OnLoad function="LiteBagFrame_OnLoad" />
-        <OnHide function="LiteBagFrame_OnHide" />
-        <OnShow function="LiteBagFrame_OnShow" />
-        <OnSizeChanged function="LiteBagFrame_OnSizeChanged" />
+        <OnLoad method="OnLoad" />
+        <OnHide method="OnHide" />
+        <OnShow method="OnShow" />
+        <OnUpdate method="OnUpdate" />
     </Scripts>
 </Frame>
 

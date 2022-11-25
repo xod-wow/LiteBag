@@ -2,7 +2,7 @@
 
   LiteBag/Plugin_BindsOn/BindsOn.lua
 
-  Copyright 2013-2020 Mike Battersby
+  Copyright 2013 Mike Battersby
 
   Released under the terms of the GNU General Public License version 2 (GPLv2).
   See the file LICENSE.txt.
@@ -39,44 +39,33 @@ local TextForBind = {
     [TOOLTIP_BATTLE_PET]       = HIGHLIGHT_FONT_COLOR:WrapTextInColorCode( PetText ),
 }
 
-local scanTip = CreateFrame("GameTooltip", "LiteBagBindOnScanTooltip")
-scanTip:SetOwner(WorldFrame, "ANCHOR_NONE")
-scanTip.leftTexts = { }
-scanTip.rightTexts = { }
-
-for i = 1, 5 do
-    local left = scanTip:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    local right = scanTip:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    scanTip:AddFontStrings(left, right)
-    scanTip.leftTexts[i] = left
-    scanTip.rightTexts[i] = right
-end
+local lineQuery = { Enum.TooltipDataLineType.ItemBinding }
 
 local function GetBindText(bag, slot)
-    scanTip:ClearLines()
-    local _, speciesID
+    local _, info
 
-    if bag == BANK_CONTAINER then
+    if bag == Enum.BagIndex.Bank then
         local id = BankButtonIDToInvSlotID(slot)
-        _, _, _, speciesID = scanTip:SetInventoryItem("player", id)
-    elseif bag == REAGENTBANK_CONTAINER then
+        info = C_TooltipInfo.GetInventoryItem('player', id)
+    elseif bag == Enum.BagIndex.ReagentBank then
         local id = ReagentBankButtonIDToInvSlotID(slot)
-        _, _, _, speciesID = scanTip:SetInventoryItem("player", id)
+        info = C_TooltipInfo.GetInventoryItem('player', id)
     else
-        _, _, _, speciesID = scanTip:SetBagItem(bag, slot)
+        info = C_TooltipInfo.GetBagItem(bag, slot)
     end
 
-    -- Battle pets don't use GameTooltip, they have a separate tooltip. Gah.
-    if (speciesID or 0) > 0 then
+    TooltipUtil.SurfaceArgs(info)
+
+    if info.battlePetSpeciesID then
         return TextForBind[TOOLTIP_BATTLE_PET]
     end
 
-    for i = 1, 5 do
-        local text = scanTip.leftTexts[i]:GetText()
-        if not text then break end
-        if strmatch(text, USE_COLON) then break end -- recipes
-        if TextForBind[text] ~= nil
-            then return TextForBind[text]
+    local bindingLines = TooltipUtil.FindLinesFromData(lineQuery, info)
+
+    if #bindingLines == 1 then
+        local text = bindingLines[1].leftText
+        if text and TextForBind[text] ~= nil then
+            return TextForBind[text]
         end
     end
     return NoBindText
@@ -88,22 +77,21 @@ local function Update(button)
         button.LiteBagBindsOnText:SetPoint("TOP", button, "TOP", 0, -2)
     end
 
-    if not LB.Options:GetGlobalOption("ShowBindsOnText") or not button.hasItem then
+    if not LB.GetGlobalOption("showBindsOn") or not button.hasItem then
         button.LiteBagBindsOnText:Hide()
         return
     end
 
-    local bag = button:GetParent():GetID()
+    local bag = button:GetBagID()
     local slot = button:GetID()
 
     local text = GetBindText(bag, slot)
     if not text then
         button.LiteBagBindsOnText:Hide()
-        return
+    else
+        button.LiteBagBindsOnText:SetText(text)
+        button.LiteBagBindsOnText:Show()
     end
-
-    button.LiteBagBindsOnText:SetText(text)
-    button.LiteBagBindsOnText:Show()
 end
 
 LB.RegisterHook('LiteBagItemButton_Update', Update)
