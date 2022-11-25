@@ -205,7 +205,7 @@ function LB.Manager:ManageBlizzardBagButtons()
 end
 
 function LB.Manager:OnEvent(event, ...)
-    -- As far as I can tell this doesn't work. Why?
+    if LB.db then LB.EventDebug(self, event, ...) end
     if event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
         local type = ...
         if type == Enum.PlayerInteractionType.GuildBanker then

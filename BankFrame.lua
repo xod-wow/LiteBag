@@ -35,17 +35,23 @@ function LiteBagBankMixin:OnLoad()
     self:AddPanel(LiteBagReagentBank)
 
     -- Bank frame specific events
-    self:RegisterEvent('BANKFRAME_OPENED')
-    self:RegisterEvent('BANKFRAME_CLOSED')
+    self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
+    self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
 end
 
 function LiteBagBankMixin:OnEvent(event, ...)
     LB.EventDebug(self, event, ...)
     local placer = self:GetParent()
-    if event == 'BANKFRAME_OPENED' then
-        ShowUIPanel(placer)
-    elseif event == 'BANKFRAME_CLOSED' then
-        HideUIPanel(placer)
+    if event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
+        local type = ...
+        if type == Enum.PlayerInteractionType.Banker and not placer:IsShown() then
+            ShowUIPanel(placer)
+        end
+    elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_HIDE' then
+        local type = ...
+        if type == Enum.PlayerInteractionType.Banker then
+            HideUIPanel(placer)
+        end
     end
 end
 
@@ -65,7 +71,7 @@ function LiteBagBankMixin:OnHide()
     CloseAllBags(self)
 
     -- Call this so the server knows we closed and it needs to send us a
-    -- new BANKFRAME_OPENED event if we interact with the NPC again.
+    -- new open event if we interact with the NPC again.
     CloseBankFrame()
 end
 
