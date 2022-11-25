@@ -82,6 +82,12 @@ function LiteBagContainerPanelMixin:OnLoad()
 
     if self.showInfoButton then
         self.InfoButton:Show()
+        self.InfoButton:SetScript('OnClick',
+            function ()
+                LB.OpenOptions()
+                -- Blizzard options hides all frame, re-show this one
+                self:GetParent():Show()
+            end)
     end
 
     self.Items = { }

@@ -9,18 +9,11 @@
     <Frames>
         <DropDownToggleButton name="$parentPortraitButton" parentKey="PortraitButton" inherits="LiteBagPortraitButtonTemplate" />
         <Frame name="$parentFilterDropDown" parentKey="FilterDropDown" inherits="LiteBagFilterDropDownTemplate" />
-        <Button name="$parentInfoButton" parentKey="InfoButton" inherits="UIPanelInfoButton" frameStrata="HIGH" hidden="true">
+        <!-- the 510 here is from Blizzard's UIPanelCloseButton -->
+        <Button name="$parentInfoButton" parentKey="InfoButton" inherits="UIPanelInfoButton" frameLevel="510" hidden="true">
             <Anchors>
                 <Anchor point="TOPRIGHT" x="-28" y="-4" />
             </Anchors>
-            <Scripts>
-                <OnClick>
-                    LB.OpenOptions()
-                    -- Blizzard options hides all frame, re-show this one
-                    local frame = self:GetParent():GetParent()
-                    frame:Show()
-                </OnClick>
-            </Scripts>
         </Button>
     </Frames>
     <Scripts>
