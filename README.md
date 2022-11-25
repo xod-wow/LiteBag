@@ -5,7 +5,7 @@ For the addon, see:
 
 ## For Authors of Bag Icon-Plugin Addons
 
-To support LiteBag can hook into ItemButton update and create as follows:
+To support LiteBag you can hook into ItemButton update and create as follows:
 
 1. Update:
    ```
