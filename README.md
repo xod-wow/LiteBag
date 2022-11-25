@@ -11,7 +11,7 @@ To support LiteBag you can hook into ItemButton update and create as follows:
    ```
    LiteBag_RegisterHook('LiteBagItemButton_Update', YourUpdateFunction)
    ```
-   and optionally `LiteBag_AddUpdateEvent(eventName)` if you need LiteBag
+   and optionally `LiteBag_AddPluginEvent(eventName)` if you need LiteBag
    to update on additional events. Your function will be called once for
    every itembutton, with the itembutton as the argument.
 
