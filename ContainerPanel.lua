@@ -130,7 +130,7 @@ end
 -- it in our event handler before it reaches the Blizzard code.
 
 function LiteBagContainerPanelMixin:OnShow()
-    LB.Debug("ContainerFrame OnShow " .. self:GetName())
+    LB.FrameDebug(self, "OnShow")
 
     self:GenerateFrame()
 
@@ -153,7 +153,7 @@ function LiteBagContainerPanelMixin:OnShow()
 end
 
 function LiteBagContainerPanelMixin:OnHide()
-    LB.Debug("ContainerFrame OnHide " .. self:GetName())
+    LB.FrameDebug(self, "OnHide")
 
     LB.db.UnregisterAllCallbacks(self)
 
@@ -209,7 +209,7 @@ end
 -- wasn't for their naming this would be called :Open()
 
 function LiteBagContainerPanelMixin:GenerateFrame()
-    LB.Debug("ContainerFrame GenerateFrame " .. self:GetName())
+    LB.FrameDebug(self, "GenerateFrame")
 
     -- Should check if dirty, probably.
     self:SetUpBags()
@@ -223,7 +223,7 @@ function LiteBagContainerPanelMixin:GenerateFrame()
 end
 
 function LiteBagContainerPanelMixin:CheckUpdateDynamicContents()
-    LB.Debug("ContainerFrame CheckUpdateDynamicContents " .. self:GetName())
+    LB.FrameDebug(self, "CheckUpdateDynamicContents")
     if self.TokenTracker then
         self.TokenTracker:Update()
     end
@@ -250,7 +250,7 @@ local function GetBagItemButton(bag, i)
 end
 
 function LiteBagContainerPanelMixin:SetUpBags()
-    LB.Debug("ContainerFrame SetUpBags " .. self:GetName())
+    LB.FrameDebug(self, "SetUpBags")
 
     table.wipe(self.Items)
 
@@ -288,7 +288,7 @@ function LiteBagContainerPanelMixin:UpdateBagButtons()
 end
 
 function LiteBagContainerPanelMixin:UpdateTokenTracker()
-    LB.Debug("ContainerFrame UpdateTokenTracker " .. self:GetName())
+    LB.FrameDebug(self, "UpdateTokenTracker")
     if self.TokenTracker and self.TokenTracker:ShouldShow() then
         self.TokenTracker:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 8, 8)
         self.TokenTracker:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -8, 8)
@@ -352,7 +352,7 @@ function LiteBagContainerPanelMixin:UpdateMiscellaneousFrames()
 end
 
 function LiteBagContainerPanelMixin:OnTokenWatchChanged()
-    LB.Debug("ContainerFrame OnTokenWatchChanged " .. self:GetName())
+    LB.FrameDebug(self, "OnTokenWatchChanged")
 
     self:UpdateTokenTracker()
 
@@ -544,7 +544,7 @@ local function GetLayoutGridForFrame(self)
 end
 
 function LiteBagContainerPanelMixin:UpdateItemLayout()
-    LB.Debug("ContainerFrame UpdateItemLayout " .. self:GetName())
+    LB.FrameDebug(self, "UpdateItemLayout")
     local layoutGrid = GetLayoutGridForFrame(self)
 
     local anchor, m, xOff, yOff
@@ -590,13 +590,13 @@ function LiteBagContainerPanelMixin:UpdateItemLayout()
 end
 
 function LiteBagContainerPanelMixin:UpdateFrameSize()
-    LB.Debug(format("ContainerFrame UpdateFrameSize %s %d,%d", self:GetName(), self.width, self.height))
+    LB.FrameDebug(self, "UpdateFrameSize %d,%d", self.width, self.height)
     self:SetSize(self.width, self.height)
     self:GetParent().needsUpdate = true
 end
 
 function LiteBagContainerPanelMixin:ResizeToWidth(width)
-    LB.Debug(format("ContainerFrame ResizeToWidth %s %d", self:GetName(), width))
+    LB.FrameDebug(self, "ResizeToWidth %d", width)
     local ncols = GetLayoutNColsForWidth(self, width)
     LB.SetFrameOption(self, 'columns', ncols)
     self:UpdateItemLayout()
@@ -632,7 +632,7 @@ function LiteBagContainerPanelMixin:UpdateSearchBox()
 end
 
 function LiteBagContainerPanelMixin:UpdateItems()
-    LB.Debug("ContainerFrame UpdateItems " .. self:GetName())
+    LB.FrameDebug(self, "UpdateItems")
     ContainerFrameMixin.UpdateItems(self)
     for _, itemButton in self:EnumerateValidItems() do
         LB.CallHooks('LiteBagItemButton_Update', itemButton)

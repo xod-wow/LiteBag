@@ -28,6 +28,18 @@ function LB.Debug(...)
     end
 end
 
+function LB.GlobalDebug(...)
+    if LB.GetGlobalOption('debug') then
+        DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00LiteBag:|r G> ' .. format(...))
+    end
+end
+
+function LB.FrameDebug(frame, ...)
+    if LB.GetGlobalOption('debug') then
+        DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00LiteBag:|r F> ' .. frame:GetName() .. ' ' .. format(...))
+    end
+end
+
 function LB.EventDebug(frame, event, ...)
     if LB.db.profile.eventFilter[event] then return end
     if LB.GetGlobalOption('eventDebug') then
@@ -35,6 +47,6 @@ function LB.EventDebug(frame, event, ...)
         for i = 1, select('#', ...) do
             msg = msg .. " " .. tostring(select(i, ...))
         end
-        DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00LiteBag:|r ' .. msg)
+        DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00LiteBag:|r E> ' .. msg)
     end
 end

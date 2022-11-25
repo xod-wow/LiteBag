@@ -81,6 +81,7 @@ function LiteBagBagButtonMixin:OnHide()
 end
 
 function LiteBagBagButtonMixin:OnEvent(event, ...)
+    LB.EventDebug(self, event, ...)
     if event == 'INVENTORY_SEARCH_UPDATE' then
         if C_Container.IsContainerFiltered(self.bagID) then
             self.searchOverlay:Show()

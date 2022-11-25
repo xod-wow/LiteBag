@@ -25,7 +25,7 @@ LiteBagFrameMixin = { }
 -- code depending on which (default) action bars are shown.
 
 function LiteBagFrameMixin:SetSnapPosition()
-    LB.Debug("Frame SetSnapPosition " .. self:GetName())
+    LB.FrameDebug(self, "SetSnapPosition")
     self:ClearAllPoints()
     self:SetPoint('BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
     -- false is don't save position, so we will reset it on reload
@@ -42,20 +42,20 @@ end
 
 function LiteBagFrameMixin:ResizeToPanel()
     local panel = self:GetCurrentPanel()
-    LB.Debug(format("Frame ResizeToPanel %s %s", self:GetName(), panel:GetName()))
+    LB.FrameDebug(self, "ResizeToPanel %s", panel:GetName())
     local w, h = panel:GetSize()
     self:SetSize(w, h)
     return w, h
 end
 
 function LiteBagFrameMixin:OnShow()
-    LB.Debug("Frame OnShow " .. self:GetName())
+    LB.FrameDebug(self, "OnShow")
     self.needsUpdate = true
     PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 end
 
 function LiteBagFrameMixin:OnHide()
-    LB.Debug("Frame OnHide " .. self:GetName())
+    LB.FrameDebug(self, "OnHide")
 
     -- Current panel OnHide was called before this due to parenting so won't
     -- get called again. When it was called it returned IsShown() as true, and
@@ -120,7 +120,7 @@ function LiteBagFrameMixin:AddPanel(panel)
 end
 
 function LiteBagFrameMixin:ShowPanel(n)
-    LB.Debug(format("Frame ShowPanel %s %d", self:GetName(), n))
+    LB.FrameDebug(self, "ShowPanel %d", n)
     PanelTemplates_SetTab(self, n)
     self.needsUpdate = true
 end

@@ -22,7 +22,7 @@ local REPLACEMENT_GLOBALS = {
 
     OpenBag =
         function (id)
-            LB.Debug('OpenBag %d', id)
+            LB.GlobalDebug('OpenBag %d', id)
             -- if not ContainerFrame_AllowedToOpenBags() then return end
             if LiteBagBackpack:OpenToBag(id) then
                 return
@@ -31,27 +31,27 @@ local REPLACEMENT_GLOBALS = {
 
     CloseBag =
         function (id)
-            LB.Debug('CloseBag %d', id)
+            LB.GlobalDebug('CloseBag %d', id)
             return CloseBackpack()
         end,
 
     ToggleBag =
         function (id)
-            LB.Debug('ToggleBag %d', id)
+            LB.GlobalDebug('ToggleBag %d', id)
             -- if not ContainerFrame_AllowedToOpenBags() then return end
             ToggleBackpack()
         end,
 
     OpenBackpack =
          function ()
-            LB.Debug('OpenBackpack')
+            LB.GlobalDebug('OpenBackpack')
             -- if not ContainerFrame_AllowedToOpenBags() then return end
             LiteBagBackpack:Show()
         end,
 
     CloseBackpack =
         function ()
-            LB.Debug('CloseBackpack')
+            LB.GlobalDebug('CloseBackpack')
             local wasShown = LiteBagBackpack:IsShown()
             LiteBagBackpack:Hide()
             return wasShown
@@ -59,7 +59,7 @@ local REPLACEMENT_GLOBALS = {
 
     ToggleBackpack =
         function ()
-            LB.Debug('ToggleBackpack')
+            LB.GlobalDebug('ToggleBackpack')
             -- if not ContainerFrame_AllowedToOpenBags() then return end
             if LiteBagBackpack:IsShown() then
                 CloseAllBags()
@@ -70,7 +70,7 @@ local REPLACEMENT_GLOBALS = {
 
     OpenAllBags =
         function (frame, forceUpdate)
-            LB.Debug('OpenAllBags %s', frame and frame:GetName() or "NONE")
+            LB.GlobalDebug('OpenAllBags %s', frame and frame:GetName() or "NONE")
             -- if not ContainerFrame_AllowedToOpenBags() then return end
             if LiteBagBackpack:IsShown() then
                 if forceUpdate then
@@ -92,7 +92,7 @@ local REPLACEMENT_GLOBALS = {
 
     CloseAllBags =
         function (frame, forceUpdate)
-            LB.Debug('CloseAllBags %s', frame and frame:GetName() or "NONE")
+            LB.GlobalDebug('CloseAllBags %s', frame and frame:GetName() or "NONE")
             if frame and frame:GetName() ~= FRAME_THAT_OPENED_BAGS then
                 return false
             end
@@ -105,7 +105,7 @@ local REPLACEMENT_GLOBALS = {
 
     ToggleAllBags =
         function ()
-            LB.Debug('ToggleAllBags')
+            LB.GlobalDebug('ToggleAllBags')
             -- if not ContainerFrame_AllowedToOpenBags() then return end
             if LiteBagBackpack:IsShown() then
                 CloseAllBags()
