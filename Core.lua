@@ -192,8 +192,12 @@ function LB.Manager:ReplaceBlizzard()
 end
 
 function LB.Manager:CanManageBagButtons()
-    return BagBarExpandToggle:GetParent() == MicroButtonAndBagsBar
-        or BagBarExpandToggle:GetParent() == hiddenParent
+    for _, b in MainMenuBarBagManager:EnumerateBagButtons() do
+        if b:GetParent() ~= MicroButtonAndBagsBar and b:GetParent() ~= hiddenParent then
+            return false
+        end
+    end
+    return true
 end
 
 function LB.Manager:ManageBlizzardBagButtons()
