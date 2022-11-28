@@ -143,6 +143,8 @@ function LiteBagFrameMixin:OnStopSizing()
     self:StopMovingOrSizing()
     self.isSizing = nil
     self.needsUpdate = true
+    -- Should we tell the current panel to fire OnOptionsModified for columns
+    -- now, in case anything else is hanging off it?
 end
 
 function LiteBagFrameMixin:OnSizeChanged(w, h)

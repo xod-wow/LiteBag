@@ -158,7 +158,7 @@ function LiteBagContainerPanelMixin:OnShow()
 
     LB.RegisterPluginEvents(self)
 
-    LB.db.RegisterCallback(self, 'OnOptionsModified', function () self:GenerateFrame() end)
+    LB.db:RegisterCallback('OnOptionsModified', self.GenerateFrame, self)
 end
 
 function LiteBagContainerPanelMixin:OnHide()
@@ -261,7 +261,7 @@ end
 function LiteBagContainerPanelMixin:SetUpBags()
     LB.FrameDebug(self, "SetUpBags")
 
-    table.wipe(self.Items)
+    self.Items = {}
 
     for _, bag in ipairs(self.bagFrames) do
         bag.size = C_Container.GetContainerNumSlots(bag:GetID())
