@@ -342,6 +342,41 @@ local options = {
                 },
             },
         },
+--@debug
+        REAGENTBAG = {
+            type = "group",
+            name = "Reagent Bag",
+            order = order(),
+            args = {
+                columns = {
+                    type = "range",
+                    name = "Columns",
+                    min = 4,
+                    max = 8,
+                    step = 1,
+                    order = order(),
+                    get = TypeGetter,
+                    set = TypeSetter,
+                },
+                __break1 = {
+                    type = "description",
+                    name = "\n",
+                    width = "full",
+                    order = order(),
+                },
+                order = {
+                    type = "select",
+                    style = "dropdown",
+                    name = L["Icon order:"],
+                    values = OrderValues,
+                    sorting = OrderSorting,
+                    order = order(),
+                    get = TypeGetter,
+                    set = TypeSetter,
+                },
+            },
+        },
+--@end-debug@
     },
 }
 
