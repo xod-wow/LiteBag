@@ -158,7 +158,7 @@ function LiteBagContainerPanelMixin:OnShow()
 
     LB.RegisterPluginEvents(self)
 
-    LB.db:RegisterCallback('OnOptionsModified', self.GenerateFrame, self)
+    LB.db.RegisterCallback(self, 'OnOptionsModified', self.GenerateFrame, self)
 end
 
 function LiteBagContainerPanelMixin:OnHide()

@@ -53,10 +53,13 @@ function LB.InitializeOptions()
     LiteBagDB = LiteBagDB or { }
     LB.db = LibStub("AceDB-3.0"):New("LiteBagDB", defaults, true)
 
-    local function ReFire () LB.db.callbacks:Fire('OnOptionsModified') end
-    LB.db:RegisterCallback('OnProfileChanged', ReFire)
-    LB.db:RegisterCallback('OnProfileReset', ReFire)
-    LB.db:RegisterCallback('OnProfileCopied', ReFire)
+    local ReFirer = {
+        Fire = function () LB.db.callbacks:Fire('OnOptionsModified') end
+    }
+
+    LB.db.RegisterCallback(ReFirer, 'OnProfileChanged', 'Fire')
+    LB.db.RegisterCallback(ReFirer, 'OnProfileReset', 'Fire')
+    LB.db.RegisterCallback(ReFirer, 'OnProfileCopied', 'Fire')
 end
 
 function LB.SetTypeOption(key, option, value, noTrigger)
