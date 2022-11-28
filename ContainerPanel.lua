@@ -19,6 +19,7 @@ local BagInfoByType = {
         showBagButtons = true,
         showSearchBox = true,
         showInfoButton = true,
+        resizingAllowed = true,
     },
     BANK = {
         bagIDs = { -1, 6, 7, 8, 9, 10, 11, 12 },
@@ -27,6 +28,7 @@ local BagInfoByType = {
         showBagButtons = true,
         showSearchBox = true,
         showInfoButton = true,
+        resizingAllowed = true,
     },
     REAGENTBAG = {
         bagIDs = { 5 },
@@ -35,6 +37,7 @@ local BagInfoByType = {
         showBagButtons = false,
         showSearchBox = false,
         showInfoButton = false,
+        resizingAllowed = false,
     },
 }
 
@@ -603,10 +606,13 @@ end
 
 function LiteBagContainerPanelMixin:ResizeToWidth(width)
     LB.FrameDebug(self, "ResizeToWidth %d", width)
-    local ncols = GetLayoutNColsForWidth(self, width)
-    LB.SetFrameOption(self, 'columns', ncols)
-    self:UpdateItemLayout()
-    self:UpdateFrameSize()
+    local cols = LB.GetTypeOption(self.FrameType, 'columns')
+    local newCols = GetLayoutNColsForWidth(self, width)
+    if cols ~= newCols then
+        LB.SetTypeOption(self.FrameType, 'columns', newCols, true)
+        self:UpdateItemLayout()
+        self:UpdateFrameSize()
+    end
 end
 
 function LiteBagContainerPanelMixin:UpdateSearchBox()

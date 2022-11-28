@@ -134,12 +134,36 @@ function LiteBagFrameMixin:OnLoad()
     self.needsUpdate = true
 end
 
+function LiteBagFrameMixin:OnStartSizing()
+    self.isSizing = true
+    self:StartSizing("BOTTOMRIGHT")
+end
+
+function LiteBagFrameMixin:OnStopSizing()
+    self:StopMovingOrSizing()
+    self.isSizing = nil
+    self.needsUpdate = true
+end
+
+function LiteBagFrameMixin:OnSizeChanged(w, h)
+    if self.isSizing then
+        LB.FrameDebug(self, "OnSizeChanged %.1f %1.f", w, h)
+        local currentPanel = self:GetCurrentPanel()
+        currentPanel:ResizeToWidth(w)
+        local clampedWidth = max(w, currentPanel:GetWidth())
+        self:SetSize(clampedWidth, currentPanel:GetHeight())
+    end
+end
+
 function LiteBagFrameMixin:OnUpdate()
-    if self.needsUpdate then
+    if self.needsUpdate and not self.isSizing then
+        LB.FrameDebug(self, "OnUpdate")
         local currentPanel = self:GetCurrentPanel()
         for i, panel in ipairs(self.panels) do
             panel:SetShown(panel==currentPanel)
         end
+
+        self.ResizeBottomRight:SetShown(currentPanel.resizingAllowed)
 
         self:SetTitle(format('%s : %s', addonName, currentPanel.Title))
 

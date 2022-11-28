@@ -37,7 +37,7 @@
                 <OnMouseDown>
                     local parent = self:GetParent()
                     if parent.MovingAllowed then
-                        self:GetParent():StartMoving()
+                        parent:StartMoving()
                     end
                 </OnMouseDown>
                 <OnMouseUp>
@@ -63,6 +63,23 @@
             </Scripts>
         </Button>
 
+        <Button name="$parentResizeBottomRight" parentKey="ResizeBottomRight" hidden="true">
+            <Size x="16" y="16" />
+            <Anchors>
+                <Anchor point="BOTTOMRIGHT" x="-2" y="2" />
+            </Anchors>
+            <NormalTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up" setAllPoints="true" />
+            <Scripts>
+                <OnMouseDown>
+                    local parent = self:GetParent()
+                    parent:OnStartSizing()
+                </OnMouseDown>
+                <OnMouseUp>
+                    local parent = self:GetParent()
+                    parent:OnStopSizing()
+                </OnMouseUp>
+            </Scripts>
+        </Button>
     </Frames>
 
     <Scripts>
@@ -70,6 +87,7 @@
         <OnHide method="OnHide" />
         <OnShow method="OnShow" />
         <OnUpdate method="OnUpdate" />
+        <OnSizeChanged method="OnSizeChanged" />
     </Scripts>
 </Frame>
 
