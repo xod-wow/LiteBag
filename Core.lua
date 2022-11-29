@@ -132,6 +132,14 @@ local REPLACEMENT_GLOBALS = {
                 return LiteBagBackpackPanel, 1
             end
         end,
+
+    -- This seems to be broken (by Blizzard) for combined frames right now, so bugfix it.
+
+    UpdateNewItemList = function (containerFrame)
+        for _, itemButton in containerFrame:EnumerateValidItems() do
+            C_NewItems.RemoveNewItem(itemButton:GetBagID(), itemButton:GetID());
+        end
+    end
 }
 
 local function ReplaceGlobals()
