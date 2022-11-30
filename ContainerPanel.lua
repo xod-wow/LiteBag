@@ -431,8 +431,8 @@ LAYOUTS.default =
 
         local w, h = ItemButtonTemplateInfo.width, ItemButtonTemplateInfo.height
 
-        local xBreak = LB.GetTypeOption(self.FrameType, 'xbreak')
-        local yBreak = LB.GetTypeOption(self.FrameType, 'ybreak')
+        local xBreak = LB.GetTypeOption(self.FrameType, 'xbreak') or 0
+        local yBreak = LB.GetTypeOption(self.FrameType, 'ybreak') or 0
 
         local row, col, maxCol, maxXGap = 0, 0, 0, 0
 
@@ -444,10 +444,10 @@ LAYOUTS.default =
                 yGap, yGapCounter = yGap + h/3, 0
             elseif col > 0 and col % ncols == 0 then
                 xGap, col, row, yGapCounter = 0, 0, row + 1, yGapCounter + 1
-                if yBreak and yGapCounter % yBreak == 0 then
+                if yBreak > 0 and yGapCounter % yBreak == 0 then
                     yGap = yGap + h/3
                 end
-            elseif xBreak and col > 0 and col % xBreak == 0 then
+            elseif xBreak > 0 and col > 0 and col % xBreak == 0 then
                 xGap = xGap + w/3
                 maxXGap = max(maxXGap, xGap)
             end

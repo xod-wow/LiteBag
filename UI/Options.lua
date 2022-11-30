@@ -398,9 +398,11 @@ AceConfig:RegisterOptionsTable(addonName, options, { "litebag", "lb" })
 local optionsPanel, category = AceConfigDialog:AddToBlizOptions(addonName)
 
 function LB.InitializeGUIOptions()
---  local profileOptions = AceDBOptions:GetOptionsTable(LB.db)
---  AceConfig:RegisterOptionsTable(addonName.."Profiles", profileOptions)
---  AceConfigDialog:AddToBlizOptions(addonName.."Profiles", "Profiles", addonName)
+--@debug
+    local profileOptions = AceDBOptions:GetOptionsTable(LB.db)
+    AceConfig:RegisterOptionsTable(addonName.."Profiles", profileOptions)
+    AceConfigDialog:AddToBlizOptions(addonName.."Profiles", "Profiles", addonName)
+--@end-debug@
 end
 
 function LB.OpenOptions()
