@@ -54,4 +54,5 @@ end
 
 -- Exported interface for other addons
 _G.LiteBag_AddPluginEvent = LB.AddPluginEvent
+_G.LiteBag_AddUpdateEvent = LB.AddPluginEvent
 _G.LiteBag_RegisterHook = LB.RegisterHook
