@@ -82,7 +82,7 @@ function LiteBagItemButtonMixin:SetBagID(id)
     -- Do nothing, avoid taint? This only works because the Blizzard
     -- ContainerFrameItemButtonMixin:GetBagID() looks up the ID of
     -- the parent if .bagID isn't set.
-    LB.Print('%s:SetBagID(%d) uh-oh this is bad', self:GetName(), id)
+    LB.Print('%s:SetBagID(%d) THIS IS BAD, please tell the addon author what you were doing when this happened', self:GetName(), id)
 end
 
 --[[
