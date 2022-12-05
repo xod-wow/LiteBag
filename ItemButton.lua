@@ -78,6 +78,13 @@ function LiteBagItemButtonMixin:OnEnter(...)
     end
 end
 
+function LiteBagItemButtonMixin:SetBagID(id)
+    -- Do nothing, avoid taint? This only works because the Blizzard
+    -- ContainerFrameItemButtonMixin:GetBagID() looks up the ID of
+    -- the parent if .bagID isn't set.
+    LB.Print('%s:SetBagID(%d) uh-oh this is bad', self:GetName(), id)
+end
+
 --[[
 /run LBI:GenerateFrame()
 /run SetCVarBitfield("closedInfoFrames", LE_FRAME_TUTORIAL_MOUNT_EQUIPMENT_SLOT_FRAME, false)
