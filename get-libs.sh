@@ -7,7 +7,14 @@
 
 get_libs () {
     local INLIBS=0
-    cat pkgmeta.yaml | while read k v; do
+    local FILE
+    if [ -f pkgmeta.yaml ]; then
+        FILE=pkgmeta.yaml
+    else
+        FILE=.pkgmeta
+    fi
+
+    cat $FILE | while read k v; do
         case $k in
         externals:)
             INLIBS=1
