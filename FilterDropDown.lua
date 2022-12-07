@@ -134,15 +134,25 @@ function LiteBagPortraitButtonMixin:OnMouseDown()
 end
 
 function LiteBagPortraitButtonMixin:OnEnter()
+    local parent = self:GetParent()
     GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-    if self:GetParent():MatchesBagID(Enum.BagIndex.Backpack) then
+    if parent:MatchesBagID(Enum.BagIndex.Backpack) then
         GameTooltip:SetText(BACKPACK_TOOLTIP, 1.0, 1.0, 1.0)
         GameTooltip:AddLine(CLICK_BAG_SETTINGS)
         GameTooltip:Show()
-    elseif self:GetParent():MatchesBagID(Enum.BagIndex.Bank) then
+    elseif parent:MatchesBagID(Enum.BagIndex.Bank) then
         GameTooltip:SetText(BANK, 1.0, 1.0, 1.0)
         GameTooltip:AddLine(CLICK_BAG_SETTINGS)
         GameTooltip:Show()
+    else
+        local id = parent.bagIDs[1]
+        local link = GetInventoryItemLink("player", C_Container.ContainerIDToInventoryID(id))
+        local name = GetItemInfo(link)
+        if name then
+            GameTooltip:SetText(name, 1.0, 1.0, 1.0)
+            GameTooltip:AddLine(CLICK_BAG_SETTINGS)
+            GameTooltip:Show()
+        end
     end
 end
 

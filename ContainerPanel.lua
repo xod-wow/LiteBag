@@ -354,8 +354,10 @@ end
 function LiteBagContainerPanelMixin:UpdateMiscellaneousFrames()
     if self:MatchesBagID(Enum.BagIndex.Bank) then
         self:GetParent():SetPortraitToUnit('npc')
-    else
+    elseif self:MatchesBagID(Enum.BagIndex.Backpack) then
         self:GetParent():SetPortraitToAsset("Interface/Icons/Inv_misc_bag_08");
+    else
+        self:GetParent():SetPortraitToBag(self.bagIDs[1])
     end
     self:UpdateBagButtons()
 end
