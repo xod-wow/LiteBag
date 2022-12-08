@@ -99,6 +99,10 @@ function LiteBagBagButtonMixin:GetIsBarExpanded()
     return true
 end
 
+function LiteBagBagButtonMixin:GetBagID()
+    return self:GetID()
+end
+
 function LiteBagBagButtonMixin:OnEnter()
     EventRegistry:TriggerEvent("BagSlot.OnEnter", self)
 
