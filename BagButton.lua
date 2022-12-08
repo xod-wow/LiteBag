@@ -22,13 +22,13 @@ LiteBagBagButtonMixin = {}
 
 function LiteBagBagButtonMixin:Update()
 
-    self.bagID = self:GetID()
+    local bagID = self:GetID()
     self.isBank = BankContainers[self:GetID()]
 
-    if self.bagID == Enum.BagIndex.Backpack then
+    if bagID == Enum.BagIndex.Backpack then
         SetItemButtonTexture(self, 'Interface\\Buttons\\Button-Backpack-Up')
         return
-    elseif self.bagID == Enum.BagIndex.Bank then
+    elseif bagID == Enum.BagIndex.Bank then
         SetItemButtonTexture(self, 'Interface\\Buttons\\Button-Backpack-Up')
         return
     end
@@ -40,7 +40,7 @@ function LiteBagBagButtonMixin:Update()
     local numBankSlots = GetNumBankSlots()
     local buyBankSlot = numBankSlots + NUM_TOTAL_EQUIPPED_BAG_SLOTS + 1
 
-    if self.bagID == buyBankSlot then
+    if bagID == buyBankSlot then
         self.purchaseCost = GetBankSlotCost()
     else
         self.purchaseCost = nil
@@ -57,7 +57,7 @@ function LiteBagBagButtonMixin:Update()
         SetItemButtonTexture(self, textureName)
     end
 
-    if self.isBank and self.bagID > buyBankSlot then
+    if self.isBank and bagID > buyBankSlot then
         SetItemButtonTextureVertexColor(self, 1, 0, 0)
     else
         SetItemButtonTextureVertexColor(self, 1, 1, 1)
@@ -83,7 +83,8 @@ end
 function LiteBagBagButtonMixin:OnEvent(event, ...)
     LB.EventDebug(self, event, ...)
     if event == 'INVENTORY_SEARCH_UPDATE' then
-        if C_Container.IsContainerFiltered(self.bagID) then
+        local bagID = self:GetID()
+        if C_Container.IsContainerFiltered(bagID) then
             self.searchOverlay:Show()
         else
             self.searchOverlay:Hide()
@@ -110,6 +111,7 @@ function LiteBagBagButtonMixin:OnEnter()
     else
         local hasItem = GameTooltip:SetInventoryItem('player', self.slotID)
         if not hasItem then
+            local bagID = self:GetID()
             GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
             if self.purchaseCost then
                 GameTooltip:ClearLines()
@@ -117,7 +119,7 @@ function LiteBagBagButtonMixin:OnEnter()
                 GameTooltip:AddDoubleLine(COSTS_LABEL, GetCoinTextureString(self.purchaseCost))
             elseif self:GetID() == Enum.BagIndex.ReagentBag then
                 GameTooltip_SetTitle(GameTooltip, EQUIP_CONTAINER_REAGENT)
-            elseif self.isBank and self.bagID > GetNumBankSlots() + 4 then
+            elseif self.isBank and bagID > GetNumBankSlots() + 4 then
                 GameTooltip_SetTitle(GameTooltip, BANK_BAG_PURCHASE)
             elseif self.isBank then
                 GameTooltip_SetTitle(GameTooltip, BANK_BAG)
@@ -136,14 +138,16 @@ function LiteBagBagButtonMixin:OnLeave()
 end
 
 function LiteBagBagButtonMixin:OnDragStart()
-    if self.bagID ~= Enum.BagIndex.Backpack and self.bagID ~= Enum.BagIndex.Bank then
+    local bagID = self:GetID()
+    if bagID ~= Enum.BagIndex.Backpack and bagID ~= Enum.BagIndex.Bank then
         PickupBagFromSlot(self.slotID)
     end
 end
 
 function LiteBagBagButtonMixin:OnClick()
+    local bagID = self:GetID()
     if CursorHasItem() then
-        if self.bagID == Enum.BagIndex.Backpack then
+        if bagID == Enum.BagIndex.Backpack then
             PutItemInBackpack()
         elseif not self.purchaseCost then
             PutItemInBag(self.slotID)
@@ -152,7 +156,11 @@ function LiteBagBagButtonMixin:OnClick()
         PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
         BankFrame.nextSlotCost = self.purchaseCost
         StaticPopup_Show('CONFIRM_BUY_BANK_SLOT')
-    elseif self.bagID ~= Enum.BagIndex.Backpack and self.bagID ~= Enum.BagIndex.Bank then
+    elseif bagID ~= Enum.BagIndex.Backpack and bagID ~= Enum.BagIndex.Bank then
         PickupBagFromSlot(self.slotID)
     end
+end
+
+function LiteBagBagButtonMixin:SetBagID()
+    -- Total unnecessary taint paranoia
 end
