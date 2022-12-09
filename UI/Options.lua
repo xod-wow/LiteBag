@@ -82,7 +82,7 @@ local options = {
         -- First options are just for the command line
         options = {
             type = "execute",
-            name = "Show options panel",
+            name = L["Show options panel."],
             hidden = true,
             cmdHidden = false,
             order = order(),
@@ -90,7 +90,7 @@ local options = {
         },
         debug = {
             type = "toggle",
-            name = "Toggle debugging",
+            name = L["Enable debugging."],
             hidden = true,
             order = order(),
             get = GlobalGetter,
@@ -98,7 +98,7 @@ local options = {
         },
         eventDebug = {
             type = "toggle",
-            name = "Toggle event debugging",
+            name = L["Enable event debugging."],
             hidden = true,
             order = order(),
             get = GlobalGetter,
@@ -191,7 +191,7 @@ local options = {
                 },
                 columns = {
                     type = "range",
-                    name = "Columns",
+                    name = L["Columns"],
                     min = 8,
                     max = 32,
                     step = 1,
@@ -201,7 +201,7 @@ local options = {
                 },
                 scale = {
                     type = "range",
-                    name = "Scale",
+                    name = L["Scale"],
                     min = 0.75,
                     max = 1.25,
                     step = 0.05,
@@ -211,7 +211,7 @@ local options = {
                 },
                 xbreak = {
                     type = "range",
-                    name = "Column gaps",
+                    name = L["Column gaps"],
                     min = 0,
                     max = 32,
                     step = 1,
@@ -221,7 +221,7 @@ local options = {
                 },
                 ybreak = {
                     type = "range",
-                    name = "Row gaps",
+                    name = L["Row gaps"],
                     min = 0,
                     max = 32,
                     step = 1,
@@ -270,7 +270,7 @@ local options = {
             args = {
                 columns = {
                     type = "range",
-                    name = "Columns",
+                    name = L["Columns"],
                     min = 8,
                     max = 32,
                     step = 1,
@@ -280,7 +280,7 @@ local options = {
                 },
                 scale = {
                     type = "range",
-                    name = "Scale",
+                    name = L"Scale"],
                     min = 0.75,
                     max = 1.25,
                     step = 0.05,
@@ -290,7 +290,7 @@ local options = {
                 },
                 xbreak = {
                     type = "range",
-                    name = "Column gaps",
+                    name = L["Column gaps"],
                     min = 0,
                     max = 32,
                     step = 1,
@@ -300,7 +300,7 @@ local options = {
                 },
                 ybreak = {
                     type = "range",
-                    name = "Row gaps",
+                    name = L["Row gaps"],
                     min = 0,
                     max = 32,
                     step = 1,
@@ -350,7 +350,7 @@ local options = {
             args = {
                 columns = {
                     type = "range",
-                    name = "Columns",
+                    name = L["Columns"],
                     min = 4,
                     max = 8,
                     step = 1,
