@@ -2,7 +2,7 @@
 
   LiteBag/Options.lua
 
-  Copyright 2015-2020 Mike Battersby
+  Copyright 2015 Mike Battersby
 
 ----------------------------------------------------------------------------]]--
 
@@ -342,7 +342,7 @@ local options = {
                 },
             },
         },
---@debug
+--@debug@
         REAGENTBAG = {
             type = "group",
             name = "Reagent Bag",
