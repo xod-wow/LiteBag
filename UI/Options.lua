@@ -280,7 +280,7 @@ local options = {
                 },
                 scale = {
                     type = "range",
-                    name = L"Scale"],
+                    name = L["Scale"],
                     min = 0.75,
                     max = 1.25,
                     step = 0.05,
@@ -398,7 +398,7 @@ AceConfig:RegisterOptionsTable(addonName, options, { "litebag", "lb" })
 local optionsPanel, category = AceConfigDialog:AddToBlizOptions(addonName)
 
 function LB.InitializeGUIOptions()
---@debug
+--@debug@
     local profileOptions = AceDBOptions:GetOptionsTable(LB.db)
     AceConfig:RegisterOptionsTable(addonName.."Profiles", profileOptions)
     AceConfigDialog:AddToBlizOptions(addonName.."Profiles", "Profiles", addonName)
