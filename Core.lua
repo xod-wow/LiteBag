@@ -90,19 +90,6 @@ local REPLACEMENT_GLOBALS = {
             EventRegistry:TriggerEvent("ContainerFrame.OpenAllBags");
         end,
 
-    CloseAllBags =
-        function (frame, forceUpdate)
-            LB.GlobalDebug('CloseAllBags %s', frame and frame:GetName() or "NONE")
-            if frame and frame:GetName() ~= FRAME_THAT_OPENED_BAGS then
-                return false
-            end
-            FRAME_THAT_OPENED_BAGS = nil
-
-            local wasShown = CloseBackpack()
-            EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags");
-            return wasShown
-        end,
-
     ToggleAllBags =
         function ()
             LB.GlobalDebug('ToggleAllBags')
@@ -142,9 +129,30 @@ local REPLACEMENT_GLOBALS = {
     end
 }
 
+local HOOKED_GLOBALS = {
+
+    -- The return values here are not used, but retain them anyway
+
+    CloseAllBags =
+        function (frame, forceUpdate)
+            LB.GlobalDebug('CloseAllBags %s', frame and frame:GetName() or "NONE")
+            if frame and frame:GetName() ~= FRAME_THAT_OPENED_BAGS then
+                return false
+            end
+            FRAME_THAT_OPENED_BAGS = nil
+
+            local wasShown = CloseBackpack()
+            EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags");
+            return wasShown
+        end,
+}
+
 local function ReplaceGlobals()
     for n, f in pairs(REPLACEMENT_GLOBALS) do
         _G[n] = f
+    end
+    for n, f in pairs(HOOKED_GLOBALS) do
+        hooksecurefunc(n, f)
     end
 end
 
