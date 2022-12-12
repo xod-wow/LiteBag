@@ -71,6 +71,23 @@ end
 
 if locale == "koKR" then
     L                     = L or {}
+    L["Another addon is managing the Blizzard bag buttons."] = "다른 애드온에서 블리자드 가방 버튼의 설정을 변경합니다."
+    L["Bags"]             = "가방"
+    L["BoA"]              = "BoA"
+    L["BoE"]              = "BoE"
+    L["Column gaps"]      = "칸 간격"
+    L["Columns"]          = "칸 수"
+    L["Display equipment set membership icons."] = "착용 세트에 멤버쉽 아이콘을 표시합니다."
+    L["Display text for BoA and BoE items."] = "BoA 및 BoE 아이템에 글자를 표시합니다."
+    L["Frame Options"]    = "프레임 설정"
+    L["Hide Blizzard bag buttons."] = "블리자드 가방 버튼 숨김"
+    L["Pet"]              = "애완동물"
+    L["Reverse"]          = "역순"
+    L["Row gaps"]         = "줄 간격"
+    L["Scale"]            = "크기"
+    L["Show options panel."] = "설정 창을 표시합니다."
+    L["Show thicker icon borders for this quality and above."] = "두꺼운 테두리를 사용할 최소 아이템 등급"
+    L["Snap inventory frame to default backpack position."] = "기본 가방 위치에 프레임을 표시합니다."
 end
 
 -- ptBR ------------------------------------------------------------------------
