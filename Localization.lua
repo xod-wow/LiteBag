@@ -112,12 +112,21 @@ end
 
 if locale == "zhTW" then
     L                     = L or {}
+    L["Another addon is managing the Blizzard bag buttons."] = "另一個插件是管理暴雪背包按鈕。"
     L["Bags"]             = "背包"
     L["BoA"]              = "帳綁"
     L["BoE"]              = "裝綁"
+    L["Column gaps"]      = "行距"
+    L["Columns"]          = "行數"
     L["Display equipment set membership icons."] = "顯示裝備設定相關圖示"
     L["Display text for BoA and BoE items."] = "帳號綁定和裝備綁定的物品顯示文字"
+    L["Frame Options"]    = "框架選項"
+    L["Hide Blizzard bag buttons."] = "隱藏暴雪背包按鈕。"
     L["Pet"]              = "寵物"
     L["Reverse"]          = "反向"
+    L["Row gaps"]         = "欄距"
+    L["Scale"]            = "縮放"
+    L["Show options panel."] = "顯示選項面板。"
+    L["Show thicker icon borders for this quality and above."] = "在此品質及以上物品顯示更粗的圖示邊框。"
     L["Snap inventory frame to default backpack position."] = "背包框架靠齊到預設位置"
 end
