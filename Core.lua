@@ -18,6 +18,14 @@ local FRAME_THAT_OPENED_BAGS = nil
 local hiddenParent = CreateFrame('Frame')
 hiddenParent:Hide()
 
+-- Because we don't override CloseX due to taint issues, we have to have some
+-- way of telling CloseAllWindows() / pressing escape that something was closed
+-- so it doesn't show the menu. Hide and Show this along with the backpack
+-- frame to achieve that.
+
+local specialCloser = CreateFrame('Frame', 'LiteBagSpecialCloser', hiddenParent)
+table.insert(UISpecialFrames, specialCloser:GetName())
+
 local REPLACEMENT_GLOBALS = {
 
     OpenBag =
@@ -27,12 +35,6 @@ local REPLACEMENT_GLOBALS = {
             if LiteBagBackpack:OpenToBag(id) then
                 return
             end
-        end,
-
-    CloseBag =
-        function (id)
-            LB.GlobalDebug('CloseBag %d', id)
-            return CloseBackpack()
         end,
 
     ToggleBag =
@@ -47,14 +49,6 @@ local REPLACEMENT_GLOBALS = {
             LB.GlobalDebug('OpenBackpack')
             -- if not ContainerFrame_AllowedToOpenBags() then return end
             LiteBagBackpack:Show()
-        end,
-
-    CloseBackpack =
-        function ()
-            LB.GlobalDebug('CloseBackpack')
-            local wasShown = LiteBagBackpack:IsShown()
-            LiteBagBackpack:Hide()
-            return wasShown
         end,
 
     ToggleBackpack =
@@ -145,6 +139,20 @@ local HOOKED_GLOBALS = {
             EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags");
             return wasShown
         end,
+
+    CloseBackpack =
+        function ()
+            LB.GlobalDebug('CloseBackpack')
+            local wasShown = LiteBagBackpack:IsShown()
+            LiteBagBackpack:Hide()
+            return wasShown
+        end,
+
+    CloseBag =
+        function (id)
+            LB.GlobalDebug('CloseBag %d', id)
+            return CloseBackpack()
+        end,
 }
 
 local function ReplaceGlobals()
@@ -195,16 +203,15 @@ local function HideBlizzardBank()
         function () BankFrame:Hide() end)
 end
 
--- This is a bit of an arms race with other addon authors who want to hook
--- the bags too, try to hook later than them all.
--- Also register here some other open/close events I liked.
-
 LB.Manager = CreateFrame('Frame', "LiteBagManager", UIParent)
 
 function LB.Manager:ReplaceBlizzard()
     HideBlizzardBags()
     HideBlizzardBank()
     ReplaceGlobals()
+    hooksecurefunc(LiteBagBackpack, 'Show', function () specialCloser:Show() end)
+    hooksecurefunc(LiteBagBackpack, 'Hide',
+        function () RunNextFrame(function () specialCloser:Hide() end) end)
 end
 
 function LB.Manager:CanManageBagButtons()
@@ -228,6 +235,10 @@ function LB.Manager:ManageBlizzardBagButtons()
         BagBarExpandToggle:SetParent(newParent)
     end
 end
+
+-- This is a bit of an arms race with other addon authors who want to hook
+-- the bags too, try to hook later than them all.
+-- Also register here some other open/close events I liked.
 
 function LB.Manager:OnEvent(event, ...)
     if LB.db then LB.EventDebug(self, event, ...) end
