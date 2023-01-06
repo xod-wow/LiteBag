@@ -168,6 +168,12 @@ function LiteBagContainerPanelMixin:OnHide()
 
     ContainerFrameCombinedBagsMixin.OnHide(self)
 
+    -- UpdateNewItemList is broken in DF 10.0 and only clears the backpack
+    -- on a combined frame. Fix it up ourselves.
+    for _, itemButton in self:EnumerateValidItems() do
+        C_NewItems.RemoveNewItem(itemButton:GetBagID(), itemButton:GetID());
+    end
+
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:UnregisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
 
