@@ -68,16 +68,15 @@ end
 function LiteBagBagButtonMixin:OnLoad()
     self:RegisterForDrag('LeftButton')
     self:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
+    self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
 end
 
 function LiteBagBagButtonMixin:OnShow()
     self:RegisterEvent('BAG_UPDATE_DELAYED')
-    self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
 end
 
 function LiteBagBagButtonMixin:OnHide()
     self:UnregisterEvent('BAG_UPDATE_DELAYED')
-    self:UnregisterEvent('INVENTORY_SEARCH_UPDATE')
 end
 
 function LiteBagBagButtonMixin:OnEvent(event, ...)
