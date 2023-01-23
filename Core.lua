@@ -272,7 +272,8 @@ function LB.Manager:OnEvent(event, ...)
         self:ManageBlizzardBagButtons()
         self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
         self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
-        LB.db:RegisterCallback('OnOptionsModified', self.ManageBlizzardBagButtons, self)
+        LB.db:RegisterCallback('OnOptionsModified', 
+            function () self:ManageBlizzardBagButtons() end)
     end
 end
 
