@@ -193,6 +193,12 @@ local function HideBlizzardBank()
         function () HideUIPanel(BankFrame) BankFrame:Show() end)
     LiteBagBank:HookScript('OnHide',
         function () BankFrame:Hide() end)
+
+    -- Force show the Bag Buttons in Edit Mode
+    EventRegistry:RegisterCallback("EditMode.Enter",
+        function () LB.Manager:ManageBlizzardBagButtons(true) end)
+    EventRegistry:RegisterCallback("EditMode.Exit",
+        function () LB.Manager:ManageBlizzardBagButtons() end)
 end
 
 LB.Manager = CreateFrame('Frame', "LiteBagManager", UIParent)
@@ -207,24 +213,36 @@ function LB.Manager:ReplaceBlizzard()
 end
 
 function LB.Manager:CanManageBagButtons()
-    for _, b in MainMenuBarBagManager:EnumerateBagButtons() do
-        if b:GetParent() ~= MicroButtonAndBagsBar and b:GetParent() ~= hiddenParent then
+    if BagsBar then
+        if BagsBar:GetParent() ~= UIParent and BagsBar:GetParent() ~= hiddenParent then
             return false
+        end
+    else
+        for _, b in MainMenuBarBagManager:EnumerateBagButtons() do
+            if b:GetParent() ~= MicroButtonAndBagsBar and b:GetParent() ~= hiddenParent then
+                return false
+            end
         end
     end
     return true
 end
 
-function LB.Manager:ManageBlizzardBagButtons()
+function LB.Manager:ManageBlizzardBagButtons(editMode)
     if self:CanManageBagButtons() then
-        local show = not LB.GetGlobalOption('hideBlizzardBagButtons')
-        local newParent = show and MicroButtonAndBagsBar or hiddenParent
-        for _, bagButton in MainMenuBarBagManager:EnumerateBagButtons() do
-            bagButton:SetShown(show)
-            bagButton:SetParent(newParent)
+        local show = editMode or not LB.GetGlobalOption('hideBlizzardBagButtons')
+        if BagsBar then
+            local newParent = show and UIParent or hiddenParent
+            BagsBar:SetShown(show)
+            BagsBar:SetParent(newParent)
+        else
+            local newParent = show and MicroButtonAndBagsBar or hiddenParent
+            for _, bagButton in MainMenuBarBagManager:EnumerateBagButtons() do
+                bagButton:SetShown(show)
+                bagButton:SetParent(newParent)
+            end
+            BagBarExpandToggle:SetShown(show)
+            BagBarExpandToggle:SetParent(newParent)
         end
-        BagBarExpandToggle:SetShown(show)
-        BagBarExpandToggle:SetParent(newParent)
     end
 end
 
