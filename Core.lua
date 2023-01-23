@@ -107,12 +107,15 @@ local REPLACEMENT_GLOBALS = {
     -- The ReagentBag and Professions tutorials need this.
     -- I don't feel good about this at all. I see taint on the horizon.
 
+--[[
     ContainerFrameUtil_GetShownFrameForID =
         function (id)
             if LiteBagBackpackPanel:IsShown() and LiteBagBackpackPanel:MatchesBagID(id) then
                 return LiteBagBackpackPanel, 1
             end
         end,
+]]
+
 }
 
 local HOOKED_GLOBALS = {
