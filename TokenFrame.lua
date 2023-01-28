@@ -16,14 +16,13 @@ local addonName, LB = ...
 LiteBagTokenFrameMixin = {}
 
 function LiteBagTokenFrameMixin:Update()
-    if C_CurrencyInfo.GetBackpackCurrencyInfo then
-        for i = 1, MAX_WATCHED_TOKENS do
-            local watchButton = self.Tokens[i]
-            local currencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo(i)
+    for i = 1, MAX_WATCHED_TOKENS do
+        local watchButton = _G[ self:GetName().."Token"..i]
+        if watchButton then
+            local name, count, icon, itemID = GetBackpackCurrencyInfo(i)
 
-            if currencyInfo then
-                local count = currencyInfo.quantity
-                watchButton.icon:SetTexture(currencyInfo.iconFileID)
+            if name then
+                watchButton.icon:SetTexture(icon)
 
                 local currencyText = BreakUpLargeNumbers(count)
                 if strlenutf8(currencyText) > 5 then
@@ -31,7 +30,7 @@ function LiteBagTokenFrameMixin:Update()
                 end
 
                 watchButton.count:SetText(currencyText)
-                watchButton.currencyID = currencyInfo.currencyTypesID
+                watchButton.currencyID = itemID
                 watchButton:Show()
 
                 self.shouldShow = true
@@ -43,36 +42,6 @@ function LiteBagTokenFrameMixin:Update()
                 end
             end
         end
-    elseif GetBackpackCurrencyInfo and LiteBagInventoryTokenFrameToken1 then
-        for i = 1, MAX_WATCHED_TOKENS do
-            local watchButton = _G["LiteBagInventoryTokenFrameToken"..i]
-            if watchButton then
-                local name, count, icon, itemID = GetBackpackCurrencyInfo(i)
-
-                if name then
-                    watchButton.icon:SetTexture(icon)
-
-                    local currencyText = BreakUpLargeNumbers(count)
-                    if strlenutf8(currencyText) > 5 then
-                        currencyText = AbbreviateNumbers(count)
-                    end
-
-                    watchButton.count:SetText(currencyText)
-                    watchButton.currencyID = itemID
-                    watchButton:Show()
-
-                    self.shouldShow = true
-                    self.numWatchedTokens = i
-                else
-                    watchButton:Hide()
-                    if i == 1 then
-                        self.shouldShow = nil
-                    end
-                end
-            end
-        end
-    else
-        return
     end
     self:SetShown(self.shouldShow)
 end
