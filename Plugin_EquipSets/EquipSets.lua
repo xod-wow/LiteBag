@@ -51,21 +51,26 @@ function EquipSetState:UpdateSet(n, id)
     end
 end
 
--- This is a fair bit of work to run every BAG_UPDATE_DELAYED, it would be
--- nicer to turn off the events if we aren't enabled.
-
 function EquipSetState:Update()
-    self.state = {}
-    for i, id in ipairs(C_EquipmentSet.GetEquipmentSetIDs()) do
-        if i < 4 then
-            self:UpdateSet(i, id)
+    if self.isDirty then
+        self.state = {}
+        for i, id in ipairs(C_EquipmentSet.GetEquipmentSetIDs()) do
+            if i < 4 then
+                self:UpdateSet(i, id)
+            end
         end
+        self.isDirty = nil
     end
 end
 
-EquipSetState:SetScript('OnEvent', EquipSetState.Update)
+function EquipSetState:MarkDirty()
+    self.isDirty = true
+end
+
+EquipSetState:SetScript('OnEvent', EquipSetState.MarkDirty)
 EquipSetState:RegisterEvent('PLAYER_LOGIN')
-EquipSetState:RegisterEvent('BAG_UPDATE_DELAYED')
+-- This should be BAG_UPDATE_DELAYED but it's not firing at the moment
+EquipSetState:RegisterEvent('BAG_UPDATE')
 EquipSetState:RegisterEvent('BANKFRAME_OPENED')
 EquipSetState:RegisterEvent('BANKFRAME_CLOSED')
 EquipSetState:RegisterEvent('EQUIPMENT_SETS_CHANGED')
@@ -123,6 +128,8 @@ local function AddTextures(b)
 end
 
 local function Update(button)
+    EquipSetState:Update()
+
     local bag = button:GetParent():GetID()
     local slot = button:GetID()
 
@@ -142,7 +149,7 @@ local function Update(button)
     end
 end
 
--- This is assuming the EQUIPMENT_SETS_CHNAGED for the state manager above
+-- This is assuming the EQUIPMENT_SETS_CHANGED for the state manager above
 -- runs before the itembutton hooks. It does because we know they add and
 -- remove OnShow/OnHide and this is therefore first, but I don't think
 -- Blizzard guarantee that behavior.
