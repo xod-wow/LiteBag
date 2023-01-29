@@ -18,8 +18,8 @@ Print.lua
 Options.lua
 Hooks.lua
 
-BagButton-Wrath.xml
-ItemButton-Wrath.xml
+BagButton.xml
+ItemButton.xml
 TokenFrame.xml
 Panel.xml
 Frame.xml

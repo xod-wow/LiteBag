@@ -30,10 +30,8 @@ local function Update(self)
         self.IconBorder:SetTexture([[Interface\Addons\LiteBag\Plugin_IconBorder\IconBorder]])
     end
 
-    if WOW_PROJECT_ID ~= 1 then
-        self.IconBorder:Show()
-        self.IconBorder:SetVertexColor(ITEM_QUALITY_COLORS[quality].color:GetRGB())
-    end
+    self.IconBorder:Show()
+    self.IconBorder:SetVertexColor(ITEM_QUALITY_COLORS[quality].color:GetRGB())
 end
 
 LB.RegisterHook('LiteBagItemButton_Update', Update)

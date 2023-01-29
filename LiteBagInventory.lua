@@ -32,19 +32,11 @@ local CLOSE_EVENTS = {
 -- part of the MainMenuBar at the bottom in the default Blizzard interface.
 
 local function SetMainMenuBarButtons(checked)
-    if WOW_PROJECT_ID == 1 then
-        MainMenuBarBackpackButton.SlotHighlightTexture:SetShown(checked)
-        CharacterBag0Slot.SlotHighlightTexture:SetShown(checked)
-        CharacterBag1Slot.SlotHighlightTexture:SetShown(checked)
-        CharacterBag2Slot.SlotHighlightTexture:SetShown(checked)
-        CharacterBag3Slot.SlotHighlightTexture:SetShown(checked)
-    else
-        MainMenuBarBackpackButton:SetChecked(checked)
-        CharacterBag0Slot:SetChecked(checked)
-        CharacterBag1Slot:SetChecked(checked)
-        CharacterBag2Slot:SetChecked(checked)
-        CharacterBag3Slot:SetChecked(checked)
-    end
+    MainMenuBarBackpackButton:SetChecked(checked)
+    CharacterBag0Slot:SetChecked(checked)
+    CharacterBag1Slot:SetChecked(checked)
+    CharacterBag2Slot:SetChecked(checked)
+    CharacterBag3Slot:SetChecked(checked)
 end
 
 function LiteBagInventory_OnLoad(self)

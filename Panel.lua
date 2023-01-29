@@ -88,8 +88,6 @@ local function GetBagFrame(self, id)
     end
 end
 
-local BUTTONTYPE = WOW_PROJECT_ID == 1 and 'ItemButton' or 'Button'
-
 function LiteBagPanel_UpdateBagSlotCounts(self)
     LB.Debug("Panel UpdateBagSlotCounts " .. self:GetName())
     local size = 0
@@ -106,7 +104,7 @@ function LiteBagPanel_UpdateBagSlotCounts(self)
         for i = 1, GetContainerNumSlots(bagID) do
             if not bag.itemButtons[i] then
                 local name = format('%sItem%d', bag:GetName(), i)
-                bag.itemButtons[i] = CreateFrame(BUTTONTYPE, name, nil, 'LiteBagItemButtonTemplate')
+                bag.itemButtons[i] = CreateFrame('Button', name, nil, 'LiteBagItemButtonTemplate')
                 bag.itemButtons[i]:SetSize(37, 37)
                 LB.CallHooks('LiteBagItemButton_Create', bag.itemButtons[i])
             end
@@ -429,11 +427,6 @@ function LiteBagPanel_UpdateBag(self)
                 itemButton.JunkIcon:SetShown(isJunk)
             end
 
-            if WOW_PROJECT_ID == 1 then
-                itemButton:UpdateItemContextMatching()
-                ContainerFrameItemButton_UpdateItemUpgradeIcon(itemButton)
-            end
-
             if ( texture ) then
                 ContainerFrame_UpdateCooldown(id, itemButton)
                 itemButton.hasItem = 1
@@ -451,25 +444,7 @@ function LiteBagPanel_UpdateBag(self)
                 end
             end
 
-            if WOW_PROJECT_ID == 1 then
-                itemButton:SetMatchesSearch(not isFiltered)
-                if ( not isFiltered ) then
-                    if shouldDoTutorialChecks then
-                        if ContainerFrame_CheckItemButtonForTutorials(itemButton, itemID) then
-                            shouldDoTutorialChecks = false
-                        end
-                    end
-                end
-            end
-
             LB.CallHooks('LiteBagItemButton_Update', itemButton)
-        end
-
-        if WOW_PROJECT_ID == 1 then
-            local bagButton = ContainerFrame_GetBagButton(self)
-            if bagButton then
-                bagButton:UpdateItemContextMatching()
-            end
         end
 end
 
@@ -512,9 +487,6 @@ function LiteBagPanel_OnShow(self)
     -- From ContainerFrame:OnShow()
     self:RegisterEvent('BAG_UPDATE')
     self:RegisterEvent('UNIT_INVENTORY_CHANGED')
-    if WOW_PROJECT_ID == 1 then
-        self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
-    end
     self:RegisterEvent('ITEM_LOCK_CHANGED')
     self:RegisterEvent('BAG_UPDATE_COOLDOWN')
     -- self:RegisterEvent('DISPLAY_SIZE_CHANGED')
@@ -629,15 +601,6 @@ function LiteBagPanel_OnEvent(self, event, ...)
             LiteBagPanel_UpdateAllBags(self)
         end
         return
-    end
-
-    if WOW_PROJECT_ID == 1 then
-        if event == 'UNIT_INVENTORY_CHANGED' or event == 'PLAYER_SPECIALIZATION_CHANGED' then
-            for _, bag in ipairs(self.bagFrames) do
-                ContainerFrame_UpdateItemUpgradeIcons(bag)
-            end
-            return
-        end
     end
 
     if event == 'BAG_UPDATE' then
