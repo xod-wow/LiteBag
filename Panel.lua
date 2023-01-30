@@ -102,8 +102,8 @@ function LiteBagPanel_UpdateBagSlotCounts(self)
 
     for _, bag in ipairs(self.bagFrames) do
         local bagID = bag:GetID()
-        bag.size = GetContainerNumSlots(bagID)
-        for i = 1, GetContainerNumSlots(bagID) do
+        bag.size = C_Container.GetContainerNumSlots(bagID)
+        for i = 1, C_Container.GetContainerNumSlots(bagID) do
             if not bag.itemButtons[i] then
                 local name = format('%sItem%d', bag:GetName(), i)
                 bag.itemButtons[i] = CreateFrame(BUTTONTYPE, name, nil, 'LiteBagItemButtonTemplate')
@@ -350,7 +350,7 @@ function LiteBagPanel_UpdateBag(self)
         local isQuestItem, questId, isActive, questTexture
         local battlepayItemTexture, newItemTexture, flash, newItemAnim
         local tooltipOwner = GameTooltip:GetOwner()
-        local baseSize = GetContainerNumSlots(id)
+        local baseSize = C_Container.GetContainerNumSlots(id)
 
         if ContainerFrame_CloseTutorial then
             ContainerFrame_CloseTutorial(self)
@@ -364,9 +364,30 @@ function LiteBagPanel_UpdateBag(self)
         for i = 1, self.size or 0, 1 do
             itemButton = self.itemButtons[i]
             name  = itemButton:GetName()
+            local containerInfo = C_Container.GetContainerItemInfo(id, itemButton:GetID())
+            if containerInfo then
+                texture = containerInfo.iconFileID
+                itemCount = containerInfo.stackCount
+                locked = containerInfo.isLocked
+                quality = containerInfo.quality
+                readable = containerInfo.isReadable
+                itemLink = containerInfo.hyperlink
+                isFiltered = containerInfo.isFiltered
+                noValue = containerInfo.hasNoValue
+                itemID = containerInfo.itemID
+                isBound = containerInfo.isBound
+            else
+                texture, itemCount, locked, quality, readable, _, itemLink, isFiltered, noValue, itemID, isBound = nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil
+            end
 
-            texture, itemCount, locked, quality, readable, _, itemLink, isFiltered, noValue, itemID, isBound = GetContainerItemInfo(id, itemButton:GetID())
-            isQuestItem, questId, isActive = GetContainerItemQuestInfo(id, itemButton:GetID())
+            local containerQuestInfo = C_Container.GetContainerItemQuestInfo(id, itemButton:GetID())
+            if containerQuestInfo then
+                isQuestItem = containerQuestInfo.isQuestItem
+                questId = containerQuestInfo.questID
+                isActive = containerQuestInfo.isActive
+            else
+                isQuestItem, questId, isActive = nil, nil, nil
+            end
 
             SetItemButtonTexture(itemButton, texture)
 
@@ -387,8 +408,9 @@ function LiteBagPanel_UpdateBag(self)
                 questTexture:Hide()
             end
 
+            --IsBattlePayItem Removed in Wrath Classic, just hard code this to false for now.
             local isNewItem = C_NewItems.IsNewItem(id, itemButton:GetID())
-            local isBattlePayItem = IsBattlePayItem(id, itemButton:GetID())
+            local isBattlePayItem = false --IsBattlePayItem(id, itemButton:GetID())
 
             battlepayItemTexture = itemButton.BattlepayItemTexture
             newItemTexture = itemButton.NewItemTexture
@@ -444,7 +466,7 @@ function LiteBagPanel_UpdateBag(self)
             itemButton.readable = readable
 
             if ( itemButton == tooltipOwner ) then
-                if (GetContainerItemInfo(self:GetID(), itemButton:GetID())) then
+                if (C_Container.GetContainerItemInfo(self:GetID(), itemButton:GetID())) then
                     itemButton.UpdateTooltip(itemButton)
                 else
                     GameTooltip:Hide()
@@ -539,7 +561,7 @@ function LiteBagPanel_OnHide(self)
     for _, bag in ipairs(self.bagFrames) do
         -- This is replacing UpdateNewItemsList
         local bagID = bag:GetID()
-        for i = 1, GetContainerNumSlots(bagID) do
+        for i = 1, C_Container.GetContainerNumSlots(bagID) do
             local slotID = bag.itemButtons[i]:GetID()
             C_NewItems.RemoveNewItem(bagID, slotID)
         end

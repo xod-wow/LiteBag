@@ -127,9 +127,9 @@ function LiteBagBagButtonMixin:GetFilter()
     end
 
     for i = LE_BAG_FILTER_FLAG_EQUIPMENT, NUM_LE_BAG_FILTER_FLAGS do
-        if self.isBank and GetBankBagSlotFlag(self.bagID - NUM_BAG_SLOTS, i) then
+        if self.isBank and C_Container.GetBagSlotFlag(self.bagID - NUM_BAG_SLOTS, i) then
             return i
-        elseif GetBagSlotFlag(self.bagID, i) then
+        elseif C_Container.GetBagSlotFlag(self.bagID, i) then
             return i
         end
     end
@@ -160,7 +160,7 @@ function LiteBagBagButtonMixin:Update()
         return
     end
 
-    self.slotID = ContainerIDToInventoryID(self:GetID())
+    self.slotID = C_Container.ContainerIDToInventoryID(self:GetID())
 
     self:SetFilterIcon()
 

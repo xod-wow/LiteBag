@@ -21,7 +21,8 @@ local function Update(self)
     local bag = self:GetParent():GetID()
     local slot = self:GetID()
 
-    local quality = select(4, GetContainerItemInfo(bag, slot))
+    local containerInfo = C_Container.GetContainerItemInfo(bag, slot)
+    local quality = containerInfo and containerInfo.quality or nil
     if not quality then return end
 
     local minQuality = tonumber(LB.Options:GetGlobalOption("ThickerIconBorder"))
