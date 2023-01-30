@@ -10,8 +10,6 @@
 ## X-Curse-Project-ID: 50424
 ## X-WoWI-ID: 26330
 
-embeds.xml
-
 Localization.lua
 
 Print.lua

@@ -100,8 +100,8 @@ function LiteBagPanel_UpdateBagSlotCounts(self)
 
     for _, bag in ipairs(self.bagFrames) do
         local bagID = bag:GetID()
-        bag.size = GetContainerNumSlots(bagID)
-        for i = 1, GetContainerNumSlots(bagID) do
+        bag.size = C_Container.GetContainerNumSlots(bagID)
+        for i = 1, bag.size do
             if not bag.itemButtons[i] then
                 local name = format('%sItem%d', bag:GetName(), i)
                 bag.itemButtons[i] = CreateFrame('Button', name, nil, 'LiteBagItemButtonTemplate')
@@ -344,90 +344,37 @@ end
 function LiteBagPanel_UpdateBag(self)
         local id = self:GetID()
         local name, itemButton
-        local texture, itemCount, locked, quality, readable, itemLink, isFiltered, noValue, itemID, isBound, _
-        local isQuestItem, questId, isActive, questTexture
-        local battlepayItemTexture, newItemTexture, flash, newItemAnim
+        local texture, itemCount, locked, quality, readable, _, isFiltered, noValue, itemID, isBound
         local tooltipOwner = GameTooltip:GetOwner()
-        local baseSize = GetContainerNumSlots(id)
-
-        if ContainerFrame_CloseTutorial then
-            ContainerFrame_CloseTutorial(self)
-        end
-
-        local shouldDoTutorialChecks
-        if ContainerFrame_ShouldDoTutorialChecks then
-            shouldDoTutorialChecks = ContainerFrame_ShouldDoTutorialChecks()
-        end
+        local baseSize = C_Container.GetContainerNumSlots(id)
 
         for i = 1, self.size or 0, 1 do
             itemButton = self.itemButtons[i]
             name  = itemButton:GetName()
 
-            texture, itemCount, locked, quality, readable, _, itemLink, isFiltered, noValue, itemID, isBound = GetContainerItemInfo(id, itemButton:GetID())
-            isQuestItem, questId, isActive = GetContainerItemQuestInfo(id, itemButton:GetID())
+            local info = C_Container.GetContainerItemInfo(id, itemButton:GetID())
+            texture = info and info.iconFileID
+            itemCount = info and info.stackCount
+            locked = info and info.isLocked
+            quality = info and info.quality
+            readable = info and info.isReadable
+            isFiltered = info and info.isFiltered
+            noValue = info and info.hasNoValue
+            itemID = info and info.itemID
 
             SetItemButtonTexture(itemButton, texture)
-
-            local doNotSuppressOverlays = false
-            SetItemButtonQuality(itemButton, quality, itemLink, doNotSuppressOverlays, isBound)
-
+            SetItemButtonQuality(itemButton, quality, itemID)
             SetItemButtonCount(itemButton, itemCount)
             SetItemButtonDesaturated(itemButton, locked)
 
-            questTexture = _G[name.."IconQuestTexture"]
-            if ( questId and not isActive ) then
-                questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG)
-                questTexture:Show()
-            elseif ( questId or isQuestItem ) then
-                questTexture:SetTexture(TEXTURE_ITEM_QUEST_BORDER)
-                questTexture:Show()
-            else
-                questTexture:Hide()
-            end
+            ContainerFrame_UpdateQuestItem(self, i, itemButton)
 
-            local isNewItem = C_NewItems.IsNewItem(id, itemButton:GetID())
-            local isBattlePayItem = IsBattlePayItem(id, itemButton:GetID())
-
-            battlepayItemTexture = itemButton.BattlepayItemTexture
-            newItemTexture = itemButton.NewItemTexture
-            flash = itemButton.flashAnim
-            newItemAnim = itemButton.newitemglowAnim
-
-            if ( isNewItem ) then
-                if (isBattlePayItem) then
-                    newItemTexture:Hide()
-                    battlepayItemTexture:Show()
-                else
-                    if (quality and NEW_ITEM_ATLAS_BY_QUALITY[quality]) then
-                        newItemTexture:SetAtlas(NEW_ITEM_ATLAS_BY_QUALITY[quality])
-                    else
-                        newItemTexture:SetAtlas("bags-glow-white")
-                    end
-                    battlepayItemTexture:Hide()
-                    newItemTexture:Show()
-                end
-                if (not flash:IsPlaying() and not newItemAnim:IsPlaying()) then
-                    flash:Play()
-                    newItemAnim:Play()
-                end
-            else
-                battlepayItemTexture:Hide()
-                newItemTexture:Hide()
-                if (flash:IsPlaying() or newItemAnim:IsPlaying()) then
-                    flash:Stop()
-                    newItemAnim:Stop()
-                end
-            end
+            itemButton.BattlepayItemTexture:Hide()
+            itemButton.NewItemTexture:Hide()
 
             itemButton.JunkIcon:Hide()
 
-            local itemLocation = ItemLocation:CreateFromBagAndSlot(self:GetID(), itemButton:GetID())
-            if C_Item.DoesItemExist(itemLocation) then
-                local isJunk = quality == Enum.ItemQuality.Poor and not noValue and MerchantFrame:IsShown()
-                itemButton.JunkIcon:SetShown(isJunk)
-            end
-
-            if ( texture ) then
+            if texture then
                 ContainerFrame_UpdateCooldown(id, itemButton)
                 itemButton.hasItem = 1
             else
@@ -436,12 +383,18 @@ function LiteBagPanel_UpdateBag(self)
             end
             itemButton.readable = readable
 
-            if ( itemButton == tooltipOwner ) then
-                if (GetContainerItemInfo(self:GetID(), itemButton:GetID())) then
+            if itemButton == tooltipOwner then
+                if C_Container.GetContainerItemInfo(self:GetID(), itemButton:GetID()) then
                     itemButton.UpdateTooltip(itemButton)
                 else
                     GameTooltip:Hide()
                 end
+            end
+
+            if ( isFiltered ) then
+                itemButton.searchOverlay:Show();
+            else
+                itemButton.searchOverlay:Hide();
             end
 
             LB.CallHooks('LiteBagItemButton_Update', itemButton)
@@ -511,7 +464,7 @@ function LiteBagPanel_OnHide(self)
     for _, bag in ipairs(self.bagFrames) do
         -- This is replacing UpdateNewItemsList
         local bagID = bag:GetID()
-        for i = 1, GetContainerNumSlots(bagID) do
+        for i = 1, C_Container.GetContainerNumSlots(bagID) do
             local slotID = bag.itemButtons[i]:GetID()
             C_NewItems.RemoveNewItem(bagID, slotID)
         end

@@ -16,9 +16,8 @@
 
 local addonName, LB = ...
 
--- This is a guess at something I don't really understand, ItemLocations.
--- On one hand this seems pretty inefficient. On the other hand, the Blizzard
--- equivalent makes you use strsplit, so frankly this has to be faster.
+-- If I felt keen I would replace all of this with the much faster cached
+-- version from the main branch.
 
 local function GetEquipmentSetMemberships(bag, slot)
     local ids = { }
@@ -26,7 +25,7 @@ local function GetEquipmentSetMemberships(bag, slot)
     for i, id in ipairs(C_EquipmentSet.GetEquipmentSetIDs()) do
         local locations = C_EquipmentSet.GetItemLocations(id) or {}
         for _, l in pairs(locations) do
-            local lplayer, lbank, lbags, lvoid, lslot, lbag = EquipmentManager_UnpackLocation(l)
+            local lplayer, lbank, lbags, lslot, lbag = EquipmentManager_UnpackLocation(l)
             if lbank == true and lbags == false then
                 lbag = -1
                 lslot = lslot - BankButtonIDToInvSlotID(1) + 1
@@ -99,15 +98,17 @@ local function Update(button)
         AddTextures(button)
     end
 
-    local memberships = GetEquipmentSetMemberships(bag, slot)
-
-    for i,td in ipairs(texData) do
-        local tex = button[td.parentKey]
-        if LB.Options:GetGlobalOption("HideEquipsetIcon") == nil and
-           memberships[i] == true then
-            tex:Show()
-        else
+    -- Don't take the performance hit if the option is off
+    if LB.Options:GetGlobalOption("HideEquipsetIcon") then
+        for i,td in ipairs(texData) do
+            local tex = button[td.parentKey]
             tex:Hide()
+        end
+    else
+        local memberships = GetEquipmentSetMemberships(bag, slot)
+        for i,td in ipairs(texData) do
+            local tex = button[td.parentKey]
+            tex:SetShown(memberships[i] == true)
         end
     end
 end

@@ -29,7 +29,6 @@
         <OnLeave method="OnLeave" />
         <OnDragStart method="OnDrag" />
         <OnReceiveDrag method="OnClick" />
-        <OnEvent method="OnEvent" />
     </Scripts>
 </Button>
 
