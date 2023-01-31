@@ -18,29 +18,39 @@ LiteBagTokenFrameMixin = {}
 function LiteBagTokenFrameMixin:Update()
     for i = 1, MAX_WATCHED_TOKENS do
         local watchButton = _G[ self:GetName().."Token"..i]
-        if watchButton then
-            local name, count, icon, itemID = GetBackpackCurrencyInfo(i)
 
-            if name then
-                watchButton.icon:SetTexture(icon)
-
-                local currencyText = BreakUpLargeNumbers(count)
-                if strlenutf8(currencyText) > 5 then
-                    currencyText = AbbreviateNumbers(count)
+        local name, count, icon, itemID = GetBackpackCurrencyInfo(i)
+        if name then
+            if itemID == Constants.CurrencyConsts.CLASSIC_HONOR_CURRENCY_ID then
+                -- Honor points. This seems logically pointless but it's what Blizz does.
+                local factionGroup = UnitFactionGroup("player")
+                if factionGroup then
+                    watchButton.icon:SetTexture(icon)
+                    watchButton.icon:SetTexCoord( 0.03125, 0.59375, 0.03125, 0.59375 )
                 end
-
-                watchButton.count:SetText(currencyText)
-                watchButton.currencyID = itemID
-                watchButton:Show()
-
-                self.shouldShow = true
-                self.numWatchedTokens = i
             else
-                watchButton:Hide()
-                if i == 1 then
-                    self.shouldShow = nil
-                end
+                watchButton.icon:SetTexture(icon)
+                watchButton.icon:SetTexCoord(0, 1, 0, 1)
             end
+
+            -- Improve on Blizzard's handling of big numbers
+            local currencyText = BreakUpLargeNumbers(count)
+            if strlenutf8(currencyText) > 5 then
+                currencyText = AbbreviateNumbers(count)
+            end
+
+            watchButton.count:SetText(currencyText)
+            watchButton.itemID = itemID
+            watchButton:Show()
+
+            self.shouldShow = true
+            self.numWatchedTokens = i
+        else
+            watchButton:Hide()
+            if i == 1 then
+                self.shouldShow = nil
+            end
+            watchButton.itemID = nil
         end
     end
     self:SetShown(self.shouldShow)
