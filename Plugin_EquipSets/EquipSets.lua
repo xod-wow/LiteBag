@@ -69,8 +69,7 @@ end
 
 EquipSetState:SetScript('OnEvent', EquipSetState.MarkDirty)
 EquipSetState:RegisterEvent('PLAYER_LOGIN')
--- This should be BAG_UPDATE_DELAYED but it's not firing at the moment
-EquipSetState:RegisterEvent('BAG_UPDATE')
+EquipSetState:RegisterEvent('BAG_UPDATE_DELAYED')
 EquipSetState:RegisterEvent('BANKFRAME_OPENED')
 EquipSetState:RegisterEvent('BANKFRAME_CLOSED')
 EquipSetState:RegisterEvent('EQUIPMENT_SETS_CHANGED')
