@@ -62,6 +62,9 @@ function LiteBagBankMixin:OnShow()
     self:ClearAllPoints()
     self:SetPoint("TOPLEFT", placer, "TOPLEFT")
 
+    local n = PanelTemplates_GetSelectedTab(self)
+    self:ShowPanel(n)
+
     OpenAllBags(self)
 end
 

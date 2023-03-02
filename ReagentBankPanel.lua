@@ -28,6 +28,7 @@ function LiteBagReagentBankMixin:OnLoad()
 end
 
 function LiteBagReagentBankMixin:OnShow()
+    LB.FrameDebug(self, "OnShow")
     BankItemAutoSortButton.anchorBag = self
     BankItemAutoSortButton:SetParent(self)
     BankItemAutoSortButton:ClearAllPoints()
@@ -48,6 +49,7 @@ function LiteBagReagentBankMixin:OnShow()
 end
 
 function LiteBagReagentBankMixin:OnHide()
+    LB.FrameDebug(self, "OnHide")
     ReagentBankFrame:Hide()
     self:UnregisterAllEvents()
 end
