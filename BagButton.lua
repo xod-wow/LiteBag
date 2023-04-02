@@ -31,6 +31,9 @@ function LiteBagBagButtonMixin:Update()
     elseif self.bagID == BANK_CONTAINER then
         SetItemButtonTexture(self, 'Interface\\Buttons\\Button-Backpack-Up')
         return
+    elseif self.bagID == KEYRING_CONTAINER then
+        SetItemButtonTexture(self, 'Interface\\ContainerFrame\\KeyRing-Bag-Icon')
+        return
     end
 
     self.slotID = C_Container.ContainerIDToInventoryID(self:GetID())
@@ -79,6 +82,8 @@ function LiteBagBagButtonMixin:OnEnter()
         GameTooltip:SetText(BACKPACK_TOOLTIP)
     elseif self.bagID == BANK_CONTAINER then
         GameTooltip:SetText(BANK_BAG)
+    elseif self.bagID == KEYRING_CONTAINER then
+        GameTooltip:SetText(KEYRING)
     else
         local hasItem = GameTooltip:SetInventoryItem('player', self.slotID)
         if not hasItem then
@@ -106,7 +111,9 @@ function LiteBagBagButtonMixin:OnLeave()
 end
 
 function LiteBagBagButtonMixin:OnDrag()
-    if self.bagID ~= BACKPACK_CONTAINER and self.bagID ~= BANK_CONTAINER then
+    if self.bagID ~= BACKPACK_CONTAINER
+        and self.bagID ~= BANK_CONTAINER
+        and self.bagID ~= KEYRING_CONTAINER then
         PickupBagFromSlot(self.slotID)
     end
 end

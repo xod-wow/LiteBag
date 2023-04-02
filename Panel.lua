@@ -100,7 +100,11 @@ function LiteBagPanel_UpdateBagSlotCounts(self)
 
     for _, bag in ipairs(self.bagFrames) do
         local bagID = bag:GetID()
-        bag.size = C_Container.GetContainerNumSlots(bagID)
+        if bagID == KEYRING_CONTAINER then
+            bag.size = GetKeyRingSize()
+        else
+            bag.size = C_Container.GetContainerNumSlots(bagID)
+        end
         for i = 1, bag.size do
             if not bag.itemButtons[i] then
                 local name = format('%sItem%d', bag:GetName(), i)
@@ -464,7 +468,7 @@ function LiteBagPanel_OnHide(self)
     for _, bag in ipairs(self.bagFrames) do
         -- This is replacing UpdateNewItemsList
         local bagID = bag:GetID()
-        for i = 1, C_Container.GetContainerNumSlots(bagID) do
+        for i = 1, bag.size do
             local slotID = bag.itemButtons[i]:GetID()
             C_NewItems.RemoveNewItem(bagID, slotID)
         end
@@ -472,7 +476,6 @@ function LiteBagPanel_OnHide(self)
             ContainerFrame_CloseTutorial(bag)
         end
     end
-
 end
 
 -- These events are only registered while the panel is shown (except for
