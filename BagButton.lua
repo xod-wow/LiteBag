@@ -33,6 +33,7 @@ function LiteBagBagButtonMixin:Update()
         return
     elseif self.bagID == KEYRING_CONTAINER then
         SetItemButtonTexture(self, 'Interface\\ContainerFrame\\KeyRing-Bag-Icon')
+        SetItemButtonDesaturated(self, not self:GetParent().showKeyring)
         return
     end
 
@@ -84,6 +85,11 @@ function LiteBagBagButtonMixin:OnEnter()
         GameTooltip:SetText(BANK_BAG)
     elseif self.bagID == KEYRING_CONTAINER then
         GameTooltip:SetText(KEYRING)
+        if frame.showKeyring then
+            GameTooltip:AddLine('Click to hide', 1, 1, 1, true)
+        else
+            GameTooltip:AddLine('Click to show', 1, 1, 1, true)
+        end
     else
         local hasItem = GameTooltip:SetInventoryItem('player', self.slotID)
         if not hasItem then
@@ -133,5 +139,11 @@ function LiteBagBagButtonMixin:OnClick()
         BankFrame.nextSlotCost = self.purchaseCost
         StaticPopup_Show('CONFIRM_BUY_BANK_SLOT')
         return
+    end
+
+    if self.bagID == KEYRING_CONTAINER then
+        local frame = self:GetParent()
+        frame.showKeyring = not frame.showKeyring
+        LiteBagPanel_Update(frame)
     end
 end

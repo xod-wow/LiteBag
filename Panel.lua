@@ -74,6 +74,8 @@ function LiteBagPanel_Initialize(self, bagIDs)
         end
     end
 
+    self.showKeyring = false
+
     -- And update ourself for the bag sizes. Need to watch PLAYER_LOGIN
     -- because the size of the bags isn't known until then the first
     -- time you start the game.
@@ -101,7 +103,7 @@ function LiteBagPanel_UpdateBagSlotCounts(self)
     for _, bag in ipairs(self.bagFrames) do
         local bagID = bag:GetID()
         if bagID == KEYRING_CONTAINER then
-            bag.size = GetKeyRingSize()
+            bag.size = self.showKeyring and GetKeyRingSize() or 0
         else
             bag.size = C_Container.GetContainerNumSlots(bagID)
         end
@@ -128,6 +130,18 @@ local function inDiffBag(a, b)
     return a:GetParent():GetID() ~= b:GetParent():GetID()
 end
 
+local function isKeyringDivide(a, b)
+    if not a then
+        return false
+    end
+    local aID, bID = a:GetParent():GetID(), b:GetParent():GetID()
+    if aID == bID then
+        return false
+    else
+        return aID == KEYRING_CONTAINER or bID == KEYRING_CONTAINER
+    end
+end
+
 local BUTTONORDERS = { }
 
 BUTTONORDERS.default =
@@ -140,8 +154,8 @@ BUTTONORDERS.blizzard =
         local itemButtons = { }
         for b = #self.bagFrames, 1, -1 do
             local bag = self.bagFrames[b]
-            for _, b in ipairs(bag.itemButtons) do
-                tinsert(itemButtons, b)
+            for i = 1, bag.size do
+                tinsert(itemButtons, bag.itemButtons[i])
             end
         end
         return itemButtons
@@ -172,7 +186,10 @@ LAYOUTS.default =
         local xGap, yGap = 0, 0
 
         for i = 1, self.size do
-            if col > 0 and col % ncols == 0 then
+            if isKeyringDivide(itemButtons[i-1], itemButtons[i]) then
+                xGap, col, row = 0, 0, row + 1
+                yGap, yGapCounter = yGap + h/3, 0
+            elseif col > 0 and col % ncols == 0 then
                 xGap, col, row = 0, 0, row + 1
                 if yBreak and row % yBreak == 0 then
                     yGap = yGap + h/3
