@@ -36,20 +36,18 @@
             <Scripts>
                 <OnMouseDown>
                     local parent = self:GetParent()
-                    if parent.MovingAllowed then
-                        parent:StartMoving()
-                    end
+                    parent:StartMoving()
                 </OnMouseDown>
                 <OnMouseUp>
                     local parent = self:GetParent()
                     parent:StopMovingOrSizing()
-                    parent:CheckSnapPosition()
+                    parent:ManagePosition()
                 </OnMouseUp>
             </Scripts>
         </Button>
 
         <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" hidden="true">
-            <Anchors>Blizzard_CompactRaidFrameManager.xml
+            <Anchors>
                 <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="11" y="2" />
             </Anchors>
             <Scripts>

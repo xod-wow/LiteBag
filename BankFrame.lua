@@ -28,8 +28,14 @@ end
 function LiteBagBankMixin:OnLoad()
     LiteBagFrameMixin.OnLoad(self)
 
-    local placer = self:GetParent()
-    self.CloseButton:SetScript('OnClick', function () HideUIPanel(placer) end)
+    self.CloseButton:SetScript('OnClick',
+        function ()
+            if self:IsUserPlaced() then
+                self:Hide()
+            else
+                HideUIPanel(LiteBagBankPlacer)
+            end
+        end)
 
     -- Attach in the reagent bank wrapper.
     self:AddPanel(LiteBagReagentBank)
@@ -41,16 +47,25 @@ end
 
 function LiteBagBankMixin:OnEvent(event, ...)
     LB.EventDebug(self, event, ...)
-    local placer = self:GetParent()
     if event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
         local type = ...
-        if type == Enum.PlayerInteractionType.Banker and not placer:IsShown() then
-            ShowUIPanel(placer)
+        if type == Enum.PlayerInteractionType.Banker then
+            if self:IsUserPlaced() then
+                self:Show()
+            else
+                if not LiteBagBankPlacer:IsShown() then
+                    ShowUIPanel(LiteBagBankPlacer)
+                end
+            end
         end
     elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_HIDE' then
         local type = ...
         if type == Enum.PlayerInteractionType.Banker then
-            HideUIPanel(placer)
+            if self:IsUserPlaced() then
+                self:Hide()
+            else
+                HideUIPanel(LiteBagBankPlacer)
+            end
         end
     end
 end
@@ -58,9 +73,13 @@ end
 function LiteBagBankMixin:OnShow()
     LiteBagFrameMixin.OnShow(self)
 
-    local placer = self:GetParent()
-    self:ClearAllPoints()
-    self:SetPoint("TOPLEFT", placer, "TOPLEFT")
+    if self:IsUserPlaced() then
+        table.insert(UISpecialFrames, self:GetName())
+    else
+        self:ClearAllPoints()
+        self:SetPoint("TOPLEFT", LiteBagBankPlacer, "TOPLEFT")
+        tDeleteItem(UISpecialFrames, self:GetName())
+    end
 
     local n = PanelTemplates_GetSelectedTab(self)
     self:ShowPanel(n)
@@ -80,10 +99,9 @@ end
 
 function LiteBagBankMixin:ResizeToPanel()
     local w, h = LiteBagFrameMixin.ResizeToPanel(self)
-    local placer = self:GetParent()
     local s = self:GetScale()
-    placer:SetSize(w*s, h*s)
-    if placer:IsShown() then
-        UpdateUIPanelPositions(placer)
+    LiteBagBankPlacer:SetSize(w*s, h*s)
+    if LiteBagBankPlacer:IsShown() then
+        UpdateUIPanelPositions(LiteBagBankPlacer)
     end
 end
