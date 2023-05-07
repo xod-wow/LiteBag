@@ -46,21 +46,9 @@ function LiteBagFrameMixin:ManagePosition()
     if not LB.GetTypeOption(self.FrameType, 'snap') then
         return
     end
-    if self.FrameType == "BACKPACK" then
-        if GetSqDistanceFromDefault(self) < 64^2 then
-            self:SetAutoPosition()
-            self:SetUserPlaced(false)
-        end
-    elseif self.FrameType == "BANK" then
-        if GetSqDistanceFromDefault(self) < 64^2 then
-            self:ClearAllPoints()
-            self:SetUserPlaced(false)
-            self:OnShow()
-            ShowUIPanel(LiteBagBankPlacer)
-        else
-            self:OnShow()
-            HideUIPanel(LiteBagBankPlacer)
-        end
+    if GetSqDistanceFromDefault(self) < 64^2 then
+        self:SetAutoPosition()
+        self:SetUserPlaced(false)
     end
 end
 
@@ -75,6 +63,7 @@ end
 function LiteBagFrameMixin:OnShow()
     LB.FrameDebug(self, "OnShow")
     self.needsUpdate = true
+    self:ManagePosition()
     PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 end
 
