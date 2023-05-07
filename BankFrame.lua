@@ -70,16 +70,28 @@ function LiteBagBankMixin:OnEvent(event, ...)
     end
 end
 
-function LiteBagBankMixin:OnShow()
-    LiteBagFrameMixin.OnShow(self)
+function LiteBagBankMixin:ManagePosition()
+    LiteBagFrameMixin.ManagePosition(self)
+
+    -- This handles switching back and forth between UIPanel placement and
+    -- user placement. In most cases the Show/HideUIPanel will not do anything
+    -- since they will reflect the current state already.
 
     if self:IsUserPlaced() then
-        table.insert(UISpecialFrames, self:GetName())
+        if not tContains(UISpecialFrames, self:GetName()) then
+            table.insert(UISpecialFrames, self:GetName())
+        end
+        HideUIPanel(LiteBagBankPlacer)
     else
         self:ClearAllPoints()
         self:SetPoint("TOPLEFT", LiteBagBankPlacer, "TOPLEFT")
         tDeleteItem(UISpecialFrames, self:GetName())
+        ShowUIPanel(LiteBagBankPlacer)
     end
+end
+
+function LiteBagBankMixin:OnShow()
+    LiteBagFrameMixin.OnShow(self)
 
     local n = PanelTemplates_GetSelectedTab(self)
     self:ShowPanel(n)
