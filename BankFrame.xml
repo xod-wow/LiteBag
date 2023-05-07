@@ -31,8 +31,12 @@
     </Attributes>
 
     <Scripts>
-        <OnShow> self.BankFrame:Show() </OnShow>
-        <OnHide> self.BankFrame:Hide() </OnHide>
+        <OnShow>
+            if not LiteBagBank:IsUserPlaced() then LiteBagBank:Show() end
+        </OnShow>
+        <OnHide>
+            if not LiteBagBank:IsUserPlaced() then LiteBagBank:Hide() end
+        </OnHide>
     </Scripts>
 
     <!-- YELLOW OVERLAY FOR DEBUGGING -->
@@ -47,10 +51,9 @@
     -->
 </Frame>
 
-<Frame name="LiteBagBank" parent="LiteBagBankPlacer" parentKey="BankFrame" inherits="LiteBagFrameTemplate" mixin="LiteBagBankMixin">
+<Frame name="LiteBagBank" parent="UIParent" inherits="LiteBagFrameTemplate" mixin="LiteBagBankMixin">
     <KeyValues>
         <KeyValue key="FrameType" value="BANK" type="string" />
-        <KeyValue key="MovingAllowed" value="false" type="boolean" />
     </KeyValues>
     <Frames>
         <Frame name="LiteBagBankPanel" parentArray="panels" inherits="LiteBagContainerPanelTemplate" hidden="true">

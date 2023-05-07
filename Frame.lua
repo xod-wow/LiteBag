@@ -11,11 +11,8 @@
 
 local addonName, LB = ...
 
-local function GetSqDistanceFromBackpackDefault(self)
-    local defaultX = UIParent:GetRight() - CONTAINER_OFFSET_X
-    local defaultY = UIParent:GetBottom() + CONTAINER_OFFSET_Y
-    local selfX = self:GetRight() * self:GetScale()
-    local selfY = self:GetBottom() * self:GetScale()
+local function GetSqDistanceFromDefault(self)
+    local anchor, defaultX, defaultY, selfX, selfY = self:GetAutoPosition()
     return (defaultX-selfX)^2 + (defaultY-selfY)^2
 end
 
@@ -24,18 +21,45 @@ LiteBagFrameMixin = { }
 -- CONTAINER_OFFSET_* are globals that are updated by the Blizzard
 -- code depending on which (default) action bars are shown.
 
-function LiteBagFrameMixin:SetSnapPosition()
-    LB.FrameDebug(self, "SetSnapPosition")
-    self:ClearAllPoints()
-    self:SetPoint('BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y)
-    -- false is don't save position, so we will reset it on reload
-    self:SetUserPlaced(false)
+function LiteBagFrameMixin:GetAutoPosition()
+    if self.FrameType == "BACKPACK" then
+        local selfX = self:GetRight() * self:GetScale() - UIParent:GetRight()
+        local selfY = self:GetBottom() * self:GetScale() - UIParent:GetBottom()
+        return "BOTTOMRIGHT", CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y, selfX, selfY
+    elseif self.FrameType == "BANK" then
+        local x = UIParent:GetAttribute("LEFT_OFFSET")
+        local y = UIParent:GetAttribute("TOP_OFFSET")
+        local selfX = self:GetLeft() * self:GetScale() - UIParent:GetLeft()
+        local selfY = self:GetTop() * self:GetScale() - UIParent:GetTop()
+        return "TOPLEFT", x, y, selfX, selfY
+    end
 end
 
-function LiteBagFrameMixin:CheckSnapPosition()
-    if LB.GetTypeOption(self.FrameType, 'snap') then
-        if GetSqDistanceFromBackpackDefault(self) < 64^2 then
-            self:SetSnapPosition()
+function LiteBagFrameMixin:SetAutoPosition()
+    LB.FrameDebug(self, "SetAutoPosition")
+    local anchor, x, y = self:GetAutoPosition()
+    self:ClearAllPoints()
+    self:SetPoint(anchor, UIParent, anchor, x, y)
+end
+
+function LiteBagFrameMixin:ManagePosition()
+    if not LB.GetTypeOption(self.FrameType, 'snap') then
+        return
+    end
+    if self.FrameType == "BACKPACK" then
+        if GetSqDistanceFromDefault(self) < 64^2 then
+            self:SetAutoPosition()
+            self:SetUserPlaced(false)
+        end
+    elseif self.FrameType == "BANK" then
+        if GetSqDistanceFromDefault(self) < 64^2 then
+            self:ClearAllPoints()
+            self:SetUserPlaced(false)
+            self:OnShow()
+            ShowUIPanel(LiteBagBankPlacer)
+        else
+            self:OnShow()
+            HideUIPanel(LiteBagBankPlacer)
         end
     end
 end

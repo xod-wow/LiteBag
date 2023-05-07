@@ -178,7 +178,7 @@ local options = {
             args = {
                 snap = {
                     type = "toggle",
-                    name = L["Snap backpack frame to default backpack position."],
+                    name = L["When moving snap frame to default position."],
                     order = order(),
                     width = "full",
                     get = TypeGetter,
@@ -268,6 +268,19 @@ local options = {
             name = BANK,
             order = order(),
             args = {
+                snap = {
+                    type = "toggle",
+                    name = L["When moving snap frame to default position."],
+                    order = order(),
+                    width = "full",
+                    get = TypeGetter,
+                    set = TypeSetter,
+                },
+                snapPostGap = {
+                    type = "description",
+                    name = "",
+                    order = order(),
+                },
                 columns = {
                     type = "range",
                     name = L["Columns"],
@@ -342,41 +355,6 @@ local options = {
                 },
             },
         },
---@debug@
-        REAGENTBAG = {
-            type = "group",
-            name = "Reagent Bag",
-            order = order(),
-            args = {
-                columns = {
-                    type = "range",
-                    name = L["Columns"],
-                    min = 4,
-                    max = 8,
-                    step = 1,
-                    order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                __break1 = {
-                    type = "description",
-                    name = "\n",
-                    width = "full",
-                    order = order(),
-                },
-                order = {
-                    type = "select",
-                    style = "dropdown",
-                    name = L["Icon order:"],
-                    values = OrderValues,
-                    sorting = OrderSorting,
-                    order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-            },
-        },
---@end-debug@
     },
 }
 
@@ -398,11 +376,9 @@ AceConfig:RegisterOptionsTable(addonName, options, { "litebag", "lb" })
 local optionsPanel, category = AceConfigDialog:AddToBlizOptions(addonName)
 
 function LB.InitializeGUIOptions()
---@debug@
     local profileOptions = AceDBOptions:GetOptionsTable(LB.db)
     AceConfig:RegisterOptionsTable(addonName.."Profiles", profileOptions)
-    AceConfigDialog:AddToBlizOptions(addonName.."Profiles", "Profiles", addonName)
---@end-debug@
+    AceConfigDialog:AddToBlizOptions(addonName.."Profiles", profileOptions.name, addonName)
 end
 
 function LB.OpenOptions()
