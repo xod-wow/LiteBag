@@ -9,12 +9,6 @@
     <Frames>
         <DropDownToggleButton name="$parentPortraitButton" parentKey="PortraitButton" inherits="LiteBagPortraitButtonTemplate" />
         <Frame name="$parentFilterDropDown" parentKey="FilterDropDown" inherits="LiteBagFilterDropDownTemplate" />
-        <!-- the 510 here is from Blizzard's UIPanelCloseButton -->
-        <Button name="$parentInfoButton" parentKey="InfoButton" inherits="UIPanelInfoButton" frameLevel="510" hidden="true">
-            <Anchors>
-                <Anchor point="TOPRIGHT" x="-28" y="-4" />
-            </Anchors>
-        </Button>
     </Frames>
     <Scripts>
         <!-- These are all of the same events from ContainerFrameCombinedBags -->

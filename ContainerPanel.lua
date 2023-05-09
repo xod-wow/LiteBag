@@ -18,7 +18,6 @@ local BagInfoByType = {
         showMoneyFrame = true,
         showBagButtons = true,
         showSearchBox = true,
-        showInfoButton = true,
         resizingAllowed = true,
     },
     BANK = {
@@ -27,7 +26,6 @@ local BagInfoByType = {
         showMoneyFrame = true,
         showBagButtons = true,
         showSearchBox = true,
-        showInfoButton = true,
         resizingAllowed = true,
     },
     REAGENTBAG = {
@@ -36,7 +34,6 @@ local BagInfoByType = {
         showMoneyFrame = false,
         showBagButtons = false,
         showSearchBox = false,
-        showInfoButton = false,
         resizingAllowed = false,
     },
 }
@@ -81,14 +78,6 @@ function LiteBagContainerPanelMixin:OnLoad()
     if self.showMoneyFrame then
         local name = self:GetName() .. "MoneyFrame"
         self.MoneyFrame = CreateFrame("Frame", name, self, "ContainerMoneyFrameTemplate")
-    end
-
-    if self.showInfoButton then
-        self.InfoButton:Show()
-        self.InfoButton:SetScript('OnClick',
-            function ()
-                LB.OpenOptions()
-            end)
     end
 
     self.Items = { }
