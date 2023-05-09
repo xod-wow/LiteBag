@@ -50,7 +50,6 @@ if locale == "frFR" then
     L["Display text for BoA and BoE items."] = "Afficher un texte sur les objets \"Lié au Compte\" (Blizzard) et \"Lié quand Équipé\" (LqE)."
     L["Pet"]              = "Pet"
     L["Reverse"]          = "Inverse"
-    L["Snap inventory frame to default backpack position."] = "Ancrer le cadre d'inventaire sur la position par défaut du sac à dos."
 end
 
 -- itIT ------------------------------------------------------------------------
@@ -64,7 +63,6 @@ if locale == "itIT" then
     L["Display text for BoA and BoE items."] = "Mostra testo per oggetti BoA e BoE."
     L["Pet"]              = "Mascotte"
     L["Reverse"]          = "Inversa"
-    L["Snap inventory frame to default backpack position."] = "Posiziona l'inventario nella posizione dello zaino predefinita."
 end
 
 -- koKR ------------------------------------------------------------------------
@@ -87,7 +85,6 @@ if locale == "koKR" then
     L["Scale"]            = "크기"
     L["Show options panel."] = "설정 창을 표시합니다."
     L["Show thicker icon borders for this quality and above."] = "두꺼운 테두리를 사용할 최소 아이템 등급"
-    L["Snap inventory frame to default backpack position."] = "기본 가방 위치에 프레임을 표시합니다."
 end
 
 -- ptBR ------------------------------------------------------------------------
@@ -128,5 +125,4 @@ if locale == "zhTW" then
     L["Scale"]            = "縮放"
     L["Show options panel."] = "顯示選項面板。"
     L["Show thicker icon borders for this quality and above."] = "在此品質及以上物品顯示更粗的圖示邊框。"
-    L["Snap inventory frame to default backpack position."] = "背包框架靠齊到預設位置"
 end
