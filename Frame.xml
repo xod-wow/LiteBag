@@ -36,11 +36,15 @@
             <Scripts>
                 <OnMouseDown>
                     local parent = self:GetParent()
-                    parent:StartMoving()
+                    if not parent:IsLocked() then
+                        parent:StartMoving()
+                        parent:ShowSnapAnchor()
+                    end
                 </OnMouseDown>
                 <OnMouseUp>
                     local parent = self:GetParent()
                     parent:StopMovingOrSizing()
+                    parent:HideSnapAnchor()
                     parent:ManagePosition()
                 </OnMouseUp>
             </Scripts>
@@ -87,6 +91,15 @@
         <OnUpdate method="OnUpdate" />
         <OnSizeChanged method="OnSizeChanged" />
     </Scripts>
+</Frame>
+
+<Frame name="LiteBagSnapAnchor" parent="UIParent" clampedToScreen="true" frameStrata="HIGH" hidden="true">
+    <Size x="64" y="64" />
+    <Layers>
+        <Layer level="ARTWORK">
+            <Texture setAllPoints="true" atlas="newplayertutorial-drag-cursor" alpha="0.5" />
+        </Layer>
+    </Layers>
 </Frame>
 
 </Ui>

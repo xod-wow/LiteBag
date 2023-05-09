@@ -52,6 +52,19 @@ function LiteBagFrameMixin:ManagePosition()
     end
 end
 
+function LiteBagFrameMixin:ShowSnapAnchor()
+    if LB.GetTypeOption(self.FrameType, 'snap') then
+        local point, x, y = self:GetAutoPosition()
+        LiteBagSnapAnchor:ClearAllPoints()
+        LiteBagSnapAnchor:SetPoint("CENTER", UIParent, point, x, y)
+        LiteBagSnapAnchor:Show()
+    end
+end
+
+function LiteBagFrameMixin:HideSnapAnchor()
+    LiteBagSnapAnchor:Hide()
+end
+
 function LiteBagFrameMixin:ResizeToPanel()
     local panel = self:GetCurrentPanel()
     LB.FrameDebug(self, "ResizeToPanel %s", panel:GetName())
