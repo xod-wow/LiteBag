@@ -187,3 +187,13 @@ function LiteBagFrameMixin:OnUpdate()
         self.needsUpdate = nil
     end
 end
+
+
+function LiteBagFrameMixin:IsLocked()
+    return LB.GetTypeOption(self.panels[1].FrameType, 'locked')
+end
+
+function LiteBagFrameMixin:ToggleLocked()
+    local v = self:IsLocked()
+    LB.SetTypeOption(self.panels[1].FrameType, 'locked', not v)
+end

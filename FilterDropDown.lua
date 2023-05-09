@@ -100,6 +100,20 @@ do
         if level == 1 then
             local parent = self:GetParent()
 
+            local info = LibDD:UIDropDownMenu_CreateInfo()
+            info.notCheckable = true
+            info.text = SETTINGS
+            info.func = LB.OpenOptions
+            LibDD:UIDropDownMenu_AddButton(info, level)
+
+            info = LibDD:UIDropDownMenu_CreateInfo()
+            info.text = LOCK_FRAME
+            info.checked = parent:GetParent():IsLocked()
+            info.func = function () parent:GetParent():ToggleLocked() end
+            LibDD:UIDropDownMenu_AddButton(info, level)
+
+            LibDD:UIDropDownMenu_AddSeparator()
+
             for _, bag in ipairs(parent.bagFrames) do
                 local i = bag:GetID()
                 local info = LibDD:UIDropDownMenu_CreateInfo()

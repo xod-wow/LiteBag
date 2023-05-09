@@ -21,6 +21,7 @@ local defaults = {
             layout = 'default',
             order = 'default',
             snap = true,
+            locked = true,
         },
         BANK = {
             columns = 14,
@@ -30,6 +31,7 @@ local defaults = {
             layout = 'default',
             order = 'default',
             snap = true,
+            locked = true,
         },
         REAGENTBANK = { },
         showEquipmentSets = false,
