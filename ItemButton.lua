@@ -13,22 +13,6 @@ local addonName, LB = ...
 
 LiteBagItemButtonMixin = {}
 
-function LiteBagItemButtonMixin:OnLoad()
-    ContainerFrameItemButtonMixin.OnLoad(self)
-    self.UpdateTooltip = self.OnEnter
-    -- This is for BankFrameItemButton_OnEnter
-    self.GetInventorySlot = ButtonInventorySlot
-end
-
-function LiteBagItemButtonMixin:OnEnter(...)
-    local bag = self:GetBagID()
-    if bag == Enum.BagIndex.Bank then
-        BankFrameItemButton_OnEnter(self, ...)
-    else
-        ContainerFrameItemButtonMixin.OnEnter(self, ...)
-    end
-end
-
 function LiteBagItemButtonMixin:SetBagID(id)
     -- Do nothing, avoid taint? This only works because the Blizzard
     -- ContainerFrameItemButtonMixin:GetBagID() looks up the ID of

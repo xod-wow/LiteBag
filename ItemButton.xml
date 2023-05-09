@@ -5,14 +5,8 @@
 <Script file="ItemButton.lua" />
 
 <ItemButton name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" virtual="true" mixin="LiteBagItemButtonMixin">
-
     <Size x="37" y="37" />
-    <!-- Note: Can't inherit OnClick/OnDrag scripts because it's secure. -->
-    <Scripts>
-        <OnLoad method="OnLoad" />
-        <OnEnter method="OnEnter" />
-    </Scripts>
-
+    <!-- Previously override OnEnter for bank, seems ok now. -->
 </ItemButton>
 
 </Ui>
