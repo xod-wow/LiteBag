@@ -5,6 +5,7 @@
 ## Version: @project-version@
 ## Author: Xodiv-Nagrand
 ## Email: mib@post.com
+## IconTexture: 133639
 ## OptionalDependencies: Masque
 ## SavedVariables: LiteBagDB
 ## X-Curse-Project-ID: 50424
