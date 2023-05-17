@@ -196,12 +196,6 @@ local function HideBlizzardBank()
         function () HideUIPanel(BankFrame) BankFrame:Show() end)
     LiteBagBank:HookScript('OnHide',
         function () BankFrame:Hide() end)
-
-    -- Force show the Bag Buttons in Edit Mode
-    EventRegistry:RegisterCallback("EditMode.Enter",
-        function () LB.Manager:ManageBlizzardBagButtons(true) end)
-    EventRegistry:RegisterCallback("EditMode.Exit",
-        function () LB.Manager:ManageBlizzardBagButtons() end)
 end
 
 LB.Manager = CreateFrame('Frame', "LiteBagManager", UIParent)
@@ -210,9 +204,17 @@ function LB.Manager:ReplaceBlizzard()
     HideBlizzardBags()
     HideBlizzardBank()
     ReplaceGlobals()
+
+    -- See the note about LiteBagSpecialCloser earlier
     hooksecurefunc(LiteBagBackpack, 'Show', function () specialCloser:Show() end)
     hooksecurefunc(LiteBagBackpack, 'Hide',
         function () RunNextFrame(function () specialCloser:Hide() end) end)
+
+    -- Force show the Bag Buttons in Edit Mode
+    EventRegistry:RegisterCallback("EditMode.Enter",
+        function () LB.Manager:ManageBlizzardBagButtons(true) end)
+    EventRegistry:RegisterCallback("EditMode.Exit",
+        function () LB.Manager:ManageBlizzardBagButtons() end)
 end
 
 function LB.Manager:CanManageBagButtons()
