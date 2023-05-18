@@ -16,7 +16,6 @@ local BagInfoByType = {
         bagIDs = { 0, 1, 2, 3, 4, 5 },
         showTokenTracker = true,
         showMoneyFrame = true,
-        showBagButtons = true,
         showSearchBox = true,
         resizingAllowed = true,
     },
@@ -24,17 +23,8 @@ local BagInfoByType = {
         bagIDs = { -1, 6, 7, 8, 9, 10, 11, 12 },
         showTokenTracker = false,
         showMoneyFrame = true,
-        showBagButtons = true,
         showSearchBox = true,
         resizingAllowed = true,
-    },
-    REAGENTBAG = {
-        bagIDs = { 5 },
-        showTokenTracker = false,
-        showMoneyFrame = false,
-        showBagButtons = false,
-        showSearchBox = false,
-        resizingAllowed = false,
     },
 }
 
@@ -309,7 +299,7 @@ end
 
 function LiteBagContainerPanelMixin:CalculateSearchBoxOffset()
     local searchBoxOffset = TITLEBAR_HEIGHT + TOPELEMENT_GAP
-    if self.showBagButtons then
+    if LB.GetTypeOption(self.FrameType, 'bagButtons') then
         searchBoxOffset = searchBoxOffset + BAGBUTTON_HEIGHT + TOPELEMENT_GAP
     end
     return searchBoxOffset
@@ -317,7 +307,7 @@ end
 
 function LiteBagContainerPanelMixin:CalculateTopOffset()
     local topOffset = TITLEBAR_HEIGHT + TOPELEMENT_GAP * 2
-    if self.showBagButtons then
+    if LB.GetTypeOption(self.FrameType, 'bagButtons') then
         topOffset = topOffset + BAGBUTTON_HEIGHT + TOPELEMENT_GAP
     end
     if self.showSearchBox then
@@ -577,7 +567,7 @@ function LiteBagContainerPanelMixin:UpdateItemLayout()
         local this = self.bagButtons[i]
         local last = self.bagButtons[i-1]
         this:ClearAllPoints()
-        if not self.showBagButtons then
+        if not LB.GetTypeOption(self.FrameType, 'bagButtons') then
             this:Hide()
         else
             if last then

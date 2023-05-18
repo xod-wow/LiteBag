@@ -22,6 +22,7 @@ local defaults = {
             order = 'default',
             snap = true,
             locked = true,
+            bagButtons = true,
         },
         BANK = {
             columns = 14,
@@ -32,8 +33,8 @@ local defaults = {
             order = 'default',
             snap = true,
             locked = true,
+            bagButtons = true,
         },
-        REAGENTBANK = { },
         showEquipmentSets = false,
         showBindsOn = false,
         hideBlizzardBagButtons = false,

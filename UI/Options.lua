@@ -184,6 +184,14 @@ local options = {
                     get = TypeGetter,
                     set = TypeSetter,
                 },
+                bagButtons = {
+                    type = "toggle",
+                    name = L["Show bag buttons."],
+                    order = order(),
+                    width = "full",
+                    get = TypeGetter,
+                    set = TypeSetter,
+                },
                 snap = {
                     type = "toggle",
                     name = L["When moving snap frame to default position."],
