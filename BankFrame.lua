@@ -71,8 +71,6 @@ function LiteBagBankMixin:OnEvent(event, ...)
 end
 
 function LiteBagBankMixin:ManagePosition()
-    LiteBagFrameMixin.ManagePosition(self)
-
     -- This handles switching back and forth between UIPanel placement and
     -- user placement. In most cases the Show/HideUIPanel will not do anything
     -- since they will reflect the current state already.

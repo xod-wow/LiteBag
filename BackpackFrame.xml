@@ -15,13 +15,6 @@
             </KeyValues>
         </Frame>
     </Frames>
-    <Scripts>
-        <OnShow inherit="append">
-            if not self:IsUserPlaced() then
-                self:SetAutoPosition()
-            end
-        </OnShow>
-    </Scripts>
 </Frame>
 
 </Ui>

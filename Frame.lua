@@ -35,20 +35,22 @@ function LiteBagFrameMixin:GetAutoPosition()
     end
 end
 
-function LiteBagFrameMixin:SetAutoPosition()
-    LB.FrameDebug(self, "SetAutoPosition")
-    local anchor, x, y = self:GetAutoPosition()
-    self:ClearAllPoints()
-    self:SetPoint(anchor, UIParent, anchor, x, y)
+function LiteBagFrameMixin:ManagePosition()
+    LB.FrameDebug(self, "ManagePosition")
+    if not self:IsUserPlaced() then
+        local anchor, x, y = self:GetAutoPosition()
+        self:ClearAllPoints()
+        self:SetPoint(anchor, UIParent, anchor, x, y)
+    end
 end
 
-function LiteBagFrameMixin:ManagePosition()
+function LiteBagFrameMixin:SnapToAutoPosition()
     if not LB.GetTypeOption(self.FrameType, 'snap') then
         return
     end
     if GetSqDistanceFromDefault(self) < 64^2 then
-        self:SetAutoPosition()
         self:SetUserPlaced(false)
+        self:ManagePosition()
     end
 end
 

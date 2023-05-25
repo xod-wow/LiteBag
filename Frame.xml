@@ -45,7 +45,7 @@
                     local parent = self:GetParent()
                     parent:StopMovingOrSizing()
                     parent:HideSnapAnchor()
-                    parent:ManagePosition()
+                    parent:SnapToAutoPosition()
                 </OnMouseUp>
             </Scripts>
         </Button>
