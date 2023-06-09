@@ -53,7 +53,7 @@ LiteBagContainerPanelMixin = CreateFromMixins(ContainerFrameCombinedBagsMixin)
 
 function LiteBagContainerPanelMixin:OnLoad()
 
-    Mixin(self, BagInfoByType[self.FrameType])
+    Mixin(self, BagInfoByType[self.PanelType])
 
     if self.showTokenTracker then
         local name = self:GetName() .. "TokenFrame"
@@ -299,7 +299,7 @@ end
 
 function LiteBagContainerPanelMixin:CalculateSearchBoxOffset()
     local searchBoxOffset = TITLEBAR_HEIGHT + TOPELEMENT_GAP
-    if LB.GetTypeOption(self.FrameType, 'bagButtons') then
+    if self:GetOption('bagButtons') then
         searchBoxOffset = searchBoxOffset + BAGBUTTON_HEIGHT + TOPELEMENT_GAP
     end
     return searchBoxOffset
@@ -307,7 +307,7 @@ end
 
 function LiteBagContainerPanelMixin:CalculateTopOffset()
     local topOffset = TITLEBAR_HEIGHT + TOPELEMENT_GAP * 2
-    if LB.GetTypeOption(self.FrameType, 'bagButtons') then
+    if self:GetOption('bagButtons') then
         topOffset = topOffset + BAGBUTTON_HEIGHT + TOPELEMENT_GAP
     end
     if self.showSearchBox then
@@ -416,8 +416,8 @@ LAYOUTS.default =
 
         local w, h = ItemButtonTemplateInfo.width, ItemButtonTemplateInfo.height
 
-        local xBreak = LB.GetTypeOption(self.FrameType, 'xbreak') or 0
-        local yBreak = LB.GetTypeOption(self.FrameType, 'ybreak') or 0
+        local xBreak = self:GetOption('xbreak') or 0
+        local yBreak = self:GetOption('ybreak') or 0
 
         local row, col, maxCol, maxXGap = 0, 0, 0, 0
 
@@ -494,11 +494,11 @@ LAYOUTS.bag =
     end
 
 local function GetLayoutNColsForWidth(self, width)
-    local layout = LB.GetTypeOption(self.FrameType, 'layout')
+    local layout = self:GetOption('layout')
     if not layout or not LAYOUTS[layout] then layout = 'default' end
 
     local ncols
-    local currentCols = LB.GetTypeOption(self.FrameType, 'columns') or MIN_COLUMNS
+    local currentCols = self:GetOption('columns') or MIN_COLUMNS
 
     -- The BUTTONORDER doesn't matter for sizing so don't bother calling it.
     -- Search up or down from our current column size, for speed.
@@ -526,9 +526,9 @@ local function GetLayoutNColsForWidth(self, width)
 end
 
 local function GetLayoutGridForFrame(self)
-    local ncols = LB.GetTypeOption(self.FrameType, 'columns')
-    local layout = LB.GetTypeOption(self.FrameType, 'layout')
-    local order = LB.GetTypeOption(self.FrameType, 'order')
+    local ncols = self:GetOption('columns')
+    local layout = self:GetOption('layout')
+    local order = self:GetOption('order')
 
     if not layout or not LAYOUTS[layout] then layout = 'default' end
     if not order or not BUTTONORDERS[order] then order = 'default' end
@@ -567,7 +567,7 @@ function LiteBagContainerPanelMixin:UpdateItemLayout()
         local this = self.bagButtons[i]
         local last = self.bagButtons[i-1]
         this:ClearAllPoints()
-        if not LB.GetTypeOption(self.FrameType, 'bagButtons') then
+        if not self:GetOption('bagButtons') then
             this:Hide()
         else
             if last then
@@ -591,10 +591,10 @@ end
 
 function LiteBagContainerPanelMixin:ResizeToWidth(width)
     LB.FrameDebug(self, "ResizeToWidth %d", width)
-    local cols = LB.GetTypeOption(self.FrameType, 'columns')
+    local cols = self:GetOption('columns')
     local newCols = GetLayoutNColsForWidth(self, width)
     if cols ~= newCols then
-        LB.SetTypeOption(self.FrameType, 'columns', newCols, true)
+        LB.SetTypeOption(self.PanelType, 'columns', newCols, true)
         self:UpdateItemLayout()
         self:UpdateFrameSize()
     end
@@ -634,4 +634,12 @@ function LiteBagContainerPanelMixin:UpdateItems()
     for _, itemButton in self:EnumerateValidItems() do
         LB.CallHooks('LiteBagItemButton_Update', itemButton)
     end
+end
+
+function LiteBagContainerPanelMixin:GetOption(k)
+    return LB.GetTypeOption(self.PanelType, k)
+end
+
+function LiteBagContainerPanelMixin:SetOption(k, v)
+    return LB.SetTypeOption(self.PanelType, k, v)
 end

@@ -23,6 +23,7 @@ local defaults = {
             snap = true,
             locked = true,
             bagButtons = true,
+            position = nil,
         },
         BANK = {
             columns = 14,
@@ -34,6 +35,7 @@ local defaults = {
             snap = true,
             locked = true,
             bagButtons = true,
+            position = nil,
         },
         showEquipmentSets = false,
         showBindsOn = false,

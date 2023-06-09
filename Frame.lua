@@ -35,27 +35,40 @@ function LiteBagFrameMixin:GetAutoPosition()
     end
 end
 
-function LiteBagFrameMixin:ManagePosition()
-    LB.FrameDebug(self, "ManagePosition")
-    if not self:IsUserPlaced() then
+function LiteBagFrameMixin:SavePosition()
+    LB.FrameDebug(self, "SavePosition")
+    if self:GetOption('snap') and GetSqDistanceFromDefault(self) < 64^2 then
+        LB.SetTypeOption(self.FrameType, 'position', nil)
+    else
+        local point, relFrame, relPoint, x, y = self:GetPoint()
+        if relFrame and relFrame ~= UIParent then
+            return -- wat do?
+        elseif point ~= relPoint then
+            return -- wat do?
+        end
+        local pos = { anchor=point, x=x, y=y }
+        LB.SetTypeOption(self.FrameType, 'position', pos)
+    end
+end
+
+function LiteBagFrameMixin:RestorePosition()
+    LB.FrameDebug(self, "RestorePosition")
+    local pos = self:GetOption('position')
+    if pos then
+        self:ClearAllPoints()
+        self:SetPoint(pos.anchor, UIParent, pos.anchor, pos.x, pos.y)
+    else
         local anchor, x, y = self:GetAutoPosition()
         self:ClearAllPoints()
         self:SetPoint(anchor, UIParent, anchor, x, y)
     end
-end
-
-function LiteBagFrameMixin:SnapToAutoPosition()
-    if not LB.GetTypeOption(self.FrameType, 'snap') then
-        return
-    end
-    if GetSqDistanceFromDefault(self) < 64^2 then
-        self:SetUserPlaced(false)
-        self:ManagePosition()
-    end
+    -- This is is just a migration nicety for moving from the out per-char blizzard
+    -- layout saving to doing it ourselves.
+    self:SetUserPlaced(false)
 end
 
 function LiteBagFrameMixin:ShowSnapAnchor()
-    if LB.GetTypeOption(self.FrameType, 'snap') then
+    if self:GetOption('snap') then
         local point, x, y = self:GetAutoPosition()
         LiteBagSnapAnchor:ClearAllPoints()
         LiteBagSnapAnchor:SetPoint("CENTER", UIParent, point, x, y)
@@ -78,7 +91,7 @@ end
 function LiteBagFrameMixin:OnShow()
     LB.FrameDebug(self, "OnShow")
     self.needsUpdate = true
-    self:ManagePosition()
+    self:RestorePosition()
     PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 end
 
@@ -197,7 +210,7 @@ function LiteBagFrameMixin:OnUpdate()
 
         self:SetTitle(format('%s : %s', addonName, currentPanel.Title))
 
-        self:SetScale(LB.GetTypeOption(self.FrameType, 'scale') or 1.0)
+        self:SetScale(self:GetOption('scale') or 1.0)
         self:ResizeToPanel()
         self.needsUpdate = nil
     end
@@ -205,10 +218,18 @@ end
 
 
 function LiteBagFrameMixin:IsLocked()
-    return LB.GetTypeOption(self.panels[1].FrameType, 'locked')
+    return self:GetOption('locked')
 end
 
 function LiteBagFrameMixin:ToggleLocked()
     local v = self:IsLocked()
-    LB.SetTypeOption(self.panels[1].FrameType, 'locked', not v)
+    self:SetOption('locked', not v)
+end
+
+function LiteBagFrameMixin:GetOption(k)
+    return LB.GetTypeOption(self.FrameType, k)
+end
+
+function LiteBagFrameMixin:SetOption(k, v)
+    return LB.SetTypeOption(self.FrameType, k, v)
 end

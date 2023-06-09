@@ -31,11 +31,13 @@
     </Attributes>
 
     <Scripts>
-        <OnShow>
-            if not LiteBagBank:IsUserPlaced() then LiteBagBank:Show() end
-        </OnShow>
+         <OnShow>
+            local pos = LiteBagBank:GetOption('position')
+            if not pos then LiteBagBank:Show() end
+         </OnShow>
         <OnHide>
-            if not LiteBagBank:IsUserPlaced() then LiteBagBank:Hide() end
+            local pos = LiteBagBank:GetOption('position')
+            if not pos then LiteBagBank:Hide() end
         </OnHide>
     </Scripts>
 
@@ -59,7 +61,7 @@
         <Frame name="LiteBagBankPanel" parentArray="panels" inherits="LiteBagContainerPanelTemplate" hidden="true">
             <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
             <KeyValues>
-                <KeyValue key="FrameType" value="BANK" type="string" />
+                <KeyValue key="PanelType" value="BANK" type="string" />
                 <KeyValue key="Title" value="BANK" type="global" />
             </KeyValues>
         </Frame>

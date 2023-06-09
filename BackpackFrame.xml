@@ -11,7 +11,7 @@
             <Anchors> <Anchor point="TOPLEFT" /> </Anchors>
             <KeyValues>
                 <KeyValue key="Title" value="BAG_NAME_BACKPACK" type="global" />
-                <KeyValue key="FrameType" value="BACKPACK" type="string" />
+                <KeyValue key="PanelType" value="BACKPACK" type="string" />
             </KeyValues>
         </Frame>
     </Frames>

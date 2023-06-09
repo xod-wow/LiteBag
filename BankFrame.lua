@@ -30,7 +30,8 @@ function LiteBagBankMixin:OnLoad()
 
     self.CloseButton:SetScript('OnClick',
         function ()
-            if self:IsUserPlaced() then
+            local pos = self:GetOption('position')
+            if pos then
                 self:Hide()
             else
                 HideUIPanel(LiteBagBankPlacer)
@@ -47,21 +48,20 @@ end
 
 function LiteBagBankMixin:OnEvent(event, ...)
     LB.EventDebug(self, event, ...)
+    local pos = self:GetOption('position')
     if event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
         local type = ...
         if type == Enum.PlayerInteractionType.Banker then
-            if self:IsUserPlaced() then
+            if pos then
                 self:Show()
             else
-                if not LiteBagBankPlacer:IsShown() then
-                    ShowUIPanel(LiteBagBankPlacer)
-                end
+                ShowUIPanel(LiteBagBankPlacer)
             end
         end
     elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_HIDE' then
         local type = ...
         if type == Enum.PlayerInteractionType.Banker then
-            if self:IsUserPlaced() then
+            if pos then
                 self:Hide()
             else
                 HideUIPanel(LiteBagBankPlacer)
@@ -70,12 +70,16 @@ function LiteBagBankMixin:OnEvent(event, ...)
     end
 end
 
-function LiteBagBankMixin:ManagePosition()
+function LiteBagBankMixin:RestorePosition()
     -- This handles switching back and forth between UIPanel placement and
     -- user placement. In most cases the Show/HideUIPanel will not do anything
     -- since they will reflect the current state already.
 
-    if self:IsUserPlaced() then
+    LB.FrameDebug(self, "RestorePosition (Bank)")
+    local pos = self:GetOption('position')
+    if pos then
+        self:ClearAllPoints()
+        self:SetPoint(pos.anchor, UIParent, pos.anchor, pos.x, pos.y)
         if not tContains(UISpecialFrames, self:GetName()) then
             table.insert(UISpecialFrames, self:GetName())
         end
