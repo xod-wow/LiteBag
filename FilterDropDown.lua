@@ -23,16 +23,16 @@ do
         ContainerFrameSettingsManager:SetFilterFlag(bagID, filterID, value)
     end
 
-    local function AddButtons_BagCleanup(bagID, level)
+    local function AddButtons_BagIgnore(bagID, level)
         local info = LibDD:UIDropDownMenu_CreateInfo()
 
-        info.text = BAG_FILTER_CLEANUP
+        info.text = BAG_FILTER_IGNORE
         info.isTitle = 1
         info.notCheckable = 1
         LibDD:UIDropDownMenu_AddButton(info, level)
 
         info = LibDD:UIDropDownMenu_CreateInfo()
-        info.text = BAG_FILTER_IGNORE
+        info.text = BAG_FILTER_CLEANUP
         info.func = function(_, _, _, value)
             if bagID == Enum.BagIndex.Bank then
                 C_Container.SetBankAutosortDisabled(not value)
@@ -52,26 +52,27 @@ do
         end
 
         LibDD:UIDropDownMenu_AddButton(info, level)
-    end
 
-    local function AddButtons_BagExcludeSellJunk(bagID, level)
-        info = LibDD:UIDropDownMenu_CreateInfo()
-        info.text = SELL_ALL_JUNK_ITEMS_EXCLUDE_FLAG
-        info.func = function(_, _, _, value)
-            if bagID == Enum.BagIndex.Backpack then
-                C_Container.SetBackpackSellJunkDisabled(not value)
-            else
-                C_Container.SetBagSlotFlag(bagID, Enum.BagSlotFlags.ExcludeJunkSell, not value)
+        if Enum.BagSlotFlags.ExcludeJunkSell and bagID ~= Enum.BagIndex.Bank then
+
+            info = LibDD:UIDropDownMenu_CreateInfo()
+            info.text = SELL_ALL_JUNK_ITEMS_EXCLUDE_FLAG
+            info.func = function(_, _, _, value)
+                if bagID == Enum.BagIndex.Backpack then
+                    C_Container.SetBackpackSellJunkDisabled(not value)
+                else
+                    C_Container.SetBagSlotFlag(bagID, Enum.BagSlotFlags.ExcludeJunkSell, not value)
+                end
             end
-        end
 
-        if bagID == Enum.BagIndex.Backpack then
-            info.checked = C_Container.GetBackpackSellJunkDisabled()
-        else
-            info.checked = C_Container.GetBagSlotFlag(bagID, Enum.BagSlotFlags.ExcludeJunkSell)
-        end
+            if bagID == Enum.BagIndex.Backpack then
+                info.checked = C_Container.GetBackpackSellJunkDisabled()
+            else
+                info.checked = C_Container.GetBagSlotFlag(bagID, Enum.BagSlotFlags.ExcludeJunkSell)
+            end
 
-        LibDD:UIDropDownMenu_AddButton(info, level)
+            LibDD:UIDropDownMenu_AddButton(info, level)
+        end
     end
 
     local function AddButtons_BagFilters(bagID, level)
@@ -147,10 +148,7 @@ do
             if L_UIDROPDOWNMENU_MENU_VALUE ~= Enum.BagIndex.Bank then
                 AddButtons_BagFilters(L_UIDROPDOWNMENU_MENU_VALUE, level)
             end
-            AddButtons_BagCleanup(L_UIDROPDOWNMENU_MENU_VALUE, level)
-            if Enum.BagSlotFlags.ExcludeJunkSell and L_UIDROPDOWNMENU_MENU_VALUE ~= Enum.BagIndex.Bank then
-                AddButtons_BagExcludeSellJunk(L_UIDROPDOWNMENU_MENU_VALUE, level)
-            end
+            AddButtons_BagIgnore(L_UIDROPDOWNMENU_MENU_VALUE, level)
         end
     end
 end
