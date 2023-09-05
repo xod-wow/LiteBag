@@ -23,9 +23,27 @@ do
         ContainerFrameSettingsManager:SetFilterFlag(bagID, filterID, value)
     end
 
+    local function AddButtons_BagHide(bagID, level)
+        local info = LibDD:UIDropDownMenu_CreateInfo()
+        info.text = DISPLAY_OPTIONS
+        info.isTitle = 1
+        info.notCheckable = 1
+        LibDD:UIDropDownMenu_AddButton(info, level)
+
+        info = LibDD:UIDropDownMenu_CreateInfo()
+        info.text = HIDE
+        info.func = function(_, _, _, value)
+                local hide = LB.GetGlobalOption('hideBagIDs')
+                hide[bagID] = not value or nil
+                LB.SetGlobalOption('hideBagIDs', hide)
+            end
+        local hide = LB.GetGlobalOption('hideBagIDs')
+        info.checked = hide[bagID]
+        LibDD:UIDropDownMenu_AddButton(info, level)
+    end
+
     local function AddButtons_BagIgnore(bagID, level)
         local info = LibDD:UIDropDownMenu_CreateInfo()
-
         info.text = BAG_FILTER_IGNORE
         info.isTitle = 1
         info.notCheckable = 1
@@ -149,6 +167,9 @@ do
                 AddButtons_BagFilters(L_UIDROPDOWNMENU_MENU_VALUE, level)
             end
             AddButtons_BagIgnore(L_UIDROPDOWNMENU_MENU_VALUE, level)
+            if L_UIDROPDOWNMENU_MENU_VALUE == Enum.BagIndex.ReagentBag then
+                AddButtons_BagHide(L_UIDROPDOWNMENU_MENU_VALUE, level)
+            end
         end
     end
 end

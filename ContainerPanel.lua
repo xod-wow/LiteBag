@@ -246,14 +246,19 @@ function LiteBagContainerPanelMixin:SetUpBags()
 
     self.Items = {}
 
+    local hideBagIDs = LB.GetGlobalOption('hideBagIDs')
+
     for _, bag in ipairs(self.bagFrames) do
         bag.size = C_Container.GetContainerNumSlots(bag:GetID())
+        local isHidden = hideBagIDs[bag:GetID()]
         for i = 1, bag.size do
             local b = GetBagItemButton(bag, i)
-            table.insert(self.Items, b)
+            if not isHidden then
+                table.insert(self.Items, b)
+            end
         end
         for i,b in ipairs(bag.Items) do
-            b:SetShown(i <= bag.size)
+            b:SetShown(not isHidden and i <= bag.size)
         end
     end
 

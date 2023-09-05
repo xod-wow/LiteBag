@@ -63,6 +63,15 @@ function LiteBagBagButtonMixin:Update()
         SetItemButtonTextureVertexColor(self, 1, 1, 1)
     end
 
+    local hide = LB.GetGlobalOption('hideBagIDs')
+    if hide[bagID] then
+        self:GetNormalTexture():SetAlpha(0.333)
+        self.icon:SetAlpha(0.333)
+    else
+        self:GetNormalTexture():SetAlpha(1)
+        self.icon:SetAlpha(1)
+    end
+
 end
 
 function LiteBagBagButtonMixin:OnLoad()
@@ -159,6 +168,12 @@ function LiteBagBagButtonMixin:OnClick()
         PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
         BankFrame.nextSlotCost = self.purchaseCost
         StaticPopup_Show('CONFIRM_BUY_BANK_SLOT')
+    elseif IsShiftKeyDown() then
+        if bagID == Enum.BagIndex.ReagentBag then
+            local hide = LB.GetGlobalOption('hideBagIDs')
+            hide[bagID] = not hide[bagID] or nil
+            LB.SetGlobalOption('hideBagIDs', hide)
+        end
     elseif bagID ~= Enum.BagIndex.Backpack and bagID ~= Enum.BagIndex.Bank then
         PickupBagFromSlot(self.slotID)
     end
