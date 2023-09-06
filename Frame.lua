@@ -71,8 +71,9 @@ function LiteBagFrame_StopSizing(self)
 end
 
 function LiteBagFrame_OnSizeChanged(self, w, h)
-    LB.Debug(format("Frame OnSizeChanged %s %d,%d",self:GetName(), w, h))
     if not self.sizing then return end
+
+    LB.Debug(format("Frame OnSizeChanged %s %d,%d", self:GetName(), w, h))
 
     LiteBagPanel_ResizeToFrame(self.currentPanel, w, h)
 
