@@ -227,14 +227,13 @@ end
 ----------------------------------------------------------------------------]]--
 
 function LB.Options:OnEvent(event, arg1, ...)
-    if event == 'ADDON_LOADED' and arg1 == addonName then
+    if event == 'PLAYER_LOGIN' then
         self:Initialize()
         SlashCmdList['LiteBag'] = SlashFunc
         SLASH_LiteBag1 = '/litebag'
         SLASH_LiteBag2 = '/lbg'
-        self:UnregisterEvent('ADDON_LOADED')
     end
 end
 
 LB.Options:SetScript('OnEvent', LB.Options.OnEvent)
-LB.Options:RegisterEvent('ADDON_LOADED')
+LB.Options:RegisterEvent('PLAYER_LOGIN')
