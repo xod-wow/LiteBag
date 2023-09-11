@@ -96,6 +96,32 @@ local options = {
             get = GlobalGetter,
             set = GlobalSetter,
         },
+        allowhide = {
+            type = "multiselect",
+            name = L["Allow hiding a bag ID."],
+            values =
+                function ()
+                    local t = tInvert(Enum.BagIndex)
+                    t[Enum.BagIndex.Backpack] = nil
+                    t[Enum.BagIndex.Bank] = nil
+                    t[Enum.BagIndex.Reagentbank] = nil
+                    t[Enum.BagIndex.Bankbag] = nil
+                    t[Enum.BagIndex.Keyring] = nil
+                    return t
+                end,
+            hidden = true,
+            order = order(),
+            get =
+                function (info, i)
+                    local allow = LB.GetGlobalOption('allowHideBagIDs')
+                    return allow[i] == true
+                 end,
+            set =
+                function (info, i, val)
+                    local allow = LB.GetGlobalOption('allowHideBagIDs')
+                    allow[i] = val or nil
+                end,
+        },
         eventDebug = {
             type = "toggle",
             name = L["Enable event debugging."],
