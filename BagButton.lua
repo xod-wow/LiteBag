@@ -169,7 +169,8 @@ function LiteBagBagButtonMixin:OnClick()
         BankFrame.nextSlotCost = self.purchaseCost
         StaticPopup_Show('CONFIRM_BUY_BANK_SLOT')
     elseif IsShiftKeyDown() then
-        if bagID == Enum.BagIndex.ReagentBag then
+        local allow = LB.GetGlobalOption('allowHideBagIDs')
+        if allow[bagID] then
             local hide = LB.GetGlobalOption('hideBagIDs')
             hide[bagID] = not hide[bagID] or nil
             LB.SetGlobalOption('hideBagIDs', hide)

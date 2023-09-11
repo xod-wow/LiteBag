@@ -40,6 +40,7 @@ local defaults = {
         showEquipmentSets = false,
         showBindsOn = false,
         hideBlizzardBagButtons = false,
+        allowHideBagIDs = { [Enum.BagIndex.ReagentBag] = true },
         hideBagIDs = { },
         thickerIconBorder = false,
         debug = nil,
