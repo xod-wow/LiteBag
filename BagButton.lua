@@ -185,6 +185,13 @@ function LiteBagBagButtonMixin:OnClick()
         local allow = LB.GetGlobalOption('allowHideBagIDs')
         if allow[bagID] then
             local hide = LB.GetGlobalOption('hideBagIDs')
+            -- Because we are inside BagSlot.OnEnter the bag items are marked
+            -- and they can't get unmarked once they're hidden so we force it
+            -- before changing the option. This is probably evidence that the
+            -- way I am doing the hiding is wrong.
+            if not hide[bagID] then
+                EventRegistry:TriggerEvent("BagSlot.OnLeave", self)
+            end
             hide[bagID] = not hide[bagID] or nil
             LB.SetGlobalOption('hideBagIDs', hide)
         end
