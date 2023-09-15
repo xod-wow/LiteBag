@@ -123,6 +123,8 @@ if locale == "zhTW" then
     L["Reverse"]          = "反向"
     L["Row gaps"]         = "欄距"
     L["Scale"]            = "縮放"
+    L["Show bag buttons."] = "顯示背包按鈕。"
     L["Show options panel."] = "顯示選項面板。"
     L["Show thicker icon borders for this quality and above."] = "在此品質及以上物品顯示更粗的圖示邊框。"
+    L["When moving snap frame to default position."] = "當移動快照框至預設位置時。"
 end
