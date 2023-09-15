@@ -120,6 +120,13 @@ local options = {
                 function (info, i, val)
                     local allow = LB.GetGlobalOption('allowHideBagIDs')
                     allow[i] = val or nil
+                    LB.SetGlobalOption('allowHideBagIDs', allow)
+                    -- Force it to be shown again if it was hidden
+                    if not val then
+                        local hide = LB.GetGlobalOption('hideBagIDs')
+                        hide[i] = nil
+                        LB.SetGlobalOption('hideBagIDs', hide)
+                    end
                 end,
         },
         eventDebug = {
