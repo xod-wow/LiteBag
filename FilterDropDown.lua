@@ -24,6 +24,9 @@ do
     end
 
     local function AddButtons_BagHide(bagID, level)
+        local allow = LB.GetGlobalOption('allowHideBagIDs')
+        if not allow[bagID] then return end
+
         local info = LibDD:UIDropDownMenu_CreateInfo()
         info.text = DISPLAY_OPTIONS
         info.isTitle = 1
@@ -167,9 +170,7 @@ do
                 AddButtons_BagFilters(L_UIDROPDOWNMENU_MENU_VALUE, level)
             end
             AddButtons_BagIgnore(L_UIDROPDOWNMENU_MENU_VALUE, level)
-            if L_UIDROPDOWNMENU_MENU_VALUE == Enum.BagIndex.ReagentBag then
-                AddButtons_BagHide(L_UIDROPDOWNMENU_MENU_VALUE, level)
-            end
+            AddButtons_BagHide(L_UIDROPDOWNMENU_MENU_VALUE, level)
         end
     end
 end
