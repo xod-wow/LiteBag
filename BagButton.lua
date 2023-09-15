@@ -11,6 +11,8 @@
 
 local addonName, LB = ...
 
+local L = LB.Localize
+
 local BankContainers = { [Enum.BagIndex.Bank]  = true }
 do
     for i = 1,NUM_BANKBAGSLOTS do
@@ -126,7 +128,14 @@ function LiteBagBagButtonMixin:OnEnter()
         GameTooltip_SetTitle(GameTooltip, BANK)
     else
         local hasItem = GameTooltip:SetInventoryItem('player', self.slotID)
-        if not hasItem then
+        if hasItem then
+            local allow = LB.GetGlobalOption('allowHideBagIDs')
+            if allow[self:GetID()] then
+                local text = "<" .. L["Shift Click to Hide/Show Bag"] .. ">"
+                GameTooltip:AddLine(" ")
+                GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(text))
+            end
+        else
             local bagID = self:GetID()
             GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
             if self.purchaseCost then
