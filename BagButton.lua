@@ -65,10 +65,14 @@ function LiteBagBagButtonMixin:Update()
 
     local hide = LB.GetGlobalOption('hideBagIDs')
     if hide[bagID] then
-        self:GetNormalTexture():SetAlpha(0.333)
-        self.icon:SetAlpha(0.333)
+        self:GetNormalTexture():SetDesaturated(true)
+        self:GetNormalTexture():SetAlpha(0.5)
+        self.icon:SetDesaturated(true)
+        self.icon:SetAlpha(0.5)
     else
+        self:GetNormalTexture():SetDesaturated(false)
         self:GetNormalTexture():SetAlpha(1)
+        self.icon:SetDesaturated(false)
         self.icon:SetAlpha(1)
     end
 
