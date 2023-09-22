@@ -179,6 +179,11 @@ end
 function LiteBagContainerPanelMixin:OnEvent(event, ...)
     LB.EventDebug(self, event, ...)
     if event == "BAG_CONTAINER_UPDATE" then
+        -- There is a corner case bug if you use the blizzard bag
+        -- buttons to drag in a bigger bag while LiteBag is hidden and then
+        -- open the LiteBag for the first time afterwards in combat, in which
+        -- case we won't be able to make the extra ItemButtons (yet). Could be
+        -- fixed with a lot of work but realistically probably never happens.
         self:GenerateFrame()
     elseif event == "BAG_CLOSED" then
         -- Nothing, don't close single bags because this fires when you
