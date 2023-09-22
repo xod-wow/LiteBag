@@ -200,6 +200,18 @@ end
 
 LB.Manager = CreateFrame('Frame', "LiteBagManager", UIParent)
 
+local InitializeHooks = {}
+
+function LB.Manager:RegisterInitializeHook(f)
+    table.insert(InitializeHooks, f)
+end
+
+function LB.Manager:CallInitializeHooks()
+    for _,f in ipairs(InitializeHooks) do
+        f()
+    end
+end
+
 function LB.Manager:ReplaceBlizzard()
     HideBlizzardBags()
     HideBlizzardBank()
@@ -270,6 +282,7 @@ function LB.Manager:OnEvent(event, ...)
     elseif event == 'PLAYER_LOGIN' then
         LB.InitializeOptions()
         LB.InitializeGUIOptions()
+        self:CallInitializeHooks()
         self:ReplaceBlizzard()
         self:ManageBlizzardBagButtons()
         self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')

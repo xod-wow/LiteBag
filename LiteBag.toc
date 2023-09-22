@@ -19,6 +19,8 @@ Print.lua
 Options.lua
 Hooks.lua
 
+Core.lua
+
 BagButton.xml
 ItemButton.xml
 FilterDropDown.xml
@@ -27,7 +29,6 @@ ReagentBankPanel.xml
 Frame.xml
 BankFrame.xml
 BackpackFrame.xml
-Core.lua
 
 #@debug@
 Plugin_Anima\Anima.xml
