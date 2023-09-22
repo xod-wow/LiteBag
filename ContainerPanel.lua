@@ -52,12 +52,6 @@ local BOTTOM_OFFSET = 8
 LiteBagContainerPanelMixin = CreateFromMixins(ContainerFrameCombinedBagsMixin)
 
 function LiteBagContainerPanelMixin:OnLoad()
-    -- Because we need to use the options which aren't available yet at OnLoad
-    -- time, this is delayed until the PLAYER_LOGIN hooks from LiteBagManager.
-    LB.Manager:RegisterInitializeHook( function () self:Initialize() end )
-end
-
-function LiteBagContainerPanelMixin:Initialize()
     Mixin(self, BagInfoByType[self.PanelType])
 
     if self.showTokenTracker then
@@ -109,8 +103,9 @@ function LiteBagContainerPanelMixin:Initialize()
     -- GenerateFrame() which is called from the OnShow handler, but if we open for the
     -- first time in combat they'll all be tainted. Blizzard prevents changing them in
     -- combat so it's safe to do this here (in PLAYER_LOGIN) before combat lockdown has
-    -- kicked in to get an initial set.
-    self:SetUpBags()
+    -- kicked in to get an initial set. But because this wants the options loaded we
+    -- have to delay it a little into PLAYER_LOGIN.
+    LB.Manager:RegisterInitializeHook( function () self:SetUpBags() end )
 
     self.PortraitButton:SetPoint("CENTER", self:GetParent():GetPortrait(), "CENTER", 3, -3)
 end
