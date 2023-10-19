@@ -27,7 +27,7 @@ function LiteBagBank_Initialize(self)
 
     local panel = CreateFrame('Frame', 'LiteBagBankPanel', self, 'LiteBagPanelTemplate')
     LiteBagPanel_Initialize(panel, BANK_BAG_IDS)
-    panel.defaultColumns = 16
+    panel.defaultColumns = 14
     panel.canResize = true
     LiteBagFrame_AddPanel(self, panel, BANK)
 
