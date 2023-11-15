@@ -510,6 +510,13 @@ LAYOUTS.bag =
         return grid
     end
 
+LAYOUTS.bagreverse =
+    function (self, Items, ncols)
+        local grid = LAYOUTS.bag(self, Items, ncols)
+        grid.reverseDirection = true
+        return grid
+    end
+
 local function GetLayoutNColsForWidth(self, width)
     local layout = self:GetOption('layout')
     if not layout or not LAYOUTS[layout] then layout = 'default' end

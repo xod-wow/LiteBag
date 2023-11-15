@@ -20,11 +20,12 @@ local OrderSorting = { "default", "blizzard", "reverse", }
 
 local LayoutValues  = {
     ['default'] = DEFAULT,
+    ['reverse'] = format('%s - %s', DEFAULT, L['Reverse']),
     ['bag'] = L['Bags'],
-    ['reverse'] = L['Reverse'],
+    ['bagreverse'] = format('%s - %s', L['Bags'], L['Reverse']),
 }
 
-local LayoutSorting = { "default", "bag", "reverse", }
+local LayoutSorting = { "default", "reverse", "bag", "bagreverse" }
 
 local function GetQualityText(i)
     if ITEM_QUALITY_COLORS[i] then
@@ -242,7 +243,7 @@ local options = {
                     type = "range",
                     name = L["Columns"],
                     min = 8,
-                    max = 32,
+                    max = 48,
                     step = 1,
                     order = order(),
                     get = TypeGetter,
