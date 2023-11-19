@@ -32,12 +32,20 @@ end
 
 if locale == "deDE" then
     L                     = L or {}
+    L["Bottom Left"]      = "Unten links"
+    L["Bottom Right"]     = "Unten rechts"
+    L["Top Left"]         = "Oben links"
+    L["Top Right"]        = "Oben rechts"
 end
 
 -- esES / esMX -----------------------------------------------------------------
 
 if locale == "esES" or locale == "esMX" then
     L                     = L or {}
+    L["Bottom Left"]      = "Inferior izquierda"
+    L["Bottom Right"]     = "Inferior derecha"
+    L["Top Left"]         = "Superior izquierda"
+    L["Top Right"]        = "Superior derecha"
 end
 
 -- frFR ------------------------------------------------------------------------
@@ -46,10 +54,14 @@ if locale == "frFR" then
     L                     = L or {}
     L["Bags"]             = "Sacs"
     L["BoE"]              = "LqE"
+    L["Bottom Left"]      = "Bas gauche"
+    L["Bottom Right"]     = "Bas droit"
     L["Display equipment set membership icons."] = "Afficher les icônes sur les Ensembles d'Équipements"
     L["Display text for BoA and BoE items."] = "Afficher un texte sur les objets \"Lié au Compte\" (Blizzard) et \"Lié quand Équipé\" (LqE)."
     L["Pet"]              = "Pet"
     L["Reverse"]          = "Inverse"
+    L["Top Left"]         = "Haut gauche"
+    L["Top Right"]        = "Haut droit"
 end
 
 -- itIT ------------------------------------------------------------------------
@@ -59,10 +71,14 @@ if locale == "itIT" then
     L["Bags"]             = "Zaini"
     L["BoA"]              = "BoA"
     L["BoE"]              = "BoE"
+    L["Bottom Left"]      = "In basso a sinistra‎"
+    L["Bottom Right"]     = "In basso a destra"
     L["Display equipment set membership icons."] = "Visualizza icone tipologia equipaggiamento."
     L["Display text for BoA and BoE items."] = "Mostra testo per oggetti BoA e BoE."
     L["Pet"]              = "Mascotte"
     L["Reverse"]          = "Inversa"
+    L["Top Left"]         = "In alto a sinistra"
+    L["Top Right"]        = "In alto a destra"
 end
 
 -- koKR ------------------------------------------------------------------------
@@ -73,6 +89,8 @@ if locale == "koKR" then
     L["Bags"]             = "가방"
     L["BoA"]              = "BoA"
     L["BoE"]              = "BoE"
+    L["Bottom Left"]      = "좌측 하단"
+    L["Bottom Right"]     = "우측 하단"
     L["Column gaps"]      = "칸 간격"
     L["Columns"]          = "칸 수"
     L["Display equipment set membership icons."] = "착용 세트에 멤버쉽 아이콘을 표시합니다."
@@ -85,24 +103,38 @@ if locale == "koKR" then
     L["Scale"]            = "크기"
     L["Show options panel."] = "설정 창을 표시합니다."
     L["Show thicker icon borders for this quality and above."] = "두꺼운 테두리를 사용할 최소 아이템 등급"
+    L["Top Left"]         = "좌측 상단"
+    L["Top Right"]        = "우측 상단"
 end
 
 -- ptBR ------------------------------------------------------------------------
 
 if locale == "ptBR" then
     L                     = L or {}
+    L["Bottom Left"]      = "Em Baixo a Esquerda"
+    L["Bottom Right"]     = "Em Baixo a Direita"
+    L["Top Left"]         = "Em Cima a Esquerda"
+    L["Top Right"]        = "Em Cima a Direita"
 end
 
 -- ruRU ------------------------------------------------------------------------
 
 if locale == "ruRU" then
     L                     = L or {}
+    L["Bottom Left"]      = "Снизу слева"
+    L["Bottom Right"]     = "Снизу справа"
+    L["Top Left"]         = "Вверху cлева"
+    L["Top Right"]        = "Вверху cправа"
 end
 
 -- zhCN ------------------------------------------------------------------------
 
 if locale == "zhCN" then
     L                     = L or {}
+    L["Bottom Left"]      = "左下"
+    L["Bottom Right"]     = "右下"
+    L["Top Left"]         = "左上"
+    L["Top Right"]        = "右上"
 end
 
 -- zhTW ------------------------------------------------------------------------
@@ -113,6 +145,8 @@ if locale == "zhTW" then
     L["Bags"]             = "背包"
     L["BoA"]              = "帳綁"
     L["BoE"]              = "裝綁"
+    L["Bottom Left"]      = "\"左下"
+    L["Bottom Right"]     = "右下"
     L["Column gaps"]      = "行距"
     L["Columns"]          = "行數"
     L["Display equipment set membership icons."] = "顯示裝備設定相關圖示"
@@ -123,8 +157,11 @@ if locale == "zhTW" then
     L["Reverse"]          = "反向"
     L["Row gaps"]         = "欄距"
     L["Scale"]            = "縮放"
+    L["Shift Click to Hide/Show Bag"] = "Shift點擊來隱藏/顯示背包"
     L["Show bag buttons."] = "顯示背包按鈕。"
     L["Show options panel."] = "顯示選項面板。"
     L["Show thicker icon borders for this quality and above."] = "在此品質及以上物品顯示更粗的圖示邊框。"
+    L["Top Left"]         = "左上"
+    L["Top Right"]        = "右上"
     L["When moving snap frame to default position."] = "當移動快照框至預設位置時。"
 end
