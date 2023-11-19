@@ -20,6 +20,7 @@ local defaults = {
             ybreak = 0,
             layout = 'default',
             order = 'default',
+            anchor = 'TOPLEFT',
             snap = true,
             locked = true,
             bagButtons = true,
@@ -32,6 +33,7 @@ local defaults = {
             ybreak = 0,
             layout = 'default',
             order = 'default',
+            anchor = 'TOPLEFT',
             snap = true,
             locked = true,
             bagButtons = true,
@@ -56,6 +58,17 @@ function LB.InitializeOptions()
     local ReFirer = {
         Fire = function () LB.db.callbacks:Fire('OnOptionsModified') end
     }
+
+    -- Migrate
+    for _, f in ipairs({ "BACKPACK", "BANK" }) do
+        if LB.db.profile[f].layout == 'reverse' then
+            LB.db.profile[f].layout = 'default'
+            LB.db.profile[f].anchor = "BOTTOMRIGHT"
+        elseif LB.db.profile[f].layout == 'bagreverse' then
+            LB.db.profile[f].layout = 'bag'
+            LB.db.profile[f].anchor = "BOTTOMRIGHT"
+        end
+    end
 
     LB.db.RegisterCallback(ReFirer, 'OnProfileChanged', 'Fire')
     LB.db.RegisterCallback(ReFirer, 'OnProfileReset', 'Fire')

@@ -20,12 +20,19 @@ local OrderSorting = { "default", "blizzard", "reverse", }
 
 local LayoutValues  = {
     ['default'] = DEFAULT,
-    ['reverse'] = format('%s - %s', DEFAULT, L['Reverse']),
     ['bag'] = L['Bags'],
-    ['bagreverse'] = format('%s - %s', L['Bags'], L['Reverse']),
 }
 
-local LayoutSorting = { "default", "reverse", "bag", "bagreverse" }
+local LayoutSorting = { "default", "bag", }
+
+local AnchorValues = {
+    ['TOPLEFT'] =  L["Top Left"],
+    ['TOPRIGHT'] = L["Top Right"],
+    ['BOTTOMLEFT'] = L["Bottom Left"],
+    ['BOTTOMRIGHT'] = L["Bottom Right"],
+}
+
+local AnchorSorting = { "TOPLEFT", "TOPRIGHT", "BOTTOMLEFT", "BOTTOMRIGHT" }
 
 local function GetQualityText(i)
     if ITEM_QUALITY_COLORS[i] then
@@ -308,6 +315,18 @@ local options = {
                     values = LayoutValues,
                     sorting = LayoutSorting,
                     order = order(),
+                    width = "1",
+                    order = order(),
+                    get = TypeGetter,
+                    set = TypeSetter,
+                },
+                anchor = {
+                    type = "select",
+                    style = "dropdown",
+                    name = L["First icon position:"],
+                    values = AnchorValues,
+                    sorting = AnchorSorting,
+                    order = order(),
                     get = TypeGetter,
                     set = TypeSetter,
                 },
@@ -407,6 +426,16 @@ local options = {
                     name = L["Icon layout:"],
                     values = LayoutValues,
                     sorting = LayoutSorting,
+                    order = order(),
+                    get = TypeGetter,
+                    set = TypeSetter,
+                },
+                anchor = {
+                    type = "select",
+                    style = "dropdown",
+                    name = L["First icon position:"],
+                    values = AnchorValues,
+                    sorting = AnchorSorting,
                     order = order(),
                     get = TypeGetter,
                     set = TypeSetter,
