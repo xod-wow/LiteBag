@@ -55,9 +55,7 @@ function EquipSetState:Update()
     if self.isDirty then
         self.state = {}
         for i, id in ipairs(C_EquipmentSet.GetEquipmentSetIDs()) do
-            if i < 4 then
-                self:UpdateSet(i, id)
-            end
+            self:UpdateSet(i, id)
         end
         self.isDirty = nil
     end
@@ -77,32 +75,66 @@ EquipSetState:RegisterEvent('EQUIPMENT_SETS_CHANGED')
 local texData = {
     [1] = {
         parentKey = "LiteBagEQTexture1",
-        point = "BOTTOMRIGHT",
+        anchor = { "CENTER", "CENTER", -10, 10 },
         level = "ARTWORK",
         subLevel = 1,
-        coords = { 0.0, 0.5, 0.0, 0.5 }
+        color = { 1, 0.5, 0.5 },
     },
     [2] = {
-        parent = "LiteBagEquipSetsTexture",
         parentKey = "LiteBagEQTexture2",
-        point = "BOTTOMLEFT",
+        anchor = { "CENTER", "CENTER", 0, 10 },
         level = "ARTWORK",
         subLevel = 1,
-        coords = { 0.5, 1.0, 0.0, 0.5 },
+        color = { 1, 0.67, 0.0 },
     },
     [3] = {
         parentKey = "LiteBagEQTexture3",
-        point = "TOPLEFT",
+        anchor = { "CENTER", "CENTER", 10, 10 },
         level = "ARTWORK",
         subLevel = 1,
-        coords = { 0.5, 1.0, 0.5, 1.0 },
+        color = { 1, 1, 0.33 },
     },
     [4] = {
         parentKey = "LiteBagEQTexture4",
-        point = "TOPRIGHT",
+        anchor = { "CENTER", "CENTER", -10, 0 },
         level = "ARTWORK",
         subLevel = 1,
-        coords = { 0.0, 0.5, 0.5, 1.0 },
+        color = { 0.0, 1, 0.0 },
+    },
+    [5] = {
+        parentKey = "LiteBagEQTexture5",
+        anchor = { "CENTER", "CENTER", 0, 0 },
+        level = "ARTWORK",
+        subLevel = 1,
+        color = { 0.33, 0.67, 1 },
+    },
+    [6] = {
+        parentKey = "LiteBagEQTexture6",
+        anchor = { "CENTER", "CENTER", 10, 0 },
+        level = "ARTWORK",
+        subLevel = 1,
+        color = { 0.0, 0.33, 1 },
+    },
+    [7] = {
+        parentKey = "LiteBagEQTexture7",
+        anchor = { "CENTER", "CENTER", -10, -10 },
+        level = "ARTWORK",
+        subLevel = 1,
+        color = { 1, 0.33, 1 },
+    },
+    [8] = {
+        parentKey = "LiteBagEQTexture8",
+        anchor = { "CENTER", "CENTER", 0, -10 },
+        level = "ARTWORK",
+        subLevel = 1,
+        color = { 0.67, 0.0, 1 }
+    },
+    [9] = {
+        parentKey = "LiteBagEQTexture9",
+        anchor = { "CENTER", "CENTER", 10, -10 },
+        level = "ARTWORK",
+        subLevel = 1,
+        color = { 1, 1, 1 },
     },
 }
 
@@ -114,9 +146,10 @@ local function MakeTexture(frame, td)
                     td.subLevel
                 )
     tex:ClearAllPoints()
-    tex:SetPoint(td.point, frame, "CENTER")
-    tex:SetSize(16, 16)
-    tex:SetTexCoord(unpack(td.coords))
+    local point, relPoint, xOff, yOff = unpack(td.anchor)
+    tex:SetPoint(point, frame, relPoint, xOff, yOff)
+    tex:SetSize(11, 11)
+    tex:SetVertexColor(unpack(td.color))
     return tex
 end
 
