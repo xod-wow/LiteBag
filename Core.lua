@@ -81,7 +81,7 @@ local REPLACEMENT_GLOBALS = {
             end
 
             OpenBackpack()
-            EventRegistry:TriggerEvent("ContainerFrame.OpenAllBags");
+            EventRegistry:TriggerEvent("ContainerFrame.OpenAllBags")
         end,
 
     ToggleAllBags =
@@ -131,7 +131,7 @@ local HOOKED_GLOBALS = {
             FRAME_THAT_OPENED_BAGS = nil
 
             local wasShown = CloseBackpack()
-            EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags");
+            EventRegistry:TriggerEvent("ContainerFrame.CloseAllBags")
             return wasShown
         end,
 

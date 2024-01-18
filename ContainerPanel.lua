@@ -160,11 +160,16 @@ function LiteBagContainerPanelMixin:OnHide()
     LB.db.UnregisterAllCallbacks(self)
 
     ContainerFrameCombinedBagsMixin.OnHide(self)
+    -- Reregister these to keep them registered. Work around a Blizzard bug where
+    -- closing the bags with a keybind while the mouse is over a bagbutton will leave
+    -- the slots highlighted forever.
+    EventRegistry:RegisterCallback("BagSlot.OnEnter", self.OnBagSlotEnter, self)
+    EventRegistry:RegisterCallback("BagSlot.OnLeave", self.OnBagSlotLeave, self)
 
     -- UpdateNewItemList is broken in DF 10.0 and only clears the backpack
     -- on a combined frame. Fix it up ourselves.
     for _, itemButton in self:EnumerateValidItems() do
-        C_NewItems.RemoveNewItem(itemButton:GetBagID(), itemButton:GetID());
+        C_NewItems.RemoveNewItem(itemButton:GetBagID(), itemButton:GetID())
     end
 
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
@@ -364,7 +369,7 @@ function LiteBagContainerPanelMixin:UpdateMiscellaneousFrames()
     if self:MatchesBagID(Enum.BagIndex.Bank) then
         self:GetParent():SetPortraitToUnit('npc')
     elseif self:MatchesBagID(Enum.BagIndex.Backpack) then
-        self:GetParent():SetPortraitToAsset("Interface/Icons/Inv_misc_bag_08");
+        self:GetParent():SetPortraitToAsset("Interface/Icons/Inv_misc_bag_08")
     else
         self:GetParent():SetPortraitToBag(self.bagIDs[1])
     end
@@ -384,7 +389,7 @@ function LiteBagContainerPanelMixin:OnTokenWatchChanged()
 end
 
 function LiteBagContainerPanelMixin:SetTokenTracker(tokenFrame)
-        -- tokenFrame:SetParent(self);
+        -- tokenFrame:SetParent(self)
         -- tokenFrame:SetIsCombinedInventory(true)
 end
 

@@ -167,7 +167,7 @@ function LiteBagFrameMixin:ShowPanel(n)
 end
 
 function LiteBagFrameMixin:OnLoad()
-    self:SetPortraitTextureSizeAndOffset(36, -4, 1);
+    self:SetPortraitTextureSizeAndOffset(36, -4, 1)
     self.Tabs[1]:SetText(self.panels[1].Title)
     PanelTemplates_SetNumTabs(self, 1)
     PanelTemplates_SetTab(self, 1)
