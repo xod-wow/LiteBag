@@ -573,6 +573,8 @@ function LiteBagContainerPanelMixin:UpdateItemLayout()
 
     local anchor = self:GetOption("anchor")
 
+    local xM, yM, xOff, yOff
+
     if anchor == 'BOTTOMRIGHT' then
         xM, yM, xOff, yOff = -1,  1, -RIGHT_OFFSET,  adjustedBottomOffset
     elseif anchor == 'BOTTOMLEFT' then
