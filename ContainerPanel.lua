@@ -421,8 +421,12 @@ BUTTONORDERS.blizzard =
         local Items = { }
         for b = #self.bagFrames, 1, -1 do
             local bag = self.bagFrames[b]
-            for _, b in ipairs(bag.Items) do
-                tinsert(Items, b)
+            -- This is a dodgy check if the whole bag is hidden for efficiency.
+            -- Strictly it should check each b inside the inner loop.
+            if tContains(self.Items, bag.Items[1]) then
+                for _, b in ipairs(bag.Items) do
+                    tinsert(Items, b)
+                end
             end
         end
         return Items
