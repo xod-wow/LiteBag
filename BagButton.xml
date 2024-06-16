@@ -5,7 +5,7 @@
 <Script file="BagButton.lua"/>
 
 <Button name="LiteBagBagButtonTemplate" hidden="true" virtual="true" inherits="ItemButtonTemplate" mixin="LiteBagBagButtonMixin">
-    <Size x="26" y="26" />
+    <Size x="22" y="22" />
     <Layers>
         <Layer level="OVERLAY">
             <Texture parentKey="FilterIcon" atlas="bags-icon-consumables" useAtlasSize="true" hidden="true">
@@ -19,7 +19,7 @@
         <OnSizeChanged>
             -- For some reason the NormalTexture is only center anchored
             -- which means it doesn't scale when the button does.
-            local tex = _G[self:GetName().."NormalTexture"]
+            local tex = self:GetNormalTexture()
             tex:SetWidth(64 *  w / 37)
             tex:SetHeight(64 * h / 37)
         </OnSizeChanged>

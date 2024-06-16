@@ -60,8 +60,14 @@ function LiteBagBank_Initialize(self)
     self.Inset.Bg:SetVertexColor(0.4, 0.4, 0.4, 1)
 
     -- Select the right search box 
-    self.searchBox = BankItemSearchBox
     self.sortButton = BankItemAutoSortButton
+    self.searchBox = BankItemSearchBox
+
+    if not self.searchBox then
+        self.searchBox = CreateFrame('EditBox', self, nil, 'BagSearchBoxTemplate')
+        self.searchBox:SetMaxLetters(15)
+        self.searchBox:SetSize(126, 18)
+    end
 
     -- Bank frame specific events
     self:RegisterEvent('BANKFRAME_OPENED')
@@ -81,7 +87,7 @@ function LiteBagBank_OnEvent(self, event, arg1, arg2, ...)
         ShowUIPanel(self:GetParent())
     elseif event == 'BANKFRAME_CLOSED' then
         HideUIPanel(self:GetParent())
-    elseif event == 'INVENTORY_SEARCH_UPDATE' then
+    elseif event == 'INVENTORY_SEARCH_UPDATE' and ReagentBankFrame then
         ContainerFrame_UpdateSearchResults(ReagentBankFrame)
     elseif event == 'ITEM_LOCK_CHANGED' then
         -- bag, slot = arg1, arg2

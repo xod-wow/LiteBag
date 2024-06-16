@@ -93,19 +93,14 @@ function LiteBagFrame_OnShow(self)
     self:SetSize(self.currentPanel:GetSize())
     self:SetScale(LB.Options:GetFrameOption(self, 'scale') or 1.0)
 
-    LiteBagFrame_AttachSearchBox(self)
+    -- Have to wait for the panel to draw itself for the anchors to be right
+    C_Timer.After(0, function () LiteBagFrame_AttachSearchBox(self) end)
 
     PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 end
 
 function LiteBagFrame_AttachSearchBox(self)
-    if self.searchBox then
-        self.searchBox:SetParent(self)
-        self.searchBox:ClearAllPoints()
-        self.searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -38, -35)
-        self.searchBox.anchorBag = self
-        self.searchBox:Show()
-    end
+    local rightOffset = -12
 
     if self.sortButton then
         self.sortButton:SetParent(self)
@@ -113,7 +108,27 @@ function LiteBagFrame_AttachSearchBox(self)
         self.sortButton:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -7, -32)
         self.sortButton.anchorBag = self
         self.sortButton:Show()
+        rightOffset = -38
     end
+
+    if self.searchBox then
+        local leftAnchorButton
+        for i, b in ipairs(self.currentPanel.bagButtons) do
+            if b:IsShown() then
+                leftAnchorButton = b
+            end
+        end
+
+        self.searchBox:SetParent(self)
+        self.searchBox:ClearAllPoints()
+        self.searchBox:SetPoint('TOPRIGHT', self, 'TOPRIGHT', rightOffset, -35)
+        if leftAnchorButton then
+            self.searchBox:SetPoint('LEFT', leftAnchorButton, 'RIGHT', 12, 0)
+        end
+        self.searchBox.anchorBag = self
+        self.searchBox:Show()
+    end
+
 end
 
 function LiteBagFrame_TabOnClick(tab)

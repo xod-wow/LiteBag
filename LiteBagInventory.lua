@@ -57,8 +57,14 @@ function LiteBagInventory_Initialize(self)
     tinsert(UISpecialFrames, self:GetName())
 
     -- Set up search / sort
-    self.searchBox = BagItemSearchBox
     self.sortButton = BagItemAutoSortButton
+    self.searchBox = BagItemSearchBox
+
+    if not self.searchBox then
+        self.searchBox = CreateFrame('EditBox', self, nil, 'BagSearchBoxTemplate')
+        self.searchBox:SetMaxLetters(15)
+        self.searchBox:SetSize(126, 18)
+    end
 
     -- Frame open/close events for Inventory
     for _, event in ipairs(OPEN_EVENTS) do self:RegisterEvent(event) end
