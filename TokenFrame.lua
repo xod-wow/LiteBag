@@ -67,6 +67,13 @@ function LiteBagTokenFrameMixin:OnLoad()
             self:Update()
         end
     )
+    if C_EventUtils.IsEventValid('CURRENCY_DISPLAY_UPDATE') then
+        self:RegisterEvent('CURRENCY_DISPLAY_UPDATE')
+    end
+end
+
+function LiteBagTokenFrameMixin:OnEvent()
+    self:Update()
 end
 
 function LiteBagTokenFrameMixin:OnShow()
