@@ -23,6 +23,8 @@ local RIGHT_OFFSET, BOTTOM_OFFSET = 14, 35
 
 local PluginUpdateEvents = { }
 
+local IsKeyRingEnabled = IsKeyRingEnabled or function () return GetCVarBool('showkeyring') end
+
 function LiteBagPanel_Initialize(self, bagIDs)
     LB.Debug("Panel Initialize " .. self:GetName())
 
@@ -65,7 +67,9 @@ function LiteBagPanel_Initialize(self, bagIDs)
     end
 
     for i, b in ipairs(self.bagButtons) do
-        if bagIDs[i] then
+        if bagIDs[i] == KEYRING_CONTAINER and not IsKeyRingEnabled() then
+            b:Hide()
+        elseif bagIDs[i] then
             b:SetID(bagIDs[i])
             b:Update()
             b:Show()
@@ -103,7 +107,7 @@ function LiteBagPanel_UpdateBagSlotCounts(self)
     for _, bag in ipairs(self.bagFrames) do
         local bagID = bag:GetID()
         if bagID == KEYRING_CONTAINER then
-            bag.size = self.showKeyring and GetKeyRingSize() or 0
+            bag.size = IsKeyRingEnabled() and self.showKeyring and GetKeyRingSize() or 0
         else
             bag.size = C_Container.GetContainerNumSlots(bagID)
         end
