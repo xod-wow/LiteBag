@@ -131,10 +131,32 @@ end
 
 if locale == "zhCN" then
     L                     = L or {}
+    L["Another addon is managing the Blizzard bag buttons."] = "另外一个插件正在管理暴雪背包按钮"
+    L["Bags"]             = "背包"
+    L["Blizzard"]         = "暴雪"
+    L["BoA"]              = "账绑"
+    L["BoE"]              = "装绑"
     L["Bottom Left"]      = "左下"
     L["Bottom Right"]     = "右下"
+    L["Column gaps"]      = "列间距"
+    L["Columns"]          = "列数"
+    L["Display text for BoA and BoE items."] = "在物品上显示账号绑定和装备绑定的缩写文字"
+    L["First icon position:"] = "第一个图标位置"
+    L["Frame Options"]    = "框架选项"
+    L["Hide Blizzard bag buttons."] = "隐藏暴雪背包按钮"
+    L["Icon layout:"]     = "图标布局:"
+    L["Icon order:"]      = "图标顺序:"
+    L["Pet"]              = "宠物"
+    L["Reverse"]          = "反向"
+    L["Row gaps"]         = "行间距"
+    L["Scale"]            = "缩放"
+    L["Shift Click to Hide/Show Bag"] = "按住 Shift 键点击隐藏或显示背包"
+    L["Show bag buttons."] = "显示背包按钮"
+    L["Show options panel."] = "显示选项面板"
+    L["Show thicker icon borders for this quality and above."] = "在此品质及以上的物品显示更粗的图标边框"
     L["Top Left"]         = "左上"
     L["Top Right"]        = "右上"
+    L["When moving snap frame to default position."] = "移动时将框架固定到默认位置"
 end
 
 -- zhTW ------------------------------------------------------------------------
@@ -151,6 +173,7 @@ if locale == "zhTW" then
     L["Columns"]          = "行數"
     L["Display equipment set membership icons."] = "顯示裝備設定相關圖示"
     L["Display text for BoA and BoE items."] = "帳號綁定和裝備綁定的物品顯示文字"
+    L["First icon position:"] = "第一個圖示位置:"
     L["Frame Options"]    = "框架選項"
     L["Hide Blizzard bag buttons."] = "隱藏暴雪背包按鈕。"
     L["Pet"]              = "寵物"

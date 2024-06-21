@@ -12,7 +12,7 @@ local L = LB.Localize
 
 local OrderValues  = {
     ['default'] = DEFAULT,
-    ['blizzard'] = 'Blizzard',
+    ['blizzard'] = L['Blizzard'],
     ['reverse'] = L['Reverse'],
 }
 

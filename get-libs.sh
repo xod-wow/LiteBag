@@ -11,6 +11,12 @@ indent () {
 
 get_repotype () {
     case "$1" in
+    *://repos.curseforge.com/wow/libactionbutton-1-0)
+        echo git
+        ;;
+    *://repos.wowace.com/wow/libbuttonglow-1-0)
+        echo git
+        ;;
     *://repos.curseforge.com/*)
         echo svn
         ;;
