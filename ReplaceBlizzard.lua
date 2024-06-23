@@ -113,9 +113,21 @@ local function ReplaceBlizzardBank()
     LiteBagBank:HookScript('OnHide', function () BankFrame:Hide() end)
 end
 
+
+-- Guild bank in classic has a bug if the search event triggers because
+-- it listens but doesn't handle it properly.
+local function FixClassicGuildBankSearch()
+    if GuildBankFrame then
+        for _, tab in ipairs(GuildBankFrame.BankTabs) do
+            tab.Button:SetScript('OnEvent', nil)
+        end
+    end
+end
+
 local function ReplaceBlizzard()
     ReplaceBlizzardInventory()
     ReplaceBlizzardBank()
+    FixClassicGuildBankSearch()
 
     -- Some other addons either replace the open functions themselves after
     -- us and cause the bag frames to show.
@@ -138,6 +150,7 @@ replacer:RegisterEvent('PLAYER_LOGIN')
 replacer:RegisterEvent('GUILDBANKFRAME_OPENED')
 replacer:RegisterEvent('GUILDBANKFRAME_CLOSED')
 replacer:RegisterEvent('PLAYER_LOGIN')
+replacer:RegisterEvent('ADDON_LOADED')
 replacer:SetScript('OnEvent',
     function (self, event, ...)
         if event == 'GUILDBANKFRAME_OPENED' then
@@ -146,5 +159,11 @@ replacer:SetScript('OnEvent',
             CloseAllBags()
         elseif event == 'PLAYER_LOGIN' then
             ReplaceBlizzard()
+        elseif event == 'ADDON_LOADED' then
+            local addonName = ...
+            if addonName == 'Blizzard_GuildBankUI' then
+                FixClassicGuildBankSearch()
+                self:UnregisterEvent('ADDON_LOADED')
+            end
         end
 end)
