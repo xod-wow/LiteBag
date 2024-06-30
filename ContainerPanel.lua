@@ -61,7 +61,7 @@ function LiteBagContainerPanelMixin:OnLoad()
         -- The Blizzard token tracker is hard coded to be a single tracker which is updated
         -- by direct call from the TokenFrame UI, Also the event handling for it is done
         -- in MainMenuBar. It's a mess.
-        hooksecurefunc('TokenFrame_Update',
+        hooksecurefunc(BackpackTokenFrame, 'Update',
             function ()
                 self.TokenTracker:Update()
             end)

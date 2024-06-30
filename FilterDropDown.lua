@@ -108,7 +108,7 @@ do
         LibDD:UIDropDownMenu_AddButton(info, level)
 
         info = LibDD:UIDropDownMenu_CreateInfo()
-        local activeBagFilter = ContainerFrameSettingsManager:GetFilterFlag(bagID)
+        local activeBagFilter = ContainerFrameSettingsManager:GetFilterFlags(bagID)
 
         for i, flag in ContainerFrameUtil_EnumerateBagGearFilters() do
             info.text = BAG_FILTER_LABELS[flag]

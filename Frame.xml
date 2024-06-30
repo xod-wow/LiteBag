@@ -67,6 +67,12 @@
             </Scripts>
         </Button>
 
+        <Button name="$parentTab3" inherits="PanelTabButtonTemplate" id="3" hidden="true">
+            <Scripts>
+                <OnClick> self:GetParent():ShowPanel(self:GetID()) </OnClick>
+            </Scripts>
+        </Button>
+
         <Button name="$parentResizeBottomRight" parentKey="ResizeBottomRight" hidden="true">
             <Size x="16" y="16" />
             <Anchors>

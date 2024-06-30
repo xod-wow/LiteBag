@@ -1,6 +1,6 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/ReagentBankFrame.lua
+  LiteBag/WrappedBankPanel.lua
 
   Copyright 2022 Mike Battersby
 
@@ -11,23 +11,25 @@
 
 local addonName, LB = ...
 
-LiteBagReagentBankMixin = {}
+LiteBagWrappedBankMixin = {}
 
-function LiteBagReagentBankMixin:OnLoad()
-    local data = BANK_PANELS[2]
+function LiteBagWrappedBankMixin:OnLoad()
+    local id = self:GetID()
+    local data = BANK_PANELS[id]
+    self.wrappedPanel = _G[data.name]
 
-    ReagentBankFrame:SetParent(self)
-    ReagentBankFrame:ClearAllPoints()
-    ReagentBankFrame:SetPoint("TOPLEFT")
+    self.wrappedPanel:SetParent(self)
+    self.wrappedPanel:ClearAllPoints()
+    self.wrappedPanel:SetPoint("TOPLEFT")
 
-    ReagentBankFrame:SetWidth(data.size.x)
-    ReagentBankFrame:SetHeight(data.size.y)
-    ReagentBankFrame:Hide()
+    self.wrappedPanel:SetWidth(data.size.x)
+    self.wrappedPanel:SetHeight(data.size.y)
+    self.wrappedPanel:Hide()
 
-    self:SetSize(ReagentBankFrame:GetSize())
+    self:SetSize(self.wrappedPanel:GetSize())
 end
 
-function LiteBagReagentBankMixin:OnShow()
+function LiteBagWrappedBankMixin:OnShow()
     LB.FrameDebug(self, "OnShow")
     BankItemAutoSortButton.anchorBag = self
     BankItemAutoSortButton:SetParent(self)
@@ -41,23 +43,23 @@ function LiteBagReagentBankMixin:OnShow()
     BankItemSearchBox:SetWidth(256)
     BankItemSearchBox:Show()
 
-    ReagentBankFrame:Show()
+    self.wrappedPanel:Show()
 
     self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
     self:RegisterEvent('ITEM_LOCK_CHANGED')
     self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
 end
 
-function LiteBagReagentBankMixin:OnHide()
+function LiteBagWrappedBankMixin:OnHide()
     LB.FrameDebug(self, "OnHide")
-    ReagentBankFrame:Hide()
+    self.wrappedPanel:Hide()
     self:UnregisterAllEvents()
 end
 
-function LiteBagReagentBankMixin:OnEvent(event, ...)
+function LiteBagWrappedBankMixin:OnEvent(event, ...)
     LB.EventDebug(self, event, ...)
     if event == 'INVENTORY_SEARCH_UPDATE' then
-        ContainerFrameMixin.UpdateSearchResults(ReagentBankFrame)
+        ContainerFrameMixin.UpdateSearchResults(self.wrappedPanel)
     elseif event == 'ITEM_LOCK_CHANGED' then
         local bag, slot = ...
         if bag == Enum.BagIndex.ReagentBank then
