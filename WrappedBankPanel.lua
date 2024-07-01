@@ -59,7 +59,7 @@ end
 function LiteBagWrappedBankMixin:OnEvent(event, ...)
     LB.EventDebug(self, event, ...)
     if event == 'INVENTORY_SEARCH_UPDATE' then
-        ContainerFrameMixin.UpdateSearchResults(self.wrappedPanel)
+        self.wrappedPanel:UpdateSearchResults()
     elseif event == 'ITEM_LOCK_CHANGED' then
         local bag, slot = ...
         if bag == Enum.BagIndex.ReagentBank then
@@ -69,6 +69,7 @@ function LiteBagWrappedBankMixin:OnEvent(event, ...)
             end
         end
     elseif event == 'PLAYERREAGENTBANKSLOTS_CHANGED' then
+        -- Could the reagent bank handle its own events please.
         local slot = ...
         local button = ReagentBankFrame['Item'..slot]
         if button then
