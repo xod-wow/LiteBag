@@ -7,8 +7,7 @@
 <Frame
     name="LiteBagContainerPanelTemplate" mixin="LiteBagContainerPanelMixin" hidden="true" virtual="true">
     <Frames>
-        <DropDownToggleButton name="$parentPortraitButton" parentKey="PortraitButton" inherits="LiteBagPortraitButtonTemplate" />
-        <Frame name="$parentFilterDropDown" parentKey="FilterDropDown" inherits="LiteBagFilterDropDownTemplate" />
+        <DropdownButton name="$parentPortraitButton" parentKey="PortraitButton" inherits="LiteBagPortraitButtonTemplate" />
     </Frames>
     <Scripts>
         <!-- These are all of the same events from ContainerFrameCombinedBags -->

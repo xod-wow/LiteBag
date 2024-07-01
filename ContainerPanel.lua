@@ -117,6 +117,7 @@ function LiteBagContainerPanelMixin:OnLoad()
     LB.Manager:RegisterInitializeHook( function () self:SetUpBags() end )
 
     self.PortraitButton:SetPoint("CENTER", self:GetParent():GetPortrait(), "CENTER", 3, -3)
+    self.PortraitButton:Initialize()
 end
 
 function LiteBagContainerPanelMixin:GetBagFrameByID(id)
