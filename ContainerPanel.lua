@@ -58,17 +58,12 @@ function LiteBagContainerPanelMixin:OnLoad()
         local name = self:GetName() .. "TokenFrame"
         self.TokenTracker = CreateFrame("Frame", name, self, "BackpackTokenFrameTemplate")
         self.TokenTracker:SetHeight(16)
-        -- The Blizzard token tracker is hard coded to be a single tracker which is updated
-        -- by direct call from the TokenFrame UI, Also the event handling for it is done
-        -- in MainMenuBar. It's a mess.
-        hooksecurefunc(BackpackTokenFrame, 'Update',
-            function ()
-                self.TokenTracker:Update()
-            end)
+        -- BackpackTokenFrameTemplate now handles its own events, no more hooking
         -- How many currencies you can track is tied to BackpackTokenFrame:GetWidth()
         self.TokenTracker:SetScript('OnSizeChanged',
             function (self, w, h)
                 BackpackTokenFrame:SetWidth(w)
+                BackpackTokenFrame:Update()
                 self:Update()
             end)
     end
