@@ -194,6 +194,7 @@ function LiteBagContainerPanelMixin:OnEvent(event, ...)
         -- Nothing, don't close single bags because this fires when you
         -- move a bag from slot to slot.
     elseif event == "ITEM_LOCK_CHANGED" then
+        local arg1, arg2 = ...
         -- The way Blizzard does uses all kinds of ContainerFrameUtil stuff
         -- that won't work for us.
         local bag = self:GetBagFrameByID(arg1)
@@ -415,8 +416,8 @@ BUTTONORDERS.default =
 BUTTONORDERS.blizzard =
     function (self)
         local Items = { }
-        for b = #self.bagFrames, 1, -1 do
-            local bag = self.bagFrames[b]
+        for bagFrameIndex = #self.bagFrames, 1, -1 do
+            local bag = self.bagFrames[bagFrameIndex]
             -- This is a dodgy check if the whole bag is hidden for efficiency.
             -- Strictly it should check each b inside the inner loop.
             if tContains(self.Items, bag.Items[1]) then
@@ -564,8 +565,6 @@ end
 function LiteBagContainerPanelMixin:UpdateItemLayout()
     LB.FrameDebug(self, "UpdateItemLayout")
     local layoutGrid = GetLayoutGridForFrame(self)
-
-    local anchor, m, xOff, yOff
 
     local adjustedBottomOffset = BOTTOM_OFFSET + self:CalculateExtraHeight()
     local adjustedTopOffset = self:CalculateTopOffset()

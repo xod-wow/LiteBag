@@ -316,7 +316,6 @@ local options = {
                     sorting = LayoutSorting,
                     order = order(),
                     width = "1",
-                    order = order(),
                     get = TypeGetter,
                     set = TypeSetter,
                 },
