@@ -165,6 +165,7 @@ if locale == "zhTW" then
     L                     = L or {}
     L["Another addon is managing the Blizzard bag buttons."] = "另一個插件是管理暴雪背包按鈕。"
     L["Bags"]             = "背包"
+    L["Blizzard"]         = "暴雪"
     L["BoA"]              = "帳綁"
     L["BoE"]              = "裝綁"
     L["Bottom Left"]      = "\"左下"
@@ -176,6 +177,8 @@ if locale == "zhTW" then
     L["First icon position:"] = "第一個圖示位置:"
     L["Frame Options"]    = "框架選項"
     L["Hide Blizzard bag buttons."] = "隱藏暴雪背包按鈕。"
+    L["Icon layout:"]     = "圖示布局："
+    L["Icon order:"]      = "圖示順序："
     L["Pet"]              = "寵物"
     L["Reverse"]          = "反向"
     L["Row gaps"]         = "欄距"

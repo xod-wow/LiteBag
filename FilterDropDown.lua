@@ -13,6 +13,8 @@
 
 local addonName, LB = ...
 
+local L = LB.Localize
+
 local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
 
 local Initialize
@@ -121,15 +123,14 @@ do
         end
     end
 
-    local bagNames =
-    {
+    local bagNames = {
         [-1] = BANK,
         [0] = BAG_NAME_BACKPACK,
         [1] = BAG_NAME_BAG_1,
         [2] = BAG_NAME_BAG_2,
         [3] = BAG_NAME_BAG_3,
         [4] = BAG_NAME_BAG_4,
-        [5] = "Reagent Bag",
+        [5] = L["Reagent Bag"],
     }
 
     local function bankName(i)
