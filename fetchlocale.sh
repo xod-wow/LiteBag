@@ -30,5 +30,7 @@ for locale in "deDE" "esES" "frFR" "itIT" "koKR" "ptBR" "ruRU" "zhCN" "zhTW"; do
     fetch $locale
 
     echo "end"
-    echo
+    if [ "$locale" != "zhTW" ]; then
+        echo
+    fi
 done
