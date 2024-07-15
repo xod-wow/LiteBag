@@ -17,9 +17,8 @@ local L = LB.Localize
 -- BoE would be though.
 
 local PetIconString = [[|TInterface\CURSOR\WildPetCapturable:14|t]]
-local BoAIconString = [[|TInterface\Addons\LiteBag\Plugin_BindsOn\Blizz:12:32|t]]
 
-local BoAText = rawget(L, 'BoA') or BoAIconString
+local WarText = L["War"]
 local BoEText = L["BoE"]
 local PetText = rawget(L, 'Pet') or PetIconString
 local NoBindText = false
@@ -28,15 +27,16 @@ local NoBindText = false
 -- Looks through the first five tooltip left texts for these keys.
 
 local TextForBind = {
-    [ITEM_ACCOUNTBOUND]        = BATTLENET_FONT_COLOR:WrapTextInColorCode( BoAText ),
-    [ITEM_BNETACCOUNTBOUND]    = BATTLENET_FONT_COLOR:WrapTextInColorCode( BoAText ),
-    [ITEM_BIND_TO_ACCOUNT]     = BATTLENET_FONT_COLOR:WrapTextInColorCode( BoAText ),
-    [ITEM_BIND_TO_BNETACCOUNT] = BATTLENET_FONT_COLOR:WrapTextInColorCode( BoAText ),
-    [ITEM_BIND_ON_EQUIP]       = GREEN_FONT_COLOR:WrapTextInColorCode( BoEText ),
-    [ITEM_BIND_ON_USE]         = GREEN_FONT_COLOR:WrapTextInColorCode( BoEText ),
-    [ITEM_SOULBOUND]           = false,
-    [ITEM_BIND_ON_PICKUP]      = false,
-    [TOOLTIP_BATTLE_PET]       = HIGHLIGHT_FONT_COLOR:WrapTextInColorCode( PetText ),
+    [ITEM_ACCOUNTBOUND]        =        BRIGHTBLUE_FONT_COLOR:WrapTextInColorCode( WarText ),
+    [ITEM_BNETACCOUNTBOUND]    =        BRIGHTBLUE_FONT_COLOR:WrapTextInColorCode( WarText ),
+    [ITEM_BIND_TO_ACCOUNT]     =        BRIGHTBLUE_FONT_COLOR:WrapTextInColorCode( WarText ),
+    [ITEM_BIND_TO_BNETACCOUNT] =        BRIGHTBLUE_FONT_COLOR:WrapTextInColorCode( WarText ),
+    [ITEM_ACCOUNTBOUND_UNTIL_EQUIP] =   GREEN_FONT_COLOR:WrapTextInColorCode( WarText ),
+    [ITEM_BIND_ON_EQUIP]       =        GREEN_FONT_COLOR:WrapTextInColorCode( BoEText ),
+    [ITEM_BIND_ON_USE]         =        GREEN_FONT_COLOR:WrapTextInColorCode( BoEText ),
+    [ITEM_SOULBOUND]           =        false,
+    [ITEM_BIND_ON_PICKUP]      =        false,
+    [TOOLTIP_BATTLE_PET]       =        HIGHLIGHT_FONT_COLOR:WrapTextInColorCode( PetText ),
 }
 
 local lineQuery = { Enum.TooltipDataLineType.ItemBinding }
