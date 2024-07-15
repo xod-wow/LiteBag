@@ -175,4 +175,6 @@ read_globals = {
     "tDeleteItem",
     "tInvert",
     "tinsert",
+    'BAG_SETTINGS_TOOLTIP',
+    'SETTINGS',
 }
