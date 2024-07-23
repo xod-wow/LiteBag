@@ -1,0 +1,33 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+
+<!-- Copyright 2022 Mike Battersby -->
+
+<!--
+    This is a wrapper to parent the reagent bank to handle its events and
+     get the search and sort buttons attached, store the title, etc.
+-->
+
+<Script file="WrappedBankPanel.lua" />
+
+<Frame name="LiteBagWrappedBankTemplate" hidden="true" mixin="LiteBagWrappedBankMixin" virtual="true">
+    <Scripts>
+        <OnLoad method="OnLoad" />
+        <OnEvent method="OnEvent" />
+        <OnShow method="OnShow" />
+        <OnHide method="OnHide" />
+    </Scripts>
+</Frame>
+
+<Frame name="LiteBagReagentBank" hidden="true" inherits="LiteBagWrappedBankTemplate" id="2">
+    <KeyValues>
+        <KeyValue key="Title" value="REAGENT_BANK" type="global" />
+    </KeyValues>
+</Frame>
+
+<Frame name="LiteBagAccountBank" hidden="true" inherits="LiteBagWrappedBankTemplate" id="3">
+    <KeyValues>
+        <KeyValue key="Title" value="ACCOUNT_BANK_PANEL_TITLE" type="global" />
+    </KeyValues>
+</Frame>
+
+</Ui>

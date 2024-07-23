@@ -4,19 +4,13 @@
 
 <Script file="FilterDropDown.lua"/>
 
-<DropDownToggleButton name="LiteBagPortraitButtonTemplate" mixin="LiteBagPortraitButtonMixin" virtual="true">
+<DropdownButton name="LiteBagPortraitButtonTemplate" mixin="LiteBagPortraitButtonMixin" virtual="true">
     <Size x="40" y="40" />
     <Scripts>
-        <OnMouseDown method="OnMouseDown"/>
+        <OnLoad method="OnLoad"/>
         <OnEnter method="OnEnter" />
         <OnLeave method="OnLeave" />
     </Scripts>
-</DropDownToggleButton>
-
-<Frame name="LiteBagFilterDropDownTemplate" mixin="LiteBagFilterDropDownMixin" virtual="true">
-    <Scripts>
-        <OnLoad method="OnLoad" />
-    </Scripts>
-</Frame>
+</DropdownButton>
 
 </Ui>

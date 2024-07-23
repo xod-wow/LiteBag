@@ -16,12 +16,15 @@ LiteBagBankMixin = {}
 function LiteBagBankMixin:ShowPanel(n)
     LiteBagFrameMixin.ShowPanel(self, n)
 
-    -- The itembuttons use BankFrame.selectedTab to know where
-    -- to put something that's clicked.
+    -- The itembuttons use these to know where to put something that's clicked.
+    -- C_Container.UseContainerItem(
+    --      self:GetBagID(),
+    --      self:GetID(),
+    --      nil,
+    --      BankFrame:GetActiveBankType(),
+    --      BankFrame:IsShown() and BankFrame.selectedTab == 2
+    -- )
     BankFrame.selectedTab = n
-
-    -- The AutoSortButton uses activeTabIndex to know which tooltip to
-    -- show (and what to sort, but we override that).
     BankFrame.activeTabIndex = n
 end
 
@@ -40,6 +43,9 @@ function LiteBagBankMixin:OnLoad()
 
     -- Attach in the reagent bank wrapper.
     self:AddPanel(LiteBagReagentBank)
+
+    -- Attach in the account bank wrapper.
+    self:AddPanel(LiteBagAccountBank)
 
     -- Bank frame specific events
     self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
@@ -108,7 +114,7 @@ function LiteBagBankMixin:OnHide()
 
     -- Call this so the server knows we closed and it needs to send us a
     -- new open event if we interact with the NPC again.
-    CloseBankFrame()
+    C_Bank.CloseBankFrame()
 end
 
 function LiteBagBankMixin:ResizeToPanel()

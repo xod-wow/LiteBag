@@ -7,7 +7,11 @@
   Released under the terms of the GNU General Public License version 2 (GPLv2).
   See the file LICENSE.txt.
 
-  A copy of the bag filtering drop down, because using Blizzards causes taint.
+  A copy of the bag filtering drop down, because the Blizzard one can't be
+  accessed from outside.
+
+  Redone with Blizzard_Menu for 11.0, see
+    Interface/AddOns/Blizzard_Menu/11_0_0_MenuImplementationGuide.lua
 
 ----------------------------------------------------------------------------]]--
 
@@ -15,180 +19,115 @@ local addonName, LB = ...
 
 local L = LB.Localize
 
-local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
+local function bankName(i)
+    return BANK .. " " .. BAG_NAME_BAG_1:gsub('1', i-NUM_TOTAL_BAG_FRAMES)
+end
 
-local Initialize
+local bagNames = {
+    [-1] = BANK,
+    [0] = BAG_NAME_BACKPACK,
+    [1] = BAG_NAME_BAG_1,
+    [2] = BAG_NAME_BAG_2,
+    [3] = BAG_NAME_BAG_3,
+    [4] = BAG_NAME_BAG_4,
+    [5] = L["Reagent Bag"],
+}
 
-do
-    local function OnBagFilterClicked(bagID, filterID, value)
-        C_Container.SetBagSlotFlag(bagID, filterID, value)
-        ContainerFrameSettingsManager:SetFilterFlag(bagID, filterID, value)
+setmetatable(bagNames, { __index=function(t, k) return bankName(k) end })
+
+-- These are copied with minor fixups from ContainerFrame. Sadly they are not
+-- exported and can't be gotten out of there without calling the whole OnLoad.
+
+local function AddButtons_BagFilters(description, bagID)
+    if not ContainerFrame_CanContainerUseFilterMenu(bagID) then
+        return
     end
 
-    local function AddButtons_BagHide(bagID, level)
-        local allow = LB.GetGlobalOption('allowHideBagIDs')
-        if not allow[bagID] then return end
+    description:CreateTitle(BAG_FILTER_ASSIGN_TO)
 
-        local info = LibDD:UIDropDownMenu_CreateInfo()
-        info.text = DISPLAY_OPTIONS
-        info.isTitle = 1
-        info.notCheckable = 1
-        LibDD:UIDropDownMenu_AddButton(info, level)
-
-        info = LibDD:UIDropDownMenu_CreateInfo()
-        info.text = HIDE
-        info.func = function(_, _, _, value)
-                local hide = LB.GetGlobalOption('hideBagIDs')
-                hide[bagID] = not value or nil
-                LB.SetGlobalOption('hideBagIDs', hide)
-            end
-        local hide = LB.GetGlobalOption('hideBagIDs')
-        info.checked = hide[bagID]
-        LibDD:UIDropDownMenu_AddButton(info, level)
+    local function IsSelected(flag)
+        return C_Container.GetBagSlotFlag(bagID, flag)
     end
 
-    local function AddButtons_BagIgnore(bagID, level)
-        local info = LibDD:UIDropDownMenu_CreateInfo()
-        info.text = BAG_FILTER_IGNORE
-        info.isTitle = 1
-        info.notCheckable = 1
-        LibDD:UIDropDownMenu_AddButton(info, level)
+    local function SetSelected(flag)
+        local value = not IsSelected(flag)
+        C_Container.SetBagSlotFlag(bagID, flag, value)
+        ContainerFrameSettingsManager:SetFilterFlag(bagID, flag, value)
+    end
 
-        info = LibDD:UIDropDownMenu_CreateInfo()
-        info.text = BAG_FILTER_CLEANUP
-        info.func = function(_, _, _, value)
+    for i, flag in ContainerFrameUtil_EnumerateBagGearFilters() do
+        local checkbox = description:CreateCheckbox(BAG_FILTER_LABELS[flag], IsSelected, SetSelected, flag)
+        checkbox:SetResponse(MenuResponse.Close)
+    end
+end
+
+local function AddButtons_BagCleanup(description, bagID)
+    description:CreateTitle(BAG_FILTER_IGNORE)
+
+    do
+        local function IsSelected()
             if bagID == Enum.BagIndex.Bank then
-                C_Container.SetBankAutosortDisabled(not value)
+                return C_Container.GetBankAutosortDisabled()
             elseif bagID == Enum.BagIndex.Backpack then
-                C_Container.SetBackpackAutosortDisabled(not value)
+                return C_Container.GetBackpackAutosortDisabled()
+            end
+            return C_Container.GetBagSlotFlag(bagID, Enum.BagSlotFlags.DisableAutoSort)
+        end
+
+        local function SetSelected()
+            local value = not IsSelected()
+            if bagID == Enum.BagIndex.Bank then
+                C_Container.SetBankAutosortDisabled(value)
+            elseif bagID == Enum.BagIndex.Backpack then
+                C_Container.SetBackpackAutosortDisabled(value)
             else
-                C_Container.SetBagSlotFlag(bagID, Enum.BagSlotFlags.DisableAutoSort, not value)
+                C_Container.SetBagSlotFlag(bagID, Enum.BagSlotFlags.DisableAutoSort, value)
             end
         end
 
-        if bagID == Enum.BagIndex.Bank then
-            info.checked = C_Container.GetBankAutosortDisabled()
-        elseif bagID == Enum.BagIndex.Backpack then
-            info.checked = C_Container.GetBackpackAutosortDisabled()
-        else
-            info.checked = C_Container.GetBagSlotFlag(bagID, Enum.BagSlotFlags.DisableAutoSort)
-        end
+        local checkbox = description:CreateCheckbox(BAG_FILTER_CLEANUP, IsSelected, SetSelected)
+        checkbox:SetResponse(MenuResponse.Close)
+    end
 
-        LibDD:UIDropDownMenu_AddButton(info, level)
-
-        if Enum.BagSlotFlags.ExcludeJunkSell and bagID ~= Enum.BagIndex.Bank then
-
-            info = LibDD:UIDropDownMenu_CreateInfo()
-            info.text = SELL_ALL_JUNK_ITEMS_EXCLUDE_FLAG
-            info.func = function(_, _, _, value)
-                if bagID == Enum.BagIndex.Backpack then
-                    C_Container.SetBackpackSellJunkDisabled(not value)
-                else
-                    C_Container.SetBagSlotFlag(bagID, Enum.BagSlotFlags.ExcludeJunkSell, not value)
-                end
-            end
-
+    -- ignore junk selling from this bag or backpack
+    if bagID ~= Enum.BagIndex.Bank then
+        local function IsSelected()
             if bagID == Enum.BagIndex.Backpack then
-                info.checked = C_Container.GetBackpackSellJunkDisabled()
+                return C_Container.GetBackpackSellJunkDisabled()
+            end
+            return C_Container.GetBagSlotFlag(bagID, Enum.BagSlotFlags.ExcludeJunkSell)
+        end
+
+        local function SetSelected()
+            local value = not IsSelected()
+            if bagID == Enum.BagIndex.Backpack then
+                C_Container.SetBackpackSellJunkDisabled(value)
             else
-                info.checked = C_Container.GetBagSlotFlag(bagID, Enum.BagSlotFlags.ExcludeJunkSell)
+                C_Container.SetBagSlotFlag(bagID, Enum.BagSlotFlags.ExcludeJunkSell, value)
             end
-
-            LibDD:UIDropDownMenu_AddButton(info, level)
-        end
-    end
-
-    local function AddButtons_BagFilters(bagID, level)
-        if not ContainerFrame_CanContainerUseFilterMenu(bagID) then
-            return
         end
 
-        local info = LibDD:UIDropDownMenu_CreateInfo()
-        info.text = BAG_FILTER_ASSIGN_TO
-        info.isTitle = 1
-        info.notCheckable = 1
-        LibDD:UIDropDownMenu_AddButton(info, level)
-
-        info = LibDD:UIDropDownMenu_CreateInfo()
-        local activeBagFilter = ContainerFrameSettingsManager:GetFilterFlag(bagID)
-
-        for i, flag in ContainerFrameUtil_EnumerateBagGearFilters() do
-            info.text = BAG_FILTER_LABELS[flag]
-            info.checked = activeBagFilter == flag
-            info.func = function(_, _, _, value)
-                return OnBagFilterClicked(bagID, flag, not value)
-            end
-
-            LibDD:UIDropDownMenu_AddButton(info, level)
+            local checkbox = description:CreateCheckbox(SELL_ALL_JUNK_ITEMS_EXCLUDE_FLAG, IsSelected, SetSelected)
+            checkbox:SetResponse(MenuResponse.Close)
         end
-    end
-
-    local bagNames = {
-        [-1] = BANK,
-        [0] = BAG_NAME_BACKPACK,
-        [1] = BAG_NAME_BAG_1,
-        [2] = BAG_NAME_BAG_2,
-        [3] = BAG_NAME_BAG_3,
-        [4] = BAG_NAME_BAG_4,
-        [5] = L["Reagent Bag"],
-    }
-
-    local function bankName(i)
-        return BANK .. " " .. BAG_NAME_BAG_1:gsub('1', i-NUM_TOTAL_BAG_FRAMES)
-    end
-
-    setmetatable(bagNames, { __index=function(t, k) return bankName(k) end })
-
-    Initialize = function(self, level)
-        if level == 1 then
-            local parent = self:GetParent()
-
-            local info = LibDD:UIDropDownMenu_CreateInfo()
-            info.notCheckable = true
-            info.text = SETTINGS
-            info.func = LB.OpenOptions
-            LibDD:UIDropDownMenu_AddButton(info, level)
-
-            info = LibDD:UIDropDownMenu_CreateInfo()
-            info.text = LOCK_FRAME
-            info.checked = parent:GetParent():IsLocked()
-            info.func = function () parent:GetParent():ToggleLocked() end
-            LibDD:UIDropDownMenu_AddButton(info, level)
-
-            LibDD:UIDropDownMenu_AddSeparator()
-
-            for _, bag in ipairs(parent.bagFrames) do
-                local i = bag:GetID()
-                local info = LibDD:UIDropDownMenu_CreateInfo()
-                info.text = bagNames[i]
-                info.hasArrow = true
-                info.notCheckable = true
-                info.value = i
-                LibDD:UIDropDownMenu_AddButton(info, level)
-            end
-        elseif level == 2 then
-            if L_UIDROPDOWNMENU_MENU_VALUE ~= Enum.BagIndex.Bank then
-                AddButtons_BagFilters(L_UIDROPDOWNMENU_MENU_VALUE, level)
-            end
-            AddButtons_BagIgnore(L_UIDROPDOWNMENU_MENU_VALUE, level)
-            AddButtons_BagHide(L_UIDROPDOWNMENU_MENU_VALUE, level)
-        end
-    end
 end
 
-LiteBagFilterDropDownMixin = {}
-
-function LiteBagFilterDropDownMixin:OnLoad()
-    LibDD:Create_UIDropDownMenu(self)
-    LibDD:UIDropDownMenu_SetInitializeFunction(self, Initialize)
-    LibDD:UIDropDownMenu_SetDisplayMode(self, "MENU")
-end
 
 LiteBagPortraitButtonMixin = {}
 
-function LiteBagPortraitButtonMixin:OnMouseDown()
-    PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-    LibDD:ToggleDropDownMenu(1, nil, self:GetParent().FilterDropDown, self, 0, 0)
+function LiteBagPortraitButtonMixin:Initialize()
+    local parent = self:GetParent()
+    self:SetupMenu(
+        function (dropdown, rootDescription)
+            rootDescription:SetTag("LITEBAG_FILTER_MENU")
+            rootDescription:CreateTitle(BAG_FILTER_TITLE_SORTING)
+            for _, bagID in ipairs(parent.bagIDs) do
+                local submenu = rootDescription:CreateButton(bagNames[bagID])
+                AddButtons_BagFilters(submenu, bagID)
+                AddButtons_BagCleanup(submenu, bagID)
+            end
+
+        end)
 end
 
 function LiteBagPortraitButtonMixin:OnEnter()

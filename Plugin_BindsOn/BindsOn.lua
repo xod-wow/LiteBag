@@ -54,8 +54,6 @@ local function GetBindText(bag, slot)
         info = C_TooltipInfo.GetBagItem(bag, slot)
     end
 
-    TooltipUtil.SurfaceArgs(info)
-
     if info.battlePetSpeciesID then
         return TextForBind[TOOLTIP_BATTLE_PET]
     end

@@ -282,6 +282,11 @@ function LB.Manager:OnEvent(event, ...)
     elseif event == 'PLAYER_LOGIN' then
         LB.InitializeOptions()
         LB.InitializeGUIOptions()
+        local tocVersion = select(4, GetBuildInfo())
+        if tocVersion < 110000 then
+            LB.Print('Error, TWW beta version installed onto live, aborting.')
+            return
+        end
         self:CallInitializeHooks()
         self:ReplaceBlizzard()
         self:ManageBlizzardBagButtons()

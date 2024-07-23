@@ -58,17 +58,12 @@ function LiteBagContainerPanelMixin:OnLoad()
         local name = self:GetName() .. "TokenFrame"
         self.TokenTracker = CreateFrame("Frame", name, self, "BackpackTokenFrameTemplate")
         self.TokenTracker:SetHeight(16)
-        -- The Blizzard token tracker is hard coded to be a single tracker which is updated
-        -- by direct call from the TokenFrame UI, Also the event handling for it is done
-        -- in MainMenuBar. It's a mess.
-        hooksecurefunc('TokenFrame_Update',
-            function ()
-                self.TokenTracker:Update()
-            end)
+        -- BackpackTokenFrameTemplate now handles its own events, no more hooking
         -- How many currencies you can track is tied to BackpackTokenFrame:GetWidth()
         self.TokenTracker:SetScript('OnSizeChanged',
             function (self, w, h)
                 BackpackTokenFrame:SetWidth(w)
+                BackpackTokenFrame:Update()
                 self:Update()
             end)
     end
@@ -117,6 +112,7 @@ function LiteBagContainerPanelMixin:OnLoad()
     LB.Manager:RegisterInitializeHook( function () self:SetUpBags() end )
 
     self.PortraitButton:SetPoint("CENTER", self:GetParent():GetPortrait(), "CENTER", 3, -3)
+    self.PortraitButton:Initialize()
 end
 
 function LiteBagContainerPanelMixin:GetBagFrameByID(id)
@@ -198,6 +194,7 @@ function LiteBagContainerPanelMixin:OnEvent(event, ...)
         -- Nothing, don't close single bags because this fires when you
         -- move a bag from slot to slot.
     elseif event == "ITEM_LOCK_CHANGED" then
+        local arg1, arg2 = ...
         -- The way Blizzard does uses all kinds of ContainerFrameUtil stuff
         -- that won't work for us.
         local bag = self:GetBagFrameByID(arg1)
@@ -419,8 +416,8 @@ BUTTONORDERS.default =
 BUTTONORDERS.blizzard =
     function (self)
         local Items = { }
-        for b = #self.bagFrames, 1, -1 do
-            local bag = self.bagFrames[b]
+        for bagFrameIndex = #self.bagFrames, 1, -1 do
+            local bag = self.bagFrames[bagFrameIndex]
             -- This is a dodgy check if the whole bag is hidden for efficiency.
             -- Strictly it should check each b inside the inner loop.
             if tContains(self.Items, bag.Items[1]) then
@@ -568,8 +565,6 @@ end
 function LiteBagContainerPanelMixin:UpdateItemLayout()
     LB.FrameDebug(self, "UpdateItemLayout")
     local layoutGrid = GetLayoutGridForFrame(self)
-
-    local anchor, m, xOff, yOff
 
     local adjustedBottomOffset = BOTTOM_OFFSET + self:CalculateExtraHeight()
     local adjustedTopOffset = self:CalculateTopOffset()
