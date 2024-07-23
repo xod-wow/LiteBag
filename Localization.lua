@@ -140,6 +140,7 @@ if locale == "zhCN" then
     L["Bottom Right"]     = "右下"
     L["Column gaps"]      = "列间距"
     L["Columns"]          = "列数"
+    L["Display equipment set membership icons."] = "显示装备设定相关图示"
     L["Display text for BoA and BoE items."] = "在物品上显示账号绑定和装备绑定的缩写文字"
     L["First icon position:"] = "第一个图标位置"
     L["Frame Options"]    = "框架选项"
