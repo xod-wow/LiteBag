@@ -52,6 +52,7 @@ read_globals = {
     "BANK_BAG_PURCHASE",
     "BANK_PANELS",
     "BATTLENET_FONT_COLOR",
+    "BRIGHTBLUE_FONT_COLOR",
     "BackpackTokenFrame",
     "BagBarExpandToggle",
     "BagItemAutoSortButton",
@@ -110,6 +111,7 @@ read_globals = {
     "HIGHLIGHT_FONT_COLOR",
     "HideUIPanel",
     "ITEM_ACCOUNTBOUND",
+    "ITEM_ACCOUNTBOUND_UNTIL_EQUIP",
     "ITEM_BIND_ON_EQUIP",
     "ITEM_BIND_ON_PICKUP",
     "ITEM_BIND_ON_USE",
@@ -173,4 +175,6 @@ read_globals = {
     "tDeleteItem",
     "tInvert",
     "tinsert",
+    'BAG_SETTINGS_TOOLTIP',
+    'SETTINGS',
 }

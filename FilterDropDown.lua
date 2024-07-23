@@ -120,6 +120,13 @@ function LiteBagPortraitButtonMixin:Initialize()
     self:SetupMenu(
         function (dropdown, rootDescription)
             rootDescription:SetTag("LITEBAG_FILTER_MENU")
+            rootDescription:CreateTitle(BAG_SETTINGS_TOOLTIP)
+            rootDescription:CreateButton(SETTINGS, LB.OpenOptions)
+            rootDescription:CreateCheckbox(LOCK_FRAME,
+                function () return LB.db and parent:GetParent():IsLocked() end,
+                function () parent:GetParent():ToggleLocked() end
+            )
+            rootDescription:CreateDivider()
             rootDescription:CreateTitle(BAG_FILTER_TITLE_SORTING)
             for _, bagID in ipairs(parent.bagIDs) do
                 local submenu = rootDescription:CreateButton(bagNames[bagID])
