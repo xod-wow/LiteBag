@@ -169,7 +169,7 @@ if locale == "zhTW" then
     L["Blizzard"]         = "暴雪"
     L["BoA"]              = "帳綁"
     L["BoE"]              = "裝綁"
-    L["Bottom Left"]      = "\"左下"
+    L["Bottom Left"]      = "左下"
     L["Bottom Right"]     = "右下"
     L["Column gaps"]      = "行距"
     L["Columns"]          = "行數"
