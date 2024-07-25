@@ -200,7 +200,7 @@ function LiteBagContainerPanelMixin:OnEvent(event, ...)
         local bag = self:GetBagFrameByID(arg1)
         if arg2 and bag then
             local info = C_Container.GetContainerItemInfo(bag:GetID(), arg2)
-            SetItemButtonDesaturated(bag.Items[arg2], info.isLocked)
+            SetItemButtonDesaturated(bag.Items[arg2], info and info.isLocked)
         end
     elseif event == "DISPLAY_SIZE_CHANGED" then
         -- We aren't doing any multi-frame reflowing stuff so do nothing
