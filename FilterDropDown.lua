@@ -151,7 +151,7 @@ function LiteBagPortraitButtonMixin:OnEnter()
     else
         local id = parent.bagIDs[1]
         local link = GetInventoryItemLink("player", C_Container.ContainerIDToInventoryID(id))
-        local name = GetItemInfo(link)
+        local name = C_Item.GetItemInfo(link)
         if name then
             GameTooltip:SetText(name, 1.0, 1.0, 1.0)
             GameTooltip:AddLine(CLICK_BAG_SETTINGS)

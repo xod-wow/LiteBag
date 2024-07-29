@@ -141,7 +141,7 @@ function LiteBagBagButtonMixin:OnEnter()
             if self.purchaseCost then
                 GameTooltip:ClearLines()
                 GameTooltip_SetTitle(GameTooltip, BANK_BAG_PURCHASE)
-                GameTooltip:AddDoubleLine(COSTS_LABEL, GetCoinTextureString(self.purchaseCost))
+                GameTooltip:AddDoubleLine(COSTS_LABEL, C_CurrencyInfo.GetCoinTextureString(self.purchaseCost))
             elseif self:GetID() == Enum.BagIndex.ReagentBag then
                 GameTooltip_SetTitle(GameTooltip, EQUIP_CONTAINER_REAGENT)
             elseif self.isBank and bagID > GetNumBankSlots() + NUM_TOTAL_EQUIPPED_BAG_SLOTS then
