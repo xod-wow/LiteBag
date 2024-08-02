@@ -22,18 +22,23 @@ local EquipSetState = CreateFrame('Frame')
 -- bags and bank.
 
 function EquipSetState.PackContainerItemLocation(bag, slot)
-    local location = ITEM_INVENTORY_LOCATION_PLAYER
+   if bag == Enum.BagIndex.Bank then
+      return ITEM_INVENTORY_LOCATION_BANK + slot + 63
+   end
 
-    if bag == Enum.BagIndex.Bank then
-        return location + ITEM_INVENTORY_LOCATION_BANK + slot
-    elseif bag > NUM_TOTAL_BAG_FRAMES then -- Bank Bag
-        location = location + ITEM_INVENTORY_LOCATION_BANK + ITEM_INVENTORY_LOCATION_BAGS
-        bag = bag - NUM_TOTAL_BAG_FRAMES
-    else
-        location = location + ITEM_INVENTORY_LOCATION_BAGS
-    end
-    location = location + bit.lshift(bag, ITEM_INVENTORY_BAG_BIT_OFFSET) + slot
-    return location
+   if bag >= 0 and bag <= Enum.BagIndex.ReagentBag then
+      return ITEM_INVENTORY_LOCATION_PLAYER
+      + ITEM_INVENTORY_LOCATION_BAGS
+      + bit.lshift(bag, ITEM_INVENTORY_BAG_BIT_OFFSET)
+      + slot
+   end
+
+   if bag >= Enum.BagIndex.BankBag_1 and bag <= Enum.BagIndex.BankBag_7 then
+      return ITEM_INVENTORY_LOCATION_BANK
+      + ITEM_INVENTORY_LOCATION_BAGS
+      + bit.lshift(bag - ITEM_INVENTORY_BANK_BAG_OFFSET, ITEM_INVENTORY_BAG_BIT_OFFSET)
+      + slot
+   end
 end
 
 function EquipSetState:GetEquipmentSetMemberships(bag, slot)
@@ -71,6 +76,7 @@ EquipSetState:RegisterEvent('BAG_UPDATE_DELAYED')
 EquipSetState:RegisterEvent('BANKFRAME_OPENED')
 EquipSetState:RegisterEvent('BANKFRAME_CLOSED')
 EquipSetState:RegisterEvent('EQUIPMENT_SETS_CHANGED')
+EquipSetState:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
 
 local texData = {
     [1] = {
@@ -140,7 +146,7 @@ local texData = {
 
 local function MakeTexture(frame, td)
     local tex = frame:CreateTexture(
-                    frame:GetName() .. td.parentKey,
+                    nil,
                     td.level,
                     "LiteBagEquipSetsTexture",
                     td.subLevel
