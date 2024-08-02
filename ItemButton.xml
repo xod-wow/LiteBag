@@ -6,6 +6,9 @@
 
 <ItemButton name="LiteBagItemButtonTemplate" inherits="ContainerFrameItemButtonTemplate" virtual="true" mixin="LiteBagItemButtonMixin">
     <Size x="37" y="37" />
+    <KeyValues>
+        <KeyValue key="isLiteBag" value="true" type="boolean" />
+    </KeyValues>
     <!-- Previously override OnEnter for bank, seems ok now. -->
 </ItemButton>
 
