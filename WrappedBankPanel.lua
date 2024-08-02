@@ -13,9 +13,24 @@ local addonName, LB = ...
 
 LiteBagWrappedBankMixin = {}
 
+function LiteBagWrappedBankMixin:CallHooksForWrappedButtons()
+    if self.bankType == Enum.BankType.Account then
+        for itemButton in self.wrappedPanel:EnumerateValidItems() do
+            LB.CallHooks('LiteBagItemButton_Update', itemButton)
+        end
+    elseif self.bankType == Enum.BankType.Character then
+        for _, itemButton in self.wrappedPanel:EnumerateValidItems() do
+            LB.CallHooks('LiteBagItemButton_Update', itemButton)
+        end
+    end
+end
+
 function LiteBagWrappedBankMixin:OnLoad()
     local id = self:GetID()
     local data = BANK_PANELS[id]
+
+    self.bankType = data.bankType
+
     self.wrappedPanel = _G[data.name]
 
     self.wrappedPanel:SetParent(self)
@@ -26,6 +41,21 @@ function LiteBagWrappedBankMixin:OnLoad()
     self.wrappedPanel:SetHeight(data.size.y)
     self.wrappedPanel:Hide()
 
+    if data.bankType == Enum.BankType.Character then
+        -- Reagent bank
+        hooksecurefunc("BankFrameItemButton_Update",
+            function (itemButton)
+                if itemButton.isBag then return end
+                LB.CallHooks('LiteBagItemButton_Update', itemButton)
+            end)
+    elseif data.bankType == Enum.BankType.Account then
+        -- Account bank
+        hooksecurefunc(AccountBankPanel, 'Clean',
+            function () self:CallHooksForWrappedButtons() end)
+        -- This is to fix a blizzard bug where it's both (a) not updated the
+        -- first time AND spins on calling Clean() every frame.
+        AccountBankPanel:MarkDirty()
+    end
     self:SetSize(self.wrappedPanel:GetSize())
 end
 
@@ -48,6 +78,8 @@ function LiteBagWrappedBankMixin:OnShow()
     self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
     self:RegisterEvent('ITEM_LOCK_CHANGED')
     self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
+
+    LB.RegisterPluginEvents(self)
 end
 
 function LiteBagWrappedBankMixin:OnHide()
@@ -62,7 +94,7 @@ function LiteBagWrappedBankMixin:OnEvent(event, ...)
         self.wrappedPanel:UpdateSearchResults()
     elseif event == 'ITEM_LOCK_CHANGED' then
         local bag, slot = ...
-        if bag == Enum.BagIndex.ReagentBank then
+        if bag == Enum.BagIndex.Reagentbank then
             local button = ReagentBankFrame['Item'..slot]
             if button then
                 BankFrameItemButton_UpdateLocked(button)
@@ -75,5 +107,7 @@ function LiteBagWrappedBankMixin:OnEvent(event, ...)
         if button then
             BankFrameItemButton_Update(button)
         end
+    elseif LB.IsPluginEvent(event) then
+        self:CallHooksForWrappedButtons()
     end
 end

@@ -14,18 +14,29 @@ local addonName, LB = ...
 -- hooksecurefunc is just too slow
 local hooks = { }
 
-function LB.RegisterHook(func, hook)
+function LB.RegisterHook(func, hook, includeBlizzard)
     hooks[func] = hooks[func] or { }
-    hooks[func][hook] = true
+    hooks[func][hook] = includeBlizzard and true or false
 end
 
 function LB.UnregisterHook(func, hook)
     hooks[func][hook] = nil
 end
 
-function LB.CallHooks(func, self)
-    for f in pairs(hooks[func] or {}) do
-         f(self)
+local function GetItemButtonBagAndSlot(button)
+    if button.GetBankTabID then
+        return button:GetBankTabID(), button:GetContainerSlotID()
+    else
+        return button:GetBagID(), button:GetID()
+    end
+end
+
+function LB.CallHooks(func, itemButton)
+    for hook, includeBlizzard in pairs(hooks[func] or {}) do
+        if includeBlizzard or itemButton.isLiteBag then
+            local bag, slot = GetItemButtonBagAndSlot(itemButton)
+            hook(itemButton, bag, slot)
+        end
     end
 end
 

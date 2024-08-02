@@ -11,11 +11,8 @@
 
 local addonName, LB = ...
 
-local function Update(self)
+local function Update(self, bag, slot)
     if not C_Item.IsAnimaItemByID then return end
-    local bag = self:GetParent():GetID()
-    local slot = self:GetID()
-
     local info = C_Container.GetContainerItemInfo(bag, slot)
     if info and C_Item.IsAnimaItemByID(info.itemID) then
         local color = ITEM_QUALITY_COLORS[info.quality]
@@ -25,4 +22,4 @@ local function Update(self)
     end
 end
 
-LB.RegisterHook('LiteBagItemButton_Update', Update)
+LB.RegisterHook('LiteBagItemButton_Update', Update, true)

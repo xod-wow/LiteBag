@@ -41,17 +41,9 @@ local TextForBind = {
 
 local lineQuery = { Enum.TooltipDataLineType.ItemBinding }
 
-local function GetBindText(bag, slot)
-    local _, info
-
-    if bag == Enum.BagIndex.Bank then
-        local id = BankButtonIDToInvSlotID(slot)
-        info = C_TooltipInfo.GetInventoryItem('player', id)
-    elseif bag == Enum.BagIndex.ReagentBank then
-        local id = ReagentBankButtonIDToInvSlotID(slot)
-        info = C_TooltipInfo.GetInventoryItem('player', id)
-    else
-        info = C_TooltipInfo.GetBagItem(bag, slot)
+local function GetInfoBindText(info)
+    if not info then
+        return
     end
 
     if info.battlePetSpeciesID then
@@ -66,30 +58,50 @@ local function GetBindText(bag, slot)
             return TextForBind[text]
         end
     end
+
     return NoBindText
 end
 
-local function Update(button)
-    if not button.LiteBagBindsOnText then
-        button.LiteBagBindsOnText = button:CreateFontString(nil, "ARTWORK", "GameFontNormalOutline")
-        button.LiteBagBindsOnText:SetPoint("TOP", button, "TOP", 0, -2)
-    end
+local function GetButtonItemTooltipInfo(button)
 
-    if not LB.GetGlobalOption("showBindsOn") or not button.hasItem then
-        button.LiteBagBindsOnText:Hide()
-        return
+    if button.GetBankTabID then
+        return C_TooltipInfo.GetBagItem(button:GetBankTabID(), button:GetContainerSlotID())
     end
 
     local bag = button:GetBagID()
     local slot = button:GetID()
 
-    local text = GetBindText(bag, slot)
-    if not text then
-        button.LiteBagBindsOnText:Hide()
+    if bag == Enum.BagIndex.Bank then
+        local id = BankButtonIDToInvSlotID(slot)
+        return C_TooltipInfo.GetInventoryItem('player', id)
+    elseif bag == Enum.BagIndex.Reagentbank then
+        local id = ReagentBankButtonIDToInvSlotID(slot)
+        return C_TooltipInfo.GetInventoryItem('player', id)
     else
-        button.LiteBagBindsOnText:SetText(text)
-        button.LiteBagBindsOnText:Show()
+        return C_TooltipInfo.GetBagItem(bag, slot)
     end
 end
 
-LB.RegisterHook('LiteBagItemButton_Update', Update)
+local BindTextsByButton = {}
+
+local function Update(button)
+    if BindTextsByButton[button] == nil then
+        BindTextsByButton[button] = button:CreateFontString(nil, "ARTWORK", "GameFontNormalOutline")
+        BindTextsByButton[button]:SetPoint("TOP", button, "TOP", 0, -2)
+    end
+
+    if LB.GetGlobalOption("showBindsOn") then
+        local info = GetButtonItemTooltipInfo(button)
+        local text = GetInfoBindText(info)
+
+        if text then
+            BindTextsByButton[button]:SetText(text)
+            BindTextsByButton[button]:Show()
+            return
+        end
+    end
+    BindTextsByButton[button]:Hide()
+end
+
+-- LiteBag
+LB.RegisterHook('LiteBagItemButton_Update', Update, true)

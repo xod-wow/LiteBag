@@ -11,15 +11,13 @@
 
 local addonName, LB = ...
 
-local function Update(self)
+local function Update(itemButton, bag, slot)
+
     -- Where did 651080 suddenly come from?
-    if self.IconBorder:GetTexture() ~= [[Interface\Common\WhiteIconFrame]] and
-       self.IconBorder:GetTexture() ~= 651080 then
+    if itemButton.IconBorder:GetTexture() ~= [[Interface\Common\WhiteIconFrame]] and
+       itemButton.IconBorder:GetTexture() ~= 651080 then
         return
     end
-
-    local bag = self:GetParent():GetID()
-    local slot = self:GetID()
 
     local info = C_Container.GetContainerItemInfo(bag, slot)
     if not info or not info.quality then return end
@@ -27,13 +25,9 @@ local function Update(self)
     local minQuality = tonumber(LB.GetGlobalOption("thickerIconBorder"))
 
     if minQuality and info.quality >= minQuality then
-        self.IconBorder:SetTexture([[Interface\Addons\LiteBag\Plugin_IconBorder\IconBorder]])
-    end
-
-    if WOW_PROJECT_ID ~= 1 then
-        self.IconBorder:Show()
-        self.IconBorder:SetVertexColor(ITEM_QUALITY_COLORS[info.quality].color:GetRGB())
+        itemButton.IconBorder:SetTexture([[Interface\Addons\LiteBag\Plugin_IconBorder\IconBorder]])
     end
 end
 
-LB.RegisterHook('LiteBagItemButton_Update', Update)
+-- LiteBag
+LB.RegisterHook('LiteBagItemButton_Update', Update, true)
