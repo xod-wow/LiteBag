@@ -75,9 +75,11 @@ function LiteBagWrappedBankMixin:OnShow()
 
     self.wrappedPanel:Show()
 
-    self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
-    self:RegisterEvent('ITEM_LOCK_CHANGED')
-    self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
+    if self.bankType == Enum.BankType.Character then
+        self:RegisterEvent('INVENTORY_SEARCH_UPDATE')
+        self:RegisterEvent('ITEM_LOCK_CHANGED')
+        self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
+    end
 
     LB.RegisterPluginEvents(self)
 end
