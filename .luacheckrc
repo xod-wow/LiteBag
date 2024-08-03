@@ -36,6 +36,7 @@ globals = {
 }
 
 read_globals = {
+    "AccountBankPanel",
     "BACKPACK_TOOLTIP",
     "BAG_FILTER_ASSIGN_TO",
     "BAG_FILTER_CLEANUP",
@@ -68,6 +69,7 @@ read_globals = {
     "COSTS_LABEL",
     "C_Bank",
     "C_Container",
+    "C_CurrencyInfo",
     "C_EquipmentSet",
     "C_Item",
     "C_NewItems",
@@ -122,6 +124,7 @@ read_globals = {
     "ITEM_INVENTORY_LOCATION_BAGS",
     "ITEM_INVENTORY_LOCATION_BANK",
     "ITEM_INVENTORY_LOCATION_PLAYER",
+    "ITEM_INVENTORY_BANK_BAG_OFFSET",
     "ITEM_QUALITY_COLORS",
     "ITEM_SOULBOUND",
     "InCombatLockdown",
@@ -142,6 +145,7 @@ read_globals = {
     "PanelTemplates_GetSelectedTab",
     "PanelTemplates_SetNumTabs",
     "PanelTemplates_SetTab",
+    "PanelTemplates_SetTabShown",
     "PanelTemplates_ShowTab",
     "PickupBagFromSlot",
     "PlaySound",
