@@ -13,14 +13,12 @@ local addonName, LB = ...
 
 LiteBagWrappedBankMixin = {}
 
-function LiteBagWrappedBankMixin:CallHooksForWrappedButtons()
-    if self.bankType == Enum.BankType.Account then
-        for itemButton in self.wrappedPanel:EnumerateValidItems() do
-            LB.CallHooks('LiteBagItemButton_Update', itemButton)
-        end
-    elseif self.bankType == Enum.BankType.Character then
-        for _, itemButton in self.wrappedPanel:EnumerateValidItems() do
-            LB.CallHooks('LiteBagItemButton_Update', itemButton)
+local hookedItemButtons = {}
+
+function LiteBagWrappedBankMixin:HookItemButtons(methodName, func)
+    for itemButton in self.wrappedPanel:EnumerateValidItems() do
+        if not hookedItemButtons[itemButton] then
+            hooksecurefunc(itemButton, methodName, func)
         end
     end
 end
@@ -49,9 +47,13 @@ function LiteBagWrappedBankMixin:OnLoad()
                 LB.CallHooks('LiteBagItemButton_Update', itemButton)
             end)
     elseif data.bankType == Enum.BankType.Account then
-        -- Account bank
-        hooksecurefunc(AccountBankPanel, 'Clean',
-            function () self:CallHooksForWrappedButtons() end)
+        hooksecurefunc(AccountBankPanel, 'GenerateItemSlotsForSelectedTab',
+            function ()
+                self:HookItemButtons('Refresh',
+                    function (itemButton)
+                        LB.CallHooks('LiteBagItemButton_Update', itemButton)
+                    end)
+            end)
         -- This is to fix a blizzard bug where it's both (a) not updated the
         -- first time AND spins on calling Clean() every frame.
         AccountBankPanel:MarkDirty()
