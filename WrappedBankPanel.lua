@@ -75,6 +75,8 @@ function LiteBagWrappedBankMixin:OnShow()
     BankItemSearchBox:SetWidth(256)
     BankItemSearchBox:Show()
 
+    self:GetParent():SetPortraitToUnit('npc')
+
     self.wrappedPanel:Show()
 
     if self.bankType == Enum.BankType.Character then
