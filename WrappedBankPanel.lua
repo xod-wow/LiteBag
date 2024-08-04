@@ -53,10 +53,10 @@ function LiteBagWrappedBankMixin:OnLoad()
                     function (itemButton)
                         LB.CallHooks('LiteBagItemButton_Update', itemButton)
                     end)
+                -- This is to fix a blizzard bug where it's not updated the
+                -- first time AND spins on calling Clean() every frame.
+                AccountBankPanel:MarkDirty()
             end)
-        -- This is to fix a blizzard bug where it's both (a) not updated the
-        -- first time AND spins on calling Clean() every frame.
-        AccountBankPanel:MarkDirty()
     end
     self:SetSize(self.wrappedPanel:GetSize())
 end
