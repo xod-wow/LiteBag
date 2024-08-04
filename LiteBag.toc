@@ -32,6 +32,7 @@ BackpackFrame.xml
 
 #@debug@
 Plugin_Anima\Anima.xml
+Plugin_Expansion\Expansion.xml
 #@end-debug@
 Plugin_BindsOn\BindsOn.xml
 Plugin_EquipSets\EquipSets.xml
