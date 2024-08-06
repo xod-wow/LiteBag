@@ -87,6 +87,7 @@ local BindTextsByButton = {}
 local function Update(button)
     if BindTextsByButton[button] == nil then
         BindTextsByButton[button] = button:CreateFontString(nil, "ARTWORK", "GameFontNormalOutline")
+        BindTextsByButton[button]:SetFont("Fonts\\FRIZQT__.TTF", 9, "OUTLINE")
         BindTextsByButton[button]:SetPoint("TOP", button, "TOP", 0, -2)
     end
 
