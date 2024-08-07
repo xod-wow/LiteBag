@@ -32,8 +32,13 @@ end
 
 if locale == "deDE" then
     L                     = L or {}
+    L["Bottom"]           = "Unten"
     L["Bottom Left"]      = "Unten links"
     L["Bottom Right"]     = "Unten rechts"
+    L["Center"]           = "Mitte"
+    L["Left"]             = "Links"
+    L["Right"]            = "Rechts"
+    L["Top"]              = "Oben"
     L["Top Left"]         = "Oben links"
     L["Top Right"]        = "Oben rechts"
 end
@@ -42,6 +47,7 @@ end
 
 if locale == "esES" or locale == "esMX" then
     L                     = L or {}
+    L["Bottom"]           = "Abajo"
     L["Bottom Left"]      = "Inferior izquierda"
     L["Bottom Right"]     = "Inferior derecha"
     L["Top Left"]         = "Superior izquierda"
@@ -54,6 +60,7 @@ if locale == "frFR" then
     L                     = L or {}
     L["Bags"]             = "Sacs"
     L["BoE"]              = "LqE"
+    L["Bottom"]           = "Bas"
     L["Bottom Left"]      = "Bas gauche"
     L["Bottom Right"]     = "Bas droit"
     L["Display equipment set membership icons."] = "Afficher les icônes sur les Ensembles d'Équipements"
@@ -89,6 +96,7 @@ if locale == "koKR" then
     L["Bags"]             = "가방"
     L["BoA"]              = "BoA"
     L["BoE"]              = "BoE"
+    L["Bottom"]           = "아래"
     L["Bottom Left"]      = "좌측 하단"
     L["Bottom Right"]     = "우측 하단"
     L["Column gaps"]      = "칸 간격"
@@ -111,6 +119,7 @@ end
 
 if locale == "ptBR" then
     L                     = L or {}
+    L["Bottom"]           = "Embaixo"
     L["Bottom Left"]      = "Em Baixo a Esquerda"
     L["Bottom Right"]     = "Em Baixo a Direita"
     L["Top Left"]         = "Em Cima a Esquerda"
@@ -121,6 +130,7 @@ end
 
 if locale == "ruRU" then
     L                     = L or {}
+    L["Bottom"]           = "Снизу"
     L["Bottom Left"]      = "Снизу слева"
     L["Bottom Right"]     = "Снизу справа"
     L["Top Left"]         = "Вверху cлева"
@@ -136,8 +146,10 @@ if locale == "zhCN" then
     L["Blizzard"]         = "暴雪"
     L["BoA"]              = "账绑"
     L["BoE"]              = "装绑"
+    L["Bottom"]           = "下"
     L["Bottom Left"]      = "左下"
     L["Bottom Right"]     = "右下"
+    L["Center"]           = "中心"
     L["Column gaps"]      = "列间距"
     L["Columns"]          = "列数"
     L["Display equipment set membership icons."] = "显示装备设定相关图示"
@@ -147,16 +159,21 @@ if locale == "zhCN" then
     L["Hide Blizzard bag buttons."] = "隐藏暴雪背包按钮"
     L["Icon layout:"]     = "图标布局:"
     L["Icon order:"]      = "图标顺序:"
+    L["Left"]             = "左边"
     L["Pet"]              = "宠物"
+    L["Reagent Bag"]      = "装备材料包"
     L["Reverse"]          = "反向"
+    L["Right"]            = "右边"
     L["Row gaps"]         = "行间距"
     L["Scale"]            = "缩放"
     L["Shift Click to Hide/Show Bag"] = "按住 Shift 键点击隐藏或显示背包"
     L["Show bag buttons."] = "显示背包按钮"
     L["Show options panel."] = "显示选项面板"
     L["Show thicker icon borders for this quality and above."] = "在此品质及以上的物品显示更粗的图标边框"
+    L["Top"]              = "顶部"
     L["Top Left"]         = "左上"
     L["Top Right"]        = "右上"
+    L["War"]              = "战团"
     L["When moving snap frame to default position."] = "移动时将框架固定到默认位置"
 end
 
@@ -169,8 +186,10 @@ if locale == "zhTW" then
     L["Blizzard"]         = "暴雪"
     L["BoA"]              = "帳綁"
     L["BoE"]              = "裝綁"
+    L["Bottom"]           = "下"
     L["Bottom Left"]      = "左下"
     L["Bottom Right"]     = "右下"
+    L["Center"]           = "中央"
     L["Column gaps"]      = "行距"
     L["Columns"]          = "行數"
     L["Display equipment set membership icons."] = "顯示裝備設定相關圖示"
@@ -180,15 +199,20 @@ if locale == "zhTW" then
     L["Hide Blizzard bag buttons."] = "隱藏暴雪背包按鈕。"
     L["Icon layout:"]     = "圖示布局："
     L["Icon order:"]      = "圖示順序："
+    L["Left"]             = "左"
     L["Pet"]              = "寵物"
+    L["Reagent Bag"]      = "材料背包"
     L["Reverse"]          = "反向"
+    L["Right"]            = "右"
     L["Row gaps"]         = "欄距"
     L["Scale"]            = "縮放"
     L["Shift Click to Hide/Show Bag"] = "Shift點擊來隱藏/顯示背包"
     L["Show bag buttons."] = "顯示背包按鈕。"
     L["Show options panel."] = "顯示選項面板。"
     L["Show thicker icon borders for this quality and above."] = "在此品質及以上物品顯示更粗的圖示邊框。"
+    L["Top"]              = "上"
     L["Top Left"]         = "左上"
     L["Top Right"]        = "右上"
+    L["War"]              = "戰隊"
     L["When moving snap frame to default position."] = "當移動快照框至預設位置時。"
 end
