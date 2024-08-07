@@ -41,6 +41,7 @@ local defaults = {
         },
         showEquipmentSets = false,
         showBindsOn = false,
+        smallerBindsOnText = false,
         hideBlizzardBagButtons = false,
         allowHideBagIDs = { [Enum.BagIndex.ReagentBag] = true },
         hideBagIDs = { },

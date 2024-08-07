@@ -158,6 +158,14 @@ local options = {
             get = GlobalGetter,
             set = GlobalSetter,
         },
+        smallerBindsOnText = {
+            type = "toggle",
+            name = L["Reduce the font size for BoA and BoE items. (Requires Reload)"],
+            order = order(),
+            width = "full",
+            get = GlobalGetter,
+            set = GlobalSetter,
+        },
         showEquipmentSets = {
             type = "toggle",
             name = L["Display equipment set membership icons."],
