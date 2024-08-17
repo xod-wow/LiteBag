@@ -144,6 +144,8 @@ local texData = {
     },
 }
 
+local ButtonTextures = {}
+
 local function MakeTexture(frame, td)
     local tex = frame:CreateTexture(
                     nil,
@@ -159,10 +161,12 @@ local function MakeTexture(frame, td)
     return tex
 end
 
-local function AddTextures(b)
-    for i, td in ipairs(texData) do
-        b[td.parentKey] = MakeTexture(b, td)
+local function GetTexture(frame, i, td)
+    if not ButtonTextures[frame] or not ButtonTextures[frame][i] then
+        ButtonTextures[frame] = ButtonTextures[frame] or {}
+        ButtonTextures[frame][i] = MakeTexture(frame, td)
     end
+    return ButtonTextures[frame][i]
 end
 
 local function Update(button)
@@ -171,14 +175,10 @@ local function Update(button)
     local bag = button:GetParent():GetID()
     local slot = button:GetID()
 
-    if not button.LiteBagEQTexture1 then
-        AddTextures(button)
-    end
-
     local memberships = EquipSetState:GetEquipmentSetMemberships(bag, slot)
 
     for i,td in ipairs(texData) do
-        local tex = button[td.parentKey]
+        local tex = GetTexture(button, i, td)
         if LB.GetGlobalOption("showEquipmentSets") and memberships and memberships[i] == true then
             tex:Show()
         else
