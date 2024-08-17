@@ -17,7 +17,7 @@ local TextsByButton = {}
 
 local function Update(button, bag, slot)
     if TextsByButton[button] == nil then
-        TextsByButton[button] = button:CreateFontString(nil, "ARTWORK", "GameFontNormalOutline")
+        TextsByButton[button] = button:CreateFontString(nil, "ARTWORK", "GameFontNormalSmallOutline")
         TextsByButton[button]:SetPoint("TOPLEFT", button, "TOPLEFT", -3, 3)
         local layer, subLayer = button.IconBorder:GetDrawLayer()
         TextsByButton[button]:SetDrawLayer(layer, subLayer + 1)
