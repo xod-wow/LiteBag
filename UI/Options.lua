@@ -152,7 +152,7 @@ local options = {
         },
         showBindsOn = {
             type = "toggle",
-            name = L["Display text for BoA and BoE items."],
+            name = L["Display text for Warbound and BoE items."],
             order = order(),
             width = "full",
             get = GlobalGetter,
