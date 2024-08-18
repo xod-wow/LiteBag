@@ -23,7 +23,6 @@ local locale = GetLocale()
 
 if locale == "enUS" or locale == "enGB" then
     L["Pet"] = "Pet"
-    L["BoA"] = "BoA"
 end
 
 -- :r! sh fetchlocale.sh -------------------------------------------------------
