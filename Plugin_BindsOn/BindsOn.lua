@@ -84,10 +84,14 @@ end
 
 local BindTextsByButton = {}
 
+local fontFile, fontSize = GameFontNormalSmall:GetFont()
+
 local function Update(button)
     if BindTextsByButton[button] == nil then
-        BindTextsByButton[button] = button:CreateFontString(nil, "ARTWORK", "GameFontNormalOutline")
-        BindTextsByButton[button]:SetPoint("TOP", button, "TOP", 0, -2)
+        BindTextsByButton[button] = button:CreateFontString(nil, "OVERLAY")
+        BindTextsByButton[button]:SetFont(fontFile, fontSize, "THICKOUTLINE")
+        BindTextsByButton[button]:SetPoint("TOPRIGHT", button, "TOPRIGHT", 3, 2)
+        BindTextsByButton[button]:SetJustifyH("RIGHT")
     end
 
     if LB.GetGlobalOption("showBindsOn") then
