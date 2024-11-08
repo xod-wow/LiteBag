@@ -20,8 +20,8 @@ function LiteBagOptionsPanel_Open()
     if not f.CurrentOptionsPanel then
         f.CurrentOptionsPanel = LiteBagOptions
     end
-    InterfaceOptionsFrame:Show()
-    InterfaceOptionsFrame_OpenToCategory(f.CurrentOptionsPanel)
+    SettingsPanel:Open()
+    SettingsPanel:SelectCategory(f.CurrentOptionsPanel.category, true)
 end
 
 function LiteBagOptionsPanel_SaveOldOptions(self)
@@ -108,7 +108,8 @@ function LiteBagOptionsPanel_OnLoad(self)
     self.default = self.default or LiteBagOptionsPanel_Default
     self.refresh = self.refresh or LiteBagOptionsPanel_Refresh
 
-    InterfaceOptions_AddCategory(self)
+    self.category = Settings.RegisterCanvasLayoutCategory(self, addonName)
+    Settings.RegisterAddOnCategory(self.category)
 end
 
 function LiteBagOptionsControl_GetControl(self)
