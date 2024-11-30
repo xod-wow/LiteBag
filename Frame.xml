@@ -28,10 +28,6 @@
 
     <Frames>
 
-        <Anchors>
-            <Anchor point="TOPLEFT" />
-        </Anchors>
-
         <Button name="$parentResizeBottomRight">
             <Size x="16" y="16" />
             <Anchors>
