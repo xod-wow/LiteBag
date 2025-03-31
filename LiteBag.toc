@@ -10,6 +10,7 @@
 ## SavedVariables: LiteBagDB
 ## X-Curse-Project-ID: 50424
 ## X-WoWI-ID: 26330
+## X-Wago-ID: 5NRevpG3
 
 embeds.xml
 
