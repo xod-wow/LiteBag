@@ -52,9 +52,7 @@ function LiteBagBagButtonMixin:Update()
         SetItemButtonTexture(self, textureName)
     elseif self.purchaseCost then
         SetItemButtonTexture(self, 'Interface\\GuildBankFrame\\UI-GuildBankFrame-NewTab')
-        -- Broken in 11.1.0
-        -- local icon = self:GetItemButtonIconTexture()
-        local icon = self.Icon or self.icon or _G[self:GetName().."IconTexture"];
+        local icon = self:GetItemButtonIconTexture()
         icon:SetTexCoord(0.1, 1, 0.1, 1)
     else
         textureName = select(2, GetInventorySlotInfo('Bag0Slot'))
