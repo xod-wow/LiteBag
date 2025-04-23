@@ -11,6 +11,17 @@
 ## X-Curse-Project-ID: 50424
 ## X-WoWI-ID: 26330
 ## X-Wago-ID: 5NRevpG3
+## Category: Inventory
+## Category-deDE: Inventar
+## Category-esES: Inventario
+## Category-esMX: Inventario
+## Category-frFR: Inventaire
+## Category-itIT: Inventario
+## Category-koKR: 소지품
+## Category-ptBR: Inventário
+## Category-ruRU: Инвентарь
+## Category-zhCN: 物品栏
+## Category-zhTW: 物品欄
 
 embeds.xml
 
