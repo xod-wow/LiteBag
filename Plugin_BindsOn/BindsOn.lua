@@ -27,6 +27,8 @@ local NoBindText = false
 -- Map tooltip text to display text, from BindsWhen by phanx
 -- Looks through the first five tooltip left texts for these keys.
 
+local BATTLENET_FONT_COLOR = BATTLENET_FONT_COLOR or CreateColorFromRGBHexString('82c5ff')
+
 local TextForBind = {
     [ITEM_ACCOUNTBOUND]        = BATTLENET_FONT_COLOR:WrapTextInColorCode( BoAText ),
     [ITEM_BNETACCOUNTBOUND]    = BATTLENET_FONT_COLOR:WrapTextInColorCode( BoAText ),
