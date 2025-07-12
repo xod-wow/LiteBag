@@ -13,30 +13,6 @@ local addonName, LB = ...
 
 local L = LB.Localize
 
--- A popup dialog for confirming the bag sort.
-StaticPopupDialogs['LB_CONFIRM_SORT'] = {
-    preferredIndex = STATICPOPUP_NUMDIALOGS,
-    text = '%s\n'..CONFIRM_CONTINUE,
-    button1 = YES,
-    button2 = NO,
-    -- sound = 'UI_BagSorting_01',
-    OnAccept = function (self, func) func() end,
-    hideOnEscape = 1,
-    timeout = 0,
-}
-
--- Don't show the confirm popup if the shift key is held.
-local function DoOrStaticPopup(text, func)
-    if IsShiftKeyDown() or LB.Options:GetGlobalOption('NoConfirmSort') then
-        func()
-    else
-        StaticPopup_Show('LB_CONFIRM_SORT', text, nil, func)
-    end
-end
-
--- Added to the bag sort tooltip.  Would be nice if it were localized.
-local TOOLTIP_NOCONFIRM_TEXT = format(L["%s: No confirmation"], SHIFT_KEY)
-
 local hiddenBagParent = CreateFrame('Frame')
 
 local function ReplaceBlizzardInventory()
