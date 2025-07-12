@@ -61,7 +61,9 @@
             <Scripts>
                 <OnLoad inherit="prepend">
                     MoneyFrame_SetType(self, "PLAYER")
-                    MoneyFrame_SetMaxDisplayWidth(self, 168)
+                    if MoneyFrame_SetMaxDisplayWidth then
+                        MoneyFrame_SetMaxDisplayWidth(self, 168)
+                    end
                 </OnLoad>
             </Scripts>
         </Frame>
