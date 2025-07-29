@@ -13,12 +13,14 @@ local addonName, LB = ...
 
 local L = LB.Localize
 
-local BankContainers = { [Enum.BagIndex.Bank]  = true }
-do
-    for i = 1,NUM_BANKBAGSLOTS do
-        BankContainers[NUM_TOTAL_EQUIPPED_BAG_SLOTS+i] = true
-    end
-end
+local BankContainers = {
+    [Enum.BagIndex.CharacterBankTab_1]  = true,
+    [Enum.BagIndex.CharacterBankTab_2]  = true,
+    [Enum.BagIndex.CharacterBankTab_3]  = true,
+    [Enum.BagIndex.CharacterBankTab_4]  = true,
+    [Enum.BagIndex.CharacterBankTab_5]  = true,
+    [Enum.BagIndex.CharacterBankTab_6]  = true,
+}
 
 LiteBagBagButtonMixin = {}
 
@@ -39,6 +41,7 @@ function LiteBagBagButtonMixin:Update()
 
     local textureName = GetInventoryItemTexture('player', self.slotID)
 
+--[[
     local numBankSlots = GetNumBankSlots()
     local buyBankSlot = numBankSlots + NUM_TOTAL_EQUIPPED_BAG_SLOTS + 1
 
@@ -47,6 +50,7 @@ function LiteBagBagButtonMixin:Update()
     else
         self.purchaseCost = nil
     end
+]]
 
     if textureName then
         SetItemButtonTexture(self, textureName)

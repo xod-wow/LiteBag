@@ -198,6 +198,18 @@ local function HideBlizzardBank()
         function () BankFrame:Hide() end)
 end
 
+local function HookBlizzardBank()
+    local function hook(panel)
+        for itemButton in panel:EnumerateValidItems() do
+            hooksecurefunc(itemButton, 'Refresh',
+                function (itemButton)
+                    LB.CallHooks('LiteBagItemButton_Update', itemButton)
+                end)
+        end
+    end
+    hooksecurefunc(BankPanel, 'GenerateItemSlotsForSelectedTab', hook)
+end
+
 LB.Manager = CreateFrame('Frame', "LiteBagManager", UIParent)
 
 local InitializeHooks = {}
@@ -214,7 +226,8 @@ end
 
 function LB.Manager:ReplaceBlizzard()
     HideBlizzardBags()
-    HideBlizzardBank()
+    HookBlizzardBank()
+    -- HideBlizzardBank()
     ReplaceGlobals()
 
     -- See the note about LiteBagSpecialCloser earlier

@@ -9,6 +9,7 @@
 
 <Script file="WrappedBankPanel.lua" />
 
+<!--
 <Frame name="LiteBagWrappedBankTemplate" hidden="true" mixin="LiteBagWrappedBankMixin" virtual="true">
     <Scripts>
         <OnLoad method="OnLoad" />
@@ -29,5 +30,6 @@
         <KeyValue key="Title" value="ACCOUNT_BANK_PANEL_TITLE" type="global" />
     </KeyValues>
 </Frame>
+-->
 
 </Ui>

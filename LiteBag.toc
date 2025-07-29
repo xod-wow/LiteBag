@@ -39,7 +39,7 @@ FilterDropDown.xml
 ContainerPanel.xml
 WrappedBankPanel.xml
 Frame.xml
-BankFrame.xml
+#BankFrame.xml
 BackpackFrame.xml
 
 #@debug@
@@ -49,5 +49,5 @@ Plugin_Expansion\Expansion.xml
 Plugin_BindsOn\BindsOn.xml
 Plugin_EquipSets\EquipSets.xml
 Plugin_IconBorder\IconBorder.xml
-
+ 
 UI\Options.lua

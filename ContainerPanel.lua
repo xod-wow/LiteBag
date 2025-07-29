@@ -134,10 +134,12 @@ function LiteBagContainerPanelMixin:OnShow()
 
     ContainerFrameCombinedBagsMixin.OnShow(self)
 
+--[[
     if self:MatchesBagID(Enum.BagIndex.Bank) then
         self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
         self:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
     end
+]]
 
     -- Blizzard does these in OnLoad for no good reason at all, because they check if
     -- the frame is shown in the event handler anyway. Derp?
@@ -168,8 +170,10 @@ function LiteBagContainerPanelMixin:OnHide()
         C_NewItems.RemoveNewItem(itemButton:GetBagID(), itemButton:GetID())
     end
 
+--[[
     self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
     self:UnregisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
+]]
 
     self:UnregisterEvent("QUEST_ACCEPTED")
     self:UnregisterEvent("UNIT_QUEST_LOG_CHANGED")
@@ -204,6 +208,7 @@ function LiteBagContainerPanelMixin:OnEvent(event, ...)
         end
     elseif event == "DISPLAY_SIZE_CHANGED" then
         -- We aren't doing any multi-frame reflowing stuff so do nothing
+--[[
     elseif event == "PLAYERBANKSLOTS_CHANGED" then
         -- The bank actually gives you the slot, unlike the bags, but
         -- there's nothing we can send through to make it efficient.
@@ -212,6 +217,7 @@ function LiteBagContainerPanelMixin:OnEvent(event, ...)
         -- As of DF reliably fires when buying bank slots, but the new info
         -- isn't available right now so delay.
         C_Timer.After(0, function () self:GenerateFrame() end)
+]]
     elseif LB.IsPluginEvent(event) then
         self:Update()
     else
