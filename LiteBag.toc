@@ -1,4 +1,4 @@
-## Interface: 110107
+## Interface: 110200
 ## Title: LiteBag
 ## Notes: A minimal one-bag solution for inventory and bank.
 ## Notes-frFR: Regroupe tous les sacs en un seul (pour l'inventaire et la banque).
@@ -6,7 +6,6 @@
 ## Author: Xodiv-Nagrand
 ## Email: mib@post.com
 ## IconTexture: 133639
-## OptionalDependencies: Masque
 ## SavedVariables: LiteBagDB
 ## X-Curse-Project-ID: 50424
 ## X-WoWI-ID: 26330
@@ -31,16 +30,9 @@ Print.lua
 Options.lua
 Hooks.lua
 
+BankFrame.lua
+ContainerFrame.lua
 Core.lua
-
-BagButton.xml
-ItemButton.xml
-FilterDropDown.xml
-ContainerPanel.xml
-WrappedBankPanel.xml
-Frame.xml
-BankFrame.xml
-BackpackFrame.xml
 
 #@debug@
 Plugin_Anima\Anima.xml

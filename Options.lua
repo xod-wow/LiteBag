@@ -15,35 +15,22 @@ local defaults = {
     profile = {
         BACKPACK = {
             columns = 10,
-            scale = 1.0,
             xbreak = 0,
             ybreak = 0,
+            anchor = 'TOPLEFT',
             layout = 'default',
             order = 'default',
-            anchor = 'TOPLEFT',
-            snap = true,
-            locked = true,
-            bagButtons = true,
-            position = nil,
         },
         BANK = {
             columns = 14,
-            scale = 1.0,
             xbreak = 0,
             ybreak = 0,
+            anchor = 'TOPLEFT',
             layout = 'default',
             order = 'default',
-            anchor = 'TOPLEFT',
-            snap = true,
-            locked = true,
-            bagButtons = true,
-            position = nil,
         },
         showEquipmentSets = false,
         showBindsOn = false,
-        hideBlizzardBagButtons = false,
-        allowHideBagIDs = { [Enum.BagIndex.ReagentBag] = true },
-        hideBagIDs = { },
         thickerIconBorder = false,
         debug = nil,
         eventDebug = nil,
@@ -58,17 +45,6 @@ function LB.InitializeOptions()
     local ReFirer = {
         Fire = function () LB.db.callbacks:Fire('OnOptionsModified') end
     }
-
-    -- Migrate
-    for _, f in ipairs({ "BACKPACK", "BANK" }) do
-        if LB.db.profile[f].layout == 'reverse' then
-            LB.db.profile[f].layout = 'default'
-            LB.db.profile[f].anchor = "BOTTOMRIGHT"
-        elseif LB.db.profile[f].layout == 'bagreverse' then
-            LB.db.profile[f].layout = 'bag'
-            LB.db.profile[f].anchor = "BOTTOMRIGHT"
-        end
-    end
 
     LB.db.RegisterCallback(ReFirer, 'OnProfileChanged', 'Fire')
     LB.db.RegisterCallback(ReFirer, 'OnProfileReset', 'Fire')

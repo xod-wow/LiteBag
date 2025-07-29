@@ -33,7 +33,7 @@ function EquipSetState.PackContainerItemLocation(bag, slot)
       + slot
    end
 
-   if bag >= Enum.BagIndex.BankBag_1 and bag <= Enum.BagIndex.BankBag_7 then
+   if bag >= Enum.BagIndex.CharacterBankTab_1 and bag <= Enum.BagIndex.CharacterBankTab_6 then
       return ITEM_INVENTORY_LOCATION_BANK
       + ITEM_INVENTORY_LOCATION_BAGS
       + bit.lshift(bag - ITEM_INVENTORY_BANK_BAG_OFFSET, ITEM_INVENTORY_BAG_BIT_OFFSET)

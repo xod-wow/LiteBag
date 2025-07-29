@@ -166,22 +166,6 @@ local options = {
             get = GlobalGetter,
             set = GlobalSetter,
         },
-        hideBlizzardBagButtons = {
-            type = "toggle",
-            name = L["Hide Blizzard bag buttons."],
-            order = order(),
-            width = "full",
-            disabled = function () return not LB.Manager:CanManageBagButtons() end,
-            desc = function ()
-                if not LB.Manager:CanManageBagButtons() then
-                    local c = RED_FONT_COLOR
-                    return c:WrapTextInColorCode(L["Another addon is managing the Blizzard bag buttons."])
-                end
-            end,
-            descStyle = "inline",
-            get = GlobalGetter,
-            set = GlobalSetter,
-        },
         iconBorderPreGap = {
             type = "description",
             name = "",
@@ -214,38 +198,9 @@ local options = {
         },
         BACKPACK = {
             type = "group",
-            name = BAG_NAME_BACKPACK,
+            name = COMBINED_BAG_TITLE,
             order = order(),
             args = {
-                locked = {
-                    type = "toggle",
-                    name = LOCK_FRAME,
-                    order = order(),
-                    width = "full",
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                bagButtons = {
-                    type = "toggle",
-                    name = L["Show bag buttons."],
-                    order = order(),
-                    width = "full",
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                snap = {
-                    type = "toggle",
-                    name = L["When moving snap frame to default position."],
-                    order = order(),
-                    width = "full",
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                snapPostGap = {
-                    type = "description",
-                    name = "",
-                    order = order(),
-                },
                 columns = {
                     type = "range",
                     name = L["Columns"],
@@ -256,15 +211,10 @@ local options = {
                     get = TypeGetter,
                     set = TypeSetter,
                 },
-                scale = {
-                    type = "range",
-                    name = L["Scale"],
-                    min = 0.75,
-                    max = 1.25,
-                    step = 0.05,
+                columnFillSpacer = {
+                    type = "description",
+                    name = "\n",
                     order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
                 },
                 xbreak = {
                     type = "range",
@@ -331,32 +281,12 @@ local options = {
                 },
             },
         },
+--[[
         BANK = {
             type = "group",
             name = BANK,
             order = order(),
             args = {
-                locked = {
-                    type = "toggle",
-                    name = LOCK_FRAME,
-                    order = order(),
-                    width = "full",
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                snap = {
-                    type = "toggle",
-                    name = L["When moving snap frame to default position."],
-                    order = order(),
-                    width = "full",
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                snapPostGap = {
-                    type = "description",
-                    name = "",
-                    order = order(),
-                },
                 columns = {
                     type = "range",
                     name = L["Columns"],
@@ -367,15 +297,10 @@ local options = {
                     get = TypeGetter,
                     set = TypeSetter,
                 },
-                scale = {
-                    type = "range",
-                    name = L["Scale"],
-                    min = 0.75,
-                    max = 1.25,
-                    step = 0.05,
+                columnFillSpacer = {
+                    type = "description",
+                    name = "\n",
                     order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
                 },
                 xbreak = {
                     type = "range",
@@ -441,6 +366,7 @@ local options = {
                 },
             },
         },
+]]
     },
 }
 
