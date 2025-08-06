@@ -22,11 +22,7 @@ local EquipSetState = CreateFrame('Frame')
 -- bags and bank.
 
 function EquipSetState.PackContainerItemLocation(bag, slot)
-   if bag == Enum.BagIndex.Bank then
-      return ITEM_INVENTORY_LOCATION_BANK + slot + 63
-   end
-
-   if bag >= 0 and bag <= Enum.BagIndex.ReagentBag then
+   if bag >= Enum.BagIndex.Backpack and bag <= Enum.BagIndex.ReagentBag then
       return ITEM_INVENTORY_LOCATION_PLAYER
       + ITEM_INVENTORY_LOCATION_BAGS
       + bit.lshift(bag, ITEM_INVENTORY_BAG_BIT_OFFSET)
@@ -76,7 +72,6 @@ EquipSetState:RegisterEvent('BAG_UPDATE_DELAYED')
 EquipSetState:RegisterEvent('BANKFRAME_OPENED')
 EquipSetState:RegisterEvent('BANKFRAME_CLOSED')
 EquipSetState:RegisterEvent('EQUIPMENT_SETS_CHANGED')
-EquipSetState:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
 
 local texData = {
     [1] = {
@@ -172,11 +167,10 @@ end
 local function Update(button)
     EquipSetState:Update()
 
-    local bag = button:GetParent():GetID()
+    local bag = button:GetBagID()
     local slot = button:GetID()
 
     local memberships = EquipSetState:GetEquipmentSetMemberships(bag, slot)
-
     for i,td in ipairs(texData) do
         local tex = GetTexture(button, i, td)
         if LB.GetGlobalOption("showEquipmentSets") and memberships and memberships[i] == true then
@@ -192,8 +186,9 @@ end
 -- remove OnShow/OnHide and this is therefore first, but I don't think
 -- Blizzard guarantee that behavior.
 
--- Hopefully someday C_Container.GetContainerItemEquipmentSetInfo will work
--- and all of this state handling crap can be removed.
+-- C_Container.GetContainerItemEquipmentSetInfo does seem to kind of work now
+-- but not all that helpfully because it returns a human-readable string with
+-- ambiguous parsing.
 
-LB.RegisterHook('LiteBagItemButton_Update', Update)
+LB.RegisterHook('LiteBagItemButton_Update', Update, true)
 LB.AddPluginEvent("EQUIPMENT_SETS_CHANGED")
