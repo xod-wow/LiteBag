@@ -1,6 +1,6 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/Core.lua
+  LiteBag/ContainerFrame.lua
 
   Copyright 2013 Mike attersby
 

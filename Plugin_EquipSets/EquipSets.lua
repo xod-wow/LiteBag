@@ -164,11 +164,8 @@ local function GetTexture(frame, i, td)
     return ButtonTextures[frame][i]
 end
 
-local function Update(button)
+local function Update(button, bag, slot)
     EquipSetState:Update()
-
-    local bag = button:GetBagID()
-    local slot = button:GetID()
 
     local memberships = EquipSetState:GetEquipmentSetMemberships(bag, slot)
     for i,td in ipairs(texData) do
