@@ -70,6 +70,32 @@ function mixin:SetSearchBoxPoint(searchBox)
     searchBox:SetWidth(math.min(330, self:GetWidth() - 110))
 end
 
-function LB.PatchCombinedBags()
+--[[ Hooks -----------------------------------------------------------------]]--
+
+-- Update all the buttons
+local function ContainerUpdateHook(self)
+    for _, itemButton in self:EnumerateValidItems() do
+        LB.CallHooks('LiteBagItemButton_Update', itemButton)
+    end
+end
+
+local BlizzardContainerFrames = {
+    ContainerFrameCombinedBags,
+    ContainerFrame1,
+    ContainerFrame2,
+    ContainerFrame3,
+    ContainerFrame4,
+    ContainerFrame5,
+    ContainerFrame6,
+}
+
+local function HookBlizzardBags()
+    for _, f in ipairs(BlizzardContainerFrames) do
+        hooksecurefunc(f, 'UpdateItems', ContainerUpdateHook)
+    end
+end
+
+function LB.PatchBags()
     Mixin(ContainerFrameCombinedBags, mixin)
+    HookBlizzardBags()
 end

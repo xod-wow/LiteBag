@@ -13,59 +13,21 @@ local addonName, LB = ...
 
 local L = LB.Localize
 
+--[[ LiteBagManager --------------------------------------------------------]]--
+
+
 LB.Manager = CreateFrame('Frame', "LiteBagManager", UIParent)
 
-local InitializeHooks = {}
-
-function LB.Manager:RegisterInitializeHook(f)
-    table.insert(InitializeHooks, f)
-end
-
-function LB.Manager:CallInitializeHooks()
-    for _,f in ipairs(InitializeHooks) do
-        f()
-    end
-end
-
-
-local function HookBlizzardBank()
-    local hookedButtons = {}
-    local function hook(self)
-        for itemButton in self:EnumerateValidItems() do
-            if not hookedButtons[itemButton] then
-                hooksecurefunc(itemButton, 'Refresh',
-                    function (itemButton)
-                        LB.CallHooks('LiteBagItemButton_Update', itemButton)
-                    end)
-                hookedButtons[itemButton] = true
-            end
-        end
-    end
-    hooksecurefunc(BankPanel, 'GenerateItemSlotsForSelectedTab', hook)
-end
-
-local BlizzardContainerFrames = {
-    ContainerFrameCombinedBags,
-    ContainerFrame1,
-    ContainerFrame2,
-    ContainerFrame3,
-    ContainerFrame4,
-    ContainerFrame5,
-    ContainerFrame6,
-}
-
-local function HookBlizzardBags()
-    for _, f in ipairs(BlizzardContainerFrames) do
-        hooksecurefunc(f, 'UpdateItems',
-            function (self)
-                for _, itemButton in self:EnumerateValidItems() do
-                    LB.CallHooks('LiteBagItemButton_Update', itemButton)
-                end
-            end)
-    end
-end
-
 -- register here some other open/close events I liked.
+
+function LB.Manager:Initialize()
+    LB.InitializeOptions()
+    LB.InitializeGUIOptions()
+    LB.PatchBags()
+    LB.PatchBank()
+    self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
+    self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
+end
 
 function LB.Manager:OnEvent(event, ...)
     if LB.db then LB.EventDebug(self, event, ...) end
@@ -80,14 +42,7 @@ function LB.Manager:OnEvent(event, ...)
             CloseAllBags()
         end
     elseif event == 'PLAYER_LOGIN' then
-        LB.InitializeOptions()
-        LB.InitializeGUIOptions()
-        LB.PatchCombinedBags()
-        HookBlizzardBags()
-        HookBlizzardBank()
-        self:CallInitializeHooks()
-        self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
-        self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
+        self:Initialize()
     end
 end
 

@@ -61,5 +61,38 @@ end
 
 --------------------------------------------------------------------------------
 
-function LB.PatchBankFrame()
+-- Update a single button
+local function ItemButtonUpdateHook(itemButton)
+    LB.CallHooks('LiteBagItemButton_Update', itemButton)
+end
+
+local hookedButtons = {}
+
+local function HookContainerItemButtons(self)
+    for itemButton in self:EnumerateValidItems() do
+        if not hookedButtons[itemButton] then
+            hooksecurefunc(itemButton, 'Refresh', ItemButtonUpdateHook)
+            hookedButtons[itemButton] = true
+        end
+    end
+end
+
+-- This fixes a Blizzard mistake where they failed to handle items not in cache
+-- in BankPanelMixin the same way they do in ContainerFrameMixin. Items not
+-- in cache don't get their quality borders set.
+
+local function FixBlizzardCacheBugHook(self)
+    local cc = ContinuableContainer:Create()
+    for itemButton in self:EnumerateValidItems() do
+        local item = Item:CreateFromItemLocation(itemButton:GetItemLocation())
+        if not item:IsItemEmpty() then
+            cc:AddContinuable(item)
+        end
+    end
+    cc:ContinueOnLoad(function () self:MarkDirty() end)
+end
+
+function LB.PatchBank()
+    hooksecurefunc(BankPanel, 'GenerateItemSlotsForSelectedTab', HookContainerItemButtons)
+    hooksecurefunc(BankPanel, 'RefreshBankPanel', FixBlizzardCacheBugHook)
 end
