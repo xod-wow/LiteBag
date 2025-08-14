@@ -2,7 +2,7 @@
 
   LiteBag/ContainerFrame.lua
 
-  Copyright 2013 Mike attersby
+  Copyright 2013 Mike Battersby
 
   Released under the terms of the GNU General Public License version 2 (GPLv2).
   See the file LICENSE.txt.
