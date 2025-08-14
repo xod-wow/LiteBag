@@ -236,6 +236,7 @@ local options = {
                     get = TypeGetter,
                     set = TypeSetter,
                 },
+--[[
                 __break1 = {
                     type = "description",
                     name = "\n",
@@ -279,6 +280,7 @@ local options = {
                     get = TypeGetter,
                     set = TypeSetter,
                 },
+]]
             },
         },
 --[[
