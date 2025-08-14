@@ -14,17 +14,30 @@ local addonName, LB = ...
 local ITEM_SPACING_X = 5
 local ITEM_SPACING_Y = 5
 
+local BlizzardContainerFrames = {
+    ContainerFrameCombinedBags,
+    ContainerFrame1,
+    ContainerFrame2,
+    ContainerFrame3,
+    ContainerFrame4,
+    ContainerFrame5,
+    ContainerFrame6,
+}
+
+
+--------------------------------------------------------------------------------
+
 local mixin = {}
 
 local function BagsOffsetFunction(row, col)
     local xoff, yoff = 0, 0
     local xBreak = LB.GetTypeOption('BACKPACK', 'xbreak') or 0
     if xBreak > 0 then
-        xoff = math.floor((col-1)/xBreak) * ITEM_SPACING_X * 2
+        xoff = xoff + math.floor((col-1)/xBreak) * ITEM_SPACING_X * 2
     end
     local yBreak = LB.GetTypeOption('BACKPACK', 'ybreak') or 0
     if yBreak > 0 then
-        yoff = math.floor((row-1)/yBreak) * ITEM_SPACING_Y * 2
+        yoff = yoff + math.floor((row-1)/yBreak) * ITEM_SPACING_Y * 2
     end
     return -xoff, yoff
 end
@@ -79,16 +92,6 @@ local function ContainerUpdateHook(self)
     end
 end
 
-local BlizzardContainerFrames = {
-    ContainerFrameCombinedBags,
-    ContainerFrame1,
-    ContainerFrame2,
-    ContainerFrame3,
-    ContainerFrame4,
-    ContainerFrame5,
-    ContainerFrame6,
-}
-
 local function HookBlizzardBags()
     for _, f in ipairs(BlizzardContainerFrames) do
         hooksecurefunc(f, 'UpdateItems', ContainerUpdateHook)
@@ -98,4 +101,12 @@ end
 function LB.PatchBags()
     Mixin(ContainerFrameCombinedBags, mixin)
     HookBlizzardBags()
+end
+
+function LB.CallHooksOnBags()
+    for _, f in ipairs(BlizzardContainerFrames) do
+        if f:IsShown() then
+            ContainerUpdateHook(f)
+        end
+    end
 end

@@ -13,6 +13,7 @@ local addonName, LB = ...
 
 local L = LB.Localize
 
+
 --[[ LiteBagManager --------------------------------------------------------]]--
 
 
@@ -43,7 +44,14 @@ function LB.Manager:OnEvent(event, ...)
         end
     elseif event == 'PLAYER_LOGIN' then
         self:Initialize()
+    else
+        LB.CallHooksOnBags()
+        LB.CallHooksOnBank()
     end
+end
+
+function LB.Manager:AddPluginEvent(e)
+    self:RegisterEvent(e)
 end
 
 LB.Manager:RegisterEvent('PLAYER_LOGIN')

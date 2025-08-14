@@ -40,30 +40,5 @@ function LB.CallHooks(func, itemButton)
     end
 end
 
-local PluginEvents = { }
-
-function LB.AddPluginEvent(e)
-    if e == 'PLAYER_LOGIN' then return end
-    PluginEvents[e] = true
-end
-
-function LB.RegisterPluginEvents(frame)
-    for e in pairs(PluginEvents) do
-        frame:RegisterEvent(e)
-    end
-end
-
-function LB.IsPluginEvent(e)
-    return PluginEvents[e]
-end
-
-function LB.UnregisterPluginEvents(frame)
-    for e in pairs(PluginEvents) do
-        frame:UnregisterEvent(e)
-    end
-end
-
--- Exported interface for other addons
-_G.LiteBag_AddPluginEvent = LB.AddPluginEvent
-_G.LiteBag_AddUpdateEvent = LB.AddPluginEvent
 _G.LiteBag_RegisterHook = LB.RegisterHook
+_G.LiteBag_AddPluginEvent = function (...) LB.Manager:AddPluginEvent(...) end

@@ -92,6 +92,14 @@ local function FixBlizzardCacheBugHook(self)
     cc:ContinueOnLoad(function () self:MarkDirty() end)
 end
 
+function LB.CallHooksOnBank()
+    if BankFrame:IsShown() then
+        for itemButton in BankPanel:EnumerateValidItems() do
+            ItemButtonUpdateHook(itemButton)
+        end
+    end
+end
+
 function LB.PatchBank()
     hooksecurefunc(BankPanel, 'GenerateItemSlotsForSelectedTab', HookContainerItemButtons)
     hooksecurefunc(BankPanel, 'RefreshBankPanel', FixBlizzardCacheBugHook)

@@ -188,4 +188,4 @@ end
 -- ambiguous parsing.
 
 LB.RegisterHook('LiteBagItemButton_Update', Update, true)
-LB.AddPluginEvent("EQUIPMENT_SETS_CHANGED")
+LB.Manager:AddPluginEvent("EQUIPMENT_SETS_CHANGED")
