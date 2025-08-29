@@ -26,23 +26,10 @@ function LB.Manager:Initialize()
     LB.InitializeGUIOptions()
     LB.PatchBags()
     LB.PatchBank()
-    self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
-    self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
 end
 
 function LB.Manager:OnEvent(event, ...)
-    if LB.db then LB.EventDebug(self, event, ...) end
-    if event == 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' then
-        local type = ...
-        if type == Enum.PlayerInteractionType.GuildBanker then
-            OpenAllBags()
-        end
-    elseif event == 'PLAYER_INTERACTION_MANAGER_FRAME_HIDE' then
-        local type = ...
-        if type == Enum.PlayerInteractionType.GuildBanker then
-            CloseAllBags()
-        end
-    elseif event == 'PLAYER_LOGIN' then
+    if event == 'PLAYER_LOGIN' then
         self:Initialize()
     else
         LB.CallHooksOnBags()
