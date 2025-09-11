@@ -24,8 +24,51 @@ local BlizzardContainerFrames = {
     ContainerFrame6,
 }
 
+local BagButtonIDs = {
+    Enum.BagIndex.Backpack,
+    Enum.BagIndex.Bag_1,
+    Enum.BagIndex.Bag_2,
+    Enum.BagIndex.Bag_3,
+    Enum.BagIndex.Bag_4,
+    Enum.BagIndex.ReagentBag,
+}
 
---------------------------------------------------------------------------------
+--[[ Bag Buttons -----------------------------------------------------------]]--
+
+local bagButtons = {}
+
+local function AddBagButtons(frame, bagIDs)
+    for i, bagID in ipairs(bagIDs) do
+        local name = format("%sBag%dSlot", frame:GetName(), i)
+        local bagButton = CreateFrame('ItemButton', name, frame, "LiteBagBagButtonTemplate")
+        bagButton:SetID(bagID)
+        bagButton:SetFrameLevel(frame.TitleContainer:GetFrameLevel() + 1)
+        table.insert(bagButtons, bagButton)
+    end
+end
+
+local function UpdateBagButtons(frame)
+    if LB.GetTypeOption('BACKPACK', 'bagButtons') then
+        for i, bagButton in ipairs(bagButtons) do
+            local prev = bagButtons[i-1]
+            bagButton:ClearAllPoints()
+            if prev then
+                bagButton:SetPoint("TOP", prev, "BOTTOM", 0, 0)
+            else
+                bagButton:SetPoint("TOPRIGHT", frame, "TOPLEFT", 0, -48)
+            end
+            bagButton:Update()
+            bagButton:Show()
+        end
+    else
+        for i, bagButton in ipairs(bagButtons) do
+            bagButton:Hide()
+        end
+    end
+end
+
+
+--[[ Override "Mixin" ------------------------------------------------------]]--
 
 local override = {}
 
@@ -136,6 +179,7 @@ local function HookBlizzardBags()
     for _, f in ipairs(BlizzardContainerFrames) do
         hooksecurefunc(f, 'UpdateItems', ContainerUpdateHook)
     end
+    hooksecurefunc(ContainerFrameCombinedBags, 'UpdateItems', UpdateBagButtons)
 end
 
 local hooks = { "UpdateFrameSize", "UpdateItemLayout", "SetSearchBoxPoint" }
@@ -144,6 +188,7 @@ function LB.PatchBags()
     for _, hook in ipairs(hooks) do
         hooksecurefunc(ContainerFrameCombinedBags, hook, override[hook])
     end
+    AddBagButtons(ContainerFrameCombinedBags, BagButtonIDs)
     HookBlizzardBags()
 end
 

@@ -217,6 +217,14 @@ local options = {
             name = COMBINED_BAG_TITLE,
             order = order(),
             args = {
+                bagButtons = {
+                    type = "toggle",
+                    name = L["Show bag buttons."],
+                    order = order(),
+                    width = "full",
+                    get = TypeGetter,
+                    set = TypeSetter,
+                },
                 columns = {
                     type = "range",
                     name = L["Columns"],

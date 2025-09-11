@@ -1,0 +1,34 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+
+<!-- Copyright 2013 Mike Battersby -->
+
+<Script file="BagButton.lua"/>
+
+<ItemButton name="LiteBagBagButtonTemplate" virtual="true" inherits="CircularItemButtonTemplate" mixin="LiteBagBagButtonMixin">
+    <Size x="24" y="24" />
+    <NormalTexture atlas="bag-border" />
+    <PushedTexture atlas="bag-border" />
+    <HighlightTexture atlas="bag-border-highlight" />
+    <Layers>
+        <Layer level="OVERLAY">
+            <Texture parentKey="FilterIcon" atlas="bags-icon-consumables" useAtlasSize="true" hidden="true">
+                <Anchors>
+                    <Anchor point="CENTER" relativePoint="BOTTOMRIGHT" x="-7" y="7" />
+                </Anchors>
+            </Texture>
+        </Layer>
+    </Layers>
+    <Scripts>
+        <OnLoad method="OnLoad" />
+        <OnClick method="OnClick" />
+        <OnEnter method="OnEnter" />
+        <OnLeave method="OnLeave" />
+        <OnShow method="OnShow" />
+        <OnHide method="OnHide" />
+        <OnDragStart method="OnDragStart" />
+        <OnReceiveDrag method="OnClick" />
+        <OnEvent method="OnEvent" />
+    </Scripts>
+</ItemButton>
+
+</Ui>

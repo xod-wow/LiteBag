@@ -30,6 +30,8 @@ Print.lua
 Options.lua
 Hooks.lua
 
+BagButton.xml
+
 BankFrame.lua
 ContainerFrame.lua
 Core.lua

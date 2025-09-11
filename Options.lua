@@ -17,9 +17,11 @@ local defaults = {
             columns = 10,
             xbreak = 0,
             ybreak = 0,
-            anchor = 'TOPLEFT',
             layout = 'default',
             order = 'default',
+            anchor = 'TOPLEFT',
+            bagButtons = true,
+            position = nil,
         },
         BANK = {
             columns = 14,
