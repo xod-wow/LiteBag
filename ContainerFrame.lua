@@ -48,21 +48,27 @@ local function AddBagButtons(frame, bagIDs)
 end
 
 local function UpdateBagButtons(frame)
-    if LB.GetTypeOption('BACKPACK', 'bagButtons') then
+    if not LB.GetTypeOption('BACKPACK', 'bagButtons') then
+        for i, bagButton in ipairs(bagButtons) do
+            bagButton:Hide()
+        end
+    else
+        local point, relativePoint
+        if frame:GetLeft() and frame:GetLeft() > 20 then
+            point, relativePoint = "TOPRIGHT", "TOPLEFT"
+        else
+            point, relativePoint = "TOPLEFT", "TOPRIGHT"
+        end
         for i, bagButton in ipairs(bagButtons) do
             local prev = bagButtons[i-1]
             bagButton:ClearAllPoints()
             if prev then
                 bagButton:SetPoint("TOP", prev, "BOTTOM", 0, 0)
             else
-                bagButton:SetPoint("TOPRIGHT", frame, "TOPLEFT", 0, -48)
+                bagButton:SetPoint(point, frame, relativePoint, 0, -48)
             end
             bagButton:Update()
             bagButton:Show()
-        end
-    else
-        for i, bagButton in ipairs(bagButtons) do
-            bagButton:Hide()
         end
     end
 end
@@ -183,6 +189,22 @@ local function GetSqDistanceFromSnap(self)
     return (defaultX - selfX)^2 + (defaultY - selfY)^2
 end
 
+local function AttachReagentBag()
+    -- if the backpack is too far to the left, move the reagent bag to
+    -- the right hand side instead of the left. The 11 here is hard-coded
+    -- in UpdateContainerFrameAnchors()
+
+    if ContainerFrame6:IsShown() then
+        local neededWidth = ContainerFrame6:GetWidth() + 11
+        ContainerFrame6:ClearAllPoints()
+        if ContainerFrameCombinedBags:GetLeft() < neededWidth then
+            ContainerFrame6:SetPoint("BOTTOMLEFT", ContainerFrameCombinedBags, "BOTTOMRIGHT", 11, 0)
+        else
+            ContainerFrame6:SetPoint("BOTTOMRIGHT", ContainerFrameCombinedBags, "BOTTOMLEFT", -11, 0)
+        end
+    end
+end
+
 function ContainerFrameCombinedBagsDragButtonMixin:OnLoad()
     self:SetPoint("TOP", ContainerFrameCombinedBags.TitleContainer, "TOP")
     self:SetPoint("BOTTOM", ContainerFrameCombinedBags.TitleContainer, "BOTTOM")
@@ -200,6 +222,22 @@ function ContainerFrameCombinedBagsDragButtonMixin:OnMouseDown()
     local parent = self:GetParent()
     local defaultX, defaultY = GetDefaultPosition(parent)
     parent:StartMoving()
+
+    -- Use the drag button OnUpdate handler to readjust the attachment
+    -- points for the bag buttons and the reagent bag while we are moving.
+
+    local totalElapsed = 1000
+    self:SetScript('OnUpdate',
+        function (self, elapsed)
+            totalElapsed = totalElapsed + elapsed
+            if totalElapsed > 0.2 then
+                AttachReagentBag()
+                UpdateBagButtons(ContainerFrameCombinedBags)
+                totalElapsed = 0
+            end
+        end)
+
+    -- Show the snap anchor
     if LB.GetTypeOption("BACKPACK", "snap") then
         LiteBagSnapAnchor:SetPoint("CENTER", UIParent, "BOTTOMRIGHT", defaultX, defaultY)
         LiteBagSnapAnchor:Show()
@@ -207,6 +245,8 @@ function ContainerFrameCombinedBagsDragButtonMixin:OnMouseDown()
 end
 
 function ContainerFrameCombinedBagsDragButtonMixin:OnMouseUp()
+    self:SetScript('OnUpdate', nil)
+
     local parent = self:GetParent()
     parent:StopMovingOrSizing()
     LiteBagSnapAnchor:Hide()
@@ -231,6 +271,7 @@ local function UpdateContainerFrameAnchorsHook()
         ContainerFrameCombinedBags:ClearAllPoints()
         ContainerFrameCombinedBags:SetPoint(pos.anchor, parent, pos.anchor, pos.x/scale, pos.y/scale)
     end
+    AttachReagentBag()
 end
 
 local function AllowMovingCombinedBags()
@@ -244,6 +285,8 @@ local function AllowMovingCombinedBags()
     ContainerFrameCombinedBags:SetMovable(true)
     ContainerFrameCombinedBags:SetClampedToScreen(true)
     hooksecurefunc("UpdateContainerFrameAnchors", UpdateContainerFrameAnchorsHook)
+    -- In case we are hidden while moving/sizing
+    ContainerFrameCombinedBags:HookScript("OnHide", function (self) dragButton:SetScript('OnUpdate', nil) end)
 end
 
 
