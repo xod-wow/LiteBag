@@ -31,6 +31,7 @@ local defaults = {
         },
         showEquipmentSets = false,
         showBindsOn = false,
+        hideBlizzardBagButtons = false,
         thickerIconBorder = false,
         debug = nil,
         eventDebug = nil,
