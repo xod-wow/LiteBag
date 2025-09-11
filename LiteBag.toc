@@ -31,6 +31,7 @@ Options.lua
 Hooks.lua
 
 BagButton.xml
+SnapAnchor.xml
 
 BankFrame.lua
 ContainerFrame.lua

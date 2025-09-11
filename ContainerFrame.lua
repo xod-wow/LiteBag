@@ -121,7 +121,6 @@ function override:CalculateHeight()
     local h = itemsHeight + self:GetPaddingHeight() + self:CalculateExtraHeight()
     local yBreak = LB.GetTypeOption('BACKPACK', 'ybreak') or 0
     if yBreak > 0 then
-        local rows = override.GetRows(self)
         local gapHeight = math.floor((rows-1)/3)* ITEM_SPACING_X * 2
         return h + gapHeight
     else
@@ -136,7 +135,6 @@ function override:CalculateWidth()
     local w = itemsWidth + self:GetPaddingWidth()
     local xBreak = LB.GetTypeOption('BACKPACK', 'xbreak') or 0
     if xBreak > 0 then
-        local columns = override.GetColumns(self)
         local gapWidth = math.floor((columns-1)/xBreak) * ITEM_SPACING_Y * 2
         return w + gapWidth
     else
@@ -166,6 +164,89 @@ function override:SetSearchBoxPoint(searchBox)
     searchBox:SetWidth(math.min(330, self:GetWidth() - 110))
 end
 
+--[[ Moving ----------------------------------------------------------------]]--
+
+local ContainerFrameCombinedBagsDragButtonMixin = {}
+
+-- Adapted from UpdateContainerFrameAnchors()
+local function GetDefaultPosition(self)
+    local containerScale = self:GetScale()
+    local xOffset = ( EditModeUtil:GetRightActionBarWidth() + 10 ) / containerScale
+    local yOffset = CONTAINER_OFFSET_Y / containerScale
+    return -xOffset, yOffset
+end
+
+local function GetSqDistanceFromSnap(self)
+    local defaultX, defaultY = GetDefaultPosition(self)
+    local selfX = self:GetRight() * self:GetScale() - UIParent:GetRight()
+    local selfY = self:GetBottom() * self:GetScale() - UIParent:GetBottom()
+    return (defaultX - selfX)^2 + (defaultY - selfY)^2
+end
+
+function ContainerFrameCombinedBagsDragButtonMixin:OnLoad()
+    self:SetPoint("TOP", ContainerFrameCombinedBags.TitleContainer, "TOP")
+    self:SetPoint("BOTTOM", ContainerFrameCombinedBags.TitleContainer, "BOTTOM")
+    self:SetPoint("LEFT", ContainerFrameCombinedBags.PortraitButton, "RIGHT")
+    self:SetPoint("RIGHT", ContainerFrameCombinedBags.CloseButton, "LEFT")
+    self:SetFrameLevel(ContainerFrameCombinedBags.TitleContainer:GetFrameLevel() + 1)
+    --[[
+    self.Background = self:CreateTexture()
+    self.Background:SetAllPoints(true)
+    self.Background:SetColorTexture(0.5, 1, 0.5)
+    ]]
+end
+
+function ContainerFrameCombinedBagsDragButtonMixin:OnMouseDown()
+    local parent = self:GetParent()
+    local defaultX, defaultY = GetDefaultPosition(parent)
+    parent:StartMoving()
+    if LB.GetTypeOption("BACKPACK", "snap") then
+        LiteBagSnapAnchor:SetPoint("CENTER", UIParent, "BOTTOMRIGHT", defaultX, defaultY)
+        LiteBagSnapAnchor:Show()
+    end
+end
+
+function ContainerFrameCombinedBagsDragButtonMixin:OnMouseUp()
+    local parent = self:GetParent()
+    parent:StopMovingOrSizing()
+    LiteBagSnapAnchor:Hide()
+    if LB.GetTypeOption("BACKPACK", "snap") and GetSqDistanceFromSnap(parent) < 64^2 then
+        local defaultX, defaultY = GetDefaultPosition(parent)
+        parent:ClearAllPoints()
+        parent:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", defaultX, defaultY)
+        LB.SetTypeOption("BACKPACK", "position", nil)
+    else
+        local scale = parent:GetScale()
+        local point, _, _, x, y = parent:GetPoint(1)
+        LB.SetTypeOption("BACKPACK", "position", { anchor=point, x=x/scale, y=y/scale })
+    end
+    parent:SetUserPlaced(false)
+end
+
+local function UpdateContainerFrameAnchorsHook()
+    local pos = LB.GetTypeOption("BACKPACK", "position")
+    if pos and tContains(ContainerFrameSettingsManager:GetBagsShown(), ContainerFrameCombinedBags) then
+        local scale = ContainerFrameCombinedBags:GetScale()
+        local parent = ContainerFrameCombinedBags:GetParent()
+        ContainerFrameCombinedBags:ClearAllPoints()
+        ContainerFrameCombinedBags:SetPoint(pos.anchor, parent, pos.anchor, pos.x/scale, pos.y/scale)
+    end
+end
+
+local function AllowMovingCombinedBags()
+    local dragButton = CreateFrame("Button", "ContainerFrameCombinedBagsDragButton", ContainerFrameCombinedBags)
+    Mixin(dragButton, ContainerFrameCombinedBagsDragButtonMixin)
+    dragButton:OnLoad()
+    dragButton:SetScript("OnMouseDown", dragButton.OnMouseDown)
+    dragButton:SetScript("OnMouseUp", dragButton.OnMouseUp)
+    dragButton:Show()
+
+    ContainerFrameCombinedBags:SetMovable(true)
+    ContainerFrameCombinedBags:SetClampedToScreen(true)
+    hooksecurefunc("UpdateContainerFrameAnchors", UpdateContainerFrameAnchorsHook)
+end
+
+
 --[[ Hooks -----------------------------------------------------------------]]--
 
 -- Update all the buttons
@@ -190,6 +271,7 @@ function LB.PatchBags()
     end
     AddBagButtons(ContainerFrameCombinedBags, BagButtonIDs)
     HookBlizzardBags()
+    AllowMovingCombinedBags()
 end
 
 function LB.CallHooksOnBags()

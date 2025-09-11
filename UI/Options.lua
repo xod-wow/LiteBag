@@ -225,6 +225,14 @@ local options = {
                     get = TypeGetter,
                     set = TypeSetter,
                 },
+                snap = {
+                    type = "toggle",
+                    name = L["When moving snap frame to default position."],
+                    order = order(),
+                    width = "full",
+                    get = TypeGetter,
+                    set = TypeSetter,
+                },
                 columns = {
                     type = "range",
                     name = L["Columns"],
