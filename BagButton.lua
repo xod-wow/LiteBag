@@ -105,6 +105,20 @@ function LiteBagBagButtonMixin:OnDragStart()
     end
 end
 
+local function GenerateMenu(owner, rootDescription)
+    rootDescription:CreateTitle("LiteBag")
+    rootDescription:CreateButton(SETTINGS, LB.OpenOptions)
+    rootDescription:CreateCheckbox(LOCK_FRAME,
+        function ()
+            return LB.db and LB.GetTypeOption('BACKPACK', 'locked')
+        end,
+        function ()
+            local isLocked = LB.GetTypeOption('BACKPACK', 'locked')
+            LB.SetTypeOption('BACKPACK', 'locked', not isLocked)
+        end
+    )
+end
+
 function LiteBagBagButtonMixin:OnClick()
     local bagID = self:GetID()
     if CursorHasItem() then
@@ -113,6 +127,8 @@ function LiteBagBagButtonMixin:OnClick()
         else
             PutItemInBag(self.slotID)
         end
+    elseif bagID == Enum.BagIndex.Backpack then
+        MenuUtil.CreateContextMenu(self, GenerateMenu)
     elseif bagID ~= Enum.BagIndex.Backpack then
         PickupBagFromSlot(self.slotID)
     end

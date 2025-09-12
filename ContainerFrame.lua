@@ -219,6 +219,10 @@ function ContainerFrameCombinedBagsDragButtonMixin:OnLoad()
 end
 
 function ContainerFrameCombinedBagsDragButtonMixin:OnMouseDown()
+    if LB.GetTypeOption('BACKPACK', 'locked') then
+        return
+    end
+
     local parent = self:GetParent()
     local defaultX, defaultY = GetDefaultPosition(parent)
     parent:StartMoving()
