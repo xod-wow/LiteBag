@@ -54,10 +54,10 @@ local function UpdateBagButtons(frame)
         end
     else
         local point, relativePoint
-        if frame:GetLeft() and frame:GetLeft() > 20 then
-            point, relativePoint = "TOPRIGHT", "TOPLEFT"
-        else
+        if frame:GetLeft() and frame:GetLeft() < 20 then
             point, relativePoint = "TOPLEFT", "TOPRIGHT"
+        else
+            point, relativePoint = "TOPRIGHT", "TOPLEFT"
         end
         for i, bagButton in ipairs(bagButtons) do
             local prev = bagButtons[i-1]
@@ -304,6 +304,9 @@ local function HookBlizzardBags()
         hooksecurefunc(f, 'UpdateItems', ContainerUpdateHook)
     end
     hooksecurefunc(ContainerFrameCombinedBags, 'UpdateItems', UpdateBagButtons)
+    -- The first time UpdateItems is called, the frame hasn't been SetPoint yet
+    -- and we don't know what side to attach the buttons, so do it again.
+    ContainerFrameCombinedBags:HookScript('OnShow', UpdateBagButtons)
 end
 
 local hooks = { "UpdateFrameSize", "UpdateItemLayout", "SetSearchBoxPoint" }

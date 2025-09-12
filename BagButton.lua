@@ -80,9 +80,12 @@ function LiteBagBagButtonMixin:OnEnter()
 
     if self:GetID() == Enum.BagIndex.Backpack then
         GameTooltip_SetTitle(GameTooltip, BACKPACK_TOOLTIP)
+        GameTooltip:AddLine(SETTINGS)
     else
-        local hasItem = GameTooltip:SetInventoryItem('player', self.slotID)
-        if not hasItem then
+        local hasItem = GetInventoryItemTexture('player', self.slotID) ~= nil
+        if hasItem then
+            GameTooltip:SetInventoryItem('player', self.slotID)
+        else
             GameTooltip_SetTitle(GameTooltip, EQUIP_CONTAINER)
         end
     end
