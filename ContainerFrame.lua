@@ -108,6 +108,18 @@ local function UpdateItemSort(items)
     end
 end
 
+local function inDiffBag(a, b)
+    return a:GetBagID() ~= b:GetBagID()
+end
+
+local function NewRowFunction(items, i)
+    local a, b = items[i], items[i-1]
+    if a and b and inDiffBag(a, b) then
+        print('yeah!', i)
+        return true
+    end
+end
+
 function override:UpdateItemLayout()
     local itemsToLayout = {}
     for _, itemButton in self:EnumerateValidItems() do
@@ -115,9 +127,10 @@ function override:UpdateItemLayout()
     end
     UpdateItemSort(itemsToLayout)
     local columns = override.GetColumns(self)
-    local layout = AnchorUtil.CreateGridLayout(GridLayoutMixin.Direction.BottomRightToTopLeft, columns, ITEM_SPACING_X, ITEM_SPACING_Y)
+    local layout = LB.CreateGridLayout(GridLayoutMixin.Direction.BottomRightToTopLeft, columns, ITEM_SPACING_X, ITEM_SPACING_Y)
     layout:SetCustomOffsetFunction(BagsOffsetFunction)
-    AnchorUtil.GridLayout(itemsToLayout, self:GetInitialItemAnchor(), layout)
+    layout:SetNewRowFunction(function (i) return NewRowFunction(itemsToLayout, i) end)
+    LB.GridLayout(itemsToLayout, self:GetInitialItemAnchor(), layout)
 end
 
 function override:CalculateHeight()

@@ -11,65 +11,57 @@
 
 local addonName, LB = ...
 
--- This is as small as you can go
-local MIN_COLUMNS = 8
+-- local function inDiffBag(a, b)
+--     return a:GetBagID() ~= b:GetBagID()
+-- end
 
--- These are the gaps between the buttons
-local BUTTON_X_GAP, BUTTON_Y_GAP = 5, 4
+LB.GridLayoutMixin = CreateFromMixins(GridLayoutMixin)
 
--- This is some gnarly magic to position the item buttons in a pleasing and
--- appropriate place inside the PortraitFrame. The big gap at the top is where
--- we put the bag buttons and search bar (plus the title bar).
-
-local TITLEBAR_HEIGHT = 25
-local BAGBUTTON_HEIGHT = C_XMLUtil.GetTemplateInfo('LiteBagBagButtonTemplate').height
-local SEARCHBOX_HEIGHT = BagItemSearchBox:GetHeight()
-local TOPELEMENT_GAP = 4
-local BAGBUTTON_OFFSET = TITLEBAR_HEIGHT + TOPELEMENT_GAP
-local LEFT_OFFSET = 8
-local RIGHT_OFFSET = 8
-local MINIMUM_TOP_OFFSET = TITLEBAR_HEIGHT + 18
-local BOTTOM_OFFSET = 8
-
-local function inDiffBag(a, b)
-    return a:GetParent():GetID() ~= b:GetParent():GetID()
+function LB.GridLayoutMixin:SetNewRowFunction(func)
+    self.newRowFunction = func
 end
 
-local BUTTONORDERS = { }
+function LB.GridLayoutMixin:IsNewRow(i)
+    if self.newRowFunction and self.newRowFunction(i) then
+        return true
+    end
+end
 
-BUTTONORDERS.default =
-    function (self)
-        return self.Items
+LB.CreateGridLayout = GenerateClosure(CreateAndInitFromMixin, LB.GridLayoutMixin)
+
+function LB.GridLayout(frames, initialAnchor, layout)
+    if #frames <= 0 then
+        return
     end
 
-BUTTONORDERS.blizzard =
-    function (self)
-        local Items = { }
-        for bagFrameIndex = #self.bagFrames, 1, -1 do
-            local bag = self.bagFrames[bagFrameIndex]
-            -- This is a dodgy check if the whole bag is hidden for efficiency.
-            -- Strictly it should check each b inside the inner loop.
-            if tContains(self.Items, bag.Items[1]) then
-                for _, b in ipairs(bag.Items) do
-                    tinsert(Items, b)
-                end
-            end
+    local width = layout.horizontalSpacing or frames[1]:GetWidth()
+    local height = layout.verticalSpacing or frames[1]:GetHeight()
+    local stride = layout.stride
+    local paddingX = layout.paddingX
+    local paddingY = layout.paddingY
+    local direction = layout.direction
+
+    local row, col = 1, 1
+
+    for i, frame in ipairs(frames) do
+        local clearAllPoints = true
+        local customOffsetX, customOffsetY = layout:GetCustomOffset(row, col)
+        local extraOffsetX = (col - 1) * (width + paddingX) * direction.x + customOffsetX
+        local extraOffsetY = (row - 1) * (height + paddingY) * direction.y + customOffsetY
+        if direction.isVertical then
+            initialAnchor:SetPointWithExtraOffset(frame, clearAllPoints, extraOffsetY, extraOffsetX)
+        else
+            initialAnchor:SetPointWithExtraOffset(frame, clearAllPoints, extraOffsetX, extraOffsetY)
         end
-        return Items
-    end
-
-BUTTONORDERS.reverse =
-    function (self)
-        local Items = { }
-        for i = #self.Items, 1, -1 do
-            tinsert(Items, self.Items[i])
+        col = col + 1
+        if col > stride or layout:IsNewRow(i) then
+            row = row + 1
+            col = 1
         end
-        return Items
     end
+end
 
-local ItemButtonTemplateInfo = C_XMLUtil.GetTemplateInfo('LiteBagItemButtonTemplate')
-
-local LAYOUTS = { }
+--[[
 
 LAYOUTS.default =
     function (self, Items, ncols)
@@ -244,3 +236,4 @@ local function UpdateItemLayout(self)
     self.width = layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET
     self.height = layoutGrid.totalHeight + adjustedTopOffset + adjustedBottomOffset
 end
+]]
