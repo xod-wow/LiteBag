@@ -274,8 +274,8 @@ local function UpdateContainerFrameAnchorsHook()
         local parent = ContainerFrameCombinedBags:GetParent()
         ContainerFrameCombinedBags:ClearAllPoints()
         ContainerFrameCombinedBags:SetPoint(pos.anchor, parent, pos.anchor, pos.x/scale, pos.y/scale)
+        AttachReagentBag()
     end
-    AttachReagentBag()
 end
 
 local function AllowMovingCombinedBags()
