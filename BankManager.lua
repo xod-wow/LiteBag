@@ -9,9 +9,9 @@
 
 ----------------------------------------------------------------------------]]--
 
-local addonName, LB = ...
+local _, LB = ...
 
-local mixin = {}
+LB.BankManager = {}
 
 --[[
 function mixin:GenerateItemSlotsForSelectedTab()
@@ -100,7 +100,7 @@ function LB.CallHooksOnBank()
     end
 end
 
-function LB.PatchBank()
+function LB.BankManager:Initialize()
     hooksecurefunc(BankPanel, 'GenerateItemSlotsForSelectedTab', HookContainerItemButtons)
     hooksecurefunc(BankPanel, 'RefreshBankPanel', FixBlizzardCacheBugHook)
 end

@@ -9,7 +9,7 @@
 
 ----------------------------------------------------------------------------]]--
 
-local addonName, LB = ...
+local _, LB = ...
 
 local function Update(itemButton, bag, slot)
 
@@ -25,7 +25,7 @@ local function Update(itemButton, bag, slot)
     local minQuality = tonumber(LB.GetGlobalOption("thickerIconBorder"))
 
     if minQuality and info.quality >= minQuality then
-        itemButton.IconBorder:SetTexture([[Interface\Addons\LiteBag\Plugin_IconBorder\IconBorder]])
+        itemButton.IconBorder:SetTexture([[Interface\Addons\LiteBag\Plugins\IconBorder\IconBorder]])
     end
 end
 

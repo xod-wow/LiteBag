@@ -9,7 +9,7 @@
 
 ----------------------------------------------------------------------------]]--
 
-local addonName, LB = ...
+local _, LB = ...
 
 -- hooksecurefunc is just too slow
 local hooks = { }

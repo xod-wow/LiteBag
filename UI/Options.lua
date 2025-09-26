@@ -10,34 +10,10 @@ local addonName, LB = ...
 
 local L = LB.Localize
 
-local OrderValues  = {
-    ['default'] = DEFAULT,
-    ['blizzard'] = L['Blizzard'],
-    ['reverse'] = L['Reverse'],
-}
-
-local OrderSorting = { "default", "blizzard", "reverse", }
-
-local LayoutValues  = {
-    ['default'] = DEFAULT,
-    ['bag'] = L['Bags'],
-}
-
-local LayoutSorting = { "default", "bag", }
-
-local AnchorValues = {
-    ['TOPLEFT'] =  L["Top Left"],
-    ['TOPRIGHT'] = L["Top Right"],
-    ['BOTTOMLEFT'] = L["Bottom Left"],
-    ['BOTTOMRIGHT'] = L["Bottom Right"],
-}
-
-local AnchorSorting = { "TOPLEFT", "TOPRIGHT", "BOTTOMLEFT", "BOTTOMRIGHT" }
-
 local function GetQualityText(i)
     if ITEM_QUALITY_COLORS[i] then
         local desc = _G['ITEM_QUALITY'..i..'_DESC']
-        return ITEM_QUALITY_COLORS[i].hex..desc..FONT_COLOR_CODE_CLOSE
+        return ITEM_QUALITY_COLORS[i]:WrapTextInColorCode(desc)
     else
         return NEVER
     end
@@ -120,12 +96,12 @@ local options = {
             hidden = true,
             order = order(),
             get =
-                function (info, i)
+                function (info, i) -- luacheck: ignore 212/info
                     local allow = LB.GetGlobalOption('allowHideBagIDs')
                     return allow[i] == true
                  end,
             set =
-                function (info, i, val)
+                function (info, i, val) -- luacheck: ignore 212/info
                     local allow = LB.GetGlobalOption('allowHideBagIDs')
                     allow[i] = val or nil
                     LB.SetGlobalOption('allowHideBagIDs', allow)
@@ -409,8 +385,6 @@ local options = {
 -- everything, even WoW.
 
 local AceConfig = LibStub("AceConfig-3.0")
-local AceConfigCmd = LibStub("AceConfigCmd-3.0")
-local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local AceDBOptions =  LibStub("AceDBOptions-3.0")
 
@@ -419,7 +393,7 @@ local AceDBOptions =  LibStub("AceDBOptions-3.0")
 -- appear in the right order, add the main panel when loaded.
 
 AceConfig:RegisterOptionsTable(addonName, options, { "litebag", "lb" })
-local optionsPanel, category = AceConfigDialog:AddToBlizOptions(addonName)
+local optionsPanel, category = AceConfigDialog:AddToBlizOptions(addonName) -- luacheck: ignore 211
 
 function LB.InitializeGUIOptions()
     local profileOptions = AceDBOptions:GetOptionsTable(LB.db)

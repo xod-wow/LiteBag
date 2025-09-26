@@ -1,0 +1,5 @@
+<Ui>
+    <Include file="BagButton.xml" />
+    <Include file="DragButton.xml" />
+    <Include file="SnapAnchor.xml" />
+</Ui>

@@ -1,0 +1,11 @@
+<Ui>
+    <Script file="DragButton.lua" />
+
+    <Button name="LiteBagDragButtonTemplate" mixin="LiteBagDragButtonMixin" virtual="true">
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnMouseDown method="OnMouseDown" />
+            <OnMouseUp method="OnMouseUp" />
+        </Scripts>
+    </Button>
+</Ui>

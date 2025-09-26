@@ -26,23 +26,15 @@ embeds.xml
 
 Localization.lua
 
-Print.lua
 Options.lua
 Hooks.lua
 
-BagButton.xml
-SnapAnchor.xml
+Components\Components.xml
 
-BankFrame.lua
-ContainerFrame.lua
+BankManager.lua
+BagsManager.lua
 Core.lua
 
-#@debug@
-Plugin_Anima\Anima.xml
-Plugin_Expansion\Expansion.xml
-#@end-debug@
-Plugin_BindsOn\BindsOn.xml
-Plugin_EquipSets\EquipSets.xml
-Plugin_IconBorder\IconBorder.xml
+Plugins\Plugins.xml
 
 UI\Options.lua

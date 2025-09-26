@@ -9,9 +9,7 @@
 
 ----------------------------------------------------------------------------]]--
 
-local addonName, LB = ...
-
-local L = LB.Localize
+local _, LB = ...
 
 local hiddenParent = CreateFrame('Frame')
 hiddenParent:Hide()
@@ -59,8 +57,8 @@ end
 function LB.Manager:Initialize()
     LB.InitializeOptions()
     LB.InitializeGUIOptions()
-    LB.PatchBags()
-    LB.PatchBank()
+    LB.BagsManager:Initialize()
+    LB.BankManager:Initialize()
 
     -- Force show the Bag Buttons in Edit Mode
     EventRegistry:RegisterCallback("EditMode.Enter", function () self:ManageBlizzardBagButtons(true) end)

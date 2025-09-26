@@ -9,7 +9,7 @@
 
 ----------------------------------------------------------------------------]]--
 
-local addonName, LB = ...
+local _, LB = ...
 
 local L = LB.Localize
 
@@ -63,22 +63,10 @@ local function GetInfoBindText(info)
 end
 
 local function GetButtonItemTooltipInfo(button)
-
     if button.GetBankTabID then
         return C_TooltipInfo.GetBagItem(button:GetBankTabID(), button:GetContainerSlotID())
-    end
-
-    local bag = button:GetBagID()
-    local slot = button:GetID()
-
-    if bag == Enum.BagIndex.Bank then
-        local id = BankButtonIDToInvSlotID(slot)
-        return C_TooltipInfo.GetInventoryItem('player', id)
-    elseif bag == Enum.BagIndex.Reagentbank then
-        local id = ReagentBankButtonIDToInvSlotID(slot)
-        return C_TooltipInfo.GetInventoryItem('player', id)
     else
-        return C_TooltipInfo.GetBagItem(bag, slot)
+        return C_TooltipInfo.GetBagItem(button:GetBagID(), button:GetID())
     end
 end
 

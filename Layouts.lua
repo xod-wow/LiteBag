@@ -9,7 +9,9 @@
 
 ----------------------------------------------------------------------------]]--
 
-local addonName, LB = ...
+--[[
+
+local _, LB = ...
 
 -- This is as small as you can go
 local MIN_COLUMNS = 8
@@ -51,7 +53,7 @@ BUTTONORDERS.blizzard =
             -- Strictly it should check each b inside the inner loop.
             if tContains(self.Items, bag.Items[1]) then
                 for _, b in ipairs(bag.Items) do
-                    tinsert(Items, b)
+                    table.insert(Items, b)
                 end
             end
         end
@@ -62,7 +64,7 @@ BUTTONORDERS.reverse =
     function (self)
         local Items = { }
         for i = #self.Items, 1, -1 do
-            tinsert(Items, self.Items[i])
+            table.insert(Items, self.Items[i])
         end
         return Items
     end
@@ -100,7 +102,7 @@ LAYOUTS.default =
 
             local x = col*(w+BUTTON_X_GAP)+xGap
             local y = row*(h+BUTTON_Y_GAP)+yGap
-            tinsert(grid, { x=x, y=y, b=Items[i] })
+            table.insert(grid, { x=x, y=y, b=Items[i] })
 
             maxCol = max(col, maxCol)
             col = col + 1
@@ -135,7 +137,7 @@ LAYOUTS.bag =
             end
             local x = col * (w+BUTTON_X_GAP)
             local y = row * (h+BUTTON_Y_GAP) + yGap
-            tinsert(grid, { x=x, y=y, b=Items[i] })
+            table.insert(grid, { x=x, y=y, b=Items[i] })
             maxCol = max(col, maxCol)
             col = col + 1
         end
@@ -244,3 +246,5 @@ local function UpdateItemLayout(self)
     self.width = layoutGrid.totalWidth + LEFT_OFFSET + RIGHT_OFFSET
     self.height = layoutGrid.totalHeight + adjustedTopOffset + adjustedBottomOffset
 end
+
+]]

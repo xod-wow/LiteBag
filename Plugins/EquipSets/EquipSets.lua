@@ -14,7 +14,7 @@
 
 ----------------------------------------------------------------------------]]--
 
-local addonName, LB = ...
+local _, LB = ...
 
 local EquipSetState = CreateFrame('Frame')
 

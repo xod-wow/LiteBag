@@ -9,9 +9,7 @@
 
 ----------------------------------------------------------------------------]]--
 
-local addonName, LB = ...
-
-local L = LB.Localize
+local _, LB = ...
 
 LiteBagBagButtonMixin = {}
 
@@ -51,7 +49,6 @@ function LiteBagBagButtonMixin:OnHide()
 end
 
 function LiteBagBagButtonMixin:OnEvent(event, ...)
-    LB.EventDebug(self, event, ...)
     if event == 'INVENTORY_SEARCH_UPDATE' then
         local bagID = self:GetID()
         if C_Container.IsContainerFiltered(bagID) then
@@ -105,6 +102,7 @@ function LiteBagBagButtonMixin:OnDragStart()
     end
 end
 
+-- luacheck: ignore 212/owner
 local function GenerateMenu(owner, rootDescription)
     rootDescription:CreateTitle("LiteBag")
     rootDescription:CreateButton(SETTINGS, LB.OpenOptions)

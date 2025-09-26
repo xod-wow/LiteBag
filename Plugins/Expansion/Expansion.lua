@@ -9,9 +9,7 @@
 
 ----------------------------------------------------------------------------]]--
 
-local addonName, LB = ...
-
-local L = LB.Localize
+local _, LB = ...
 
 local TextsByButton = {}
 
@@ -29,7 +27,7 @@ local function Update(button, bag, slot)
         if id then
             local expansionID = select(15, C_Item.GetItemInfo(id))
             if expansionID then
-                local name = GetExpansionName(expansionID)
+                -- local name = GetExpansionName(expansionID)
                 TextsByButton[button]:SetText(expansionID)
                 TextsByButton[button]:Show()
                 return

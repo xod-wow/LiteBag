@@ -1,0 +1,10 @@
+<Ui>
+    <!--@debug@-->
+    <Include file="Anima\Anima.xml" />
+    <Include file="Expansion\Expansion.xml" />
+    <!--@end-debug@-->
+
+    <Include file="BindsOn\BindsOn.xml" />
+    <Include file="EquipSets\EquipSets.xml" />
+    <Include file="IconBorder\IconBorder.xml" />
+</Ui>
