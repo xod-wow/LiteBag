@@ -1,7 +1,5 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/Localization.lua
-
   LiteBag translations into other languages.
 
   Copyright 2013 Mike Battersby

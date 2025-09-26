@@ -1,7 +1,5 @@
 --[[----------------------------------------------------------------------------
 
-  LiteBag/Layouts.lua
-
   Copyright 2022 Mike Battersby
 
   Released under the terms of the GNU General Public License version 2 (GPLv2).

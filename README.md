@@ -3,7 +3,17 @@
 For the addon, see:
 - https://www.curseforge.com/wow/addons/litebag
 
+The classic branch is still a full bag addon providing unified bag
+and bank frames. The retail branch is now only a restyler of the
+Blizzard frames.
+
+
 ## For Authors of Bag Icon-Plugin Addons
+
+This is really only relevant for classic. On retail you can just hook
+all of the Blizzard stuff and it'll work. On the other hand, this will
+conveniently hook all the Blizzard stuff without you having to find it
+all.
 
 To support LiteBag you can hook into ItemButton update and create as follows:
 
@@ -31,8 +41,7 @@ E.g.,
 if LiteBag_RegisterHook then
     LiteBag_RegisterHook('LiteBagItemButton_Update',
         function (button)
-            local slot = button:GetID()
-            local bag = button:GetParent():GetID()
+            local bag, slot = button:GetBagID(), button:GetID()
             -- your code
         end)
 end
