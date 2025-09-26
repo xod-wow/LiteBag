@@ -230,7 +230,7 @@ function ContainerFrameCombinedBagsDragButtonMixin:OnMouseDown()
     -- Use the drag button OnUpdate handler to readjust the attachment
     -- points for the bag buttons and the reagent bag while we are moving.
 
-    local totalElapsed = 1000
+    local totalElapsed = math.huge
     self:SetScript('OnUpdate',
         function (self, elapsed)
             totalElapsed = totalElapsed + elapsed
