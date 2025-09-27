@@ -10,10 +10,18 @@ local addonName, LB = ...
 
 local L = LB.Localize
 
+local LayoutValues  = {
+    ['default'] = DEFAULT,
+    ['topleft'] = L['Align to top left'],
+    ['bags']    = L['Gap between bags'],
+}
+
+local LayoutSorting = { 'default', 'topleft', 'bags', }
+
 local function GetQualityText(i)
     if ITEM_QUALITY_COLORS[i] then
         local desc = _G['ITEM_QUALITY'..i..'_DESC']
-        return ITEM_QUALITY_COLORS[i]:WrapTextInColorCode(desc)
+        return ITEM_QUALITY_COLORS[i].color:WrapTextInColorCode(desc)
     else
         return NEVER
     end
@@ -243,29 +251,7 @@ local options = {
                     order = order(),
                     get = TypeGetter,
                     set = TypeSetter,
-                },
---[[
-                __break1 = {
-                    type = "description",
-                    name = "\n",
-                    width = "full",
-                    order = order(),
-                },
-                order = {
-                    type = "select",
-                    style = "dropdown",
-                    name = L["Icon order:"],
-                    values = OrderValues,
-                    sorting = OrderSorting,
-                    order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                __break2 = {
-                    type = "description",
-                    name = "\n",
-                    width = "full",
-                    order = order(),
+                    disabled = function () return LB.db.profile.BACKPACK.layout == 'bags' end,
                 },
                 layout = {
                     type = "select",
@@ -274,21 +260,10 @@ local options = {
                     values = LayoutValues,
                     sorting = LayoutSorting,
                     order = order(),
-                    width = "1",
+                    width = 1.5,
                     get = TypeGetter,
                     set = TypeSetter,
                 },
-                anchor = {
-                    type = "select",
-                    style = "dropdown",
-                    name = L["First icon position:"],
-                    values = AnchorValues,
-                    sorting = AnchorSorting,
-                    order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-]]
             },
         },
 --[[

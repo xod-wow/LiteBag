@@ -79,17 +79,44 @@ function LB.BagsManager:UpdateBagButtons(frame)
     end
 end
 
+-- This precalculates the number of yBreak for each column so we aren't
+-- looping so many times per itemButton in BagsOffsetFunctionBags.
+function LB.BagsManager:CalculateBagBreaks(frame)
+    self.bagBreaksByRow = {}
+
+    if self:GetFrameOption(frame, 'layout') == 'bags' then
+        local columns = self:GetColumns(frame)
+        local bagRowCounts = {}
+        for bagID = Enum.BagIndex.Bag_4, Enum.BagIndex.Backpack, -1 do
+            local slots = C_Container.GetContainerNumSlots(bagID)
+            table.insert(bagRowCounts, math.ceil(slots / columns))
+        end
+        for bagIndex, rowCount in ipairs(bagRowCounts) do
+            for i = 1, rowCount do  -- luacheck: ignore 213
+                table.insert(self.bagBreaksByRow, bagIndex-1)
+            end
+        end
+    else
+        local yBreak = self:GetFrameOption(frame, 'ybreak') or 0
+        for i = 1, self:GetRows(frame) do
+            if yBreak > 0 then
+                self.bagBreaksByRow[i] = math.floor((i-1)/yBreak)
+            else
+                self.bagBreaksByRow[i] = 0
+            end
+        end
+    end
+end
 
 function LB.BagsManager:BagsOffsetFunction(frame, row, col)
-    local xoff, yoff = 0, 0
+    local xoff = 0
+
     local xBreak = self:GetFrameOption(frame, 'xbreak') or 0
     if xBreak > 0 then
-        xoff = xoff + math.floor((col-1)/xBreak) * ITEM_SPACING_X * 2
+        xoff = math.floor((col-1)/xBreak) * ITEM_SPACING_X * 2
     end
-    local yBreak = self:GetFrameOption(frame, 'ybreak') or 0
-    if yBreak > 0 then
-        yoff = yoff + math.floor((row-1)/yBreak) * ITEM_SPACING_Y * 2
-    end
+
+    local yoff = self.bagBreaksByRow[row] * ITEM_SPACING_Y * 2
     return -xoff, yoff
 end
 
@@ -110,12 +137,64 @@ function LB.BagsManager:UpdateItemSort(items)
     end
 end
 
+-- Rather than implementing my own layout code, just use GridLayout but add
+-- spacers to fill out rows where necessary. This seems to be good enough for
+-- the buttons not to be shown.
+--
+-- It is possible to make GridLayout work in other directions but then I
+-- would have to figure out the top offset.
+--
+-- Be careful the spacer is the same size as the other itembuttons as it
+-- will often be itemsToLayout[1] and used by AnchorUtil to get the size.
+--
+-- I'm also 80% sure if the spacer is not secure taint will go everywhere, so
+-- don't be tempted to make it some kind of non-frame (even though that would
+-- be super nice, to implement the minimum API for LayoutGrid which are all
+-- no-op).
+
+local hiddenParent = CreateFrame('Frame')
+hiddenParent:Hide()
+local spacerItemButton = CreateFrame('ItemButton', nil, hiddenParent, "ContainerFrameItemButtonTemplate")
+
+local function inDiffBag(a, b) return not b or a:GetBagID() ~= b:GetBagID() end
+
+function LB.BagsManager:AddSpacersToItemList(frame, itemsToLayout)
+    local columns = self:GetColumns(frame)
+    if self:GetFrameOption(frame, 'layout') == 'topleft' then
+        -- Add spacers so the gap is bottom-right not top-left.
+        local nExtra = -#itemsToLayout % columns
+        for i = 1, nExtra do    -- luacheck: ignore 213
+            table.insert(itemsToLayout, 1, spacerItemButton)
+        end
+    elseif self:GetFrameOption(frame, 'layout') == 'bags' then
+        -- This is a bit funky in order to put the spaces at the bottomright
+        -- of the bag when the layout starts at the bottomright. They have to
+        -- come before the first layout item from that bag, which is the last
+        -- item in the bag.
+        local i = 1
+        while i < #itemsToLayout do
+            if inDiffBag(itemsToLayout[i], itemsToLayout[i-1]) then
+                local bagID = itemsToLayout[i]:GetBagID()
+                local slots = C_Container.GetContainerNumSlots(bagID)
+                while slots % columns ~= 0 do
+                    table.insert(itemsToLayout, i, spacerItemButton)
+                    i = i + 1
+                    slots = slots + 1
+                end
+            end
+            i = i + 1
+        end
+    end
+end
+
 function LB.BagsManager:UpdateItemLayout(frame)
     local itemsToLayout = {}
     for _, itemButton in frame:EnumerateValidItems() do
         table.insert(itemsToLayout, itemButton)
     end
     self:UpdateItemSort(itemsToLayout)
+    self:CalculateBagBreaks(frame)
+    self:AddSpacersToItemList(frame, itemsToLayout)
     local columns = self:GetColumns(frame)
     local layout = AnchorUtil.CreateGridLayout(GridLayoutMixin.Direction.BottomRightToTopLeft, columns, ITEM_SPACING_X, ITEM_SPACING_Y)
     layout:SetCustomOffsetFunction(function (row, col) return self:BagsOffsetFunction(frame, row, col) end)
@@ -127,9 +206,14 @@ function LB.BagsManager:CalculateHeight(frame)
     local templateInfo = C_XMLUtil.GetTemplateInfo(frame.itemButtonPool:GetTemplate())
     local itemsHeight = (rows * templateInfo.height) + ((rows - 1) * ITEM_SPACING_Y)
     local h = itemsHeight + frame:GetPaddingHeight() + frame:CalculateExtraHeight()
+
     local yBreak = LB.GetTypeOption('BACKPACK', 'ybreak') or 0
-    if yBreak > 0 then
-        local gapHeight = math.floor((rows-1)/3)* ITEM_SPACING_X * 2
+
+    if self:GetFrameOption(frame, 'layout') == 'bags' then
+        -- Always 5 bags, 4 gaps
+        return h + 4 * ITEM_SPACING_Y * 2
+    elseif yBreak > 0 then
+        local gapHeight = math.floor((rows-1)/yBreak) * ITEM_SPACING_Y * 2
         return h + gapHeight
     else
         return h
@@ -143,7 +227,7 @@ function LB.BagsManager:CalculateWidth(frame)
     local w = itemsWidth + frame:GetPaddingWidth()
     local xBreak = LB.GetTypeOption('BACKPACK', 'xbreak') or 0
     if xBreak > 0 then
-        local gapWidth = math.floor((columns-1)/xBreak) * ITEM_SPACING_Y * 2
+        local gapWidth = math.floor((columns-1)/xBreak) * ITEM_SPACING_X * 2
         return w + gapWidth
     else
         return w
@@ -163,7 +247,17 @@ function LB.BagsManager:GetColumns(frame)
 end
 
 function LB.BagsManager:GetRows(frame)
-    return math.ceil(frame:GetBagSize() / self:GetColumns(frame))
+    local columns = self:GetColumns(frame)
+    if self:GetFrameOption(frame, 'layout') == 'bags' then
+        local rows = 0
+        for bagID = Enum.BagIndex.Backpack, Enum.BagIndex.Bag_4 do
+            local slots = C_Container.GetContainerNumSlots(bagID)
+            rows = rows + math.ceil(slots / columns)
+        end
+        return rows
+    else
+        return math.ceil(frame:GetBagSize() / columns)
+    end
 end
 
 function LB.BagsManager:SetSearchBoxPoint(frame, searchBox)
