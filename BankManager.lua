@@ -9,15 +9,50 @@
 
 local _, LB = ...
 
+
+--[[------------------------------------------------------------------------]]--
+
+-- Modify the tabs on the BankPanel to accept drag/drop to move items.
+
+LB.BankTabManager = {}
+
+function LB.BankTabManager:AcceptItem(tabFrame, isClick)
+    if CursorHasItem() and not InCombatLockdown() then
+        local bagID = tabFrame.tabData.ID
+        local freeSlots = C_Container.GetContainerFreeSlots(bagID)
+        if freeSlots and #freeSlots > 0 then
+            -- "Picking Up" the destination will put the item there
+            C_Container.PickupContainerItem(bagID, freeSlots[1])
+            if isClick then
+                self.restoreTabScript = true
+                tabFrame:SetScript('OnClick', nil)
+            end
+        end
+    end
+end
+
+function LB.BankTabManager:RestoreScript(tabFrame)
+    if self.restoreTabScript then
+        tabFrame:SetScript('OnClick', BankPanelTabMixin.OnClick)
+        self.restoreTabScript = nil
+    end
+end
+
+function LB.BankTabManager:InitializeTab(tabFrame)
+    tabFrame:RegisterForDrag()
+    tabFrame:SetScript('OnReceiveDrag', function (tabFrame) self:AcceptItem(tabFrame) end)
+    tabFrame:SetScript('PreClick', function (tabFrame) self:AcceptItem(tabFrame, true) end)
+    tabFrame:SetScript('PostClick', function (tabFrame) self:RestoreScript(tabFrame) end)
+end
+
+--[[------------------------------------------------------------------------]]--
+
 LB.BankManager = {}
 
---------------------------------------------------------------------------------
-
--- Update a single button
+-- Call hooks on a single item button
 local function ItemButtonUpdateHook(itemButton)
     LB.CallHooks('LiteBagItemButton_Update', itemButton)
 end
-
 
 function LB.BankManager:GenerateItemSlotsForSelectedTab(frame)
     for itemButton in frame:EnumerateValidItems() do
@@ -25,6 +60,12 @@ function LB.BankManager:GenerateItemSlotsForSelectedTab(frame)
             hooksecurefunc(itemButton, 'Refresh', ItemButtonUpdateHook)
             self.hookedButtons[itemButton] = true
         end
+    end
+end
+
+function LB.BankManager:RefreshBankTabs(frame)
+    for tabFrame in frame.bankTabPool:EnumerateActive() do
+        LB.BankTabManager:InitializeTab(tabFrame)
     end
 end
 
@@ -43,7 +84,7 @@ function LB.BankManager:RefreshBankPanel(frame)
     cc:ContinueOnLoad(function () frame:MarkDirty() end)
 end
 
-local hooks = { "RefreshBankPanel", "GenerateItemSlotsForSelectedTab", }
+local hooks = { "RefreshBankTabs", "RefreshBankPanel", "GenerateItemSlotsForSelectedTab", }
 
 function LB.BankManager:Initialize()
     self.hookedButtons = {}
