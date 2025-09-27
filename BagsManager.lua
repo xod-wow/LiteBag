@@ -322,38 +322,39 @@ end
 --[[ Hooks -----------------------------------------------------------------]]--
 
 -- Update all the buttons
-local function ContainerUpdateHook(self)
-    for _, itemButton in self:EnumerateValidItems() do
+function LB.BagsManager:CallItemHooks(frame)
+    for _, itemButton in frame:EnumerateValidItems() do
         LB.CallHooks('LiteBagItemButton_Update', itemButton)
     end
 end
 
-function LB.BagsManager:HookBlizzardBags()
-    for _, f in ipairs(BlizzardContainerFrames) do
-        hooksecurefunc(f, 'UpdateItems', ContainerUpdateHook)
-    end
-
-    local UpdateBagButtons = function (frame) self:UpdateBagButtons(frame) end
-
-    hooksecurefunc(ContainerFrameCombinedBags, 'UpdateItems', UpdateBagButtons)
-    -- The first time UpdateItems is called, the frame hasn't been SetPoint yet
-    -- and we don't know what side to attach the buttons, so do it again.
-    ContainerFrameCombinedBags:HookScript('OnShow', UpdateBagButtons)
+function LB.BagsManager:UpdateItems(frame)
+    self:CallItemHooks(frame)
+    self:UpdateBagButtons(frame)
 end
 
-local hooks = { "UpdateFrameSize", "UpdateItemLayout", "SetSearchBoxPoint" }
+local directHooks = { "UpdateItems", "UpdateFrameSize", "UpdateItemLayout", "SetSearchBoxPoint" }
 
 function LB.BagsManager:Initialize()
-    for _, method in ipairs(hooks) do
+    for _, method in ipairs(directHooks) do
         local hook = function (...) self[method](self, ...) end
         hooksecurefunc(ContainerFrameCombinedBags, method, hook)
     end
+
+    for _, f in ipairs(BlizzardContainerFrames) do
+        hooksecurefunc(f, 'UpdateItems', function () self:CallItemHooks(f) end)
+    end
+
     self:AddBagButtons(ContainerFrameCombinedBags, BagButtonIDs)
-    self:HookBlizzardBags()
+
+    -- The first time UpdateItems is called, the frame hasn't been SetPoint yet
+    -- and we don't know what side to attach the buttons, so do it again.
+    ContainerFrameCombinedBags:HookScript('OnShow', function (f) self:UpdateBagButtons(f) end)
+
     self:AllowMoving(ContainerFrameCombinedBags)
 end
 
-function LB.CallHooksOnBags()
+function LB.BagsManager:CallHooks()
     for _, f in ipairs(BlizzardContainerFrames) do
         if f:IsShown() then
             ContainerUpdateHook(f)

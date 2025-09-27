@@ -70,8 +70,8 @@ function LB.Manager:OnEvent(event, ...)
     if event == 'PLAYER_LOGIN' then
         self:Initialize()
     else
-        LB.CallHooksOnBags()
-        LB.CallHooksOnBank()
+        LB.BagsManager:CallHooks()
+        LB.BankManager:CallHooks()
     end
 end
 

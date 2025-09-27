@@ -53,7 +53,7 @@ function LB.BankManager:Initialize()
     end
 end
 
-function LB.CallHooksOnBank()
+function LB.BankManager:CallHooks()
     if BankFrame:IsShown() then
         for itemButton in BankPanel:EnumerateValidItems() do
             ItemButtonUpdateHook(itemButton)
