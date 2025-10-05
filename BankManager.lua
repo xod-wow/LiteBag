@@ -40,9 +40,9 @@ end
 
 function LB.BankTabManager:InitializeTab(tabFrame)
     tabFrame:RegisterForDrag()
-    tabFrame:SetScript('OnReceiveDrag', function (tabFrame) self:AcceptItem(tabFrame) end)
-    tabFrame:SetScript('PreClick', function (tabFrame) self:AcceptItem(tabFrame, true) end)
-    tabFrame:SetScript('PostClick', function (tabFrame) self:RestoreScript(tabFrame) end)
+    tabFrame:SetScript('OnReceiveDrag', function (f) self:AcceptItem(f) end)
+    tabFrame:SetScript('PreClick', function (f) self:AcceptItem(f, true) end)
+    tabFrame:SetScript('PostClick', function (f) self:RestoreScript(f) end)
 end
 
 --[[------------------------------------------------------------------------]]--

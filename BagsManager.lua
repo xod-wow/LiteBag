@@ -357,7 +357,7 @@ end
 function LB.BagsManager:CallHooks()
     for _, f in ipairs(BlizzardContainerFrames) do
         if f:IsShown() then
-            ContainerUpdateHook(f)
+            self:CallItemHooks(f)
         end
     end
 end
