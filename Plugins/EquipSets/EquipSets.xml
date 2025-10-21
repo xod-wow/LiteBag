@@ -5,7 +5,7 @@
 <Script file="EquipSets.lua" />
 
 <Texture name="LiteBagEquipsetsTexture"
-         file="Interface\Addons\LiteBag\Plugin_EquipSets\EquipSetIcon"
+         file="Interface\Addons\LiteBag\Plugins\EquipSets\EquipSetIcon"
          virtual="true" />
 
 </Ui>
