@@ -14,9 +14,9 @@ local _, LB = ...
 
 -- Modify the tabs on the BankPanel to accept drag/drop to move items.
 
-LB.BankTabManager = {}
+LB.BankPanelTabManager = {}
 
-function LB.BankTabManager:AcceptItem(tabFrame, isClick)
+function LB.BankPanelTabManager:TabAcceptItem(tabFrame, isClick)
     if CursorHasItem() and not InCombatLockdown() then
         local bagID = tabFrame.tabData.ID
         local freeSlots = C_Container.GetContainerFreeSlots(bagID)
@@ -31,18 +31,38 @@ function LB.BankTabManager:AcceptItem(tabFrame, isClick)
     end
 end
 
-function LB.BankTabManager:RestoreScript(tabFrame)
+function LB.BankPanelTabManager:TabRestoreScript(tabFrame)
     if self.restoreTabScript then
         tabFrame:SetScript('OnClick', BankPanelTabMixin.OnClick)
         self.restoreTabScript = nil
     end
 end
 
-function LB.BankTabManager:InitializeTab(tabFrame)
+function LB.BankPanelTabManager:TabOnEnter(tabFrame)
+    if CursorHasItem() and not tabFrame:IsPurchaseTab() then
+        --[[
+        if not self.restoreTabID then
+            self.restoreTabID = BankPanel.selectedTabID
+            EventUtil.RegisterOnceFrameEventAndCallback("ITEM_UNLOCKED",
+                function ()
+                    if self.restoreTabID then
+                        BankPanel:OnBankTabClicked(self.restoreTabID)
+                        self.restoreTabID = nil
+                    end
+                end)
+        end
+        ]]
+        BankPanel:OnBankTabClicked(tabFrame.tabData.ID)
+    end
+    BankPanelTabMixin.OnEnter(tabFrame)
+end
+
+function LB.BankPanelTabManager:InitializeTab(tabFrame)
     tabFrame:RegisterForDrag()
-    tabFrame:SetScript('OnReceiveDrag', function (f) self:AcceptItem(f) end)
-    tabFrame:SetScript('PreClick', function (f) self:AcceptItem(f, true) end)
-    tabFrame:SetScript('PostClick', function (f) self:RestoreScript(f) end)
+    tabFrame:SetScript('OnReceiveDrag', function (f) self:TabAcceptItem(f) end)
+    tabFrame:SetScript('PreClick', function (f) self:TabAcceptItem(f, true) end)
+    tabFrame:SetScript('PostClick', function (f) self:TabRestoreScript(f) end)
+    tabFrame:SetScript('OnEnter', function () self:TabOnEnter(tabFrame) end)
 end
 
 --[[------------------------------------------------------------------------]]--
@@ -65,7 +85,7 @@ end
 
 function LB.BankManager:RefreshBankTabs(frame)
     for tabFrame in frame.bankTabPool:EnumerateActive() do
-        LB.BankTabManager:InitializeTab(tabFrame)
+        LB.BankPanelTabManager:InitializeTab(tabFrame)
     end
 end
 
