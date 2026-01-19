@@ -92,8 +92,7 @@ local function SlashFunc(argstr)
     local onOff = CheckOnOff(arg1)
 
     if cmd == '' or cmd == 'options' then
-        InterfaceOptionsFrame:Show()
-        InterfaceOptionsFrame_OpenToCategory(LiteBagOptions)
+        Settings.OpenToCategory(LiteBagOptions.category.ID)
         return
     end
 

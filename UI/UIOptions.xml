@@ -16,7 +16,7 @@
     </Layers>
 
     <Frames>
-        <Frame name="$parentGlobalBox" enableMouse="false" frameStrata="ARTWORK" inherits="TooltipBackdropTemplate">
+        <Frame name="$parentGlobalBox" enableMouse="false" useParentLevel="true" inherits="TooltipBackdropTemplate">
             <KeyValues>
                 <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
                 <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
@@ -28,7 +28,7 @@
                 <Anchor point="BOTTOM" relativePoint="CENTER" y="6" />
             </Anchors>
         </Frame>
-        <Frame name="$parentBankBox" enableMouse="false" frameStrata="ARTWORK" inherits="TooltipBackdropTemplate">
+        <Frame name="$parentBankBox" enableMouse="false" useParentLevel="true" inherits="TooltipBackdropTemplate">
             <KeyValues>
                 <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
                 <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
@@ -48,7 +48,7 @@
                 </Layer>
             </Layers>
         </Frame>
-        <Frame name="$parentInventoryBox" enableMouse="false" frameStrata="ARTWORK" inherits="TooltipBackdropTemplate">
+        <Frame name="$parentInventoryBox" enableMouse="false" useParentLevel="true" inherits="TooltipBackdropTemplate">
             <KeyValues>
                 <KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
                 <KeyValue key="backdropColorAlpha" value="0.2" type="number"/>
