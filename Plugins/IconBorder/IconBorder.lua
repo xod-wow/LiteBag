@@ -11,6 +11,8 @@
 
 local _, LB = ...
 
+local L = LB.Localize
+
 local function Update(itemButton, bag, slot)
 
     -- Where did 651080 suddenly come from?
@@ -29,5 +31,41 @@ local function Update(itemButton, bag, slot)
     end
 end
 
--- LiteBag
+local function GetQualityText(i)
+    if ITEM_QUALITY_COLORS[i] then
+        local desc = _G['ITEM_QUALITY'..i..'_DESC']
+        return ITEM_QUALITY_COLORS[i].color:WrapTextInColorCode(desc)
+    else
+        return NEVER
+    end
+end
+
+local function IconBorderSorting()
+    local out = { }
+    for i = Enum.ItemQualityMeta.NumValues-1, 0, -1 do
+        table.insert(out, i)
+    end
+    table.insert(out, false)
+    return out
+end
+
+local function IconBorderValues()
+    local out = {}
+    for _,k in ipairs(IconBorderSorting()) do
+        out[k] = GetQualityText(k)
+    end
+    return out
+end
+
+local options = {
+    thickerIconBorder = {
+        type = "select",
+        style = "dropdown",
+        name = L["Show thicker icon borders for this quality and above."],
+        values = IconBorderValues,
+        sorting = IconBorderSorting,
+    }
+}
+
 LB.RegisterHook('LiteBagItemButton_Update', Update, true)
+LB.AddPluginOptions(options)

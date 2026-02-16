@@ -9,6 +9,8 @@
 
 local _, LB = ...
 
+LB.PluginOptions = {}
+
 local defaults = {
     profile = {
         BACKPACK = {
@@ -33,9 +35,6 @@ local defaults = {
         showBindsOn = false,
         hideBlizzardBagButtons = false,
         thickerIconBorder = false,
-        debug = nil,
-        eventDebug = nil,
-        eventFilter = { },
     }
 }
 
@@ -68,4 +67,8 @@ end
 
 function LB.GetGlobalOption(option)
     return LB.db.profile[option]
+end
+
+function LB.AddPluginOptions(options)
+    Mixin(LB.PluginOptions, options)
 end

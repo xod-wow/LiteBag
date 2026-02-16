@@ -16,6 +16,8 @@
 
 local _, LB = ...
 
+local L = LB.Localize
+
 local EquipSetState = CreateFrame('Frame')
 
 -- A partial opposite of EquipmentManager_UnpackLocation that only handles
@@ -177,6 +179,16 @@ local function Update(button, bag, slot)
         end
     end
 end
+
+local options = {
+    showEquipmentSets = {
+        type = "toggle",
+        name = L["Display equipment set membership icons."],
+        width = "full",
+    },
+}
+
+LB.AddPluginOptions(options)
 
 -- This is assuming the EQUIPMENT_SETS_CHANGED for the state manager above
 -- runs before the itembutton hooks. It does because we know they add and

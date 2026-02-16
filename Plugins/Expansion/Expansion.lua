@@ -11,6 +11,8 @@
 
 local _, LB = ...
 
+local L = LB.Localize
+
 local TextsByButton = {}
 
 local function Update(button, bag, slot)
@@ -36,6 +38,16 @@ local function Update(button, bag, slot)
     end
     TextsByButton[button]:Hide()
 end
+
+local options = {
+    showExpansion = {
+        type = "toggle",
+        width = "full",
+        name = L["Display expansion number."],
+    }
+}
+
+LB.AddPluginOptions(options)
 
 -- LiteBag
 LB.RegisterHook('LiteBagItemButton_Update', Update, true)

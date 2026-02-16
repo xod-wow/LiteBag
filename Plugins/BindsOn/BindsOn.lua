@@ -95,5 +95,14 @@ local function Update(button)
     BindTextsByButton[button]:Hide()
 end
 
+local options = {
+    showBindsOn = {
+        type = "toggle",
+        width = "full",
+        name = L["Display text for Warbound and BoE items."],
+    }
+}
+
 -- LiteBag
 LB.RegisterHook('LiteBagItemButton_Update', Update, true)
+LB.AddPluginOptions(options)

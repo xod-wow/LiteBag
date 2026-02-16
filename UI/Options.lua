@@ -18,32 +18,6 @@ local LayoutValues  = {
 
 local LayoutSorting = { 'default', 'topleft', 'bags', }
 
-local function GetQualityText(i)
-    if ITEM_QUALITY_COLORS[i] then
-        local desc = _G['ITEM_QUALITY'..i..'_DESC']
-        return ITEM_QUALITY_COLORS[i].color:WrapTextInColorCode(desc)
-    else
-        return NEVER
-    end
-end
-
-local function IconBorderSorting()
-    local out = { }
-    for i = Enum.ItemQualityMeta.NumValues-1, 0, -1 do
-        table.insert(out, i)
-    end
-    table.insert(out, false)
-    return out
-end
-
-local function IconBorderValues()
-    local out = {}
-    for _,k in ipairs(IconBorderSorting()) do
-        out[k] = GetQualityText(k)
-    end
-    return out
-end
-
 local function GlobalGetter(info)
     return LB.GetGlobalOption(info[#info])
 end
@@ -62,14 +36,9 @@ local function TypeSetter(info, val)
     return LB.SetTypeOption(type, arg, val)
 end
 
-local order
-do
-    local n = 0
-    order = function () n = n + 1 return n end
-end
-
 local options = {
     type = "group",
+    plugins = { ALL = {} },
     args = {
         -- First options are just for the command line
         options = {
@@ -77,83 +46,26 @@ local options = {
             name = L["Show options panel."],
             hidden = true,
             cmdHidden = false,
-            order = order(),
+            order = 1,
             func = function () LB.OpenOptions() end,
         },
         debug = {
             type = "toggle",
             name = L["Enable debugging."],
             hidden = true,
-            order = order(),
-            get = GlobalGetter,
-            set = GlobalSetter,
-        },
-        allowhide = {
-            type = "multiselect",
-            name = L["Allow hiding a bag ID."],
-            values =
-                function ()
-                    local t = tInvert(Enum.BagIndex)
-                    t[Enum.BagIndex.Backpack] = nil
-                    t[Enum.BagIndex.Bank] = nil
-                    t[Enum.BagIndex.Reagentbank] = nil
-                    t[Enum.BagIndex.Bankbag] = nil
-                    t[Enum.BagIndex.Keyring] = nil
-                    return t
-                end,
-            hidden = true,
-            order = order(),
-            get =
-                function (info, i) -- luacheck: ignore 212/info
-                    local allow = LB.GetGlobalOption('allowHideBagIDs')
-                    return allow[i] == true
-                 end,
-            set =
-                function (info, i, val) -- luacheck: ignore 212/info
-                    local allow = LB.GetGlobalOption('allowHideBagIDs')
-                    allow[i] = val or nil
-                    LB.SetGlobalOption('allowHideBagIDs', allow)
-                    -- Force it to be shown again if it was hidden
-                    if not val then
-                        local hide = LB.GetGlobalOption('hideBagIDs')
-                        hide[i] = nil
-                        LB.SetGlobalOption('hideBagIDs', hide)
-                    end
-                end,
-        },
-        eventDebug = {
-            type = "toggle",
-            name = L["Enable event debugging."],
-            hidden = true,
-            order = order(),
+            order = 2,
             get = GlobalGetter,
             set = GlobalSetter,
         },
         GeneralHeader = {
             type = "header",
             name = GENERAL,
-            order = order(),
-        },
-        showBindsOn = {
-            type = "toggle",
-            name = L["Display text for Warbound and BoE items."],
-            order = order(),
-            width = "full",
-            get = GlobalGetter,
-            set = GlobalSetter,
-        },
-        showEquipmentSets = {
-            type = "toggle",
-            name = L["Display equipment set membership icons."],
-            order = order(),
-            width = "full",
-            get = GlobalGetter,
-            set = GlobalSetter,
+            order = 3,
         },
         hideBlizzardBagButtons = {
             type = "toggle",
             name = L["Hide Blizzard bag buttons."],
-            order = order(),
+            order = 10,
             width = "full",
             disabled = function () return not LB.Manager:CanManageBagButtons() end,
             desc = function ()
@@ -166,45 +78,40 @@ local options = {
             get = GlobalGetter,
             set = GlobalSetter,
         },
-        iconBorderPreGap = {
+        PluginsHeaderPreGap = {
             type = "description",
-            name = "",
-            order = order(),
+            name = "\n",
+            order = 50,
         },
-        thickerIconBorder = {
-            type = "select",
-            style = "dropdown",
-            name = L["Show thicker icon borders for this quality and above."],
-            order = order(),
-            values = IconBorderValues,
-            sorting = IconBorderSorting,
-            get = GlobalGetter,
-            set = GlobalSetter,
+        PluginsHeader = {
+            type = "header",
+            name = L["Plugins"],
+            order = 51,
         },
         FrameHeaderPreGap = {
             type = "description",
             name = "\n",
-            order = order(),
+            order = 997,
         },
         FrameHeader = {
             type = "header",
             name = L["Frame Options"],
-            order = order(),
+            order = 998,
         },
         FrameHeaderPostGap = {
             type = "description",
             name = "\n",
-            order = order(),
+            order = 999,
         },
         BACKPACK = {
             type = "group",
             name = COMBINED_BAG_TITLE,
-            order = order(),
+            order = 1000,
             args = {
                 bagButtons = {
                     type = "toggle",
                     name = L["Show bag buttons."],
-                    order = order(),
+                    order = 1010,
                     width = "full",
                     get = TypeGetter,
                     set = TypeSetter,
@@ -212,7 +119,7 @@ local options = {
                 snap = {
                     type = "toggle",
                     name = L["When moving snap frame to default position."],
-                    order = order(),
+                    order = 1020,
                     width = "full",
                     get = TypeGetter,
                     set = TypeSetter,
@@ -223,14 +130,14 @@ local options = {
                     min = 8,
                     max = 48,
                     step = 1,
-                    order = order(),
+                    order = 1030,
                     get = TypeGetter,
                     set = TypeSetter,
                 },
                 columnFillSpacer = {
                     type = "description",
                     name = "\n",
-                    order = order(),
+                    order = 1040,
                 },
                 xbreak = {
                     type = "range",
@@ -238,7 +145,7 @@ local options = {
                     min = 0,
                     max = 32,
                     step = 1,
-                    order = order(),
+                    order = 1050,
                     get = TypeGetter,
                     set = TypeSetter,
                 },
@@ -248,7 +155,7 @@ local options = {
                     min = 0,
                     max = 32,
                     step = 1,
-                    order = order(),
+                    order = 1060,
                     get = TypeGetter,
                     set = TypeSetter,
                     disabled = function () return LB.db.profile.BACKPACK.layout == 'bags' end,
@@ -259,101 +166,60 @@ local options = {
                     name = L["Icon layout:"],
                     values = LayoutValues,
                     sorting = LayoutSorting,
-                    order = order(),
+                    order = 1070,
                     width = 1.5,
                     get = TypeGetter,
                     set = TypeSetter,
                 },
             },
         },
---[[
-        BANK = {
-            type = "group",
-            name = BANK,
-            order = order(),
-            args = {
-                columns = {
-                    type = "range",
-                    name = L["Columns"],
-                    min = 8,
-                    max = 32,
-                    step = 1,
-                    order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                columnFillSpacer = {
-                    type = "description",
-                    name = "\n",
-                    order = order(),
-                },
-                xbreak = {
-                    type = "range",
-                    name = L["Column gaps"],
-                    min = 0,
-                    max = 32,
-                    step = 1,
-                    order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                ybreak = {
-                    type = "range",
-                    name = L["Row gaps"],
-                    min = 0,
-                    max = 32,
-                    step = 1,
-                    order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                __break1 = {
-                    type = "description",
-                    name = "\n",
-                    width = "full",
-                    order = order(),
-                },
-                order = {
-                    type = "select",
-                    style = "dropdown",
-                    name = L["Icon order:"],
-                    values = OrderValues,
-                    sorting = OrderSorting,
-                    order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                __break2 = {
-                    type = "description",
-                    name = "\n",
-                    width = "full",
-                    order = order(),
-                },
-                layout = {
-                    type = "select",
-                    style = "dropdown",
-                    name = L["Icon layout:"],
-                    values = LayoutValues,
-                    sorting = LayoutSorting,
-                    order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-                anchor = {
-                    type = "select",
-                    style = "dropdown",
-                    name = L["First icon position:"],
-                    values = AnchorValues,
-                    sorting = AnchorSorting,
-                    order = order(),
-                    get = TypeGetter,
-                    set = TypeSetter,
-                },
-            },
-        },
-]]
     },
 }
+
+local function GenerateOptions()
+    local order = 100
+    table.wipe(options.plugins.ALL)
+
+    local nameList = GetKeysArray(LB.PluginOptions)
+    table.sort(nameList,
+        function (a, b)
+            local nameA = L[LB.PluginOptions[a].name]
+            local nameB = L[LB.PluginOptions[b].name]
+            return nameA < nameB
+        end)
+
+    for _, name in ipairs(nameList) do
+        local option = CopyTable(LB.PluginOptions[name])
+
+        if option.type == "select" then
+            local preGap = {
+                type = "description",
+                name = "",
+                order = order,
+            }
+            options.plugins.ALL[name.."PreGap"] = preGap
+            order = order + 10
+        end
+
+        option.order = order
+        option.get = GlobalGetter
+        option.set = GlobalSetter
+        options.plugins.ALL[name] = option
+        order = order + 10
+
+        if option.type == "select" then
+            local postGap = {
+                type = "description",
+                name = "",
+                order = order,
+            }
+            options.plugins.ALL[name.."PostGap"] = postGap
+            order = order + 10
+        end
+
+    end
+    return options
+end
 
 -- The sheer amount of crap required here is ridiculous. I bloody well hate
 -- frameworks, just give me components I can assemble. Dot-com weenies ruined
@@ -367,7 +233,7 @@ local AceDBOptions =  LibStub("AceDBOptions-3.0")
 -- added, not sorted by name. In order to mostly get them to
 -- appear in the right order, add the main panel when loaded.
 
-AceConfig:RegisterOptionsTable(addonName, options, { "litebag", "lb" })
+AceConfig:RegisterOptionsTable(addonName, GenerateOptions, { "litebag", "lb" })
 local optionsPanel, category = AceConfigDialog:AddToBlizOptions(addonName) -- luacheck: ignore 211
 
 function LB.InitializeGUIOptions()

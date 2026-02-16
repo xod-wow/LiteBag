@@ -11,8 +11,10 @@
 
 local _, LB = ...
 
+local L = LB.Localize
+
 local function Update(self, bag, slot)
-    if not C_Item.IsAnimaItemByID then return end
+    if not LB.GetGlobalOption('showAnima') then return end
     local info = C_Container.GetContainerItemInfo(bag, slot)
     if info and C_Item.IsAnimaItemByID(info.itemID) then
         -- local color = ITEM_QUALITY_COLORS[info.quality]
@@ -21,5 +23,15 @@ local function Update(self, bag, slot)
         self.IconOverlay:Show()
     end
 end
+
+local options = {
+    showAnima = {
+        type = "toggle",
+        width = "full",
+        name = L["Display icon corners on Anima items."],
+    }
+}
+
+LB.AddPluginOptions(options)
 
 LB.RegisterHook('LiteBagItemButton_Update', Update, true)
