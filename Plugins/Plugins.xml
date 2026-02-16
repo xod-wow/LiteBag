@@ -7,4 +7,5 @@
     <Include file="BindsOn\BindsOn.xml" />
     <Include file="EquipSets\EquipSets.xml" />
     <Include file="IconBorder\IconBorder.xml" />
+    <Include file="Search\Search.xml" />
 </Ui>
