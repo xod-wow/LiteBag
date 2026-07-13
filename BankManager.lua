@@ -92,7 +92,12 @@ end
 -- This fixes a Blizzard mistake where they failed to handle items not in cache
 -- in BankPanelMixin the same way they do in ContainerFrameMixin. Items not
 -- in cache don't get their quality borders set.
+--
+-- Can't use this, it causes spreading taint from the bank frame into every
+-- itembutton due to ContainerFrameItemButton_OnClick's call to
+-- BankFrame:GetActiveBankType()
 
+--[[
 function LB.BankManager:RefreshBankPanel(frame)
     local cc = ContinuableContainer:Create()
     for itemButton in frame:EnumerateValidItems() do
@@ -105,6 +110,10 @@ function LB.BankManager:RefreshBankPanel(frame)
 end
 
 local hooks = { "RefreshBankTabs", "RefreshBankPanel", "GenerateItemSlotsForSelectedTab", }
+
+]]
+
+local hooks = { "RefreshBankTabs", "GenerateItemSlotsForSelectedTab", }
 
 function LB.BankManager:Initialize()
     self.hookedButtons = {}
