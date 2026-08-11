@@ -1,4 +1,4 @@
-## Interface: 120007, 120005
+## Interface: 120100, 120007
 ## Title: LiteBag
 ## Notes: A minimal one-bag solution for inventory and bank.
 ## Notes-frFR: Regroupe tous les sacs en un seul (pour l'inventaire et la banque).
